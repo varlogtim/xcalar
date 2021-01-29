@@ -1,0 +1,28 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "temp-795205",
+            "columns": [
+                {
+                    "columnName": "column46",
+                    "headerAlias": "column46"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.0.3.17-jenkins-485ec9b5",
+    "udfs": [
+        {
+            "fileName": "udfs/default2.py",
+            "moduleName": "default2",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"nfs:///<pathToQaDatasets>/gdelt-small/20130406.export.csv\" --format csv --size 104857600B  --name \"<datasetName>\";index --key \"column4\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-669578\" --prefix column4;map --eval \"default2:multiJoin(column4::column36, column4::column2)\" --srctable \"<tablePrefix>-669578\" --fieldName \"col-3229-88098786692\" --dsttable \"<tablePrefix>-674674\";index --key \"col-3229-88098786692\" --srctable \"<tablePrefix>-674674\" --dsttable \"<tablePrefix>-679398\" --sorted;index --key \"column4::column46\" --srctable \"<tablePrefix>-679398\" --dsttable \"<tablePrefix>-771686\" --sorted=desc;groupBy --srctable \"<tablePrefix>-771686\" --eval \"count(column4::column45)\" --fieldName \"col-3228-85012841012\" --newKeyFieldName \"column46\" --dsttable \"temp-795205\" --nosample;"
+}

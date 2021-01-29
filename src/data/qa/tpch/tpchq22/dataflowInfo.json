@@ -1,0 +1,26 @@
+{
+    "query": "load --url \"<pathToTpchDatasets>/customer.tbl\" --format csv --size 0B  --name \"demo.60456.customer\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.60456.customer\" --dsttable \"customer#R11069\" --prefix customer;map --srctable \"customer#R11069\" --fieldName C_CNTRYCODE --eval \"substring(customer::C_PHONE, 0, 2)\" --dsttable \"customer#R11071\";map --srctable \"customer#R11071\" --fieldName C_CNTRYCODE --eval \"int(C_CNTRYCODE, 10)\" --dsttable \"customer#R11072\";map --srctable \"customer#R11072\" --fieldName C_CUSTKEY --eval \"int(customer::C_CUSTKEY, 10)\" --dsttable \"customer#R11073\";filter --srctable customer#R11073 --eval \"or(eq(C_CNTRYCODE, 13), or(eq(C_CNTRYCODE, 17), or(eq(C_CNTRYCODE, 18), or(eq(C_CNTRYCODE, 23), or(eq(C_CNTRYCODE, 29), or(eq(C_CNTRYCODE, 30), eq(C_CNTRYCODE, 31)))))))\"  --dsttable \"customer#R11080\";map --srctable \"customer#R11080\" --fieldName C_ACCTBAL --eval \"float(customer::C_ACCTBAL)\" --dsttable \"customer#R11081\";load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;filter --srctable customer#R11081 --eval \"gt(C_ACCTBAL, 0)\"  --dsttable \"customer#R11082\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#R11070\" --prefix orders;aggregate --srctable \"customer#R11082\" --dsttable \"avg_c_acctbal\" --eval \"avg(C_ACCTBAL)\";map --srctable \"orders#R11070\" --fieldName O_CUSTKEY --eval \"int(orders::O_CUSTKEY, 10)\" --dsttable \"orders#R11074\";filter --srctable customer#R11082 --eval \"gt(C_ACCTBAL, ^avg_c_acctbal)\"  --dsttable \"customer#R11083\";index --key \"O_CUSTKEY\" --keyType 4  --srctable \"orders#R11074\" --dsttable \"orders.index#R11076\";index --key \"C_CUSTKEY\" --keyType 4  --srctable \"customer#R11083\" --dsttable \"customer.index#R11085\";groupBy --srctable \"orders.index#R11076\" --eval \"count(orders::O_ORDERKEY)\" --fieldName \"O_COUNT\" --newKeyFieldName \"O_CUSTKEY\" --dsttable \"order_count#R11075\" --nosample;join --leftTable \"order_count#R11075\" --rightTable \"customer.index#R11085\" --joinType rightJoin  --joinTable \"query22_right_result#R11084\" --collisionCheck;filter --srctable query22_right_result#R11084 --eval \"not(exists(O_CUSTKEY))\"  --dsttable \"query22_right_result#R11086\";index --key \"C_CNTRYCODE\" --keyType 4  --srctable \"query22_right_result#R11086\" --dsttable \"query22_right_result.index#R11091\";groupBy --srctable \"query22_right_result.index#R11091\" --eval \"sum(C_ACCTBAL)\" --fieldName \"totacctbal\" --newKeyFieldName \"C_CNTRYCODE\" --dsttable \"query22_model_result#R11093\" --nosample;groupBy --srctable \"query22_right_result.index#R11091\" --eval \"count(C_CUSTKEY)\" --fieldName \"numcust\" --newKeyFieldName \"C_CNTRYCODE\" --dsttable \"query22_model_result#R11092\" --nosample;join --leftTable \"query22_model_result#R11092\" --rightTable \"query22_model_result#R11093\" --joinType innerJoin  --joinTable \"query22_model_result#R11094\" --collisionCheck --rightRenameMap C_CNTRYCODE:C_CNTRYCODE_GB859:1;index --key \"C_CNTRYCODE\" --keyType 4  --srctable \"query22_model_result#R11094\" --dsttable \"EndResult-tpchq22\" --sorted;",
+    "udfs": [],
+    "schema hints": [],
+    "tables": [
+        {
+            "name": "EndResult-tpchq22",
+            "columns": [
+                {
+                    "columnName": "C_CNTRYCODE",
+                    "headerAlias": "C_CNTRYCODE"
+                },
+                {
+                    "columnName": "numcust",
+                    "headerAlias": "numcust"
+                },
+                {
+                    "columnName": "totacctbal",
+                    "headerAlias": "totacctbal"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-jenkins-b4f694b1-9e11c6b7",
+    "dataflowVersion": 1
+}

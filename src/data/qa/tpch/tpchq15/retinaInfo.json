@@ -1,0 +1,39 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq15",
+            "columns": [
+                {
+                    "columnName": "supplier::S_SUPPKEY",
+                    "headerAlias": "S_SUPPKEY"
+                },
+                {
+                    "columnName": "supplier::S_NAME",
+                    "headerAlias": "S_NAME"
+                },
+                {
+                    "columnName": "supplier::S_ADDRESS",
+                    "headerAlias": "S_ADDRESS"
+                },
+                {
+                    "columnName": "supplier::S_PHONE",
+                    "headerAlias": "S_PHONE"
+                },
+                {
+                    "columnName": "total_revenue",
+                    "headerAlias": "total_revenue"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "fileName": "udfs/adddateinterval_modified.py",
+            "moduleName": "adddateinterval_modified",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#wW0\" --prefix lineitem;filter --srctable lineitem#wW0 --eval \"ge(lineitem::L_SHIPDATE, \\\"1996-01-01\\\")\"  --dsttable \"lineitem#wW1\";map --eval \"adddateinterval_modified:dateltinputdate(lineitem::L_SHIPDATE, \\\"1996-01-01\\\", 3)\" --srctable \"lineitem#wW1\" --fieldName \"L_SHIPDATE_udf\" --dsttable \"lineitem#wW2\";filter --srctable lineitem#wW2 --eval \"eq(L_SHIPDATE_udf, \\\"True\\\")\"  --dsttable \"lineitem#wW3\";map --eval \"float(lineitem::L_EXTENDEDPRICE)\" --srctable \"lineitem#wW3\" --fieldName \"L_EXTENDEDPRICE_float\" --dsttable \"lineitem#wW4\";map --eval \"float(lineitem::L_DISCOUNT)\" --srctable \"lineitem#wW4\" --fieldName \"L_DISCOUNT_float\" --dsttable \"lineitem#wW5\";map --eval \"mult(L_EXTENDEDPRICE_float, sub(1,L_DISCOUNT_float))\" --srctable \"lineitem#wW5\" --fieldName \"L_EXTENDEDPRICE_float_mult\" --dsttable \"lineitem#wW6\";load --url \"<pathToTpchDatasets>/supplier.tbl\" --format csv --size 0B  --name \"demo.92928.supplier\" --fielddelim | --crlf --header;index --key \"lineitem::L_SUPPKEY\" --keyType 1  --srctable \"lineitem#wW6\" --dsttable \"lineitem.index#wW8\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.92928.supplier\" --dsttable \"supplier#wW9\" --prefix supplier;groupBy --srctable \"lineitem.index#wW8\" --eval \"sum(L_EXTENDEDPRICE_float_mult)\" --fieldName \"total_revenue\" --newKeyFieldName \"L_SUPPKEY\" --dsttable \"revenue#wW7\" --nosample;index --key \"supplier::S_SUPPKEY\" --keyType 1  --srctable \"supplier#wW9\" --dsttable \"supplier.index#wW13\";aggregate --srctable \"revenue#wW7\" --dsttable \"max_revenue\" --eval \"max(total_revenue)\";join --leftTable \"supplier.index#wW13\" --rightTable \"revenue#wW7\" --joinType innerJoin  --joinTable \"supp_revenue_join#wW12\" --collisionCheck;filter --srctable supp_revenue_join#wW12 --eval \"eq(total_revenue, ^max_revenue)\"  --dsttable \"EndResult-tpchq15\";",
+    "xcalarVersion": "1.2.1-1-jenkins-efd2531c-fc9162cb",
+    "retinaVersion": 1
+}

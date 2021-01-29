@@ -1,0 +1,165 @@
+https://0.0.0.0 {
+    redir 301 {
+        if {>X-Forwarded-Proto} is http
+        /  https://{host}{uri}
+    }
+
+    # timeouts are long because letting proxy connections
+    # die and retry causes unpredictable results during
+    # long events like data loads
+    timeouts {
+        read 4h
+        write 4h
+    }
+
+    # Some differences between caddy-0.9.5 and caddy-0.10.10 are
+    # observed:
+    # - caddy-0.9.5  redirect every url pointing at '/' to
+    #   /index.html (which redirects to the Xcalar login page.)
+    # - caddy-0.10.10 redirects requests to /index.html back to /
+    # - the two versions handle POST operations to /index.html
+    #   differently, 0.9.5 accepts them, and 0.10.10 rejects them
+
+    # Where these rules permit connection to Xcalar to / and
+    # /index.html, the request is redirected to the Xcalar login
+    # page. This includes things like POSTs, GETs with queries,
+    # and other operations (HEAD, TRACE, etc...) which are not
+    # useful for login.  these rewrites limit access to '/' to
+    # GETs with no query strings and access to '/index.html' to
+    # GETs, POSTs, and DELETEs.
+
+    rewrite /index.html {
+       if {method} not GET
+       if {method} not POST
+       if {method} not DELETE
+       to /error404
+    }
+
+    rewrite {
+       r ^/$
+       if {query} starts_with workbook
+       to /?{query}{fragment}
+    }
+
+    rewrite {
+        r ^/$
+        if {query} starts_with project
+        to /?{query}{fragment}
+    }
+
+    rewrite {
+        r ^/$
+        if {query} starts_with panel
+        to /?{query}{fragment}
+    }
+
+    rewrite {
+       r ^/$
+       if {method} not GET
+       to /error404
+    }
+
+    rewrite {
+       r ^/$
+       if {query} not ""
+       to /error404
+    }
+
+    rewrite /services/expServer {
+       to /error404
+    }
+
+    status 404 /error404
+
+    status 200 /healthCheck
+
+    header / {
+        X-XSS-Protection "1; mode=block"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.xcalar.com https://*.mixpanel.com https://*.mxpnl.com http://*.mxpnl.com;  font-src data: 'self' ;  img-src data: 'self' ; form-action 'self'; connect-src 'self' ws: https://api.mixpanel.com https://api-js.mixpanel.com https://*.amazonaws.com; frame-ancestors 'self' https://*:*"
+    }
+
+    tls self_signed
+    root /var/www/xcalar-gui
+    proxy /thrift/service http://127.0.0.1:9090/thrift/service http://127.0.0.1:9090/thrift/service {
+        without /thrift/service
+        max_fails 10
+        fail_timeout 10s
+        keepalive 1000
+        transparent
+        try_duration 10s
+        try_interval 1s
+    }
+    proxy /app/service/xce http://127.0.0.1:12124 http://127.0.0.1:12126 http://127.0.0.1:12128 http://127.0.0.1:12130 {
+        policy round_robin
+        without /app
+        max_fails 10
+        fail_timeout 10s
+        keepalive 1000
+        transparent
+        try_duration 10s
+        try_interval 1s
+    }
+    proxy /app  http://127.0.0.1:12124 http://127.0.0.1:12124 {
+        without /app
+        max_fails 10
+        fail_timeout 10s
+        keepalive 1000
+        transparent
+        try_duration 10s
+        try_interval 1s
+    }
+    proxy /socket.io http://127.0.0.1:12124/socket.io {
+        without /socket.io
+        websocket
+        max_fails 5
+        fail_timeout 10s
+        transparent
+    }
+    proxy /sql http://127.0.0.1:27000/xcesql http://127.0.0.1:27000/xcesql {
+        without /sql
+        max_fails 10
+        fail_timeout 10s
+        transparent
+        try_duration 10s
+        try_interval 1s
+    }
+    proxy /xshell http://127.0.0.1:3000/ {
+        websocket
+        max_fails 5
+        fail_timeout 10s
+    }
+
+    jwt {
+        path /
+        redirect /assets/htmlFiles/login.html
+        except /app
+        except /socket.io
+        #thrift traffic is now proxied to xcmgmtd, so the jwt now must act as security
+        #except /thrift/service
+        except /sql
+        except /xshell
+        except /3rd/fonts/opensans
+        except /3rd/fonts/raleway
+        except /3rd/createjs-2015.11.26.min.js
+        except /3rd/createjs.min.js
+        except /3rd/jquery-ui
+        except /3rd/jquery-scrollintoview-master
+        except /3rd/bower_components/jquery
+        except /3rd/bower_components/crypto-js
+        except /3rd/microsoft-authentication-library-for-js
+        except /assets/htmlFiles/login.html
+        except /assets/fonts
+        except /assets/images
+        except /assets/js
+        except /assets/lang
+        except /assets/stylesheets/css
+        except /favicon.ico
+        except /testSuite.html
+        except /unitTest.html
+     }
+
+    log    / {$XCE_LOGDIR}/caddy.log "{combined}"
+    errors {$XCE_LOGDIR}/caddy-errors.log
+}

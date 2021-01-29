@@ -1,0 +1,639 @@
+{
+    "tables": [
+        {
+            "name": "temp-66116",
+            "columns": [
+                {
+                    "columnName": "key-14801-9252",
+                    "headerAlias": "key-14801-9252"
+                },
+                {
+                    "columnName": "col-14801-9250",
+                    "headerAlias": "col-14801-9250"
+                },
+                {
+                    "columnName": "col-14801-9251",
+                    "headerAlias": "col-14801-9251"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "<pathToQaDatasets>/gdelt-small",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}"
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "dest": "RN0temp-939",
+                "key": [
+                    {
+                        "name": "column35",
+                        "keyFieldName": "prefix-14789-507-column35",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-14789-507",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "dest": ".XcalarDS.retina__14798-19334-27603:operatorsFuncTestUser-1-node0",
+                "sameSession": false,
+                "columns": []
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.retina__14798-19334-27603:operatorsFuncTestUser-1-node0",
+                "dest": "retina__14798-19334-27603:temp-939",
+                "key": [
+                    {
+                        "name": "column35",
+                        "keyFieldName": "prefix-14789-507-column35",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-14789-507",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "retina__14798-19334-27603:temp-939",
+                "dest": "retina__14798-19334-27603",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-14789-507::column0",
+                        "destColumn": "prefix-14789-507__column0",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column1",
+                        "destColumn": "prefix-14789-507__column1",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column2",
+                        "destColumn": "prefix-14789-507__column2",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column4",
+                        "destColumn": "prefix-14789-507__column4",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column5",
+                        "destColumn": "prefix-14789-507__column5",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column6",
+                        "destColumn": "prefix-14789-507__column6",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column7",
+                        "destColumn": "prefix-14789-507__column7",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column8",
+                        "destColumn": "prefix-14789-507__column8",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column9",
+                        "destColumn": "prefix-14789-507__column9",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column10",
+                        "destColumn": "prefix-14789-507__column10",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column11",
+                        "destColumn": "prefix-14789-507__column11",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column13",
+                        "destColumn": "prefix-14789-507__column13",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column14",
+                        "destColumn": "prefix-14789-507__column14",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column16",
+                        "destColumn": "prefix-14789-507__column16",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column17",
+                        "destColumn": "prefix-14789-507__column17",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column18",
+                        "destColumn": "prefix-14789-507__column18",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column19",
+                        "destColumn": "prefix-14789-507__column19",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column20",
+                        "destColumn": "prefix-14789-507__column20",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column21",
+                        "destColumn": "prefix-14789-507__column21",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column22",
+                        "destColumn": "prefix-14789-507__column22",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column23",
+                        "destColumn": "prefix-14789-507__column23",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column25",
+                        "destColumn": "prefix-14789-507__column25",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column26",
+                        "destColumn": "prefix-14789-507__column26",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column27",
+                        "destColumn": "prefix-14789-507__column27",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column29",
+                        "destColumn": "prefix-14789-507__column29",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column30",
+                        "destColumn": "prefix-14789-507__column30",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column31",
+                        "destColumn": "prefix-14789-507__column31",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column32",
+                        "destColumn": "prefix-14789-507__column32",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column33",
+                        "destColumn": "prefix-14789-507__column33",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column34",
+                        "destColumn": "prefix-14789-507__column34",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column35",
+                        "destColumn": "prefix-14789-507__column35",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column36",
+                        "destColumn": "prefix-14789-507__column36",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column37",
+                        "destColumn": "prefix-14789-507__column37",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column40",
+                        "destColumn": "prefix-14789-507__column40",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column41",
+                        "destColumn": "prefix-14789-507__column41",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column43",
+                        "destColumn": "prefix-14789-507__column43",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column45",
+                        "destColumn": "prefix-14789-507__column45",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column46",
+                        "destColumn": "prefix-14789-507__column46",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column47",
+                        "destColumn": "prefix-14789-507__column47",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column49",
+                        "destColumn": "prefix-14789-507__column49",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column50",
+                        "destColumn": "prefix-14789-507__column50",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column51",
+                        "destColumn": "prefix-14789-507__column51",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column53",
+                        "destColumn": "prefix-14789-507__column53",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column54",
+                        "destColumn": "prefix-14789-507__column54",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column55",
+                        "destColumn": "prefix-14789-507__column55",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507::column57",
+                        "destColumn": "prefix-14789-507__column57",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-14789-507-column35",
+                        "destColumn": "prefix-14789-507-column35",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "RN0temp-939",
+                "dest": "RN0temp-9254",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-14789-507::column8)",
+                        "newField": "col-14801-9250"
+                    },
+                    {
+                        "evalString": "count(prefix-14789-507::column8)",
+                        "newField": "col-14801-9251"
+                    }
+                ],
+                "newKeyField": "key-14801-9252",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "args": {
+                "source": [
+                    "RN0temp-9254",
+                    "retina__14798-19334-27603"
+                ],
+                "dest": "temp-66116",
+                "dedup": false,
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "key-14801-9252",
+                            "destColumn": "key-14801-9252",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-14801-9250",
+                            "destColumn": "col-14801-9250",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-14801-9251",
+                            "destColumn": "col-14801-9251",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-14789-507__column1",
+                            "destColumn": "prefix-14789-507__column1",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column4",
+                            "destColumn": "prefix-14789-507__column4",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column5",
+                            "destColumn": "prefix-14789-507__column5",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column6",
+                            "destColumn": "prefix-14789-507__column6",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column7",
+                            "destColumn": "prefix-14789-507__column7",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column10",
+                            "destColumn": "prefix-14789-507__column10",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column11",
+                            "destColumn": "prefix-14789-507__column11",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column13",
+                            "destColumn": "prefix-14789-507__column13",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column14",
+                            "destColumn": "prefix-14789-507__column14",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column16",
+                            "destColumn": "prefix-14789-507__column16",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column18",
+                            "destColumn": "prefix-14789-507__column18",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column19",
+                            "destColumn": "prefix-14789-507__column19",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column20",
+                            "destColumn": "prefix-14789-507__column20",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column21",
+                            "destColumn": "prefix-14789-507__column21",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column22",
+                            "destColumn": "prefix-14789-507__column22",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column23",
+                            "destColumn": "prefix-14789-507__column23",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column25",
+                            "destColumn": "prefix-14789-507__column25",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column26",
+                            "destColumn": "prefix-14789-507__column26",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column29",
+                            "destColumn": "prefix-14789-507__column29",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column30",
+                            "destColumn": "prefix-14789-507__column30",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column31",
+                            "destColumn": "prefix-14789-507__column31",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column32",
+                            "destColumn": "prefix-14789-507__column32",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column33",
+                            "destColumn": "prefix-14789-507__column33",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column34",
+                            "destColumn": "prefix-14789-507__column34",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column35",
+                            "destColumn": "prefix-14789-507__column35",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column36",
+                            "destColumn": "prefix-14789-507__column36",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column37",
+                            "destColumn": "prefix-14789-507__column37",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column40",
+                            "destColumn": "prefix-14789-507__column40",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column41",
+                            "destColumn": "prefix-14789-507__column41",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column43",
+                            "destColumn": "prefix-14789-507__column43",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column45",
+                            "destColumn": "prefix-14789-507__column45",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column46",
+                            "destColumn": "prefix-14789-507__column46",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column47",
+                            "destColumn": "prefix-14789-507__column47",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column50",
+                            "destColumn": "prefix-14789-507__column50",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column51",
+                            "destColumn": "prefix-14789-507__column51",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column53",
+                            "destColumn": "prefix-14789-507__column53",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column54",
+                            "destColumn": "prefix-14789-507__column54",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column55",
+                            "destColumn": "prefix-14789-507__column55",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507__column57",
+                            "destColumn": "prefix-14789-507__column57",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-14789-507-column35",
+                            "destColumn": "key-14801-9252",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "source": "temp-66116",
+                "fileName": "export-temp-66116.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-66116",
+                "columns": [
+                    {
+                        "columnName": "key-14801-9252",
+                        "headerName": "key-14801-9252"
+                    },
+                    {
+                        "columnName": "col-14801-9250",
+                        "headerName": "col-14801-9250"
+                    },
+                    {
+                        "columnName": "col-14801-9251",
+                        "headerName": "col-14801-9251"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 7813572878256843901,
+                "splitNumFiles": 2463523346524236911,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1-bli-83f05b59-af9f79a3",
+    "dataflowVersion": 1
+}

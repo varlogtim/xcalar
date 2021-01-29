@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# shellcheck disable=SC2046,SC2086
+
+set -x
+if test -e "$JAVA_HOME"; then
+    if [ -x "$JAVA_HOME"/jre/bin/java ]; then
+        JAVA_BIN="$JAVA_HOME"/jre/bin/java
+    elif [ -x "$JAVA_HOME"/bin/java ]; then
+        JAVA_BIN="$JAVA_HOME"/bin/java
+    fi
+fi
+
+if ! test -x "$JAVA_BIN"; then
+    if JAVA_BIN=$(readlink -f $(which java)); then
+        if test -x "${JAVA_BIN}c"; then
+            JAVA_HOME="${JAVA_BIN%/bin/java}"
+        elif test -x "${JAVA_BIN%/jre/bin/java}"/bin/javac; then
+            JAVA_HOME="${JAVA_BIN%/jre/bin/java}"
+        fi
+    fi
+fi
+if [ -n "$JAVA_HOME" ]; then
+    export JAVA_HOME
+fi
+
+JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME:-$(hostname -s)-swarm}
+JENKINS_URL=https://jenkins.int.xcalar.com
+JENKINS_EXECUTORS=${JENKINS_EXECUTORS:-2}
+SWARM_JAR=${SWARM_JAR:-/usr/share/jenkins/swarm-client.jar}
+
+if [ $(id -u) -eq 0 ]; then
+    EXEC="su-exec $CONTAINER_UID"
+else
+    EXEC=''
+fi
+
+exec $EXEC $JAVA_BIN \
+        -jar "$SWARM_JAR" \
+        -name "${JENKINS_AGENT_NAME}" \
+        -master "${JENKINS_URL}" \
+        -disableSslVerification \
+        -executors "${JENKINS_EXECUTORS}" \
+        -fsroot "${JENKINS_AGENT_WORKDIR}" \
+        -labelsFile "${SWARM_LABELSFILE}" \
+        -username "${SWARM_USER}" \
+        -passwordFile "${SWARM_PASSFILE}" \
+        -deleteExistingClients \
+        -disableClientsUniqueId \
+        -mode exclusive

@@ -1,0 +1,12 @@
+{
+    "xcalarVersion": "1.4.1-1-hying-71de7b26-148e411a",
+    "workbookVersion": 2,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "workbook/udfs/default.py",
+            "udfType": "python"
+        }
+    ]
+}

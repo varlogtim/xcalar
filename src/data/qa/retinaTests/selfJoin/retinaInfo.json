@@ -1,0 +1,17 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "asdf4#BC4",
+            "columns": [
+                {
+                    "columnName": "columns::a",
+                    "headerAlias": "a"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "0.9.9.10-kkochis-036bfecc",
+    "udfs": [],
+    "query": "load --url \"nfs://<pathToQaDatasets>/columns/columns\" --format csv --size 0B  --name \"kk.columns\" --fielddelim , --crlf --header;index --prefix \"columns\" --key \"xcalarRecordNum\" --dataset \".XcalarDS.kk.columns\" --dsttable \"columns#BC0\";index --key \"columns::a\" --srctable \"columns#BC0\" --dsttable \"columns.index#BC3\";index --key \"columns::a\" --srctable \"columns#BC0\" --dsttable \"columns.index#BC2\";join --leftTable \"columns.index#BC3\" --rightTable \"columns.index#BC2\" --joinType innerJoin  --joinTable \"asdf#BC1\";join --leftTable \"asdf#BC1\" --rightTable \"asdf#BC1\" --joinType innerJoin  --joinTable \"asdf4#BC4\";"
+}

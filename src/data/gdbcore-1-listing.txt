@@ -1,0 +1,13 @@
+-rw-rw-rw- 1000/1000      6978 2017-09-27 11:02 env.txt
+-rw-rw-rw- 1000/1000         5 2017-09-27 11:02 osid.txt
+-rw-rw-rw- 1000/1000      9648 2017-09-21 08:06 a.out
+-rw-rw-rw- 1000/1000      2574 2017-09-27 11:02 core.a.out.11181.txt
+-rw-rw-rw- 1000/1000    262144 2017-09-27 08:34 core.a.out.11182
+-rw-rw-rw- 1000/1000      2474 2017-09-27 11:02 core.a.out.11182.txt
+-rw-rw-rw- 1000/1000  17530880 2017-09-27 08:34 core.libdssanity.27923
+-rw-rw-rw- 1000/1000      7203 2017-09-27 11:02 core.libdssanity.27923.txt
+-rw-rw-rw- 1000/1000      7273 2017-09-27 11:02 core.libdssanity.27924.txt
+-rw-rw-rw- 1000/1000  17530880 2017-09-21 07:12 src/lib/tests/core.libdssanity.27924
+lrw-rw-rw- 1000/1000         0 2017-09-27 09:46 src/lib/tests/libdssanity -> libdssanity.real
+-rw-rw-rw- 1000/1000  96416213 2017-09-21 07:09 src/lib/tests/libdssanity.real
+-rw-rw-rw- 1000/1000    262144 2017-09-21 08:06 var/tmp/xcalar-root/core.a.out.11181

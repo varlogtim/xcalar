@@ -1,0 +1,68 @@
+// Copyright 2018 - 2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Workbook;
+
+enum ScopeType {
+    GlobalScopeType = 0;
+    WorkbookScopeType = 1;
+};
+
+message GlobalSpecifier {
+};
+
+message WorkbookSpecifier {
+    message NameSpecifier {
+        string username = 1;
+        string workbookName = 2;
+    };
+
+    NameSpecifier name = 1;
+};
+
+message WorkbookScope {
+    oneof specifier {
+        GlobalSpecifier globl = 2;
+        WorkbookSpecifier workbook = 3;
+    };
+};
+
+message ConvertKvsToQueryRequest {
+    message Parameter{
+        string name = 1;
+        string value = 2;
+    };
+    repeated string kvsString = 1;
+    string dataflowName = 2;
+    bool optimized = 3;
+    string listXdfsOutput = 4;
+    string userName = 5;
+    string sessionId = 6;
+    string workbookName = 7;
+    repeated Parameter parameters = 8;
+};
+
+message ConvertKvsToQueryResponse {
+    bool converted = 1;
+    // Converted query string (if converted is true)
+    // Reason conversion wasn't completed (if converted is false)
+    string resultString = 2;
+
+    // results of this query execution
+    // to be published to global namespace
+    // session table name => published table name
+    map<string, string> publishResultMap = 3;
+};
+
+service Workbook {
+    rpc ConvertKvsToQuery (ConvertKvsToQueryRequest) returns (ConvertKvsToQueryResponse);
+};

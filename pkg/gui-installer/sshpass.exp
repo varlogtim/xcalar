@@ -1,0 +1,28 @@
+#!/usr/bin/env expect
+#
+# Wrap a call to ssh/scp with this script to accept the host key
+# and send the password automatically. Set the SSHPASS environment
+# variable before calling this script.
+#
+# $ export SSHPASS=foobar
+# $ ./sshpass.exp ssh -l root foo.int.xcalar.com ls -l
+#
+#
+
+set timeout 15
+set sshpass $env(SSHPASS)
+
+spawn {*}$argv
+
+expect {
+	"(yes/no)? " {
+		send_user " (accepting host key)\n"
+			send "yes\n"
+			exp_continue
+	}
+	"assword:" {
+		send_user " (sending password)\n"
+			send "$sshpass\n"
+	}
+}
+expect eof

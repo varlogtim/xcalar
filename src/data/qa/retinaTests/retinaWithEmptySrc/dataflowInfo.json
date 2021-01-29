@@ -1,0 +1,71 @@
+{
+    "tables": [
+        {
+            "name": "temp-2460290",
+            "columns": [
+                {
+                    "columnName": "col-18407-2460263",
+                    "headerAlias": "col-18407-2460263"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-bli-a08abee6-4c2d1e8d",
+    "udfs": [],
+    "query": [
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "temp-2460215",
+                "dest": "temp-2460215",
+                "sameSession": false,
+                "columns": []
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "groupAll": false,
+                "source": "temp-2460215",
+                "includeSample": false,
+                "dest": "temp-2460290",
+                "eval": [
+                    {
+                        "evalString": "count(77)",
+                        "newField": "col-18407-2460263"
+                    }
+                ],
+                "newKeyField": "key-18407-2460288",
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 8371475317196355685,
+                "targetName": "Default",
+                "splitSize": 3474021552678268261,
+                "headerType": "every",
+                "source": "temp-2460290",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-2460290.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-2460290",
+                "columns": [
+                    {
+                        "headerName": "col-18407-2460263",
+                        "columnName": "col-18407-2460263"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

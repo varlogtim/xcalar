@@ -1,0 +1,12 @@
+{
+    "xcalarVersion": "1.4.1-1-hying-d824b175-71f4a862",
+    "workbookVersion": 3,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "ymd",
+            "fileName": "workbook/udfs/ymd.py",
+            "udfType": "python"
+        }
+    ]
+}

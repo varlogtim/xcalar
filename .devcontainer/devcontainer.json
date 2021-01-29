@@ -1,0 +1,118 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
+// https://github.com/microsoft/vscode-dev-containers/tree/master/containers/docker-existing-dockerfile
+{
+	"name": "el7-build",
+
+	// Sets the run context to one level up instead of the .devcontainer folder.
+
+	"context": "..",
+
+	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+
+    "build": {
+	    "dockerfile": "../docker/el7/el7-build/Dockerfile",
+	    "context": "..",
+	    "args": {
+	        "CENTOS7": "centos@sha256:8540a199ad51c6b7b51492fa9fee27549fd11b3bb913e888ab2ccf77cbb72cc1",
+            "XCALAR_REPOPKG_URL": "http://repo.xcalar.net",
+            "XCALAR_DOCKER_VERSION": "19.03.8",
+            "XCALAR_CLANG_VERSION": "5",
+            "XCALAR_PYTHON_VERSION": "3.6.11-140",
+            "XCALAR_THRIFT_VERSION": "0.10.0-28",
+            "XCALAR_ARROW_VERSION": "0.13.0-8",
+            "XCALAR_PROTOBUF_VERSION": "3.12.2",
+            "XCALAR_GRPC_VERSION": "1.30.0-5",
+            "LIBARCHIVE_VERSION": "3.3.1-12.el7",
+            "CONTAINER_GID": "1000",
+            "CONTAINER_UID": "1000",
+            "CONTAINER_USER": "xcalardev",
+            "CONTAINER_HOME": "/home/xcalardev"
+	    }
+	}
+
+	//"image": "el7-build:latest",
+    ,
+	// Uncomment the next line to have VS Code connect as an existing non-root user in the container.
+	// On Linux, by default, the container user's UID/GID will be updated to match your local user. See
+	// https://aka.ms/vscode-remote/containers/non-root for details on adding a non-root user if none exist.
+	"containerUser": "xcalardev",
+
+
+	// Uncomment the next line if you will use a ptrace-based debugger like C++, Go, and Rust
+	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined", "--add-host","netstore:10.10.2.136","--dns","10.10.2.136"],
+
+	// Uncomment the next line to use Docker from inside the container. See https://aka.ms/vscode-remote/samples/docker-in-docker for details.
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+		"target=/run,type=tmpfs",
+		"target=/run/lock,type=tmpfs",
+		"source=/sys/fs/cgroup,target=/sys/fs/cgroup,type=bind,readonly",
+		"source=/netstore,target=/netstore,type=bind",
+		"source=/var/tmp/1000,target=/var/tmp/1000,type=bind",
+		"source=${env:USER}_cache_v3,target=/var/opt/cache,type=volume"],
+
+	// Use 'settings' to set *default* container specific settings.json values on container create.
+	// You can edit these settings after create using File > Preferences > Settings > Remote.
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.pythonPath": "/workspaces/xcalar/xcve/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		//"python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
+		//"python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+		"python.formatting.yapfPath": "/workspaces/xcalar/xcve/bin/yapf",
+		//"python.linting.banditPath": "/usr/local/py-utils/bin/bandit",
+		"python.linting.flake8Path": "/workspaces/xcalar/xcve/bin/flake8",
+		//"python.linting.mypyPath": "/usr/local/py-utils/bin/mypy",
+		//"python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
+		//"python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
+		"python.linting.pylintPath": "/workspaces/xcalar/xcve/bin/pylint",
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [8443],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+
+	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "xcalardev",
+
+
+	"containerEnv": {
+		"container": "docker",
+		"XCE_HTTPS_PORT": "8443",
+		"HOST_PROJECT_PATH": "${localWorkspaceFolder}",
+		"VIRTUAL_ENV": "/workspaces/xcalar/xcve",
+		"HOME": "/home/xcalardev",
+		"USER": "xcalardev",
+		"LOGNAME": "xcalardev",
+	    "XLRDIR": "/workspaces/xcalar",
+	    "BUILD_DIR": "/workspaces/xcalar/buildOut",
+	    "PATH": "/workspaces/xcalar/xcve/bin:/workspaces/xcalar/bin:/opt/xcalar/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin"
+	},
+
+
+
+
+	// Use 'appPort' to create a container with published ports. If the port isn't working, be sure
+	// your server accepts connections from all interfaces (0.0.0.0 or '*'), not just localhost.
+
+	"appPort": [8443,10000,27000],
+	// "appPort": [8443,5000,18552,8000,9090],
+
+	// Uncomment the next line to run commands after the container is created - for example installing git.
+	// "postCreateCommand": "apt-get update && apt-get install -y git",
+	// "postCreateCommand": "source bin/xcsetenv",
+
+
+	// Add the IDs of extensions you want installed when the container is created in the array below.
+	"extensions": [
+	    "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "ms-python.python"
+    ]
+
+}
+// vim: ft=json5

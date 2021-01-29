@@ -1,0 +1,12 @@
+{
+    "xcalarVersion": "2.4.0-1-xcalardev-cfa2ab22-8e164e50",
+    "workbookVersion": 4,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "sql",
+            "fileName": "workbook/udfs/sql.py",
+            "udfType": "python"
+        }
+    ]
+}

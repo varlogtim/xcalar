@@ -1,0 +1,265 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398509975780",
+            "columns": [
+                {
+                    "columnName": "col-28951-18014398509966344",
+                    "headerAlias": "retCol-28953-18014398509981468"
+                },
+                {
+                    "columnName": "col-28951-18014398509966345",
+                    "headerAlias": "retCol-28953-18014398509981469"
+                },
+                {
+                    "columnName": "col-28951-18014398509966346",
+                    "headerAlias": "retCol-28953-18014398509981470"
+                },
+                {
+                    "columnName": "col-28951-18014398509966347",
+                    "headerAlias": "retCol-28953-18014398509981471"
+                },
+                {
+                    "columnName": "col-28951-18014398509966348",
+                    "headerAlias": "retCol-28953-18014398509981472"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [],
+    "query": [
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-18014398509966391",
+                "dest": "RN0temp-18014398509966391",
+                "sameSession": false,
+                "columns": [
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966318",
+                        "destColumn": "dsPrefix-28951-18014398509966318",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966319",
+                        "destColumn": "col-28951-18014398509966319",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966320",
+                        "destColumn": "dsPrefix-28951-18014398509966320",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966321",
+                        "destColumn": "col-28951-18014398509966321",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966322",
+                        "destColumn": "dsPrefix-28951-18014398509966322",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966323",
+                        "destColumn": "col-28951-18014398509966323",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966324",
+                        "destColumn": "dsPrefix-28951-18014398509966324",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966325",
+                        "destColumn": "col-28951-18014398509966325",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966326",
+                        "destColumn": "col-28951-18014398509966326",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966327",
+                        "destColumn": "col-28951-18014398509966327",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966328",
+                        "destColumn": "col-28951-18014398509966328",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966329",
+                        "destColumn": "col-28951-18014398509966329",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966330",
+                        "destColumn": "col-28951-18014398509966330",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966331",
+                        "destColumn": "col-28951-18014398509966331",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966332",
+                        "destColumn": "col-28951-18014398509966332",
+                        "columnType": "DfTimespec"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966333",
+                        "destColumn": "col-28951-18014398509966333",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966334",
+                        "destColumn": "col-28951-18014398509966334",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966335",
+                        "destColumn": "dsPrefix-28951-18014398509966335",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966336",
+                        "destColumn": "col-28951-18014398509966336",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966337",
+                        "destColumn": "dsPrefix-28951-18014398509966337",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966338",
+                        "destColumn": "col-28951-18014398509966338",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966339",
+                        "destColumn": "dsPrefix-28951-18014398509966339",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966340",
+                        "destColumn": "col-28951-18014398509966340",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966341",
+                        "destColumn": "dsPrefix-28951-18014398509966341",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966342",
+                        "destColumn": "col-28951-18014398509966342",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966343",
+                        "destColumn": "col-28951-18014398509966343",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966344",
+                        "destColumn": "col-28951-18014398509966344",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966345",
+                        "destColumn": "col-28951-18014398509966345",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966346",
+                        "destColumn": "col-28951-18014398509966346",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966347",
+                        "destColumn": "col-28951-18014398509966347",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966348",
+                        "destColumn": "col-28951-18014398509966348",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-28951-18014398509966349",
+                        "destColumn": "dsPrefix-28951-18014398509966349",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "col-28951-18014398509966350",
+                        "destColumn": "col-28951-18014398509966350",
+                        "columnType": "DfString"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-18014398509966391",
+                "dest": "temp-18014398509975780",
+                "eval": [
+                    {
+                        "evalString": "not(exists(col-28951-18014398509966333))"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398509975780",
+                "dest": ".XcalarLRQExport.temp-18014398509975780",
+                "columns": [
+                    {
+                        "columnName": "col-28951-18014398509966344",
+                        "headerName": "retCol-28953-18014398509981468"
+                    },
+                    {
+                        "columnName": "col-28951-18014398509966345",
+                        "headerName": "retCol-28953-18014398509981469"
+                    },
+                    {
+                        "columnName": "col-28951-18014398509966346",
+                        "headerName": "retCol-28953-18014398509981470"
+                    },
+                    {
+                        "columnName": "col-28951-18014398509966347",
+                        "headerName": "retCol-28953-18014398509981471"
+                    },
+                    {
+                        "columnName": "col-28951-18014398509966348",
+                        "headerName": "retCol-28953-18014398509981472"
+                    }
+                ],
+                "driverName": "do_nothing",
+                "driverParams": "{}"
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "1.4.1-2584-xcalardev-e5fe7089-fc81b860",
+    "dataflowVersion": 1
+}

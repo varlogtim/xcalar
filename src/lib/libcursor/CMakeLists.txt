@@ -1,0 +1,1 @@
+add_xce_library(libcursor STATIC CursorManager.cpp Cursor.cpp)

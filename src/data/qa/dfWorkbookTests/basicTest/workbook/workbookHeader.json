@@ -1,0 +1,12 @@
+{
+    "xcalarVersion": "1.4.1-1-swatanabe-4d68613b-e1f39c50",
+    "workbookVersion": 3,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "marblesudfmodule",
+            "fileName": "workbook/udfs/marblesudfmodule.py",
+            "udfType": "python"
+        }
+    ]
+}

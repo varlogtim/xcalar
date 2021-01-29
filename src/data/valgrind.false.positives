@@ -1,0 +1,50 @@
+{
+   gmonStartLeak
+   Memcheck:Leak
+   fun:calloc
+   fun:monstartup
+   fun:__gmon_start__
+   obj:/lib/x86_64-linux-gnu/libm-2.17.so
+   obj:*
+   fun:call_init.part.0
+   fun:_dl_init
+   obj:/lib/x86_64-linux-gnu/ld-2.17.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.2.5
+   fun:socketTests
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   futex(op)
+   fun:sem_wait
+   fun:socketTestServer
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:sem_wait
+   fun:socketTestServer
+   fun:start_thread
+   fun:clone
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   fun:sendRecvVCommon
+   fun:sendRecvCommon
+   fun:sockSend
+   fun:xcalarApiQueueWork
+   fun:main
+}

@@ -1,0 +1,284 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398509701646",
+            "columns": [
+                {
+                    "columnName": "prefix-20856-18014398509589461::column3",
+                    "headerAlias": "prefix-20856-18014398509589461::column3"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column5",
+                    "headerAlias": "prefix-20856-18014398509589461::column5"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column7",
+                    "headerAlias": "prefix-20856-18014398509589461::column7"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column17",
+                    "headerAlias": "prefix-20856-18014398509589461::column17"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column24",
+                    "headerAlias": "prefix-20856-18014398509589461::column24"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column25",
+                    "headerAlias": "prefix-20856-18014398509589461::column25"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column26",
+                    "headerAlias": "prefix-20856-18014398509589461::column26"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column28",
+                    "headerAlias": "prefix-20856-18014398509589461::column28"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column32",
+                    "headerAlias": "prefix-20856-18014398509589461::column32"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column34",
+                    "headerAlias": "prefix-20856-18014398509589461::column34"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column39",
+                    "headerAlias": "prefix-20856-18014398509589461::column39"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column40",
+                    "headerAlias": "prefix-20856-18014398509589461::column40"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column42",
+                    "headerAlias": "prefix-20856-18014398509589461::column42"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column43",
+                    "headerAlias": "prefix-20856-18014398509589461::column43"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column46",
+                    "headerAlias": "prefix-20856-18014398509589461::column46"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column47",
+                    "headerAlias": "prefix-20856-18014398509589461::column47"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column51",
+                    "headerAlias": "prefix-20856-18014398509589461::column51"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column55",
+                    "headerAlias": "prefix-20856-18014398509589461::column55"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461::column56",
+                    "headerAlias": "prefix-20856-18014398509589461::column56"
+                },
+                {
+                    "columnName": "prefix-20856-18014398509589461-column28",
+                    "headerAlias": "prefix-20856-18014398509589461-column28"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-1-node1-20820-18014398509565119",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/gdelt-small/",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}"
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-1-node1-20820-18014398509565119",
+                "dest": "RN0temp-18014398509597957",
+                "key": [
+                    {
+                        "name": "column28",
+                        "keyFieldName": "prefix-20856-18014398509589461-column28",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-20856-18014398509589461",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "args": {
+                "source": "RN0temp-18014398509597957",
+                "dest": "temp-18014398509637942",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-20856-18014398509589461::column26)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "RN0temp-18014398509597957",
+                "dest": "RN10temp-18014398509643805",
+                "key": [
+                    {
+                        "name": "prefix-20856-18014398509589461::column41",
+                        "keyFieldName": "prefix-20856-18014398509589461-column41",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN10temp-18014398509643805",
+                "dest": "temp-18014398509701646",
+                "eval": [
+                    {
+                        "evalString": "lt(float(prefix-20856-18014398509589461::column13), float(^temp-18014398509637942))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-18014398509701646",
+                "fileName": "export-temp-18014398509701646.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-18014398509701646",
+                "columns": [
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column3",
+                        "headerName": "prefix-20856-18014398509589461::column3"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column5",
+                        "headerName": "prefix-20856-18014398509589461::column5"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column7",
+                        "headerName": "prefix-20856-18014398509589461::column7"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column17",
+                        "headerName": "prefix-20856-18014398509589461::column17"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column24",
+                        "headerName": "prefix-20856-18014398509589461::column24"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column25",
+                        "headerName": "prefix-20856-18014398509589461::column25"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column26",
+                        "headerName": "prefix-20856-18014398509589461::column26"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column28",
+                        "headerName": "prefix-20856-18014398509589461::column28"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column32",
+                        "headerName": "prefix-20856-18014398509589461::column32"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column34",
+                        "headerName": "prefix-20856-18014398509589461::column34"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column39",
+                        "headerName": "prefix-20856-18014398509589461::column39"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column40",
+                        "headerName": "prefix-20856-18014398509589461::column40"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column42",
+                        "headerName": "prefix-20856-18014398509589461::column42"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column43",
+                        "headerName": "prefix-20856-18014398509589461::column43"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column46",
+                        "headerName": "prefix-20856-18014398509589461::column46"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column47",
+                        "headerName": "prefix-20856-18014398509589461::column47"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column51",
+                        "headerName": "prefix-20856-18014398509589461::column51"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column55",
+                        "headerName": "prefix-20856-18014398509589461::column55"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461::column56",
+                        "headerName": "prefix-20856-18014398509589461::column56"
+                    },
+                    {
+                        "columnName": "prefix-20856-18014398509589461-column28",
+                        "headerName": "prefix-20856-18014398509589461-column28"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1420-xcalardev-14303c52-af9f79a3",
+    "dataflowVersion": 1
+}

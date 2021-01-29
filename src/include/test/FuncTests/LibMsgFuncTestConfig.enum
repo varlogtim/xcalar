@@ -1,0 +1,13 @@
+enum LibMsgFuncTestConfig {
+    LibMsgFuncStressThreads:"LibMsgFuncStressThreads",
+    LibMsgTypeBasicSuccessEnable:"LibMsgTypeBasicSuccessEnable",
+    LibMsgTypeBasicSuccessIter:"LibMsgTypeBasicSuccessIter",
+    LibMsgTypeBasicSuccessThreads:"LibMsgTypeBasicSuccessThreads",
+    LibMsgTypeBasicFailureEnable:"LibMsgTypeBasicFailureEnable",
+    LibMsgTypeBasicFailureIter:"LibMsgTypeBasicFailureIter",
+    LibMsgTypeBasicFailureThreads:"LibMsgTypeBasicFailureThreads",
+    LibMsgTypeLargePayloadEnable:"LibMsgTypeLargePayloadEnable",
+    LibMsgTypeLargePayloadIter:"LibMsgTypeLargePayloadIter",
+    LibMsgTypeLargePayloadThreads:"LibMsgTypeLargePayloadThreads",
+    LibMsgTypeMsgStreamEnable:"LibMsgTypeMsgStreamEnable",
+}

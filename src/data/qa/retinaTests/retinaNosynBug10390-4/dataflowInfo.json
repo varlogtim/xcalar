@@ -1,0 +1,281 @@
+{
+    "tables": [
+        {
+            "name": "temp-2380128",
+            "columns": [
+                {
+                    "columnName": "col-22891-2376918",
+                    "headerAlias": "col-22891-2376918"
+                },
+                {
+                    "columnName": "col-22891-2376921",
+                    "headerAlias": "col-22891-2376921"
+                },
+                {
+                    "columnName": "col-22891-2376923",
+                    "headerAlias": "col-22891-2376923"
+                },
+                {
+                    "columnName": "col-22891-2376924",
+                    "headerAlias": "col-22891-2376924"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "fileName": "udfs/default2.py",
+            "moduleName": "default2",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-0-node1-22591-18014398511092373",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-0-node1-22591-18014398511092373",
+                "dest": "RN0temp-1896567",
+                "key": [
+                    {
+                        "name": "flaky",
+                        "keyFieldName": "prefix-22891-1870835-flaky",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-22891-1870835",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "RN0temp-1896567",
+                "dest": "RN0temp-2038527",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-22891-1870835::a.b)",
+                        "newField": "col-22891-2038524"
+                    }
+                ],
+                "newKeyField": "key-22891-2038525",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "RN0temp-2038527",
+                "dest": "RN0temp-2132239",
+                "key": [
+                    {
+                        "name": "col-22891-2038524",
+                        "keyFieldName": "col-22891-2038524",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN0temp-2132239",
+                "dest": "RN0temp-2212299",
+                "eval": [
+                    {
+                        "evalString": "not(exists(key-22891-2038525))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "args": {
+                "source": "RN0temp-2132239",
+                "dest": "temp-2212302",
+                "eval": [
+                    {
+                        "evalString": "count(col-22891-2038524)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "RN0temp-2212299",
+                "dest": "temp-2304834",
+                "columns": [
+                    "col-22891-2038524"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "RN0temp-2212299",
+                "dest": "RN0temp-2293296",
+                "eval": [
+                    {
+                        "evalString": "concat(string(col-22891-2038524), string(15))",
+                        "newField": "col-22892-2292728"
+                    },
+                    {
+                        "evalString": "add(float(col-22891-2038524), float(^temp-2212302))",
+                        "newField": "col-22892-2292831"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-22891-2038524, 75)",
+                        "newField": "col-22892-2293018"
+                    },
+                    {
+                        "evalString": "concat(string(col-22891-2038524), string(1))",
+                        "newField": "col-22892-2293154"
+                    },
+                    {
+                        "evalString": "add(float(col-22891-2038524), float(^temp-2212302))",
+                        "newField": "col-22892-2293291"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "RN0temp-2293296",
+                    "temp-2304834"
+                ],
+                "dest": "temp-2380128",
+                "joinType": "rightJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "key-22891-2038525",
+                            "destColumn": "col-22891-2376917",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-22891-2038524",
+                            "destColumn": "col-22891-2376918",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-22892-2292728",
+                            "destColumn": "col-22891-2376919",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-22892-2292831",
+                            "destColumn": "col-22891-2376920",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-22892-2293018",
+                            "destColumn": "col-22891-2376921",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-22892-2293154",
+                            "destColumn": "col-22891-2376922",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-22892-2293291",
+                            "destColumn": "col-22891-2376923",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "col-22891-2038524",
+                            "destColumn": "col-22891-2376924",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-2380128",
+                "fileName": "export-temp-2380128.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-2380128",
+                "columns": [
+                    {
+                        "columnName": "col-22891-2376918",
+                        "headerName": "col-22891-2376918"
+                    },
+                    {
+                        "columnName": "col-22891-2376921",
+                        "headerName": "col-22891-2376921"
+                    },
+                    {
+                        "columnName": "col-22891-2376923",
+                        "headerName": "col-22891-2376923"
+                    },
+                    {
+                        "columnName": "col-22891-2376924",
+                        "headerName": "col-22891-2376924"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 136,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1421-xcalardev-f5bfb18c-af9f79a3",
+    "dataflowVersion": 1
+}

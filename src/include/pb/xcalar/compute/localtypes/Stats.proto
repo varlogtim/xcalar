@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option cc_enable_arenas = true;
+
+package xcalar.compute.localtypes.Stats;
+
+message StatValue {
+    oneof StatValue {
+        bool   vBool   = 1;
+        uint64 vUInt   = 2;
+        int64  vInt    = 3;
+        double vDouble = 4;
+        string vString = 5;
+        bytes  vBytes = 6;
+    }
+}
+
+enum StatUnits {
+    Default         = 0; // Assert fail if user doesn't specify units
+    Unitless        = 1;
+    Percent         = 2;
+    MicroSeconds    = 3;
+    Bytes           = 4;
+    Operations      = 5;
+    Count           = 6;
+    // ...
+}
+
+enum StatType {
+    StatCumulative = 0;
+    StatAbsoluteWithRefVal = 1;
+    StatAbsoluteWithNoRefVal = 2;
+}
+
+message StatMeta {
+    google.protobuf.StringValue name        = 1;
+    google.protobuf.BoolValue   monotonic   = 2;
+    StatUnits                   units       = 3;
+    google.protobuf.StringValue maxName     = 4; // Name of other stat that defines the maximum amount of this resource
+    // ...
+}
+
+message StatNode {
+    // Can be used to look up name in client dict and for localization
+    uint64                      id          = 1;
+    // Stat metadata only needs to be populated once
+    StatMeta                    meta        = 2;
+    // Optional for internal nodes
+    repeated StatValue          values      = 3;
+    // Only filled in for non-monotonic stats (eg instantaneous memory usage).
+    // Automatically reset after each stats query
+    repeated StatValue          maxValues   = 4;
+    repeated StatNode           children    = 5;
+}
+
+message GetStatsRequest {
+    bool getMeta = 1;
+    bool getFromAllNodes = 2;
+    repeated string statPaths = 3;
+}
+
+message GetStatsPerHostResponse {
+    bool                        status = 1;
+    string                      errMsg = 2;
+    google.protobuf.UInt32Value nodeId = 3;
+    google.protobuf.Timestamp   ts = 4;
+    repeated StatNode           statNodes = 5;
+}
+
+message GetStatsResponse {
+    repeated GetStatsPerHostResponse 	perHostStats = 1;
+}
+
+message GetLibstatsRequest {}
+
+message LibstatNode {
+    string statName = 1;
+    StatValue statValue = 2;
+    uint64 groupId = 3;
+    StatType statType = 4;
+}
+
+
+message GetLibstatsResponse {
+    repeated LibstatNode libstatNodes = 1;
+}
+
+message ResetStatsRequest {
+    // A nodeId of -1 indicates all nodes
+    int64 nodeId = 1;
+    bool resetHwmStats = 2;
+    bool resetCumulativeStats = 3;
+}
+
+message ResetStatsResponse {}
+
+service Stats {
+   rpc GetStats(GetStatsRequest) returns (GetStatsResponse);
+   rpc GetLibstats(GetLibstatsRequest) returns (GetLibstatsResponse);
+   rpc ResetStats(ResetStatsRequest) returns (ResetStatsResponse);
+}

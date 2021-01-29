@@ -1,0 +1,104 @@
+{
+    "tables": [
+        {
+            "name": "expTbl#3",
+            "columns": [
+                {
+                    "columnName": "startRow",
+                    "headerAlias": "startRow"
+                },
+                {
+                    "columnName": "numRows_float",
+                    "headerAlias": "numRows_float"
+                },
+                {
+                    "columnName": "numRows",
+                    "headerAlias": "numRows"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [],
+    "query": [
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "runBatchDataflowbug13481Orig#2",
+            "state": "Created",
+            "args": {
+                "source": "ds10#3",
+                "dest": "expTbl#2",
+                "sameSession": false,
+                "columns": [
+                    {
+                        "sourceColumn": "startRow",
+                        "destColumn": "startRow",
+                        "columnType": "DfScalarObj"
+                    },
+                    {
+                        "sourceColumn": "numRows",
+                        "destColumn": "numRows",
+                        "columnType": "DfScalarObj"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "map#3",
+            "state": "Created",
+            "args": {
+                "source": "expTbl#2",
+                "dest": "expTbl#3",
+                "eval": [
+                    {
+                        "evalString": "float(\"None\")",
+                        "newField": "numRows_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "expTbl#3",
+                "fileName": "export-expTbl#3.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.expTbl#3",
+                "columns": [
+                    {
+                        "columnName": "startRow",
+                        "headerName": "startRow"
+                    },
+                    {
+                        "columnName": "numRows_float",
+                        "headerName": "numRows_float"
+                    },
+                    {
+                        "columnName": "numRows",
+                        "headerName": "numRows"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-pmaddipatla-098cb2b7-4d99d367",
+    "dataflowVersion": 1
+}

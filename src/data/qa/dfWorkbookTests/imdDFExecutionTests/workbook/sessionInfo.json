@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.1.0-1-vgonela-fa486153-c4f91c0a",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5d52115f2bdfbe32",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1565389917",
+        "tvNsec": "244619763"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1565659492",
+        "tvNsec": "352813636"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1565659665",
+        "tvNsec": "773687093"
+    },
+    "sessionName": "imdDFExecutionTests"
+}

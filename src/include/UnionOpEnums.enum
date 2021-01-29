@@ -1,0 +1,5 @@
+enum UnionOperator {
+    UnionStandard:"unionStandard",
+    UnionIntersect:"unionIntersect",
+    UnionExcept:"unionExcept",
+};

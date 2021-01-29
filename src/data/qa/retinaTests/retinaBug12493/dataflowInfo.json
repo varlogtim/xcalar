@@ -1,0 +1,2639 @@
+{
+    "tables": [
+        {
+            "name": "gdelt-small20130403#5",
+            "columns": [
+                {
+                    "columnName": "gdelt-small20130403::column0",
+                    "headerAlias": "column0"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column1",
+                    "headerAlias": "column1"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column2",
+                    "headerAlias": "column2"
+                },
+                {
+                    "columnName": "column3_add",
+                    "headerAlias": "column3_add"
+                },
+                {
+                    "columnName": "column3",
+                    "headerAlias": "column3"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column4",
+                    "headerAlias": "column4"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column5",
+                    "headerAlias": "column5"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column6",
+                    "headerAlias": "column6"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column7",
+                    "headerAlias": "column7"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column8",
+                    "headerAlias": "column8"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column9",
+                    "headerAlias": "column9"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column10",
+                    "headerAlias": "column10"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column11",
+                    "headerAlias": "column11"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column12",
+                    "headerAlias": "column12"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column13",
+                    "headerAlias": "column13"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column14",
+                    "headerAlias": "column14"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column15",
+                    "headerAlias": "column15"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column16",
+                    "headerAlias": "column16"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column17",
+                    "headerAlias": "column17"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column18",
+                    "headerAlias": "column18"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column19",
+                    "headerAlias": "column19"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column20",
+                    "headerAlias": "column20"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column21",
+                    "headerAlias": "column21"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column22",
+                    "headerAlias": "column22"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column23",
+                    "headerAlias": "column23"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column24",
+                    "headerAlias": "column24"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column25",
+                    "headerAlias": "column25"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column26",
+                    "headerAlias": "column26"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column27",
+                    "headerAlias": "column27"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column28",
+                    "headerAlias": "column28"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column29",
+                    "headerAlias": "column29"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column30",
+                    "headerAlias": "column30"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column31",
+                    "headerAlias": "column31"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column32",
+                    "headerAlias": "column32"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column33",
+                    "headerAlias": "column33"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column34",
+                    "headerAlias": "column34"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column35",
+                    "headerAlias": "column35"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column36",
+                    "headerAlias": "column36"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column37",
+                    "headerAlias": "column37"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column38",
+                    "headerAlias": "column38"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column39",
+                    "headerAlias": "column39"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column40",
+                    "headerAlias": "column40"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column41",
+                    "headerAlias": "column41"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column42",
+                    "headerAlias": "column42"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column43",
+                    "headerAlias": "column43"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column44",
+                    "headerAlias": "column44"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column45",
+                    "headerAlias": "column45"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column46",
+                    "headerAlias": "column46"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column47",
+                    "headerAlias": "column47"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column48",
+                    "headerAlias": "column48"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column49",
+                    "headerAlias": "column49"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column50",
+                    "headerAlias": "column50"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column51",
+                    "headerAlias": "column51"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column52",
+                    "headerAlias": "column52"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column53",
+                    "headerAlias": "column53"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column54",
+                    "headerAlias": "column54"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column55",
+                    "headerAlias": "column55"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column56",
+                    "headerAlias": "column56"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column57",
+                    "headerAlias": "column57"
+                }
+            ]
+        },
+        {
+            "name": "gdelt-small20130403#4",
+            "columns": [
+                {
+                    "columnName": "gdelt-small20130403::column0",
+                    "headerAlias": "column0"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column1",
+                    "headerAlias": "column1"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column2",
+                    "headerAlias": "column2"
+                },
+                {
+                    "columnName": "column3_add",
+                    "headerAlias": "column3_add"
+                },
+                {
+                    "columnName": "column3",
+                    "headerAlias": "column3"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column4",
+                    "headerAlias": "column4"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column5",
+                    "headerAlias": "column5"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column6",
+                    "headerAlias": "column6"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column7",
+                    "headerAlias": "column7"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column8",
+                    "headerAlias": "column8"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column9",
+                    "headerAlias": "column9"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column10",
+                    "headerAlias": "column10"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column11",
+                    "headerAlias": "column11"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column12",
+                    "headerAlias": "column12"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column13",
+                    "headerAlias": "column13"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column14",
+                    "headerAlias": "column14"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column15",
+                    "headerAlias": "column15"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column16",
+                    "headerAlias": "column16"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column17",
+                    "headerAlias": "column17"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column18",
+                    "headerAlias": "column18"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column19",
+                    "headerAlias": "column19"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column20",
+                    "headerAlias": "column20"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column21",
+                    "headerAlias": "column21"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column22",
+                    "headerAlias": "column22"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column23",
+                    "headerAlias": "column23"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column24",
+                    "headerAlias": "column24"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column25",
+                    "headerAlias": "column25"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column26",
+                    "headerAlias": "column26"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column27",
+                    "headerAlias": "column27"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column28",
+                    "headerAlias": "column28"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column29",
+                    "headerAlias": "column29"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column30",
+                    "headerAlias": "column30"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column31",
+                    "headerAlias": "column31"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column32",
+                    "headerAlias": "column32"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column33",
+                    "headerAlias": "column33"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column34",
+                    "headerAlias": "column34"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column35",
+                    "headerAlias": "column35"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column36",
+                    "headerAlias": "column36"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column37",
+                    "headerAlias": "column37"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column38",
+                    "headerAlias": "column38"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column39",
+                    "headerAlias": "column39"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column40",
+                    "headerAlias": "column40"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column41",
+                    "headerAlias": "column41"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column42",
+                    "headerAlias": "column42"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column43",
+                    "headerAlias": "column43"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column44",
+                    "headerAlias": "column44"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column45",
+                    "headerAlias": "column45"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column46",
+                    "headerAlias": "column46"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column47",
+                    "headerAlias": "column47"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column48",
+                    "headerAlias": "column48"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column49",
+                    "headerAlias": "column49"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column50",
+                    "headerAlias": "column50"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column51",
+                    "headerAlias": "column51"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column52",
+                    "headerAlias": "column52"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column53",
+                    "headerAlias": "column53"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column54",
+                    "headerAlias": "column54"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column55",
+                    "headerAlias": "column55"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column56",
+                    "headerAlias": "column56"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column57",
+                    "headerAlias": "column57"
+                }
+            ]
+        },
+        {
+            "name": "gdelt-small20130403#2",
+            "columns": [
+                {
+                    "columnName": "gdelt-small20130403::column0",
+                    "headerAlias": "column0"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column1",
+                    "headerAlias": "column1"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column2",
+                    "headerAlias": "column2"
+                },
+                {
+                    "columnName": "column3",
+                    "headerAlias": "column3"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column4",
+                    "headerAlias": "column4"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column5",
+                    "headerAlias": "column5"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column6",
+                    "headerAlias": "column6"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column7",
+                    "headerAlias": "column7"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column8",
+                    "headerAlias": "column8"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column9",
+                    "headerAlias": "column9"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column10",
+                    "headerAlias": "column10"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column11",
+                    "headerAlias": "column11"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column12",
+                    "headerAlias": "column12"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column13",
+                    "headerAlias": "column13"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column14",
+                    "headerAlias": "column14"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column15",
+                    "headerAlias": "column15"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column16",
+                    "headerAlias": "column16"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column17",
+                    "headerAlias": "column17"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column18",
+                    "headerAlias": "column18"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column19",
+                    "headerAlias": "column19"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column20",
+                    "headerAlias": "column20"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column21",
+                    "headerAlias": "column21"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column22",
+                    "headerAlias": "column22"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column23",
+                    "headerAlias": "column23"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column24",
+                    "headerAlias": "column24"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column25",
+                    "headerAlias": "column25"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column26",
+                    "headerAlias": "column26"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column27",
+                    "headerAlias": "column27"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column28",
+                    "headerAlias": "column28"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column29",
+                    "headerAlias": "column29"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column30",
+                    "headerAlias": "column30"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column31",
+                    "headerAlias": "column31"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column32",
+                    "headerAlias": "column32"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column33",
+                    "headerAlias": "column33"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column34",
+                    "headerAlias": "column34"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column35",
+                    "headerAlias": "column35"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column36",
+                    "headerAlias": "column36"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column37",
+                    "headerAlias": "column37"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column38",
+                    "headerAlias": "column38"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column39",
+                    "headerAlias": "column39"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column40",
+                    "headerAlias": "column40"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column41",
+                    "headerAlias": "column41"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column42",
+                    "headerAlias": "column42"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column43",
+                    "headerAlias": "column43"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column44",
+                    "headerAlias": "column44"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column45",
+                    "headerAlias": "column45"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column46",
+                    "headerAlias": "column46"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column47",
+                    "headerAlias": "column47"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column48",
+                    "headerAlias": "column48"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column49",
+                    "headerAlias": "column49"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column50",
+                    "headerAlias": "column50"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column51",
+                    "headerAlias": "column51"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column52",
+                    "headerAlias": "column52"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column53",
+                    "headerAlias": "column53"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column54",
+                    "headerAlias": "column54"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column55",
+                    "headerAlias": "column55"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column56",
+                    "headerAlias": "column56"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column57",
+                    "headerAlias": "column57"
+                }
+            ]
+        },
+        {
+            "name": "gdelt-small20130403#1",
+            "columns": [
+                {
+                    "columnName": "gdelt-small20130403::column0",
+                    "headerAlias": "column0"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column1",
+                    "headerAlias": "column1"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column2",
+                    "headerAlias": "column2"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column3",
+                    "headerAlias": "column3"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column4",
+                    "headerAlias": "column4"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column5",
+                    "headerAlias": "column5"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column6",
+                    "headerAlias": "column6"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column7",
+                    "headerAlias": "column7"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column8",
+                    "headerAlias": "column8"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column9",
+                    "headerAlias": "column9"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column10",
+                    "headerAlias": "column10"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column11",
+                    "headerAlias": "column11"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column12",
+                    "headerAlias": "column12"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column13",
+                    "headerAlias": "column13"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column14",
+                    "headerAlias": "column14"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column15",
+                    "headerAlias": "column15"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column16",
+                    "headerAlias": "column16"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column17",
+                    "headerAlias": "column17"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column18",
+                    "headerAlias": "column18"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column19",
+                    "headerAlias": "column19"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column20",
+                    "headerAlias": "column20"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column21",
+                    "headerAlias": "column21"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column22",
+                    "headerAlias": "column22"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column23",
+                    "headerAlias": "column23"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column24",
+                    "headerAlias": "column24"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column25",
+                    "headerAlias": "column25"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column26",
+                    "headerAlias": "column26"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column27",
+                    "headerAlias": "column27"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column28",
+                    "headerAlias": "column28"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column29",
+                    "headerAlias": "column29"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column30",
+                    "headerAlias": "column30"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column31",
+                    "headerAlias": "column31"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column32",
+                    "headerAlias": "column32"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column33",
+                    "headerAlias": "column33"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column34",
+                    "headerAlias": "column34"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column35",
+                    "headerAlias": "column35"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column36",
+                    "headerAlias": "column36"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column37",
+                    "headerAlias": "column37"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column38",
+                    "headerAlias": "column38"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column39",
+                    "headerAlias": "column39"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column40",
+                    "headerAlias": "column40"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column41",
+                    "headerAlias": "column41"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column42",
+                    "headerAlias": "column42"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column43",
+                    "headerAlias": "column43"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column44",
+                    "headerAlias": "column44"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column45",
+                    "headerAlias": "column45"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column46",
+                    "headerAlias": "column46"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column47",
+                    "headerAlias": "column47"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column48",
+                    "headerAlias": "column48"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column49",
+                    "headerAlias": "column49"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column50",
+                    "headerAlias": "column50"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column51",
+                    "headerAlias": "column51"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column52",
+                    "headerAlias": "column52"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column53",
+                    "headerAlias": "column53"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column54",
+                    "headerAlias": "column54"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column55",
+                    "headerAlias": "column55"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column56",
+                    "headerAlias": "column56"
+                },
+                {
+                    "columnName": "gdelt-small20130403::column57",
+                    "headerAlias": "column57"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "column0",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column1",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column2",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column3",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column4",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column5",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column6",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column7",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column8",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column9",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column10",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column11",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column12",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column13",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column14",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column15",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column16",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column17",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column18",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column19",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column20",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column21",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column22",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column23",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column24",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column25",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column26",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column27",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column28",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column29",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column30",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column31",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column32",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column33",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column34",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column35",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column36",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column37",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column38",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column39",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column40",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column41",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column42",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column43",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column44",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column45",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column46",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column47",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column48",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column49",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column50",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column51",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column52",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column53",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column54",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column55",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column56",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column57",
+            "type": "DfUnknown"
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-srinathk-75c8d00b-25f8c8a8",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.admin.24685.gdelt-small20130403",
+                "loadArgs": {
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"isCRLF\":false,\"linesToSkip\":0,\"quoteDelim\":\"\\\"\",\"hasHeader\":false,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "column0",
+                                "columnType": "DfInt64",
+                                "destColumn": "column0"
+                            },
+                            {
+                                "sourceColumn": "column1",
+                                "columnType": "DfInt64",
+                                "destColumn": "column1"
+                            },
+                            {
+                                "sourceColumn": "column2",
+                                "columnType": "DfInt64",
+                                "destColumn": "column2"
+                            },
+                            {
+                                "sourceColumn": "column3",
+                                "columnType": "DfInt64",
+                                "destColumn": "column3"
+                            },
+                            {
+                                "sourceColumn": "column4",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column4"
+                            },
+                            {
+                                "sourceColumn": "column5",
+                                "columnType": "DfString",
+                                "destColumn": "column5"
+                            },
+                            {
+                                "sourceColumn": "column6",
+                                "columnType": "DfString",
+                                "destColumn": "column6"
+                            },
+                            {
+                                "sourceColumn": "column7",
+                                "columnType": "DfString",
+                                "destColumn": "column7"
+                            },
+                            {
+                                "sourceColumn": "column8",
+                                "columnType": "DfString",
+                                "destColumn": "column8"
+                            },
+                            {
+                                "sourceColumn": "column9",
+                                "columnType": "DfString",
+                                "destColumn": "column9"
+                            },
+                            {
+                                "sourceColumn": "column10",
+                                "columnType": "DfString",
+                                "destColumn": "column10"
+                            },
+                            {
+                                "sourceColumn": "column11",
+                                "columnType": "DfString",
+                                "destColumn": "column11"
+                            },
+                            {
+                                "sourceColumn": "column12",
+                                "columnType": "DfString",
+                                "destColumn": "column12"
+                            },
+                            {
+                                "sourceColumn": "column13",
+                                "columnType": "DfString",
+                                "destColumn": "column13"
+                            },
+                            {
+                                "sourceColumn": "column14",
+                                "columnType": "DfString",
+                                "destColumn": "column14"
+                            },
+                            {
+                                "sourceColumn": "column15",
+                                "columnType": "DfString",
+                                "destColumn": "column15"
+                            },
+                            {
+                                "sourceColumn": "column16",
+                                "columnType": "DfString",
+                                "destColumn": "column16"
+                            },
+                            {
+                                "sourceColumn": "column17",
+                                "columnType": "DfString",
+                                "destColumn": "column17"
+                            },
+                            {
+                                "sourceColumn": "column18",
+                                "columnType": "DfString",
+                                "destColumn": "column18"
+                            },
+                            {
+                                "sourceColumn": "column19",
+                                "columnType": "DfString",
+                                "destColumn": "column19"
+                            },
+                            {
+                                "sourceColumn": "column20",
+                                "columnType": "DfString",
+                                "destColumn": "column20"
+                            },
+                            {
+                                "sourceColumn": "column21",
+                                "columnType": "DfString",
+                                "destColumn": "column21"
+                            },
+                            {
+                                "sourceColumn": "column22",
+                                "columnType": "DfString",
+                                "destColumn": "column22"
+                            },
+                            {
+                                "sourceColumn": "column23",
+                                "columnType": "DfString",
+                                "destColumn": "column23"
+                            },
+                            {
+                                "sourceColumn": "column24",
+                                "columnType": "DfString",
+                                "destColumn": "column24"
+                            },
+                            {
+                                "sourceColumn": "column25",
+                                "columnType": "DfInt64",
+                                "destColumn": "column25"
+                            },
+                            {
+                                "sourceColumn": "column26",
+                                "columnType": "DfInt64",
+                                "destColumn": "column26"
+                            },
+                            {
+                                "sourceColumn": "column27",
+                                "columnType": "DfInt64",
+                                "destColumn": "column27"
+                            },
+                            {
+                                "sourceColumn": "column28",
+                                "columnType": "DfInt64",
+                                "destColumn": "column28"
+                            },
+                            {
+                                "sourceColumn": "column29",
+                                "columnType": "DfInt64",
+                                "destColumn": "column29"
+                            },
+                            {
+                                "sourceColumn": "column30",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column30"
+                            },
+                            {
+                                "sourceColumn": "column31",
+                                "columnType": "DfInt64",
+                                "destColumn": "column31"
+                            },
+                            {
+                                "sourceColumn": "column32",
+                                "columnType": "DfInt64",
+                                "destColumn": "column32"
+                            },
+                            {
+                                "sourceColumn": "column33",
+                                "columnType": "DfInt64",
+                                "destColumn": "column33"
+                            },
+                            {
+                                "sourceColumn": "column34",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column34"
+                            },
+                            {
+                                "sourceColumn": "column35",
+                                "columnType": "DfInt64",
+                                "destColumn": "column35"
+                            },
+                            {
+                                "sourceColumn": "column36",
+                                "columnType": "DfString",
+                                "destColumn": "column36"
+                            },
+                            {
+                                "sourceColumn": "column37",
+                                "columnType": "DfString",
+                                "destColumn": "column37"
+                            },
+                            {
+                                "sourceColumn": "column38",
+                                "columnType": "DfString",
+                                "destColumn": "column38"
+                            },
+                            {
+                                "sourceColumn": "column39",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column39"
+                            },
+                            {
+                                "sourceColumn": "column40",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column40"
+                            },
+                            {
+                                "sourceColumn": "column41",
+                                "columnType": "DfInt64",
+                                "destColumn": "column41"
+                            },
+                            {
+                                "sourceColumn": "column42",
+                                "columnType": "DfInt64",
+                                "destColumn": "column42"
+                            },
+                            {
+                                "sourceColumn": "column43",
+                                "columnType": "DfString",
+                                "destColumn": "column43"
+                            },
+                            {
+                                "sourceColumn": "column44",
+                                "columnType": "DfString",
+                                "destColumn": "column44"
+                            },
+                            {
+                                "sourceColumn": "column45",
+                                "columnType": "DfString",
+                                "destColumn": "column45"
+                            },
+                            {
+                                "sourceColumn": "column46",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column46"
+                            },
+                            {
+                                "sourceColumn": "column47",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column47"
+                            },
+                            {
+                                "sourceColumn": "column48",
+                                "columnType": "DfString",
+                                "destColumn": "column48"
+                            },
+                            {
+                                "sourceColumn": "column49",
+                                "columnType": "DfInt64",
+                                "destColumn": "column49"
+                            },
+                            {
+                                "sourceColumn": "column50",
+                                "columnType": "DfString",
+                                "destColumn": "column50"
+                            },
+                            {
+                                "sourceColumn": "column51",
+                                "columnType": "DfString",
+                                "destColumn": "column51"
+                            },
+                            {
+                                "sourceColumn": "column52",
+                                "columnType": "DfString",
+                                "destColumn": "column52"
+                            },
+                            {
+                                "sourceColumn": "column53",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column53"
+                            },
+                            {
+                                "sourceColumn": "column54",
+                                "columnType": "DfFloat64",
+                                "destColumn": "column54"
+                            },
+                            {
+                                "sourceColumn": "column55",
+                                "columnType": "DfString",
+                                "destColumn": "column55"
+                            },
+                            {
+                                "sourceColumn": "column56",
+                                "columnType": "DfInt64",
+                                "destColumn": "column56"
+                            },
+                            {
+                                "sourceColumn": "column57",
+                                "columnType": "DfString",
+                                "destColumn": "column57"
+                            }
+                        ]
+                    },
+                    "sourceArgsList": [
+                        {
+                            "recursive": false,
+                            "path": "/netstore/datasets/gdelt-small/20130403.export.csv",
+                            "targetName": "Default Shared Root",
+                            "fileNamePattern": ""
+                        }
+                    ],
+                    "size": 10737418240
+                }
+            },
+            "tag": "",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.admin.24685.gdelt-small20130403",
+                "dest": "gdelt-small20130403#1",
+                "prefix": "gdelt-small20130403",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "gdelt-small20130403-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "indexFromDataset#1",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "gdelt-small20130403#1",
+                "dest": "gdelt-small20130403#2",
+                "eval": [
+                    {
+                        "evalString": "int(gdelt-small20130403::column3, 10)",
+                        "newField": "column3"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "sort#3",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "gdelt-small20130403#2",
+                "dest": "gdelt-small20130403#4",
+                "eval": [
+                    {
+                        "evalString": "add(column3, 1)",
+                        "newField": "column3_add"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "map#4",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "gdelt-small20130403#4",
+                "dest": "gdelt-small20130403#5",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "column3_add",
+                        "ordering": "Ascending",
+                        "keyFieldName": "column3_add",
+                        "type": "DfFloat64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "sort#5",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "gdelt-small20130403#5",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-gdelt-small20130403#511.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.gdelt-small20130403#5",
+                "columns": [
+                    {
+                        "headerName": "column0",
+                        "columnName": "gdelt-small20130403::column0"
+                    },
+                    {
+                        "headerName": "column1",
+                        "columnName": "gdelt-small20130403::column1"
+                    },
+                    {
+                        "headerName": "column2",
+                        "columnName": "gdelt-small20130403::column2"
+                    },
+                    {
+                        "headerName": "column3_add",
+                        "columnName": "column3_add"
+                    },
+                    {
+                        "headerName": "column3",
+                        "columnName": "column3"
+                    },
+                    {
+                        "headerName": "column4",
+                        "columnName": "gdelt-small20130403::column4"
+                    },
+                    {
+                        "headerName": "column5",
+                        "columnName": "gdelt-small20130403::column5"
+                    },
+                    {
+                        "headerName": "column6",
+                        "columnName": "gdelt-small20130403::column6"
+                    },
+                    {
+                        "headerName": "column7",
+                        "columnName": "gdelt-small20130403::column7"
+                    },
+                    {
+                        "headerName": "column8",
+                        "columnName": "gdelt-small20130403::column8"
+                    },
+                    {
+                        "headerName": "column9",
+                        "columnName": "gdelt-small20130403::column9"
+                    },
+                    {
+                        "headerName": "column10",
+                        "columnName": "gdelt-small20130403::column10"
+                    },
+                    {
+                        "headerName": "column11",
+                        "columnName": "gdelt-small20130403::column11"
+                    },
+                    {
+                        "headerName": "column12",
+                        "columnName": "gdelt-small20130403::column12"
+                    },
+                    {
+                        "headerName": "column13",
+                        "columnName": "gdelt-small20130403::column13"
+                    },
+                    {
+                        "headerName": "column14",
+                        "columnName": "gdelt-small20130403::column14"
+                    },
+                    {
+                        "headerName": "column15",
+                        "columnName": "gdelt-small20130403::column15"
+                    },
+                    {
+                        "headerName": "column16",
+                        "columnName": "gdelt-small20130403::column16"
+                    },
+                    {
+                        "headerName": "column17",
+                        "columnName": "gdelt-small20130403::column17"
+                    },
+                    {
+                        "headerName": "column18",
+                        "columnName": "gdelt-small20130403::column18"
+                    },
+                    {
+                        "headerName": "column19",
+                        "columnName": "gdelt-small20130403::column19"
+                    },
+                    {
+                        "headerName": "column20",
+                        "columnName": "gdelt-small20130403::column20"
+                    },
+                    {
+                        "headerName": "column21",
+                        "columnName": "gdelt-small20130403::column21"
+                    },
+                    {
+                        "headerName": "column22",
+                        "columnName": "gdelt-small20130403::column22"
+                    },
+                    {
+                        "headerName": "column23",
+                        "columnName": "gdelt-small20130403::column23"
+                    },
+                    {
+                        "headerName": "column24",
+                        "columnName": "gdelt-small20130403::column24"
+                    },
+                    {
+                        "headerName": "column25",
+                        "columnName": "gdelt-small20130403::column25"
+                    },
+                    {
+                        "headerName": "column26",
+                        "columnName": "gdelt-small20130403::column26"
+                    },
+                    {
+                        "headerName": "column27",
+                        "columnName": "gdelt-small20130403::column27"
+                    },
+                    {
+                        "headerName": "column28",
+                        "columnName": "gdelt-small20130403::column28"
+                    },
+                    {
+                        "headerName": "column29",
+                        "columnName": "gdelt-small20130403::column29"
+                    },
+                    {
+                        "headerName": "column30",
+                        "columnName": "gdelt-small20130403::column30"
+                    },
+                    {
+                        "headerName": "column31",
+                        "columnName": "gdelt-small20130403::column31"
+                    },
+                    {
+                        "headerName": "column32",
+                        "columnName": "gdelt-small20130403::column32"
+                    },
+                    {
+                        "headerName": "column33",
+                        "columnName": "gdelt-small20130403::column33"
+                    },
+                    {
+                        "headerName": "column34",
+                        "columnName": "gdelt-small20130403::column34"
+                    },
+                    {
+                        "headerName": "column35",
+                        "columnName": "gdelt-small20130403::column35"
+                    },
+                    {
+                        "headerName": "column36",
+                        "columnName": "gdelt-small20130403::column36"
+                    },
+                    {
+                        "headerName": "column37",
+                        "columnName": "gdelt-small20130403::column37"
+                    },
+                    {
+                        "headerName": "column38",
+                        "columnName": "gdelt-small20130403::column38"
+                    },
+                    {
+                        "headerName": "column39",
+                        "columnName": "gdelt-small20130403::column39"
+                    },
+                    {
+                        "headerName": "column40",
+                        "columnName": "gdelt-small20130403::column40"
+                    },
+                    {
+                        "headerName": "column41",
+                        "columnName": "gdelt-small20130403::column41"
+                    },
+                    {
+                        "headerName": "column42",
+                        "columnName": "gdelt-small20130403::column42"
+                    },
+                    {
+                        "headerName": "column43",
+                        "columnName": "gdelt-small20130403::column43"
+                    },
+                    {
+                        "headerName": "column44",
+                        "columnName": "gdelt-small20130403::column44"
+                    },
+                    {
+                        "headerName": "column45",
+                        "columnName": "gdelt-small20130403::column45"
+                    },
+                    {
+                        "headerName": "column46",
+                        "columnName": "gdelt-small20130403::column46"
+                    },
+                    {
+                        "headerName": "column47",
+                        "columnName": "gdelt-small20130403::column47"
+                    },
+                    {
+                        "headerName": "column48",
+                        "columnName": "gdelt-small20130403::column48"
+                    },
+                    {
+                        "headerName": "column49",
+                        "columnName": "gdelt-small20130403::column49"
+                    },
+                    {
+                        "headerName": "column50",
+                        "columnName": "gdelt-small20130403::column50"
+                    },
+                    {
+                        "headerName": "column51",
+                        "columnName": "gdelt-small20130403::column51"
+                    },
+                    {
+                        "headerName": "column52",
+                        "columnName": "gdelt-small20130403::column52"
+                    },
+                    {
+                        "headerName": "column53",
+                        "columnName": "gdelt-small20130403::column53"
+                    },
+                    {
+                        "headerName": "column54",
+                        "columnName": "gdelt-small20130403::column54"
+                    },
+                    {
+                        "headerName": "column55",
+                        "columnName": "gdelt-small20130403::column55"
+                    },
+                    {
+                        "headerName": "column56",
+                        "columnName": "gdelt-small20130403::column56"
+                    },
+                    {
+                        "headerName": "column57",
+                        "columnName": "gdelt-small20130403::column57"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "gdelt-small20130403#4",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-gdelt-small20130403#411.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.gdelt-small20130403#4",
+                "columns": [
+                    {
+                        "headerName": "column0",
+                        "columnName": "gdelt-small20130403::column0"
+                    },
+                    {
+                        "headerName": "column1",
+                        "columnName": "gdelt-small20130403::column1"
+                    },
+                    {
+                        "headerName": "column2",
+                        "columnName": "gdelt-small20130403::column2"
+                    },
+                    {
+                        "headerName": "column3_add",
+                        "columnName": "column3_add"
+                    },
+                    {
+                        "headerName": "column3",
+                        "columnName": "column3"
+                    },
+                    {
+                        "headerName": "column4",
+                        "columnName": "gdelt-small20130403::column4"
+                    },
+                    {
+                        "headerName": "column5",
+                        "columnName": "gdelt-small20130403::column5"
+                    },
+                    {
+                        "headerName": "column6",
+                        "columnName": "gdelt-small20130403::column6"
+                    },
+                    {
+                        "headerName": "column7",
+                        "columnName": "gdelt-small20130403::column7"
+                    },
+                    {
+                        "headerName": "column8",
+                        "columnName": "gdelt-small20130403::column8"
+                    },
+                    {
+                        "headerName": "column9",
+                        "columnName": "gdelt-small20130403::column9"
+                    },
+                    {
+                        "headerName": "column10",
+                        "columnName": "gdelt-small20130403::column10"
+                    },
+                    {
+                        "headerName": "column11",
+                        "columnName": "gdelt-small20130403::column11"
+                    },
+                    {
+                        "headerName": "column12",
+                        "columnName": "gdelt-small20130403::column12"
+                    },
+                    {
+                        "headerName": "column13",
+                        "columnName": "gdelt-small20130403::column13"
+                    },
+                    {
+                        "headerName": "column14",
+                        "columnName": "gdelt-small20130403::column14"
+                    },
+                    {
+                        "headerName": "column15",
+                        "columnName": "gdelt-small20130403::column15"
+                    },
+                    {
+                        "headerName": "column16",
+                        "columnName": "gdelt-small20130403::column16"
+                    },
+                    {
+                        "headerName": "column17",
+                        "columnName": "gdelt-small20130403::column17"
+                    },
+                    {
+                        "headerName": "column18",
+                        "columnName": "gdelt-small20130403::column18"
+                    },
+                    {
+                        "headerName": "column19",
+                        "columnName": "gdelt-small20130403::column19"
+                    },
+                    {
+                        "headerName": "column20",
+                        "columnName": "gdelt-small20130403::column20"
+                    },
+                    {
+                        "headerName": "column21",
+                        "columnName": "gdelt-small20130403::column21"
+                    },
+                    {
+                        "headerName": "column22",
+                        "columnName": "gdelt-small20130403::column22"
+                    },
+                    {
+                        "headerName": "column23",
+                        "columnName": "gdelt-small20130403::column23"
+                    },
+                    {
+                        "headerName": "column24",
+                        "columnName": "gdelt-small20130403::column24"
+                    },
+                    {
+                        "headerName": "column25",
+                        "columnName": "gdelt-small20130403::column25"
+                    },
+                    {
+                        "headerName": "column26",
+                        "columnName": "gdelt-small20130403::column26"
+                    },
+                    {
+                        "headerName": "column27",
+                        "columnName": "gdelt-small20130403::column27"
+                    },
+                    {
+                        "headerName": "column28",
+                        "columnName": "gdelt-small20130403::column28"
+                    },
+                    {
+                        "headerName": "column29",
+                        "columnName": "gdelt-small20130403::column29"
+                    },
+                    {
+                        "headerName": "column30",
+                        "columnName": "gdelt-small20130403::column30"
+                    },
+                    {
+                        "headerName": "column31",
+                        "columnName": "gdelt-small20130403::column31"
+                    },
+                    {
+                        "headerName": "column32",
+                        "columnName": "gdelt-small20130403::column32"
+                    },
+                    {
+                        "headerName": "column33",
+                        "columnName": "gdelt-small20130403::column33"
+                    },
+                    {
+                        "headerName": "column34",
+                        "columnName": "gdelt-small20130403::column34"
+                    },
+                    {
+                        "headerName": "column35",
+                        "columnName": "gdelt-small20130403::column35"
+                    },
+                    {
+                        "headerName": "column36",
+                        "columnName": "gdelt-small20130403::column36"
+                    },
+                    {
+                        "headerName": "column37",
+                        "columnName": "gdelt-small20130403::column37"
+                    },
+                    {
+                        "headerName": "column38",
+                        "columnName": "gdelt-small20130403::column38"
+                    },
+                    {
+                        "headerName": "column39",
+                        "columnName": "gdelt-small20130403::column39"
+                    },
+                    {
+                        "headerName": "column40",
+                        "columnName": "gdelt-small20130403::column40"
+                    },
+                    {
+                        "headerName": "column41",
+                        "columnName": "gdelt-small20130403::column41"
+                    },
+                    {
+                        "headerName": "column42",
+                        "columnName": "gdelt-small20130403::column42"
+                    },
+                    {
+                        "headerName": "column43",
+                        "columnName": "gdelt-small20130403::column43"
+                    },
+                    {
+                        "headerName": "column44",
+                        "columnName": "gdelt-small20130403::column44"
+                    },
+                    {
+                        "headerName": "column45",
+                        "columnName": "gdelt-small20130403::column45"
+                    },
+                    {
+                        "headerName": "column46",
+                        "columnName": "gdelt-small20130403::column46"
+                    },
+                    {
+                        "headerName": "column47",
+                        "columnName": "gdelt-small20130403::column47"
+                    },
+                    {
+                        "headerName": "column48",
+                        "columnName": "gdelt-small20130403::column48"
+                    },
+                    {
+                        "headerName": "column49",
+                        "columnName": "gdelt-small20130403::column49"
+                    },
+                    {
+                        "headerName": "column50",
+                        "columnName": "gdelt-small20130403::column50"
+                    },
+                    {
+                        "headerName": "column51",
+                        "columnName": "gdelt-small20130403::column51"
+                    },
+                    {
+                        "headerName": "column52",
+                        "columnName": "gdelt-small20130403::column52"
+                    },
+                    {
+                        "headerName": "column53",
+                        "columnName": "gdelt-small20130403::column53"
+                    },
+                    {
+                        "headerName": "column54",
+                        "columnName": "gdelt-small20130403::column54"
+                    },
+                    {
+                        "headerName": "column55",
+                        "columnName": "gdelt-small20130403::column55"
+                    },
+                    {
+                        "headerName": "column56",
+                        "columnName": "gdelt-small20130403::column56"
+                    },
+                    {
+                        "headerName": "column57",
+                        "columnName": "gdelt-small20130403::column57"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "gdelt-small20130403#2",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-gdelt-small20130403#211.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.gdelt-small20130403#2",
+                "columns": [
+                    {
+                        "headerName": "column0",
+                        "columnName": "gdelt-small20130403::column0"
+                    },
+                    {
+                        "headerName": "column1",
+                        "columnName": "gdelt-small20130403::column1"
+                    },
+                    {
+                        "headerName": "column2",
+                        "columnName": "gdelt-small20130403::column2"
+                    },
+                    {
+                        "headerName": "column3",
+                        "columnName": "column3"
+                    },
+                    {
+                        "headerName": "column4",
+                        "columnName": "gdelt-small20130403::column4"
+                    },
+                    {
+                        "headerName": "column5",
+                        "columnName": "gdelt-small20130403::column5"
+                    },
+                    {
+                        "headerName": "column6",
+                        "columnName": "gdelt-small20130403::column6"
+                    },
+                    {
+                        "headerName": "column7",
+                        "columnName": "gdelt-small20130403::column7"
+                    },
+                    {
+                        "headerName": "column8",
+                        "columnName": "gdelt-small20130403::column8"
+                    },
+                    {
+                        "headerName": "column9",
+                        "columnName": "gdelt-small20130403::column9"
+                    },
+                    {
+                        "headerName": "column10",
+                        "columnName": "gdelt-small20130403::column10"
+                    },
+                    {
+                        "headerName": "column11",
+                        "columnName": "gdelt-small20130403::column11"
+                    },
+                    {
+                        "headerName": "column12",
+                        "columnName": "gdelt-small20130403::column12"
+                    },
+                    {
+                        "headerName": "column13",
+                        "columnName": "gdelt-small20130403::column13"
+                    },
+                    {
+                        "headerName": "column14",
+                        "columnName": "gdelt-small20130403::column14"
+                    },
+                    {
+                        "headerName": "column15",
+                        "columnName": "gdelt-small20130403::column15"
+                    },
+                    {
+                        "headerName": "column16",
+                        "columnName": "gdelt-small20130403::column16"
+                    },
+                    {
+                        "headerName": "column17",
+                        "columnName": "gdelt-small20130403::column17"
+                    },
+                    {
+                        "headerName": "column18",
+                        "columnName": "gdelt-small20130403::column18"
+                    },
+                    {
+                        "headerName": "column19",
+                        "columnName": "gdelt-small20130403::column19"
+                    },
+                    {
+                        "headerName": "column20",
+                        "columnName": "gdelt-small20130403::column20"
+                    },
+                    {
+                        "headerName": "column21",
+                        "columnName": "gdelt-small20130403::column21"
+                    },
+                    {
+                        "headerName": "column22",
+                        "columnName": "gdelt-small20130403::column22"
+                    },
+                    {
+                        "headerName": "column23",
+                        "columnName": "gdelt-small20130403::column23"
+                    },
+                    {
+                        "headerName": "column24",
+                        "columnName": "gdelt-small20130403::column24"
+                    },
+                    {
+                        "headerName": "column25",
+                        "columnName": "gdelt-small20130403::column25"
+                    },
+                    {
+                        "headerName": "column26",
+                        "columnName": "gdelt-small20130403::column26"
+                    },
+                    {
+                        "headerName": "column27",
+                        "columnName": "gdelt-small20130403::column27"
+                    },
+                    {
+                        "headerName": "column28",
+                        "columnName": "gdelt-small20130403::column28"
+                    },
+                    {
+                        "headerName": "column29",
+                        "columnName": "gdelt-small20130403::column29"
+                    },
+                    {
+                        "headerName": "column30",
+                        "columnName": "gdelt-small20130403::column30"
+                    },
+                    {
+                        "headerName": "column31",
+                        "columnName": "gdelt-small20130403::column31"
+                    },
+                    {
+                        "headerName": "column32",
+                        "columnName": "gdelt-small20130403::column32"
+                    },
+                    {
+                        "headerName": "column33",
+                        "columnName": "gdelt-small20130403::column33"
+                    },
+                    {
+                        "headerName": "column34",
+                        "columnName": "gdelt-small20130403::column34"
+                    },
+                    {
+                        "headerName": "column35",
+                        "columnName": "gdelt-small20130403::column35"
+                    },
+                    {
+                        "headerName": "column36",
+                        "columnName": "gdelt-small20130403::column36"
+                    },
+                    {
+                        "headerName": "column37",
+                        "columnName": "gdelt-small20130403::column37"
+                    },
+                    {
+                        "headerName": "column38",
+                        "columnName": "gdelt-small20130403::column38"
+                    },
+                    {
+                        "headerName": "column39",
+                        "columnName": "gdelt-small20130403::column39"
+                    },
+                    {
+                        "headerName": "column40",
+                        "columnName": "gdelt-small20130403::column40"
+                    },
+                    {
+                        "headerName": "column41",
+                        "columnName": "gdelt-small20130403::column41"
+                    },
+                    {
+                        "headerName": "column42",
+                        "columnName": "gdelt-small20130403::column42"
+                    },
+                    {
+                        "headerName": "column43",
+                        "columnName": "gdelt-small20130403::column43"
+                    },
+                    {
+                        "headerName": "column44",
+                        "columnName": "gdelt-small20130403::column44"
+                    },
+                    {
+                        "headerName": "column45",
+                        "columnName": "gdelt-small20130403::column45"
+                    },
+                    {
+                        "headerName": "column46",
+                        "columnName": "gdelt-small20130403::column46"
+                    },
+                    {
+                        "headerName": "column47",
+                        "columnName": "gdelt-small20130403::column47"
+                    },
+                    {
+                        "headerName": "column48",
+                        "columnName": "gdelt-small20130403::column48"
+                    },
+                    {
+                        "headerName": "column49",
+                        "columnName": "gdelt-small20130403::column49"
+                    },
+                    {
+                        "headerName": "column50",
+                        "columnName": "gdelt-small20130403::column50"
+                    },
+                    {
+                        "headerName": "column51",
+                        "columnName": "gdelt-small20130403::column51"
+                    },
+                    {
+                        "headerName": "column52",
+                        "columnName": "gdelt-small20130403::column52"
+                    },
+                    {
+                        "headerName": "column53",
+                        "columnName": "gdelt-small20130403::column53"
+                    },
+                    {
+                        "headerName": "column54",
+                        "columnName": "gdelt-small20130403::column54"
+                    },
+                    {
+                        "headerName": "column55",
+                        "columnName": "gdelt-small20130403::column55"
+                    },
+                    {
+                        "headerName": "column56",
+                        "columnName": "gdelt-small20130403::column56"
+                    },
+                    {
+                        "headerName": "column57",
+                        "columnName": "gdelt-small20130403::column57"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "gdelt-small20130403#1",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-gdelt-small20130403#11111.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.gdelt-small20130403#1",
+                "columns": [
+                    {
+                        "headerName": "column0",
+                        "columnName": "gdelt-small20130403::column0"
+                    },
+                    {
+                        "headerName": "column1",
+                        "columnName": "gdelt-small20130403::column1"
+                    },
+                    {
+                        "headerName": "column2",
+                        "columnName": "gdelt-small20130403::column2"
+                    },
+                    {
+                        "headerName": "column3",
+                        "columnName": "gdelt-small20130403::column3"
+                    },
+                    {
+                        "headerName": "column4",
+                        "columnName": "gdelt-small20130403::column4"
+                    },
+                    {
+                        "headerName": "column5",
+                        "columnName": "gdelt-small20130403::column5"
+                    },
+                    {
+                        "headerName": "column6",
+                        "columnName": "gdelt-small20130403::column6"
+                    },
+                    {
+                        "headerName": "column7",
+                        "columnName": "gdelt-small20130403::column7"
+                    },
+                    {
+                        "headerName": "column8",
+                        "columnName": "gdelt-small20130403::column8"
+                    },
+                    {
+                        "headerName": "column9",
+                        "columnName": "gdelt-small20130403::column9"
+                    },
+                    {
+                        "headerName": "column10",
+                        "columnName": "gdelt-small20130403::column10"
+                    },
+                    {
+                        "headerName": "column11",
+                        "columnName": "gdelt-small20130403::column11"
+                    },
+                    {
+                        "headerName": "column12",
+                        "columnName": "gdelt-small20130403::column12"
+                    },
+                    {
+                        "headerName": "column13",
+                        "columnName": "gdelt-small20130403::column13"
+                    },
+                    {
+                        "headerName": "column14",
+                        "columnName": "gdelt-small20130403::column14"
+                    },
+                    {
+                        "headerName": "column15",
+                        "columnName": "gdelt-small20130403::column15"
+                    },
+                    {
+                        "headerName": "column16",
+                        "columnName": "gdelt-small20130403::column16"
+                    },
+                    {
+                        "headerName": "column17",
+                        "columnName": "gdelt-small20130403::column17"
+                    },
+                    {
+                        "headerName": "column18",
+                        "columnName": "gdelt-small20130403::column18"
+                    },
+                    {
+                        "headerName": "column19",
+                        "columnName": "gdelt-small20130403::column19"
+                    },
+                    {
+                        "headerName": "column20",
+                        "columnName": "gdelt-small20130403::column20"
+                    },
+                    {
+                        "headerName": "column21",
+                        "columnName": "gdelt-small20130403::column21"
+                    },
+                    {
+                        "headerName": "column22",
+                        "columnName": "gdelt-small20130403::column22"
+                    },
+                    {
+                        "headerName": "column23",
+                        "columnName": "gdelt-small20130403::column23"
+                    },
+                    {
+                        "headerName": "column24",
+                        "columnName": "gdelt-small20130403::column24"
+                    },
+                    {
+                        "headerName": "column25",
+                        "columnName": "gdelt-small20130403::column25"
+                    },
+                    {
+                        "headerName": "column26",
+                        "columnName": "gdelt-small20130403::column26"
+                    },
+                    {
+                        "headerName": "column27",
+                        "columnName": "gdelt-small20130403::column27"
+                    },
+                    {
+                        "headerName": "column28",
+                        "columnName": "gdelt-small20130403::column28"
+                    },
+                    {
+                        "headerName": "column29",
+                        "columnName": "gdelt-small20130403::column29"
+                    },
+                    {
+                        "headerName": "column30",
+                        "columnName": "gdelt-small20130403::column30"
+                    },
+                    {
+                        "headerName": "column31",
+                        "columnName": "gdelt-small20130403::column31"
+                    },
+                    {
+                        "headerName": "column32",
+                        "columnName": "gdelt-small20130403::column32"
+                    },
+                    {
+                        "headerName": "column33",
+                        "columnName": "gdelt-small20130403::column33"
+                    },
+                    {
+                        "headerName": "column34",
+                        "columnName": "gdelt-small20130403::column34"
+                    },
+                    {
+                        "headerName": "column35",
+                        "columnName": "gdelt-small20130403::column35"
+                    },
+                    {
+                        "headerName": "column36",
+                        "columnName": "gdelt-small20130403::column36"
+                    },
+                    {
+                        "headerName": "column37",
+                        "columnName": "gdelt-small20130403::column37"
+                    },
+                    {
+                        "headerName": "column38",
+                        "columnName": "gdelt-small20130403::column38"
+                    },
+                    {
+                        "headerName": "column39",
+                        "columnName": "gdelt-small20130403::column39"
+                    },
+                    {
+                        "headerName": "column40",
+                        "columnName": "gdelt-small20130403::column40"
+                    },
+                    {
+                        "headerName": "column41",
+                        "columnName": "gdelt-small20130403::column41"
+                    },
+                    {
+                        "headerName": "column42",
+                        "columnName": "gdelt-small20130403::column42"
+                    },
+                    {
+                        "headerName": "column43",
+                        "columnName": "gdelt-small20130403::column43"
+                    },
+                    {
+                        "headerName": "column44",
+                        "columnName": "gdelt-small20130403::column44"
+                    },
+                    {
+                        "headerName": "column45",
+                        "columnName": "gdelt-small20130403::column45"
+                    },
+                    {
+                        "headerName": "column46",
+                        "columnName": "gdelt-small20130403::column46"
+                    },
+                    {
+                        "headerName": "column47",
+                        "columnName": "gdelt-small20130403::column47"
+                    },
+                    {
+                        "headerName": "column48",
+                        "columnName": "gdelt-small20130403::column48"
+                    },
+                    {
+                        "headerName": "column49",
+                        "columnName": "gdelt-small20130403::column49"
+                    },
+                    {
+                        "headerName": "column50",
+                        "columnName": "gdelt-small20130403::column50"
+                    },
+                    {
+                        "headerName": "column51",
+                        "columnName": "gdelt-small20130403::column51"
+                    },
+                    {
+                        "headerName": "column52",
+                        "columnName": "gdelt-small20130403::column52"
+                    },
+                    {
+                        "headerName": "column53",
+                        "columnName": "gdelt-small20130403::column53"
+                    },
+                    {
+                        "headerName": "column54",
+                        "columnName": "gdelt-small20130403::column54"
+                    },
+                    {
+                        "headerName": "column55",
+                        "columnName": "gdelt-small20130403::column55"
+                    },
+                    {
+                        "headerName": "column56",
+                        "columnName": "gdelt-small20130403::column56"
+                    },
+                    {
+                        "headerName": "column57",
+                        "columnName": "gdelt-small20130403::column57"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        }
+    ],
+    "dataflowVersion": 1
+}

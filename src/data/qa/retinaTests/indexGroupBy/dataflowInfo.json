@@ -1,0 +1,138 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398509877157",
+            "columns": [
+                {
+                    "columnName": "prefix-27886-18014398509701869-column47",
+                    "headerAlias": "prefix-27886-18014398509701869-column47"
+                },
+                {
+                    "columnName": "col-27893-18014398509877154",
+                    "headerAlias": "col-27893-18014398509877154"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.<datasetName>",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "<pathToQaDatasets>/gdelt-small",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}"
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.<datasetName>",
+                "dest": "<tablePrefix>-RN0temp-18014398509709604",
+                "key": [
+                    {
+                        "name": "column36",
+                        "keyFieldName": "prefix-27886-18014398509701869-column36",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-27886-18014398509701869",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "<tablePrefix>-RN0temp-18014398509709604",
+                "dest": "<tablePrefix>-temp-18014398509870433",
+                "key": [
+                    {
+                        "name": "prefix-27886-18014398509701869::column42",
+                        "keyFieldName": "prefix-27886-18014398509701869-column42",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    },
+                    {
+                        "name": "prefix-27886-18014398509701869::column47",
+                        "keyFieldName": "prefix-27886-18014398509701869-column47",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "<tablePrefix>-temp-18014398509870433",
+                "dest": "temp-18014398509877157",
+                "eval": [
+                    {
+                        "evalString": "count(57)",
+                        "newField": "col-27893-18014398509877154"
+                    }
+                ],
+                "newKeyField": "key-27893-18014398509877155",
+                "includeSample": false,
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-18014398509877157",
+                "fileName": "export-temp-18014398509877157.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-18014398509877157",
+                "columns": [
+                    {
+                        "columnName": "prefix-27886-18014398509701869-column47",
+                        "headerName": "prefix-27886-18014398509701869-column47"
+                    },
+                    {
+                        "columnName": "col-27893-18014398509877154",
+                        "headerName": "col-27893-18014398509877154"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 38912,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-7937-jenkins-f3929f98-c712586e",
+    "dataflowVersion": 1
+}

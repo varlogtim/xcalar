@@ -1,0 +1,7 @@
+build_qa_df_workbook(basicTest)
+build_qa_df_workbook(cascadePart1Test)
+build_qa_df_workbook(cascadePart2Test)
+build_qa_df_workbook(kvsToQueryTest)
+build_qa_df_workbook(dfSqlParameterized)
+build_qa_df_workbook(imdDFExecutionTests)
+build_qa_df_workbook(pubTableDfXc2)

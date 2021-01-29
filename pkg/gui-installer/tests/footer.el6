@@ -1,0 +1,2 @@
+CMD ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/init"]

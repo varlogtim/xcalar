@@ -1,0 +1,33 @@
+{
+    "tables": [
+        {
+            "name": "temp-72057594038160372",
+            "columns": [
+                {
+                    "columnName": "average_stars::yelping_since",
+                    "headerAlias": "average_stars::yelping_since"
+                },
+                {
+                    "columnName": "average_stars::review_count",
+                    "headerAlias": "average_stars::review_count"
+                },
+                {
+                    "columnName": "average_stars::user_id",
+                    "headerAlias": "average_stars::user_id"
+                },
+                {
+                    "columnName": "average_stars::friends",
+                    "headerAlias": "average_stars::friends"
+                },
+                {
+                    "columnName": "average_stars::elite",
+                    "headerAlias": "average_stars::elite"
+                }
+            ]
+        }
+    ],
+    "udfs": [],
+    "query": "load --url \"nfs:///<pathToQaDatasets>/yelp/user/\" --format json --size 104857600B  --name \"<datasetName>\";index --key \"average_stars\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-72057594038071748\" --prefix average_stars;index --key \"average_stars::user_id\" --srctable \"<tablePrefix>-72057594038071748\" --dsttable \"<tablePrefix>-72057594038087152\";index --key \"average_stars::user_id\" --srctable \"<tablePrefix>-72057594038087152\" --dsttable \"<tablePrefix>-72057594038101118\" --sorted=desc;index --key \"average_stars::user_id\" --srctable \"<tablePrefix>-72057594038101118\" --dsttable \"<tablePrefix>-72057594038124060\" --sorted=desc;map --eval \"add(float(temp-72057594038020775), float(average_stars::elite))\" --srctable \"<tablePrefix>-72057594038124060\" --fieldName \"col-3440-229144743939\" --dsttable \"temp-72057594038160372\";",
+    "xcalarVersion": "1.1.0.18-xcalardev-0e771958",
+    "retinaVersion": 1
+}

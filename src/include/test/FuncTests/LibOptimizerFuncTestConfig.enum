@@ -1,0 +1,5 @@
+enum LibOptimizerFuncTestConfig {
+    LibOptimizerThreadsPerCore:"LibOptimizerThreadsPerCore",
+    LibOptimizerRunsPerThread:"LibOptimizerRunsPerThread",
+    LibOptimizerNumberOfCores:"LibOptimizerNumberOfCores",
+}

@@ -1,0 +1,45 @@
+// Copyright 2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Sql;
+
+message SQLQueryRequest {
+    message Optimizations {
+        bool dropAsYouGo = 1;
+        bool dropSrcTables = 2;
+        bool randomCrossJoin = 3;
+        bool pushToSelect = 4;
+    };
+    string userName = 1;
+    uint32 userId = 2;
+    string sessionName = 3;
+    string resultTableName = 4;
+    string queryString = 5;
+    string tablePrefix = 6;
+    string queryName = 7;
+    Optimizations optimizations = 9;
+};
+
+message SQLQueryResponse {
+    message ColInfo {
+        string colName = 1;
+        uint32 colId = 2;
+        string colType = 3;
+        string rename = 4;
+    };
+    string tableName = 1;
+    repeated ColInfo orderedColumns = 2;
+};
+
+service Sql {
+    rpc ExecuteSQL (SQLQueryRequest) returns (SQLQueryResponse);
+};

@@ -1,0 +1,29 @@
+{
+    "controllerApp": {
+        "stateChange": {
+            "numTries": 20,
+            "sleepIntervalInSec":10
+        },
+        "appFilePath": "/opt/xcalar/apps/streaming_controller/",
+        "appPropertiesFilePath": "/opt/xcalar/apps/streaming_controller/properties.json"
+    },
+    "xcalar": {
+        "url": "https://xdp-gslab-12-ng.westus2.cloudapp.azure.com",
+        "username": "xdpadmin",
+        "password": "Welcome1",
+        "sessionName": "gs_controller",
+        "xpuCount": 4,
+        "nodes": {
+            "0": "xdp-gslab-12-ng-vm0.azure",
+            "1": "xdp-gslab-12-ng-vm1.azure",
+            "2": "xdp-gslab-12-ng-vm2.azure"
+        }
+    },
+    "git": {
+        "url": "https://gitlab.com/api/v4",
+        "projectId": "14164315",
+        "accessToken": "jALRsUHgQ2EC52WSg3Wv"
+    },
+    "callbacksPluginName": "xcalar_cli_callbacks",
+    "universeAdapterPluginName": "xcalar_integration_universe_adapter"
+}

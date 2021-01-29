@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.0.0-1-swatanabe-7cb3787b-bfe28db2",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5c788461156aa731",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1551402081",
+        "tvNsec": "359311153"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1551402091",
+        "tvNsec": "180060187"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1551402122",
+        "tvNsec": "464727318"
+    },
+    "sessionName": "SQLAirlinesMesa"
+}

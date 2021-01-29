@@ -1,0 +1,20 @@
+{
+  "name": "xcalarnodeservice",
+  "version": "0.9.14",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://gerrit.int.xcalar.com:29418/xcalar.git"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "body-parser": "^1.15.0"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {}
+}

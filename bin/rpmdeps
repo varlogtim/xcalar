@@ -1,0 +1,9 @@
+#!/bin/bash
+for filen in "$@"; do
+    if test -f "$filen"; then
+        rpm -qpR "$filen" | grep -Ev '\(' | grep -v '^/'
+    else
+        rpm -qR "$filen" | grep -Ev '\(' | grep -v '^/'
+    fi
+done
+

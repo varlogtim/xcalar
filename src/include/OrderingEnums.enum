@@ -1,0 +1,9 @@
+enum XcalarOrdering {
+    XcalarOrderingUnordered:"Unordered" = 0,
+    XcalarOrderingAscending:"Ascending" = 3,
+    XcalarOrderingDescending:"Descending" = 5,
+    XcalarOrderingPartialAscending:"PartialAscending" = 11,
+    XcalarOrderingPartialDescending:"PartialDescending" = 13,
+    XcalarOrderingRandom:"Random" = 16,
+    XcalarOrderingInvalid:"Invalid" = 195936478,
+}

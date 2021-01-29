@@ -1,0 +1,143 @@
+{
+    "tables": [
+        {
+            "name": "retina__31003-140546056-140569643",
+            "columns": [
+                {
+                    "columnName": "prefix-30947-138582624__row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                    "headerAlias": "prefix-30947-138582624__row\\\\\\.num\\.float\\\\\\.\\\\\\.col"
+                },
+                {
+                    "columnName": "prefix-30947-138582624__cols\\.array\\[1\\]",
+                    "headerAlias": "prefix-30947-138582624__cols\\.array\\[1\\]"
+                },
+                {
+                    "columnName": "prefix-30947-138582624__a\\\\\\.b",
+                    "headerAlias": "prefix-30947-138582624__a\\\\\\.b"
+                },
+                {
+                    "columnName": "prefix-30947-138582624-row\\\\\\\\\\\\\\.num\\\\\\.float\\\\\\\\\\\\\\.\\\\\\\\\\\\\\.col",
+                    "headerAlias": "prefix-30947-138582624-row\\\\\\\\\\\\\\.num\\\\\\.float\\\\\\\\\\\\\\.\\\\\\\\\\\\\\.col"
+                },
+                {
+                    "columnName": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                    "headerAlias": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [],
+    "query": [
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "RN0temp-138594691",
+                "dest": "retina__31003-140546056-140569643:RN0temp-138594691",
+                "sameSession": false,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-30947-138582624",
+                        "destColumn": "prefix-30947-138582624",
+                        "columnType": "DfFatptr"
+                    },
+                    {
+                        "sourceColumn": "prefix-30947-138582624-row\\.num.float\\.\\.col",
+                        "destColumn": "prefix-30947-138582624-row\\.num.float\\.\\.col",
+                        "columnType": "DfFloat64"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "retina__31003-140546056-140569643:RN0temp-138594691",
+                "dest": "retina__31003-140546056-140569643:temp-138909834",
+                "eval": [
+                    {
+                        "evalString": "lt(float(prefix-30947-138582624::a\\.b), float(25))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "retina__31003-140546056-140569643:temp-138909834",
+                "dest": "retina__31003-140546056-140569643",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-30947-138582624::row\\.num.float\\.\\.col",
+                        "destColumn": "prefix-30947-138582624__row\\.num.float\\.\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-30947-138582624::cols.array[1]",
+                        "destColumn": "prefix-30947-138582624__cols.array[1]",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-30947-138582624::a\\.b",
+                        "destColumn": "prefix-30947-138582624__a\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                        "destColumn": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "source": "retina__31003-140546056-140569643",
+                "fileName": "export-retina__31003-140546056-140569643.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.retina__31003-140546056-140569643",
+                "columns": [
+                    {
+                        "columnName": "prefix-30947-138582624__row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                        "headerName": "prefix-30947-138582624__row\\\\\\.num\\.float\\\\\\.\\\\\\.col"
+                    },
+                    {
+                        "columnName": "prefix-30947-138582624__cols\\.array\\[1\\]",
+                        "headerName": "prefix-30947-138582624__cols\\.array\\[1\\]"
+                    },
+                    {
+                        "columnName": "prefix-30947-138582624__a\\\\\\.b",
+                        "headerName": "prefix-30947-138582624__a\\\\\\.b"
+                    },
+                    {
+                        "columnName": "prefix-30947-138582624-row\\\\\\\\\\\\\\.num\\\\\\.float\\\\\\\\\\\\\\.\\\\\\\\\\\\\\.col",
+                        "headerName": "prefix-30947-138582624-row\\\\\\\\\\\\\\.num\\\\\\.float\\\\\\\\\\\\\\.\\\\\\\\\\\\\\.col"
+                    },
+                    {
+                        "columnName": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                        "headerName": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1517-xcalardev-47d5b532-d5a44043",
+    "dataflowVersion": 1
+}

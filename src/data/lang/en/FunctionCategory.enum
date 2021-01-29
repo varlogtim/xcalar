@@ -1,0 +1,13 @@
+enum FunctionCategory {
+    FunctionCategoryArithmetic:"Arithmetic functions",
+    FunctionCategoryBitwise:"Bitwise functions",
+    FunctionCategoryTrigonometry:"Trigonometric functions",
+    FunctionCategoryConversion:"Conversion functions",
+    FunctionCategoryString:"String functions",
+    FunctionCategoryMisc:"Miscellaneous functions",
+    FunctionCategoryCondition:"Conditional functions",
+    FunctionCategoryAggregate:"Aggregate functions",
+    FunctionCategoryCast:"Type-casting functions",
+    FunctionCategoryUdf:"User-defined functions",
+    FunctionCategoryTimestamp:"Timestamp functions",
+}

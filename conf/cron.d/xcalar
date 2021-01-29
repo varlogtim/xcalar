@@ -1,0 +1,3 @@
+# Generate a Xcalar support bundle each day at 02:00 local time
+
+0 2 * * * xce_user /opt/xcalar/scripts/support-generate.sh > /dev/null

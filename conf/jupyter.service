@@ -1,0 +1,34 @@
+[Unit]
+Description=Xcalar Jupyter Daemon
+After=network-online.target
+Wants=network-online.target
+Before=xcalar-usrnode.service
+PartOf=xcalar.service
+
+[Service]
+Restart=always
+RestartSec=5
+Slice=xcalar.slice
+CPUAccounting=true
+MemoryAccounting=true
+
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+
+ExecStart=/opt/xcalar/bin/jupyter-service.sh
+
+TimeoutStopSec=5s
+
+LimitNOFILE=32768:1048576
+LimitNPROC=65536
+
+PrivateTmp=true
+ReadWriteDirectories=/var/log/xcalar
+RuntimeDirectory=xcalar-jupyter
+WorkingDirectory=/run/xcalar-jupyter
+
+SyslogIdentifier=xcalar-jupyter

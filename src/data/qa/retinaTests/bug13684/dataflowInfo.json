@@ -1,0 +1,397 @@
+{
+    "tables": [
+        {
+            "name": "temp-36028797022212188",
+            "columns": [
+                {
+                    "columnName": "key-12038-36028797022150516",
+                    "headerAlias": "key-12038-36028797022150516"
+                },
+                {
+                    "columnName": "col-12038-36028797022205013",
+                    "headerAlias": "col-12038-36028797022205013"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "loadMemDefault",
+            "fileName": "udfs/loadMemDefault.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-0-node1",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "1000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "loadMemDefault:loadMemory",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-0-node1",
+                "dest": "RN0temp-36028797022098562",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-1113-36028797022098491-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-1113-36028797022098491",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-0-node1",
+                "dest": "temp-36028797022099325",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-1113-36028797022098491-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-1113-36028797022098491",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "RN0temp-36028797022098562",
+                    "temp-36028797022099325"
+                ],
+                "dest": "RN0temp-36028797022100734",
+                "joinType": "leftSemiJoin",
+                "key": [
+                    [
+                        "prefix-1113-36028797022098491-a\\.b"
+                    ],
+                    [
+                        "prefix-1113-36028797022098491-a\\.b"
+                    ]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-1113-36028797022098491",
+                            "destColumn": "dsPrefix-12038-36028797022100081",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-1113-36028797022098491-a\\.b",
+                            "destColumn": "col-12038-36028797022100082",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-1113-36028797022098491",
+                            "destColumn": "dsPrefix-12038-36028797022100083",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-1113-36028797022098491-a\\.b",
+                            "destColumn": "col-12038-36028797022100084",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022100734",
+                "dest": "RN10temp-36028797022105339",
+                "eval": [
+                    {
+                        "evalString": "timestamp(dsPrefix-12038-36028797022100081::cols.array[0])",
+                        "newField": "col-12036-36028797022105336"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN10temp-36028797022105339",
+                "dest": "temp-36028797022105396",
+                "eval": [
+                    {
+                        "evalString": "timestamp(dsPrefix-12038-36028797022100081::cols.array[0])",
+                        "newField": "col-12036-36028797022105337"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-36028797022105396",
+                "dest": "RN0temp-36028797022105817",
+                "key": [
+                    {
+                        "name": "col-12036-36028797022105337",
+                        "keyFieldName": "col-12036-36028797022105337",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022105817",
+                "dest": "RN0temp-36028797022123063",
+                "eval": [
+                    {
+                        "evalString": "count(dsPrefix-12038-36028797022100081::a\\.b)",
+                        "newField": "col-12035-36028797022123057"
+                    },
+                    {
+                        "evalString": "count(dsPrefix-12038-36028797022100081::a\\.b)",
+                        "newField": "col-12035-36028797022123058"
+                    },
+                    {
+                        "evalString": "count(dsPrefix-12038-36028797022100081::a\\.b)",
+                        "newField": "col-12035-36028797022123059"
+                    }
+                ],
+                "newKeyField": "key-12035-36028797022123061",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022123063",
+                "dest": "RN0temp-36028797022150519",
+                "eval": [
+                    {
+                        "evalString": "count(col-12035-36028797022123058)",
+                        "newField": "col-12038-36028797022150497"
+                    },
+                    {
+                        "evalString": "count(col-12035-36028797022123058)",
+                        "newField": "col-12038-36028797022150498"
+                    }
+                ],
+                "newKeyField": "key-12038-36028797022150516",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022150519",
+                "dest": "RN0temp-36028797022179686",
+                "columns": [
+                    "key-12038-36028797022150516",
+                    "col-12038-36028797022150497",
+                    "col-12038-36028797022150498"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022179686",
+                "dest": "RN0temp-36028797022193363",
+                "eval": [
+                    {
+                        "evalString": "lt(float(col-12038-36028797022150498), float(15))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022193363",
+                "dest": "RN0temp-36028797022196723",
+                "key": [
+                    {
+                        "name": "key-12038-36028797022150516",
+                        "keyFieldName": "key-12038-36028797022150516",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "col-12038-36028797022150497",
+                        "keyFieldName": "col-12038-36028797022150497",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "col-12038-36028797022150498",
+                        "keyFieldName": "col-12038-36028797022150498",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-36028797022196723",
+                "dest": "temp-36028797022205016",
+                "eval": [
+                    {
+                        "evalString": "default:multiJoin(key-12038-36028797022150516, key-12038-36028797022150516)",
+                        "newField": "col-12038-36028797022204977"
+                    },
+                    {
+                        "evalString": "concat(string(key-12038-36028797022150516), string(col-12038-36028797022150498))",
+                        "newField": "col-12038-36028797022205013"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-36028797022205016",
+                "dest": "temp-36028797022212188",
+                "eval": [
+                    {
+                        "evalString": "eq(col-12038-36028797022205013, \"1970-01-01T00:00:00.000Z1\")"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-36028797022212188",
+                "fileName": "export-temp-36028797022212188.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-36028797022212188",
+                "columns": [
+                    {
+                        "columnName": "key-12038-36028797022150516",
+                        "headerName": "key-12038-36028797022150516"
+                    },
+                    {
+                        "columnName": "col-12038-36028797022205013",
+                        "headerName": "col-12038-36028797022205013"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-bli-d49df187-4d99d367",
+    "dataflowVersion": 1
+}

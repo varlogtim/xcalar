@@ -1,0 +1,5 @@
+sem_timedwait
+sysSemTimedWait
+ringBufDequeue
+parentReaperThread
+thrWrapper

@@ -1,0 +1,58 @@
+#
+# core Xcalar configuration variables
+#
+XCE_CONFIG=/etc/xcalar/default.cfg
+XCE_USER=xcalar
+XCE_GROUP=xcalar
+XCE_HOME=/var/opt/xcalar
+XCE_USER_HOME=/home/xcalar
+XCE_WORKDIR=/var/tmp/xcalar-root
+XCE_LOGDIR=/var/log/xcalar
+XLRDIR=/opt/xcalar
+XLRGUIDIR=/opt/xcalar/xcalar-gui
+XCE_LICENSEDIR=/etc/xcalar
+XCE_LICENSEFILE=/etc/xcalar/XcalarLic.key
+# umask setting for usrnode -- default is "000" (no file permissions masking)
+XCE_UMASK=000
+XCE_SUPERVISOR_CONFIG=/etc/xcalar/supervisor.conf
+XCE_CADDYFILE=/etc/xcalar/Caddyfile
+XCE_HTTP_ROOT=/var/www
+XCE_HTTP_PORT=80
+XCE_HTTPS_PORT=443
+PYTHONHOME=/opt/xcalar
+XCE_ACCESS_URL=/assets/htmlFiles/login.html
+XCE_LOGIN_PAGE=/assets/htmlFiles/login.html
+JWT_SECRET=3fPh4BmUwdzxvTk1iuh1ahxsUhwNANDtKK
+XCE_CLUSTER_URL=
+CLUSTER_ALIAS=
+XCE_USRNODE_UNIT=xcalar-usrnode.service
+XCE_USRNODE_SCOPE=xcalar-usrnode.scope
+XCE_XCALAR_UNIT=xcalar.service
+XCE_XCALAR_SLICE=xcalar.slice
+XCE_CGCTRL_CMD=/opt/xcalar/bin/cgroupControllerUtil.sh
+XCE_USRNODE_PATH=
+XCE_USRNODE_LD_LIB_PATH=
+XCE_CADDY_UNIT=xcalar-caddy.service
+XCE_EXPSERVER_UNIT=xcalar-expserver@.service
+XCE_EXPSERVER_COUNT=4
+XCE_EXPSERVER_PORTS=12124,12126,12128,12130
+XCE_EXPSERVER_SYSD_TEMPLATE=1
+XCE_JUPYTER_UNIT=xcalar-jupyter.service
+XCE_SQLDF_UNIT=xcalar-sqldf.service
+XCE_XCMGMTD_UNIT=xcalar-xcmgmtd.service
+XCE_TERMINAL_UNIT=xcalar-terminal.service
+XCE_MW_CONTROLLERS=memory
+# 2GB
+XCE_MW_MIN_TOTAL_MEM=2147483648
+XCE_MW_SOFT_MEM_PCT=90
+XCE_MW_MEM_PCT=10
+XCE_MW_SVC_CNT=5
+XCE_MW_SWAPPINESS=0
+XCE_MW_OOM_CONTROL=0
+XCE_USRNODE_SWAPPINESS=0
+XCE_USRNODE_OOM_CONTROL=1
+XCE_USE_SYSTEMD=1
+# $XCE_USRNODE_WAIT must be less that systemd
+# TimeoutStartSec, or systemd will kill the service
+XCE_USRNODE_WAIT=300
+XCE_ASUP_TMPDIR=/var/tmp

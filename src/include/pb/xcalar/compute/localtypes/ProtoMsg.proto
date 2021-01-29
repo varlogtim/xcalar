@@ -1,0 +1,105 @@
+// Copyright 2016 - 2017 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+// Optimize for lite runtime. Disables fancy things like reflection.
+option optimize_for = LITE_RUNTIME;
+
+import "xcalar/compute/localtypes/ParentChild.proto";
+import "xcalar/compute/localtypes/Service.proto";
+
+// Requests supported by XCE API layer.
+enum ProtoApiFunc {
+    ApiFuncInvalid = 0;
+    ApiFuncGetVersion = 1;
+    ApiFuncGetBufCacheAddr = 2;
+    ApiFuncGetXdbId = 3;
+};
+
+message ProtoApiRequest {
+    ProtoApiFunc func = 1;
+    oneof payload {
+        string name = 2;
+        uint64 id = 3;
+        uint64 addr = 4;
+    }
+};
+
+message ProtoTestRequest {
+    uint64 testInt = 1;
+    string testString = 2;
+};
+
+message ProtoApiResponse {
+    oneof payload {
+        string version = 1;
+        uint64 addr = 2;
+    };
+};
+
+enum ProtoMsgTarget {
+    ProtoMsgTargetInvalid = 0;
+    ProtoMsgTargetParent = 1;
+    ProtoMsgTargetChild = 2;
+    ProtoMsgTargetApi = 3;
+    ProtoMsgTargetService = 4;
+    ProtoMsgTargetTest = 5;
+};
+
+// Wrapper type for all request messages. Contains fields common to all
+// request messages.
+message ProtoRequestMsg {
+
+    int64 requestId = 1;
+    ProtoMsgTarget target = 2;
+    int64 childId = 3;
+
+    // Payload varies by type and func. May not even exist.
+    oneof payload {
+        ProtoApiRequest api = 4;
+        ProtoParentRequest parent = 5;
+        ProtoChildRequest child = 6;
+        ProtoTestRequest test = 7;
+        ServiceRequest servic = 8;
+    };
+
+};
+
+// Wrapper type for all responses to RequestMsgs. Contains fields common to all
+// response messages.
+// XXX Currently, all messages are assumed to have a response.
+message ProtoResponseMsg {
+
+    // XXX Generate Status enum.
+    int64 requestId = 1;
+    int64 status = 2;
+    string error = 3;
+
+    // Optional payload. Varies by type and func of RequestMsg.
+    oneof payload {
+        ProtoApiResponse api = 4;
+        ProtoParentChildResponse parentChild = 5;
+        ServiceResponse servic = 6;
+    };
+};
+
+// What's the purpose of this message?
+enum ProtoMsgType {
+    ProtoMsgTypeInvalid = 0;
+    ProtoMsgTypeRequest = 1;
+    ProtoMsgTypeResponse = 2;
+};
+
+// Wrapper type for all messages.
+message ProtoMsg {
+    ProtoMsgType type = 1;
+    oneof payload {
+        ProtoRequestMsg request = 2;
+        ProtoResponseMsg response = 3;
+    };
+};

@@ -1,0 +1,6 @@
+enum LibBcFuncTestConfig {
+    LibBcNumBufferCacheElements:"LibBcNumBufferCacheElements",
+    LibBcLoopIterations:"LibBcLoopIterations",
+    LibBcElementSize:"LibBcElementSize",
+    LibBcStressThreads:"LibBcStressThreads",
+}

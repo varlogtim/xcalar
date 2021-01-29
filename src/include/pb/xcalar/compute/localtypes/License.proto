@@ -1,0 +1,63 @@
+// Copyright 2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.License;
+
+// The license value is a compressed string
+message LicenseValue {
+    string value = 1;
+};
+
+message CreateRequest {
+    LicenseValue licenseValue = 1;
+};
+
+message DestroyRequest {
+};
+
+message GetRequest {
+};
+
+message GetResponse {
+    bool loaded = 1;
+    bool expired = 2;
+    string platform = 3;
+    string product = 4;
+    string productFamily = 5;
+    string productVersion = 6;
+    string expiration = 7;
+    int64 nodeCount = 8;
+    int64 userCount = 9;
+    string attributes = 10;
+    string licensee = 11;
+    int64 compressedLicenseSize = 12;
+    string compressedLicense = 13;
+};
+
+message UpdateRequest {
+    LicenseValue licenseValue = 1;
+};
+
+message ValidateRequest {
+};
+
+message ValidateResponse {
+    bool isLicenseCompliant = 1;
+};
+
+service License {
+    rpc Create (CreateRequest) returns (google.protobuf.Empty);
+    rpc Destroy (DestroyRequest) returns (google.protobuf.Empty);
+    rpc Get (GetRequest) returns (GetResponse);
+    rpc Validate (ValidateRequest) returns (ValidateResponse);
+    rpc Update (UpdateRequest) returns (google.protobuf.Empty);
+};

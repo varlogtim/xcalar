@@ -1,0 +1,15 @@
+[
+  { "day": 1, "temperature": 14.2, "sale": 215 },
+  { "day": 2, "temperature": 16.4, "sale": 325 },
+  { "day": 3, "temperature": 11.9, "sale": 185 },
+  { "day": 4, "temperature": 15.2, "sale": 332 },
+  { "day": 5, "temperature": 18.5, "sale": 406 },
+  { "day": 6, "temperature": 22.1, "sale": 522 },
+  { "day": 7, "temperature": 19.4, "sale": 412 },
+  { "day": 8, "temperature": 25.1, "sale": 614 },
+  { "day": 9, "temperature": 23.4, "sale": 544 },
+  { "day": 10, "temperature": 18.1, "sale": 421 },
+  { "day": 11, "temperature": 22.6, "sale": 445 },
+  { "day": 12, "temperature": 17.2, "sale": 408 }
+]
+

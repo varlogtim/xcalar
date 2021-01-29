@@ -1,0 +1,84 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "xcalar/compute/localtypes/Workbook.proto";
+
+package xcalar.compute.localtypes.KvStore;
+
+message ScopedKey {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string name = 2;
+};
+
+message KeyValue {
+    string text = 1;
+};
+
+message LookupRequest {
+    ScopedKey key = 1;
+};
+
+message LookupResponse {
+    KeyValue value = 1;
+};
+
+message AddOrReplaceRequest {
+    ScopedKey key = 1;
+    bool persist = 2;
+    KeyValue value = 3;
+};
+
+// TODO: remove the AddOrReplace api and port it to use MultiAddOrReplace
+message MultiAddOrReplaceRequest {
+    repeated string keys = 1;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 2;
+    bool persist = 3;
+    repeated KeyValue values = 4;
+}
+
+message DeleteKeyRequest {
+    ScopedKey key = 1;
+};
+
+message AppendRequest {
+    ScopedKey key = 1;
+    string suffix = 2;
+};
+
+message SetIfEqualRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    bool persist = 2;
+    uint32 countSecondaryPairs = 3;
+    string keyCompare = 4;
+    string valueCompare = 5;
+    string valueReplace = 6;
+    string keySecondary = 7;
+    string valueSecondary = 8;
+};
+
+message ListRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string keyRegex = 2;
+};
+
+message ListResponse {
+    repeated string keys = 1;
+};
+
+service KvStore {
+    rpc Lookup (LookupRequest) returns (LookupResponse);
+    rpc AddOrReplace (AddOrReplaceRequest) returns (google.protobuf.Empty);
+    rpc MultiAddOrReplace (MultiAddOrReplaceRequest) returns (google.protobuf.Empty);
+    rpc DeleteKey (DeleteKeyRequest) returns (google.protobuf.Empty);
+    rpc Append (AppendRequest) returns (google.protobuf.Empty);
+    rpc SetIfEqual (SetIfEqualRequest) returns (google.protobuf.Empty);
+    rpc List (ListRequest) returns (ListResponse);
+};

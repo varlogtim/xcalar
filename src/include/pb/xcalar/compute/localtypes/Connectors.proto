@@ -1,0 +1,49 @@
+// Copyright 2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/Workbook.proto";
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Connectors;
+
+message DataSourceArgs {
+  string targetName = 1;
+  string path = 2;
+  string fileNamePattern = 3;
+  bool recursive = 4;
+};
+
+message File {
+    string name = 1;
+    bool isDir = 2;
+    uint64 mtime = 3;
+    uint64 size = 4;
+}
+
+message ListFilesRequest {
+  DataSourceArgs sourceArgs = 1;
+  bool paged = 2;
+  string continuationToken = 3;
+};
+
+message ListFilesResponse {
+    repeated File files = 1;
+    string continuationToken = 2;
+};
+
+message RemoveFileRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string path = 2;
+    string target_name = 3;
+};
+
+service Connectors {
+    rpc ListFiles (ListFilesRequest) returns (ListFilesResponse);
+    rpc RemoveFile (RemoveFileRequest) returns (google.protobuf.Empty);
+};

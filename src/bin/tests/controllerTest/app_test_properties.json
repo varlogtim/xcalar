@@ -1,0 +1,16 @@
+{
+    "controllerApp": {
+        "stateChange": {
+            "numTries": 40,
+            "sleepIntervalInSec": 10
+        },
+        "appFilePath": "/home/mtang/xcalar/src/bin/tests/controllerTest/"
+    },
+    "git": {
+        "url": "https://gitlab.com/api/v4",
+        "projectId": "14164315",
+        "accessToken": "jALRsUHgQ2EC52WSg3Wv"
+    },
+    "callbacksPluginName": "xcalar_integration_callbacks",
+    "universeAdapterPluginName": "xcalar_integration_universe_adapter"
+}

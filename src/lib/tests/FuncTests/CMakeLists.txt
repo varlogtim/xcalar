@@ -1,0 +1,66 @@
+include_directories(
+    "${CMAKE_SOURCE_DIR}/src/include/test/FuncTests"
+    "${CMAKE_BINARY_DIR}/src/include/test/FuncTests"
+    "${CMAKE_SOURCE_DIR}/src/lib/libbc"
+    "${CMAKE_SOURCE_DIR}/src/include/parent"
+    "${CMAKE_SOURCE_DIR}/src/lib/libxdb"
+    "${CMAKE_SOURCE_DIR}/src/lib/libmsg"
+    "${CMAKE_SOURCE_DIR}/src/lib/libds"
+    "${CMAKE_SOURCE_DIR}/src/lib/libdf"
+    "${CMAKE_SOURCE_DIR}/src/lib/libconfig"
+    "${CMAKE_SOURCE_DIR}/src/lib/libruntime"
+    "${CMAKE_SOURCE_DIR}/src/lib/libsession"
+    "${CMAKE_SOURCE_DIR}/src/lib/libdemystify"
+    "${CMAKE_SOURCE_DIR}/src/lib/libdag"
+    "${CMAKE_SOURCE_DIR}/src/lib/libtable"
+    "${CMAKE_SOURCE_DIR}/src/lib/libutil"
+    "${CMAKE_SOURCE_DIR}/src/lib/tests"
+    )
+
+add_xce_library(libfunctests STATIC
+    "ConfigFileFuncTests.cpp" # XXX This is probably supposed to be in a subdir
+    "FuncTestBase.cpp"
+    "FuncTestDriver.cpp"
+    "libhello/Hello.cpp"
+    "libbc/BcStress.cpp"
+    "libruntime/RuntimeTests.cpp"
+    "libsession/SessionTest.cpp"
+    "../LogTestsCommon.h"
+    "../LogTestsCommon.cpp"
+    "liblog/LogTest.cpp"
+    "liboperators/OperatorsFuncTest.cpp"
+    "libcallout/CalloutTests.cpp"
+    "libdag/LibDagTests.cpp"
+    "libquerymanager/QueryManagerTests.cpp"
+    "libdag/RandDag.cpp"
+    "libdag/RandDag.h"
+    "../QueryEvalTestsCommon.h"
+    "../QueryEvalTestsCommon.cpp"
+    "libqueryeval/QueryEvalTests.cpp"
+    "../KvStoreTestsCommon.h"
+    "../KvStoreTestsCommon.cpp"
+    "libkvstore/KvStoreTests.cpp"
+    "libxdb/XdbTests.cpp"
+    "../XdbTestsCommon.h"
+    "../XdbTestsCommon.cpp"
+    "libmsg/MsgTests.cpp"
+    "../OptimizerTestsCommon.h"
+    "../OptimizerTestsCommon.cpp"
+    "liboptimizer/OptimizerTests.cpp"
+    "../TestQueries.h"
+    "libapp/AppFuncTests.cpp"
+    "../DataSetTestsCommon.h"
+    "../DataSetTestsCommon.cpp"
+    "liblocalmsg/LocalMsgTests.cpp"
+    "libns/LibNsTests.cpp"
+    "libtable/TableTests.cpp"
+)
+target_link_libraries(libfunctests
+    libutilxc
+    libbcquota
+    libenum
+    libdurable
+    libxprotobuf
+    libsession
+    libapis_recv
+    libtransport)

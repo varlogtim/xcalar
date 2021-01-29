@@ -1,0 +1,14 @@
+[
+    { "str": "ABC", "base": 10, "expectedInt": "error", "expectedFloat": "error" },
+    { "str": "ABC", "expectedInt": "error", "expectedFloat": "error" },
+    { "str": "123ABC", "base": 10, "expectedInt": 123, "expectedFloat": 123.0 },
+    { "str": "123ABC", "expectedInt": 123, "expectedFloat": 123.0 },
+    { "str": "1.0.1", "base": 10, "expectedInt": 1, "expectedFloat": 1.0 },
+    { "str": "1.0.1", "expectedInt": 1, "expectedFloat": 1.0 },
+    { "str": "1.2.3", "base": 10, "expectedInt": 1, "expectedFloat": 1.2 },
+    { "str": "1.2.3", "expectedInt": 1, "expectedFloat": 1.2 },
+    { "str": "010", "base": 10, "expectedInt": 10, "expectedFloat": 10.0 },
+    { "str": "010", "expectedInt": 8, "expectedFloat": 10.0 },
+    { "str": "0x00FF", "base": 10, "expectedInt": 0, "expectedFloat": 255.0 },
+    { "str": "0x00FF", "expectedInt": 255, "expectedFloat": 255.0 }
+]

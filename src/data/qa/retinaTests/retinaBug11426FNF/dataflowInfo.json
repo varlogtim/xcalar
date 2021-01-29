@@ -1,0 +1,1520 @@
+{
+    "tables": [
+        {
+            "name": "temp-108086391132506633",
+            "columns": [
+                {
+                    "columnName": "retCol-5235-108086391120208540",
+                    "headerAlias": "retCol-5237-108086391134625866"
+                },
+                {
+                    "columnName": "retCol-5235-108086391120208542",
+                    "headerAlias": "retCol-5237-108086391134625867"
+                },
+                {
+                    "columnName": "retCol-5235-108086391120208543",
+                    "headerAlias": "retCol-5237-108086391134625868"
+                },
+                {
+                    "columnName": "prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                    "headerAlias": "retCol-5237-108086391134625869"
+                },
+                {
+                    "columnName": "col-5233-108086391124287496",
+                    "headerAlias": "retCol-5237-108086391134625870"
+                },
+                {
+                    "columnName": "col-5235-108086391124605466",
+                    "headerAlias": "retCol-5237-108086391134625871"
+                },
+                {
+                    "columnName": "col-5235-108086391124605518",
+                    "headerAlias": "retCol-5237-108086391134625872"
+                },
+                {
+                    "columnName": "col-5235-108086391124605563",
+                    "headerAlias": "retCol-5237-108086391134625873"
+                },
+                {
+                    "columnName": "col-5235-108086391124605621",
+                    "headerAlias": "retCol-5237-108086391134625874"
+                },
+                {
+                    "columnName": "col-5235-108086391124605651",
+                    "headerAlias": "retCol-5237-108086391134625875"
+                },
+                {
+                    "columnName": "col-5235-108086391124605467",
+                    "headerAlias": "retCol-5237-108086391134625876"
+                },
+                {
+                    "columnName": "col-5235-108086391124605519",
+                    "headerAlias": "retCol-5237-108086391134625877"
+                },
+                {
+                    "columnName": "col-5235-108086391124605564",
+                    "headerAlias": "retCol-5237-108086391134625878"
+                },
+                {
+                    "columnName": "col-5235-108086391124605652",
+                    "headerAlias": "retCol-5237-108086391134625879"
+                },
+                {
+                    "columnName": "col-5231-108086391131492661",
+                    "headerAlias": "retCol-5237-108086391134625880"
+                },
+                {
+                    "columnName": "col-5231-108086391131492701",
+                    "headerAlias": "retCol-5237-108086391134625881"
+                },
+                {
+                    "columnName": "col-5231-108086391131492662",
+                    "headerAlias": "retCol-5237-108086391134625882"
+                },
+                {
+                    "columnName": "col-5231-108086391131492702",
+                    "headerAlias": "retCol-5237-108086391134625883"
+                },
+                {
+                    "columnName": "col-5231-108086391132101677",
+                    "headerAlias": "retCol-5237-108086391134625884"
+                },
+                {
+                    "columnName": "col-5231-108086391132182376",
+                    "headerAlias": "retCol-5237-108086391134625885"
+                },
+                {
+                    "columnName": "col-5231-108086391132182377",
+                    "headerAlias": "retCol-5237-108086391134625886"
+                },
+                {
+                    "columnName": "col-5231-108086391132182378",
+                    "headerAlias": "retCol-5237-108086391134625887"
+                },
+                {
+                    "columnName": "col-5231-108086391132182382",
+                    "headerAlias": "retCol-5237-108086391134625888"
+                },
+                {
+                    "columnName": "col-5231-108086391132182383",
+                    "headerAlias": "retCol-5237-108086391134625889"
+                },
+                {
+                    "columnName": "col-5231-108086391132182384",
+                    "headerAlias": "retCol-5237-108086391134625890"
+                },
+                {
+                    "columnName": "col-5231-108086391132182385",
+                    "headerAlias": "retCol-5237-108086391134625891"
+                },
+                {
+                    "columnName": "col-5231-108086391132182386",
+                    "headerAlias": "retCol-5237-108086391134625892"
+                },
+                {
+                    "columnName": "col-5231-108086391132182387",
+                    "headerAlias": "retCol-5237-108086391134625893"
+                },
+                {
+                    "columnName": "col-5231-108086391132182388",
+                    "headerAlias": "retCol-5237-108086391134625894"
+                },
+                {
+                    "columnName": "col-5231-108086391132182389",
+                    "headerAlias": "retCol-5237-108086391134625895"
+                },
+                {
+                    "columnName": "col-5231-108086391132182390",
+                    "headerAlias": "retCol-5237-108086391134625896"
+                },
+                {
+                    "columnName": "col-5231-108086391132182391",
+                    "headerAlias": "retCol-5237-108086391134625897"
+                },
+                {
+                    "columnName": "col-5231-108086391132182392",
+                    "headerAlias": "retCol-5237-108086391134625898"
+                },
+                {
+                    "columnName": "col-5231-108086391132182393",
+                    "headerAlias": "retCol-5237-108086391134625899"
+                },
+                {
+                    "columnName": "col-5231-108086391132182394",
+                    "headerAlias": "retCol-5237-108086391134625900"
+                },
+                {
+                    "columnName": "col-5231-108086391132182395",
+                    "headerAlias": "retCol-5237-108086391134625901"
+                },
+                {
+                    "columnName": "col-5231-108086391132182397",
+                    "headerAlias": "retCol-5237-108086391134625902"
+                },
+                {
+                    "columnName": "col-5231-108086391132182398",
+                    "headerAlias": "retCol-5237-108086391134625903"
+                },
+                {
+                    "columnName": "col-5231-108086391132182399",
+                    "headerAlias": "retCol-5237-108086391134625904"
+                },
+                {
+                    "columnName": "col-5231-108086391132182401",
+                    "headerAlias": "retCol-5237-108086391134625905"
+                },
+                {
+                    "columnName": "col-5231-108086391132182403",
+                    "headerAlias": "retCol-5237-108086391134625906"
+                },
+                {
+                    "columnName": "col-5231-108086391132182404",
+                    "headerAlias": "retCol-5237-108086391134625907"
+                },
+                {
+                    "columnName": "col-5231-108086391132182405",
+                    "headerAlias": "retCol-5237-108086391134625908"
+                },
+                {
+                    "columnName": "col-5231-108086391132182406",
+                    "headerAlias": "retCol-5237-108086391134625909"
+                },
+                {
+                    "columnName": "col-5231-108086391132182408",
+                    "headerAlias": "retCol-5237-108086391134625910"
+                },
+                {
+                    "columnName": "col-5231-108086391132182409",
+                    "headerAlias": "retCol-5237-108086391134625911"
+                },
+                {
+                    "columnName": "col-5231-108086391132182410",
+                    "headerAlias": "retCol-5237-108086391134625912"
+                },
+                {
+                    "columnName": "col-5231-108086391132182411",
+                    "headerAlias": "retCol-5237-108086391134625913"
+                },
+                {
+                    "columnName": "col-5231-108086391132182412",
+                    "headerAlias": "retCol-5237-108086391134625914"
+                },
+                {
+                    "columnName": "col-5231-108086391132182413",
+                    "headerAlias": "retCol-5237-108086391134625915"
+                },
+                {
+                    "columnName": "col-5231-108086391132182414",
+                    "headerAlias": "retCol-5237-108086391134625916"
+                },
+                {
+                    "columnName": "col-5231-108086391132182415",
+                    "headerAlias": "retCol-5237-108086391134625917"
+                },
+                {
+                    "columnName": "col-5231-108086391132182416",
+                    "headerAlias": "retCol-5237-108086391134625918"
+                },
+                {
+                    "columnName": "col-5231-108086391132182417",
+                    "headerAlias": "retCol-5237-108086391134625919"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-1-node4-8107-72057594041538037",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "2769",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-1-node4-8107-72057594041538037",
+                "dest": "RN0temp-108086391119571002",
+                "key": [
+                    {
+                        "name": "row\\.num.string\\\\\\.col",
+                        "keyFieldName": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-5231-108086391117396330",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391119571002",
+                "dest": "temp-108086391119795803",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5235-108086391119795800"
+                    }
+                ],
+                "newKeyField": "key-5235-108086391119795801",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "dest": ".XcalarDS.RN0retina--5235-108086391120208539-108086391120232423:ds-operatorsFuncTestUser-1-node4-8107-72057594041538037",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "2769",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": ".XcalarDS.RN0retina--5235-108086391120208539-108086391120232423:ds-operatorsFuncTestUser-1-node4-8107-72057594041538037",
+                "dest": "RN0retina--5235-108086391120208539-108086391120232423:RN0temp-108086391119571002",
+                "key": [
+                    {
+                        "name": "row\\.num.string\\\\\\.col",
+                        "keyFieldName": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-5231-108086391117396330",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--5235-108086391120208539-108086391120232423:RN0temp-108086391119571002",
+                "dest": "RN0retina--5235-108086391120208539-108086391120232423:temp-108086391119753892",
+                "eval": [
+                    {
+                        "evalString": "lt(float(prefix-5231-108086391117396330::a\\.b), float(55))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--5235-108086391120208539-108086391120232423:temp-108086391119753892",
+                "dest": "RN0retina--5235-108086391120208539-108086391120232423",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-5231-108086391117396330::row\\.num.float\\.\\.col",
+                        "destColumn": "retCol-5235-108086391120208540",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-5231-108086391117396330::cols.array[0]",
+                        "destColumn": "retCol-5235-108086391120208541",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-5231-108086391117396330::a.b",
+                        "destColumn": "retCol-5235-108086391120208542",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-5231-108086391117396330::a\\.b",
+                        "destColumn": "retCol-5235-108086391120208543",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                        "destColumn": "retCol-5235-108086391120208544",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": [
+                    "RN0retina--5235-108086391120208539-108086391120232423",
+                    "temp-108086391119795803"
+                ],
+                "dest": "RN10temp-108086391121173274",
+                "dedup": false,
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208540",
+                            "destColumn": "retCol-5235-108086391120208540",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208542",
+                            "destColumn": "retCol-5235-108086391120208542",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208543",
+                            "destColumn": "retCol-5235-108086391120208543",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208544",
+                            "destColumn": "retCol-5235-108086391120208544",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "destColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "key-5235-108086391119795801",
+                            "destColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391119795800",
+                            "destColumn": "col-5235-108086391119795800",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN10temp-108086391121173274",
+                "dest": "temp-108086391124287499",
+                "eval": [
+                    {
+                        "evalString": "concat(string(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col), string(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col))",
+                        "newField": "col-5233-108086391124287496"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-108086391124287499",
+                "dest": "RN0temp-108086391124287661",
+                "key": [
+                    {
+                        "name": "col-5233-108086391124287496",
+                        "keyFieldName": "col-5233-108086391124287496",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391124287661",
+                "dest": "temp-108086391124605654",
+                "eval": [
+                    {
+                        "evalString": "default:multiJoin(retCol-5235-108086391120208540, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5235-108086391124605466"
+                    },
+                    {
+                        "evalString": "concat(string(retCol-5235-108086391120208540), string(retCol-5235-108086391120208542))",
+                        "newField": "col-5235-108086391124605518"
+                    },
+                    {
+                        "evalString": "add(float(col-5233-108086391124287496), float(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col))",
+                        "newField": "col-5235-108086391124605563"
+                    },
+                    {
+                        "evalString": "default:multiJoin(col-5233-108086391124287496, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5235-108086391124605621"
+                    },
+                    {
+                        "evalString": "concat(string(retCol-5235-108086391120208544), string(retCol-5235-108086391120208543))",
+                        "newField": "col-5235-108086391124605651"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-108086391124605654",
+                "dest": "temp-108086391124612609",
+                "eval": [
+                    {
+                        "evalString": "default:multiJoin(retCol-5235-108086391120208540, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5235-108086391124605467"
+                    },
+                    {
+                        "evalString": "concat(string(retCol-5235-108086391120208540), string(retCol-5235-108086391120208542))",
+                        "newField": "col-5235-108086391124605519"
+                    },
+                    {
+                        "evalString": "add(float(col-5233-108086391124287496), float(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col))",
+                        "newField": "col-5235-108086391124605564"
+                    },
+                    {
+                        "evalString": "default:multiJoin(col-5233-108086391124287496, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5235-108086391124605622"
+                    },
+                    {
+                        "evalString": "concat(string(retCol-5235-108086391120208544), string(retCol-5235-108086391120208543))",
+                        "newField": "col-5235-108086391124605652"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-108086391124612609",
+                "dest": "RN0temp-108086391124619784",
+                "key": [
+                    {
+                        "name": "col-5235-108086391124605519",
+                        "keyFieldName": "col-5235-108086391124605519",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391124619784",
+                "dest": "RN0temp-108086391124620064",
+                "eval": [
+                    {
+                        "evalString": "eq(col-5235-108086391124605518,col-5235-108086391124605519)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391124620064",
+                "dest": "RN0temp-108086391131492704",
+                "eval": [
+                    {
+                        "evalString": "add(float(col-5235-108086391124605564), float(col-5235-108086391124605467))",
+                        "newField": "col-5231-108086391131492661"
+                    },
+                    {
+                        "evalString": "default:multiJoin(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5231-108086391131492701"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391131492704",
+                "dest": "RN0temp-108086391131500864",
+                "eval": [
+                    {
+                        "evalString": "add(float(col-5235-108086391124605564), float(col-5235-108086391124605467))",
+                        "newField": "col-5231-108086391131492662"
+                    },
+                    {
+                        "evalString": "default:multiJoin(prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col, prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col)",
+                        "newField": "col-5231-108086391131492702"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-108086391131500864",
+                "dest": "temp-108086391132101705",
+                "eval": [
+                    {
+                        "evalString": "concat(string(col-5235-108086391124605563), string(col-5231-108086391131492701))",
+                        "newField": "col-5231-108086391132101677"
+                    },
+                    {
+                        "evalString": "add(float(col-5235-108086391119795800), float(col-5233-108086391124287496))",
+                        "newField": "col-5231-108086391132101702"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": [
+                    "RN0temp-108086391131500864",
+                    "RN0temp-108086391131500864"
+                ],
+                "dest": "temp-108086391132182528",
+                "joinType": "leftJoin",
+                "key": [
+                    [
+                        "col-5235-108086391124605519"
+                    ],
+                    [
+                        "col-5235-108086391124605519"
+                    ]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208540",
+                            "destColumn": "col-5231-108086391132182376",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208542",
+                            "destColumn": "col-5231-108086391132182377",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208543",
+                            "destColumn": "col-5231-108086391132182378",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208544",
+                            "destColumn": "col-5231-108086391132182379",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "destColumn": "col-5231-108086391132182380",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391119795800",
+                            "destColumn": "col-5231-108086391132182381",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-5233-108086391124287496",
+                            "destColumn": "col-5231-108086391132182382",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605466",
+                            "destColumn": "col-5231-108086391132182383",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605518",
+                            "destColumn": "col-5231-108086391132182384",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605563",
+                            "destColumn": "col-5231-108086391132182385",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605621",
+                            "destColumn": "col-5231-108086391132182386",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605651",
+                            "destColumn": "col-5231-108086391132182387",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605467",
+                            "destColumn": "col-5231-108086391132182388",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605519",
+                            "destColumn": "col-5231-108086391132182389",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605564",
+                            "destColumn": "col-5231-108086391132182390",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605622",
+                            "destColumn": "col-5231-108086391132182391",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605652",
+                            "destColumn": "col-5231-108086391132182392",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492661",
+                            "destColumn": "col-5231-108086391132182393",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492701",
+                            "destColumn": "col-5231-108086391132182394",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492662",
+                            "destColumn": "col-5231-108086391132182395",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492702",
+                            "destColumn": "col-5231-108086391132182396",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208540",
+                            "destColumn": "col-5231-108086391132182397",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208542",
+                            "destColumn": "col-5231-108086391132182398",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208543",
+                            "destColumn": "col-5231-108086391132182399",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208544",
+                            "destColumn": "col-5231-108086391132182400",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "destColumn": "col-5231-108086391132182401",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391119795800",
+                            "destColumn": "col-5231-108086391132182402",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-5233-108086391124287496",
+                            "destColumn": "col-5231-108086391132182403",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605466",
+                            "destColumn": "col-5231-108086391132182404",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605518",
+                            "destColumn": "col-5231-108086391132182405",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605563",
+                            "destColumn": "col-5231-108086391132182406",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605621",
+                            "destColumn": "col-5231-108086391132182407",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605651",
+                            "destColumn": "col-5231-108086391132182408",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605467",
+                            "destColumn": "col-5231-108086391132182409",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605519",
+                            "destColumn": "col-5231-108086391132182410",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605564",
+                            "destColumn": "col-5231-108086391132182411",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605622",
+                            "destColumn": "col-5231-108086391132182412",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605652",
+                            "destColumn": "col-5231-108086391132182413",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492661",
+                            "destColumn": "col-5231-108086391132182414",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492701",
+                            "destColumn": "col-5231-108086391132182415",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492662",
+                            "destColumn": "col-5231-108086391132182416",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492702",
+                            "destColumn": "col-5231-108086391132182417",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-108086391132101705",
+                "dest": "RN0temp-108086391132102300",
+                "eval": [
+                    {
+                        "evalString": "concat(string(col-5235-108086391124605563), string(col-5231-108086391131492701))",
+                        "newField": "col-5231-108086391132101678"
+                    },
+                    {
+                        "evalString": "add(float(col-5235-108086391119795800), float(col-5233-108086391124287496))",
+                        "newField": "col-5231-108086391132101703"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": [
+                    "RN0temp-108086391132102300",
+                    "temp-108086391132182528"
+                ],
+                "dest": "temp-108086391132506633",
+                "joinType": "innerJoin",
+                "key": [
+                    [
+                        "col-5235-108086391124605519"
+                    ],
+                    [
+                        "col-5231-108086391132182389"
+                    ]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208540",
+                            "destColumn": "retCol-5235-108086391120208540",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208542",
+                            "destColumn": "retCol-5235-108086391120208542",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208543",
+                            "destColumn": "retCol-5235-108086391120208543",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "retCol-5235-108086391120208544",
+                            "destColumn": "retCol-5235-108086391120208544",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "destColumn": "prefix-5231-108086391117396330-row\\.num.string\\\\\\.col",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391119795800",
+                            "destColumn": "col-5235-108086391119795800",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-5233-108086391124287496",
+                            "destColumn": "col-5233-108086391124287496",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605466",
+                            "destColumn": "col-5235-108086391124605466",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605518",
+                            "destColumn": "col-5235-108086391124605518",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605563",
+                            "destColumn": "col-5235-108086391124605563",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605621",
+                            "destColumn": "col-5235-108086391124605621",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605651",
+                            "destColumn": "col-5235-108086391124605651",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605467",
+                            "destColumn": "col-5235-108086391124605467",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605519",
+                            "destColumn": "col-5235-108086391124605519",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605564",
+                            "destColumn": "col-5235-108086391124605564",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605622",
+                            "destColumn": "col-5235-108086391124605622",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5235-108086391124605652",
+                            "destColumn": "col-5235-108086391124605652",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492661",
+                            "destColumn": "col-5231-108086391131492661",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492701",
+                            "destColumn": "col-5231-108086391131492701",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492662",
+                            "destColumn": "col-5231-108086391131492662",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391131492702",
+                            "destColumn": "col-5231-108086391131492702",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132101677",
+                            "destColumn": "col-5231-108086391132101677",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132101702",
+                            "destColumn": "col-5231-108086391132101702",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132101678",
+                            "destColumn": "col-5231-108086391132101678",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132101703",
+                            "destColumn": "col-5231-108086391132101703",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "col-5231-108086391132182376",
+                            "destColumn": "col-5231-108086391132182376",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182377",
+                            "destColumn": "col-5231-108086391132182377",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182378",
+                            "destColumn": "col-5231-108086391132182378",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182379",
+                            "destColumn": "col-5231-108086391132182379",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182380",
+                            "destColumn": "col-5231-108086391132182380",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182381",
+                            "destColumn": "col-5231-108086391132182381",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182382",
+                            "destColumn": "col-5231-108086391132182382",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182383",
+                            "destColumn": "col-5231-108086391132182383",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182384",
+                            "destColumn": "col-5231-108086391132182384",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182385",
+                            "destColumn": "col-5231-108086391132182385",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182386",
+                            "destColumn": "col-5231-108086391132182386",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182387",
+                            "destColumn": "col-5231-108086391132182387",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182388",
+                            "destColumn": "col-5231-108086391132182388",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182389",
+                            "destColumn": "col-5231-108086391132182389",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182390",
+                            "destColumn": "col-5231-108086391132182390",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182391",
+                            "destColumn": "col-5231-108086391132182391",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182392",
+                            "destColumn": "col-5231-108086391132182392",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182393",
+                            "destColumn": "col-5231-108086391132182393",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182394",
+                            "destColumn": "col-5231-108086391132182394",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182395",
+                            "destColumn": "col-5231-108086391132182395",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182396",
+                            "destColumn": "col-5231-108086391132182396",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182397",
+                            "destColumn": "col-5231-108086391132182397",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182398",
+                            "destColumn": "col-5231-108086391132182398",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182399",
+                            "destColumn": "col-5231-108086391132182399",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182400",
+                            "destColumn": "col-5231-108086391132182400",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182401",
+                            "destColumn": "col-5231-108086391132182401",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182402",
+                            "destColumn": "col-5231-108086391132182402",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182403",
+                            "destColumn": "col-5231-108086391132182403",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182404",
+                            "destColumn": "col-5231-108086391132182404",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182405",
+                            "destColumn": "col-5231-108086391132182405",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182406",
+                            "destColumn": "col-5231-108086391132182406",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182407",
+                            "destColumn": "col-5231-108086391132182407",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182408",
+                            "destColumn": "col-5231-108086391132182408",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182409",
+                            "destColumn": "col-5231-108086391132182409",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182410",
+                            "destColumn": "col-5231-108086391132182410",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182411",
+                            "destColumn": "col-5231-108086391132182411",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182412",
+                            "destColumn": "col-5231-108086391132182412",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182413",
+                            "destColumn": "col-5231-108086391132182413",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182414",
+                            "destColumn": "col-5231-108086391132182414",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182415",
+                            "destColumn": "col-5231-108086391132182415",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182416",
+                            "destColumn": "col-5231-108086391132182416",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-5231-108086391132182417",
+                            "destColumn": "col-5231-108086391132182417",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-108086391132506633",
+                "fileName": "export-temp-108086391132506633.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-108086391132506633",
+                "columns": [
+                    {
+                        "columnName": "retCol-5235-108086391120208540",
+                        "headerName": "retCol-5237-108086391134625866"
+                    },
+                    {
+                        "columnName": "retCol-5235-108086391120208542",
+                        "headerName": "retCol-5237-108086391134625867"
+                    },
+                    {
+                        "columnName": "retCol-5235-108086391120208543",
+                        "headerName": "retCol-5237-108086391134625868"
+                    },
+                    {
+                        "columnName": "prefix-5231-108086391117396330-row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                        "headerName": "retCol-5237-108086391134625869"
+                    },
+                    {
+                        "columnName": "col-5233-108086391124287496",
+                        "headerName": "retCol-5237-108086391134625870"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605466",
+                        "headerName": "retCol-5237-108086391134625871"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605518",
+                        "headerName": "retCol-5237-108086391134625872"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605563",
+                        "headerName": "retCol-5237-108086391134625873"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605621",
+                        "headerName": "retCol-5237-108086391134625874"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605651",
+                        "headerName": "retCol-5237-108086391134625875"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605467",
+                        "headerName": "retCol-5237-108086391134625876"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605519",
+                        "headerName": "retCol-5237-108086391134625877"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605564",
+                        "headerName": "retCol-5237-108086391134625878"
+                    },
+                    {
+                        "columnName": "col-5235-108086391124605652",
+                        "headerName": "retCol-5237-108086391134625879"
+                    },
+                    {
+                        "columnName": "col-5231-108086391131492661",
+                        "headerName": "retCol-5237-108086391134625880"
+                    },
+                    {
+                        "columnName": "col-5231-108086391131492701",
+                        "headerName": "retCol-5237-108086391134625881"
+                    },
+                    {
+                        "columnName": "col-5231-108086391131492662",
+                        "headerName": "retCol-5237-108086391134625882"
+                    },
+                    {
+                        "columnName": "col-5231-108086391131492702",
+                        "headerName": "retCol-5237-108086391134625883"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132101677",
+                        "headerName": "retCol-5237-108086391134625884"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182376",
+                        "headerName": "retCol-5237-108086391134625885"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182377",
+                        "headerName": "retCol-5237-108086391134625886"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182378",
+                        "headerName": "retCol-5237-108086391134625887"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182382",
+                        "headerName": "retCol-5237-108086391134625888"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182383",
+                        "headerName": "retCol-5237-108086391134625889"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182384",
+                        "headerName": "retCol-5237-108086391134625890"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182385",
+                        "headerName": "retCol-5237-108086391134625891"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182386",
+                        "headerName": "retCol-5237-108086391134625892"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182387",
+                        "headerName": "retCol-5237-108086391134625893"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182388",
+                        "headerName": "retCol-5237-108086391134625894"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182389",
+                        "headerName": "retCol-5237-108086391134625895"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182390",
+                        "headerName": "retCol-5237-108086391134625896"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182391",
+                        "headerName": "retCol-5237-108086391134625897"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182392",
+                        "headerName": "retCol-5237-108086391134625898"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182393",
+                        "headerName": "retCol-5237-108086391134625899"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182394",
+                        "headerName": "retCol-5237-108086391134625900"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182395",
+                        "headerName": "retCol-5237-108086391134625901"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182397",
+                        "headerName": "retCol-5237-108086391134625902"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182398",
+                        "headerName": "retCol-5237-108086391134625903"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182399",
+                        "headerName": "retCol-5237-108086391134625904"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182401",
+                        "headerName": "retCol-5237-108086391134625905"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182403",
+                        "headerName": "retCol-5237-108086391134625906"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182404",
+                        "headerName": "retCol-5237-108086391134625907"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182405",
+                        "headerName": "retCol-5237-108086391134625908"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182406",
+                        "headerName": "retCol-5237-108086391134625909"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182408",
+                        "headerName": "retCol-5237-108086391134625910"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182409",
+                        "headerName": "retCol-5237-108086391134625911"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182410",
+                        "headerName": "retCol-5237-108086391134625912"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182411",
+                        "headerName": "retCol-5237-108086391134625913"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182412",
+                        "headerName": "retCol-5237-108086391134625914"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182413",
+                        "headerName": "retCol-5237-108086391134625915"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182414",
+                        "headerName": "retCol-5237-108086391134625916"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182415",
+                        "headerName": "retCol-5237-108086391134625917"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182416",
+                        "headerName": "retCol-5237-108086391134625918"
+                    },
+                    {
+                        "columnName": "col-5231-108086391132182417",
+                        "headerName": "retCol-5237-108086391134625919"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.1-1665-xcalardev-d65e1e47-7a0a648e",
+    "dataflowVersion": 1
+}

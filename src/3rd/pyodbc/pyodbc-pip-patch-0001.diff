@@ -1,0 +1,11 @@
+--- pyodbc-4.0.17/src/getdata.cpp	2017-10-05 21:32:50.455917223 -0700
++++ pyodbc-4.0.17-new/src/getdata.cpp	2017-10-05 21:28:35.853957001 -0700
+@@ -402,7 +402,7 @@
+ #if PY_MAJOR_VERSION >= 3
+     if (PyUnicode_Check(result))
+     {
+-        pch = PyUnicode_AsUTF8AndSize(result, &cch);
++        pch = (char *)PyUnicode_AsUTF8AndSize(result, &cch);
+     }
+     else
+     {

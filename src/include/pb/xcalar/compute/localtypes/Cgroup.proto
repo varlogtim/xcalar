@@ -1,0 +1,27 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Cgroup;
+
+// Look at scripts/cgroupsMgr.py the detais about the input and output for
+// Cggroup APIs.
+message CgRequest {
+    string jsonInput = 1;
+};
+
+message CgResponse {
+    string jsonOutput = 1;
+};
+
+service Cgroup {
+    rpc Process (CgRequest) returns (CgResponse);
+};

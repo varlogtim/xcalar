@@ -1,0 +1,53 @@
+[
+    {
+        "operation": "XcalarApiBulkLoad",
+        "comment": "",
+        "tag": "",
+        "state": "Created",
+        "args": {
+            "dest": ".XcalarDS.hying.71502.yelp_academic_dataset_review_fixed",
+            "loadArgs": {
+                "sourceArgsList": [
+                    {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/yelp/reviews/yelp_academic_dataset_review_fixed.json",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    }
+                ],
+                "parseArgs": {
+                    "parserFnName": "default:parseJson",
+                    "parserArgJson": "{}",
+                    "fileNameFieldName": "",
+                    "recordNumFieldName": "",
+                    "allowFileErrors": false,
+                    "allowRecordErrors": false,
+                    "schema": []
+                },
+                "size": 10737418240
+            }
+        }
+    },
+    {
+        "operation": "XcalarApiIndex",
+        "comment": "",
+        "tag": "indexFromDataset#1",
+        "state": "Created",
+        "args": {
+            "source": ".XcalarDS.hying.71502.yelp_academic_dataset_review_fixed",
+            "dest": "yelp_academic_dataset_review_fixed#1",
+            "key": [
+                {
+                    "name": "xcalarRecordNum",
+                    "keyFieldName": "yelp_academic_dataset_review_fi-xcalarRecordNum",
+                    "type": "DfInt64",
+                    "ordering": "Unordered"
+                }
+            ],
+            "prefix": "yelp_academic_dataset_review_fi",
+            "dhtName": "",
+            "delaySort": false,
+            "broadcast": false
+        }
+    }
+]

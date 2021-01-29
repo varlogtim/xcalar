@@ -1,0 +1,23 @@
+{
+    "query": "load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"output_q6_run2:.XcalarDS.demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \"output_q6_run2:.XcalarDS.demo.70529.lineitem\" --dsttable \"output_q6_run2:lineitem#L937\" --prefix lineitem1;map --eval \"float(lineitem1--L_QUANTITY)\" --srctable \"output_q6_run2:lineitem#L937\" --fieldName \"L_QUANTITY_float\" --dsttable \"output_q6_run2:lineitem#L938\";map --eval \"float(lineitem1--L_DISCOUNT)\" --srctable \"output_q6_run2:lineitem#L938\" --fieldName \"L_DISCOUNT_float\" --dsttable \"output_q6_run2:lineitem#L939\";map --eval \"float(lineitem1--L_EXTENDEDPRICE)\" --srctable \"output_q6_run2:lineitem#L939\" --fieldName \"L_EXTENDEDPRICE_float\" --dsttable \"output_q6_run2:lineitem#L940\";filter --srctable output_q6_run2:lineitem#L940 --eval \"lt(L_QUANTITY_float,24)\"  --dsttable \"output_q6_run2:lineitem#L941\";filter --srctable output_q6_run2:lineitem#L941 --eval \"between(L_DISCOUNT_float,sub(0.06,0.01),add(0.06,0.011))\"  --dsttable \"output_q6_run2:lineitem#L946\";map --eval \"adddateinterval_modified#2:dategeinputdate(lineitem1--L_SHIPDATE,\\\"1994-01-01\\\")\" --srctable \"output_q6_run2:lineitem#L946\" --fieldName \"L_SHIPDATE_ge_udf\" --dsttable \"output_q6_run2:lineitem#L947\";filter --srctable output_q6_run2:lineitem#L947 --eval \"eq(L_SHIPDATE_ge_udf,\\\"True\\\")\"  --dsttable \"output_q6_run2:lineitem#L948\";map --eval \"adddateinterval_modified#2:dateltyearinputdate(lineitem1--L_SHIPDATE,\\\"1994-01-01\\\",1)\" --srctable \"output_q6_run2:lineitem#L948\" --fieldName \"L_SHIPDATE_lt_yearinterval_udf\" --dsttable \"output_q6_run2:lineitem#L949\";filter --srctable output_q6_run2:lineitem#L949 --eval \"eq(L_SHIPDATE_lt_yearinterval_udf,\\\"True\\\")\"  --dsttable \"output_q6_run2:lineitem#L950\";map --eval \"mult(L_EXTENDEDPRICE_float,L_DISCOUNT_float)\" --srctable \"output_q6_run2:lineitem#L950\" --fieldName \"revenue_bfr_sum\" --dsttable \"output_q6_run2:lineitem#L951\";map --eval \"int(1)\" --srctable \"output_q6_run2:lineitem#L951\" --fieldName \"dummyforsort\" --dsttable \"output_q6_run2:lineitem#L952\";index --key \"dummyforsort\" --keyType 4  --srctable \"output_q6_run2:lineitem#L952\" --dsttable \"output_q6_run2:lineitem.index#L954\";groupBy --srctable \"output_q6_run2:lineitem.index#L954\" --eval \"sum(revenue_bfr_sum)\" --fieldName \"revenue\" --newKeyFieldName \"dummyforsort\" --dsttable \"output_q6_run2#L961\" --nosample;project --srctable \"output_q6_run2#L961\" --dsttable \"EndResult-tpchq6\" \"revenue\";",
+    "tables": [
+        {
+            "name": "EndResult-tpchq6",
+            "columns": [
+                {
+                    "columnName": "revenue",
+                    "headerAlias": "revenue"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "adddateinterval_modified",
+            "fileName": "udfs/adddateinterval_modified.py",
+            "udfType": "python"
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-jenkins-417e2c36-fc9162cb",
+    "retinaVersion": 1
+}

@@ -1,0 +1,104 @@
+#!/bin/bash
+set -e
+DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
+MYXLRDIR="$(cd "$DIR/.." && pwd)"
+if [ "$MYXLRDIR" != "$XLRDIR" ]; then
+    echo >&2 "WARNING: Mismatched XLRDIR=$XLRDIR, but this script is under $MYXLRDIR"
+    echo >&2 "WARNING: Setting XLRDIR=$MYXLRDIR"
+    export XLRDIR="$MYXLRDIR"
+fi
+MY_XCE_LICENSEDIR="$MYXLRDIR/src/data"
+if [ "$MY_XCE_LICENSEDIR" != "$XCE_LICENSEDIR" ]; then
+    echo >&2 "WARNING: Mismatched license paths - XCE_LICENSEDIR=$XCE_LICENSEDIR but testing will look in $MY_XCE_LICENSEDIR"
+    echo >&2 "WARNING: setting XCE_LICENSEDIR=$MY_XCE_LICENSEDIR"
+    export XCE_LICENSEDIR=$MY_XCE_LICENSEDIR
+fi
+cd $XLRDIR
+export PATH="$XLRDIR/bin:$PATH"
+hash -r
+CLANGVER="${CLANGVER:-3.9}"
+SCAN_BUILD_OUTDIR="${SCAN_BUILD_OUTDIR:-/var/tmp/$LOGNAME/scan-build}"
+PRE_ARGS=()
+POST_ARGS=()
+SCAN_BUILD=false
+for arg in "$@"; do
+    case "$arg" in
+        scan-build) SCAN_BUILD=true ;;
+        -v|--verbose|prod|production|coverage|prof|config|configure|clean|analyze|prodconf|prodconfig|packages) PRE_ARGS+=("$arg") ;;
+        *) POST_ARGS+=("$arg") ;;
+    esac
+done
+set -- "${PRE_ARGS[@]}"
+
+have_command () {
+    command -v "$1" &>/dev/null
+}
+
+if test -z "$CC"; then
+    if have_command ccache; then
+        CC="ccache clang-$CLANGVER"
+    else
+        CC="clang-$CLANGVER"
+    fi
+fi
+if test -z "$CXX"; then
+    if have_command ccache; then
+        CXX="ccache clang++-$CLANGVER"
+    else
+        CXX="clang++-$CLANGVER"
+    fi
+fi
+
+SCAN_BUILD_CLANG=scan-build-$CLANGVER
+CFLAGS="-Wno-unknown-warning-option -g $CFLAGS"
+CXXFLAGS="-Wno-overloaded-virtual -Wno-unknown-warning-option -Wno-unused -g $CXXFLAGS"
+MKDEFAULTS="-j`nproc` V=0 -s"
+SBDEFAULTS="--use-cc clang-${CLANGVER} --use-c++ clang++-${CLANGVER} --force-analyze-debug-code -disable-checker deadcode.DeadStores -analyzer-config stable-report-filename=true -o $SCAN_BUILD_OUTDIR"
+
+build_html () {
+    cat <<-EOF
+	<html>
+	<head>Scan build</head>
+	<br/>
+	<ul>
+	EOF
+    for i in */index.html; do
+        cat <<-EOF
+		<li><a href="$i">`dirname $i`</a></li><br/>
+		EOF
+    done
+    cat <<-EOF
+	</ul>
+	</html>
+	EOF
+}
+
+if [ "$1" = "msan" ]; then
+    CFLAGS="$CFLAGS -fsanitize=memory -fsanitize-memory-track-origins=2"
+    CXXFLAGS="$CXXFLAGS -fsanitize=memory -fsanitize-memory-track-origins=2"
+    LDFLAGS="$LDFLAGS -fsanitize=memory -fsanitize-memory-track-origins=2"
+    shift
+elif [ "$1" = "tsan" ]; then
+    CFLAGS="$CFLAGS -fsanitize=thread"
+    CXXFLAGS="$CXXFLAGS -fsanitize=thread"
+    LDFLAGS="$LDFLAGS -fsanitize=thread"
+    shift
+elif [ "$1" = "asan" ]; then
+    CFLAGS="$CFLAGS -fsanitize=address"
+    CXXFLAGS="$CXXFLAGS -fsanitize=address"
+    LDFLAGS="$LDFLAGS -fsanitize=address"
+    shift
+fi
+export ASAN_OPTIONS=suppressions=$DIR/ASan.supp
+export LSAN_OPTIONS=suppressions=$DIR/LSan.supp
+if $SCAN_BUILD; then
+    mkdir -p $SCAN_BUILD_OUTDIR
+    if ! test -f configure; then
+        autoreconf -fvi
+    fi
+    scan-build-${CLANGVER} ./configure --enable-debug=no --enable-coverage=no --enable-inlines=yes --enable-prof=no --enable-asserts=no --enable-libcxx=no
+    $SCAN_BUILD_CLANG $SBDEFAULTS make $MKDEFAULTS CC="$CC" CXX="$CXX" LD="$LD" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS"
+    (cd $SCAN_BUILD_OUTDIR && build_html > index.html)
+else
+    build "$@" CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" "${POST_ARGS[@]}"
+fi

@@ -1,0 +1,17 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "temp-72057594038292854",
+            "columns": [
+                {
+                    "columnName": "col-13146-36057966",
+                    "headerAlias": "col-13146-36057966"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.0.3.17-jenkins-c0fe2cdb",
+    "udfs": [],
+    "query": "load --url \"nfs:///<pathToQaDatasets>/gdelt-small/\" --format csv --size 104857600B  --name \"<datasetName>\";index --key \"column45\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-temp-72057594038287200\" --prefix column45;groupBy --srctable \"<tablePrefix>-temp-72057594038287200\" --eval \"count(column45::column17)\" --fieldName \"col-13146-36057966\" --newKeyFieldName \"column45\" --dsttable \"temp-72057594038292854\" --nosample;"
+}

@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.4.0-1-xcalardev-cfa2ab22-8e164e50",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5f5fce1205a1bea0",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1600114194",
+        "tvNsec": "94486176"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1600114200",
+        "tvNsec": "968321737"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1600114260",
+        "tvNsec": "520747886"
+    },
+    "sessionName": "LoadMart"
+}

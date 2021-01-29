@@ -1,0 +1,7 @@
+enum LibLogFuncTestConfig {
+    LibLogTestFuncStressThreads:"LibLogTestFuncStressThreads",
+    LibLogTestBigFileSize:"LibLogTestBigFileSize",
+    LibLogTestNumLogPerThread:"LibLogTestNumLogPerThread",
+    LibLogTestDataFileDir:"LibLogTestDataFileDir",
+    LibLogTestDataFileDirAux:"LibLogTestDataFileDirAux",
+}

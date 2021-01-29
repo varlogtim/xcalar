@@ -1,0 +1,4 @@
+sem_timedwait
+sysSemTimedWait
+WorkQueue::worker
+BlockableRuntimeThread::fiberEntryPoint

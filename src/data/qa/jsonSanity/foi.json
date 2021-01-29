@@ -1,0 +1,26 @@
+[
+    {
+        "idx": 1,
+        "nestedField": {
+            "intField": 1,
+            "mixedField": "hello",
+            "floatField": 5.12,
+            "arrayField": [ 1, 2, 3 ]
+        },
+        "arrayField": [ 1, 2, 3, 4 ],
+        "mixedField": "world",
+        "stringField": "ignoreme"
+    },
+    {
+        "idx": 2,
+        "stringField": "ignoreme",
+        "nullField": null,
+        "nestedField": {
+            "mixedField": 5,
+            "floatField": 6.2,
+            "arrayField": [ 1, 2, 3, 4 ]
+        },
+        "arrayField": [ 1, 2, 3 ],
+        "mixedField": true
+    }
+]

@@ -1,0 +1,31 @@
+enum DfFieldType {
+    DfUnknown,
+    DfString,
+    DfInt32,
+    DfUInt32,
+    DfInt64,
+    DfUInt64,
+    DfFloat32,
+    DfFloat64,
+    DfBoolean,
+    DfTimespec,
+    DfBlob,
+    DfNull,
+    DfMixed,
+    DfFatptr,
+    DfScalarPtr,
+    DfScalarObj,
+    DfOpRowMetaPtr,
+    DfArray,
+    DfObject,
+    DfMoney,
+}
+
+enum DfFormatType {
+    DfFormatUnknown:"unknown",
+    DfFormatJson:"json",
+    DfFormatCsv:"csv",
+    DfFormatSql:"sql",
+    DfFormatInternal:"internal",
+    DfFormatParquet:"parquet",
+}

@@ -1,0 +1,133 @@
+{
+    "properties" : {
+        "deltaIntervalInSeconds": 5,
+        "batchRetentionSeconds": 5000,
+        "minimumSleepIntervalInSeconds": 5,
+        "snapshotDataTargetName": "snapshot",
+        "snapshotMaxRetentionNumber": 5,
+        "snapshotMaxRetentionPeriodSeconds": 604800,
+        "distributer": {},
+        "IMDThreadCount": 1,
+        "snapshotThreadCount": 1,
+        "sharedSession":true
+    },
+    "params": {
+        "lake_infinity": 999999999,
+        "infdt1": 253399622400000000,
+        "dt2": 1483246800000000,
+        "infdt3": 253370782800000000,
+        "ds2path_bkp": "/netstore/solutions/customer4/datasets/ds2base/",
+        "ds2path": "ds2base/"
+    },
+    "source_defs": {
+        "local_parquet": {
+            "targetName": "Default Shared Root",
+            "type": "dataset",
+            "parseArgs": {
+                "parquetParser": "native"
+            },
+            "parserFnName": "/sharedUDFs/default:parseParquet",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "test": {
+            "targetName": "snapshot_mnt",
+            "type": "dataset",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "parserFnName": "default:parseCsv",
+            "forceCast": false,
+            "forceTrim": false,
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "test_base": {
+            "targetName": "Default Shared Root",
+            "type": "dataset",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "parserFnName": "default:parseCsv",
+            "basePath": "/netstore/controller/snapshots/customer4/",
+            "forceCast": false,
+            "forceTrim": false,
+            "literals": {
+                "batch_id": {
+                    "eval": "getInitBatchId",
+                    "type": "int"
+                },
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "kafka-base": {
+            "targetName": "kafka-base",
+            "type": "stream",
+            "parserFnName": "parse_kafka_topic",
+            "parserTemplateName": "kafka_import_confluent",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        }
+    },
+    "universe": {
+        "ds1": {
+            "schema": "ds1_schema",
+            "source": {
+                "filter": "eq(<dt2>,<dt2>)",
+                "path": "ds1base/",
+                "path_bkp": "/netstore/solutions/customer4/snapshots/1572225544/ds1/",
+                "isFolder": true,
+                "sourceDef": "test_base"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        }
+    }
+}

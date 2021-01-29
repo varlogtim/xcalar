@@ -1,0 +1,188 @@
+This is a document describing common development processes.
+For system setup, please see xcalar/bin/README.sh
+
+=============== BUILDING THE SYS TREE ===============
+1.  Check out the appropriate branch (currently trunk)
+2.  Configure a build:
+  cd xcalar
+  $ build config
+  By default this will create a debug build with code coverage && asserts
+  enabled.  If you wish to change the default build configuration run build
+  with the following arguments:
+
+  $ build config --{en,dis}able-debug --{en,dis}able-coverage --{en,dis}able-prof --{en,dis}able-inlines --{en,dis}able-asserts
+
+  You only need to specify this once per build configuration change and your
+  setting will be persisted upon subsequent build invocations.
+3.  Build:
+  $ build
+4.  To cleanup a build:
+  $ build clean
+
+=============== UNIT TESTING THE TREE ============
+1.  Follow BUILDING THE TREE steps 1 & 2
+2.  Run:
+  $ build check
+
+=============== CStyle Checking ===============
+1. Follow BUILDING THE TREE steps 1 & 2
+2. Run:
+  $ build cstyle
+
+=============== STATIC Analysis ===============
+1.  First clean the build:
+  $ build clean
+2.  Run:
+  $ build analyze
+
+=============== Documentation ================
+1.  To build the html and manpages documentation:
+  $ build doc
+
+=============== Profiling With Gprof ================
+1.  Build with profiling on, coverage off, and with static libraries.  You may
+    also disable inlining to get additional visibility
+  $ build config --enable-coverage=no --enable-inlines=no --enable-prof=yes --disable-asserts --disable-shared
+2.  Run the program you want to profile to completion.  This should product a
+    file called gmon.out.
+3.  Run gprof:
+  $ gprof <programName>
+
+=============== Profiling With Callgrind ================
+1.  Build with profiling off, coverage off, and with static libraries.  You may
+    also disable inlining to get additional visibility.  For more accurate
+    results, also disable debugging.  Finally, to avoid init code polluting
+    your profiling data, you can specify the function to begin profiling from
+    when running callgrind.  e.x.:
+
+    $ build config --enable-debug=no --enable-coverage=no --enable-prof=no --enable-inlines=no --disable-asserts
+    $ valgrind --tool=callgrind --zero-before=simSpinUntilThreadsExit simnode 1 0 1
+
+    Note that running under callgrind is slow.  You can monitor your program's
+    progress & callstack via:
+
+    $ watch callgrind_control -b
+
+    Once the program has finished running, it will create a file called
+    callgrind.out.<pid>.  Pass this to kcachegrind to view the result:
+
+    $ kcachegrind callgrind.out.<pid>
+
+=============== Profiling With perf ================
+1.  make sure you've installed linux-tools-common linux-tools-generic
+
+    $ sudo apt-get linux-tools-common linux-tools-generic
+
+2.  make a performance build
+
+    $ build config --enable-debug=no --enable-coverage=no --enable-prof=no --enable-inlines=yes --disable-asserts
+    $ build
+
+3.  generate a performance profile
+
+    $ sudo perf record -a --call-graph fp <programToProf>
+
+4.  view results
+
+    $ sudo perf report --call-graph --stdio
+
+=============== Production builds ================
+  $ build config --enable-debug=no --enable-coverage=no --enable-inlines=yes --enable-prof=no --enable-asserts=no
+
+=============== Licenses ===============
+
+The file EcdsaPub.key contains a public key used to verify
+that the the license is produced by Xcalar. The file XcalarLic.key contains the 
+license itself. Both of these should be installed by the GUI installer.  Other installs 
+will only install the public key and require that the license file be placed by hand.  
+
+EcdsaPub.key is burned into the usrnode binary itself. However when necessary, an alternate
+public key can be provided via the environment variable XCE_PUBSIGNKEYFILE.
+
+The source build command sets XCE_LICENSEDIR to $XLRDIR/src/data, which contains a 
+test key and a test license for build and sanity testing.  Developers can use the 
+test license for internal development and testing.  It should never be shared with 
+customers. 
+
+Developers and customers can also obtain their own license from the ZenDesk customer 
+portal. 
+
+=============== DEBUGGING ===============
+
+** NOTE: This only applies to libraries built with automake's lib_XXX rule. We
+now build all our libraries with noinst_XXX to statically link the libraries,
+so you don't need to prefix your invocations with libtool anymore. **
+
+Libraries and binaries are created using LIBTOOL(1).  Libtool creates
+a subdirect .libs/ in the current directory and will place compiled objects
+here.  It will then create symlinks in the current directory to run the
+binary and load the requisite libraries.  Unfortunately, this makes it
+difficult for developers to naturally run gdb, strace, valgrind, etc. on the
+compiler outputs.  Instead, libtool provides a convenient wrapper to achieve
+this:
+
+  $ libtool --mode=execute <debugger> <exe>
+
+  e.x.  libtool --mode=execute gdb libsysTest
+        libtool --mode=execute strace libconfigTest
+        libtool --mode=execute valgrind libconfigTest
+
+Running memcheck
+
+ libtool --mode=execute valgrind --tool=memcheck --leak-check=full
+ --show-reachable=yes --track-fds=yes --track-origins=yes
+ --error-exitcode=1 --trace-children=yes --time-stamp=yes <programName>
+
+=============== GDB NOTES ===============
+When stepping a multi-threaded program, the following may be useful to
+prevent gdb from context switching:
+
+(gdb) set scheduler-locking on
+
+this will prevent all of the threads you aren't working with from
+executing.  e.x. if you want to single step without other threads
+interrupting you because they hit a breakpoint.
+
+don't forget to turn it back off before continuing, unless you only
+want the thread you were debugging to continue.  (the latter was
+actually pretty useful for me to find bug 80).
+
+
+============== BUILD CONFIG OPTIONS ==============
+  --enable-coverage={no|yes}
+  Enables code coverage.  Default is yes; very cpu hungry.  Mutually exclusive
+  with profiling.
+
+  --enable-inlines=yes
+  Enables inlining.  Default is yes; erodes debugability & profilability
+
+  --enable-prof=no
+  Enables profiling.  Default is no; very cpu hungry.  Mutually exclusive with
+  coverage.  Must also configure with --disable-shared
+
+  --enable-debug=yes
+  Enables debug build (assertions on, printDbg() on, #ifdef DEBUG on)
+
+============== RUNNING THE GUI ==============
+1.  make sure you've installed nodejs npm node-less apache2 packages as per
+ONE TIME SETUP section 5
+2.  make sure you've run SETUP.sh as per ONE TIME SETUP section 19b
+3.  make sure you've changed apache's www root to point to $XLRGUIDIR as per ONE TIME SETUP section 22
+4.  everything you refresh the GUI repo with the latest code, be sure to run
+RUNME.sh
+5.  cd $XLRDIR/src/bin/usrnode
+6.  ./launcher.sh <numNodes>
+7.  start apache
+    sudo /etc/init.d/apache2 start
+8.  launch a web browser and point it at the following url:
+    http://localhost/login.html Be sure to use a username (no password necesary)
+
+============== CHECK IN CODE ==============
+1. git cherry-pick -x the commit into stable branch. Remember the -x to preserve
+   the (cherry pick SHA) comment. Recommend to create an alias for it:
+   a. Open ~/.bashrc
+   b. Add the following line in the end of the .bashrc file and save the file:
+        alias gpk='git cherry-pick -x'
+   c. Run "source ~/.bashrc" in shell
+   d. In the future, run gpk to cherry pick a commit,instead of running
+      "git cherry-pick -x".

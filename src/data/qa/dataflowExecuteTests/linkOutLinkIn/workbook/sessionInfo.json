@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.0.0-1-swatanabe-6c3d12a5-bfe28db2",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5c7d633524b56faf",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1551135074",
+        "tvNsec": "982578343"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1551721272",
+        "tvNsec": "130620910"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1551732683",
+        "tvNsec": "354104110"
+    },
+    "sessionName": "LinkOutLinkIn"
+}

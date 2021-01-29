@@ -1,0 +1,81 @@
+Instructions to run the simulation rig locally:
+
+Kafka server setup
+https://xcalar.atlassian.net/wiki/spaces/~232626476/overview#Kafka
+
+Data Generation part:
+
+To run the customer4 simulation rig, we should have data lake which looks similar to what we have at Customer4. Customer4 shared with us there tables schema and also statics of the some columns of those tables. Using that information, we can create a data lake which looks similar to Customer4 but not perfect.
+
+The data generation utility generates base data of the tables and for imd tables it will also generate delta data which we can feed it to the kafka server.
+
+Check the default values of data_gen util and change any defaults as needed
+    ./src/bin/tests/simulationRig/dataGen/data_gen.py -h
+
+1) To generate base table,
+    ./src/bin/tests/simulationRig/dataGen/data_gen.py -m 1
+2) To generate 50 batches of deltas for the imd tables,
+    ./src/bin/tests/simulationRig/dataGen/data_gen.py -m 50 --deltasOnly
+
+OR to generate both base and deltas in one run
+    ./src/bin/tests/simulationRig/dataGen/data_gen.py -m 50
+
+XCE rememberes batch numbers generated so far. To clean up data gen previous state, run the following command
+./src/bin/tests/simulationRig/dataGen/data_gen.py -c
+
+Run simulation rig:
+
+To run one premise(+ shared) with two incrementas
+./src/bin/tests/simulationRig/test_rig_main.py --num-premises 1 --num-incrementals 2 --action all --snapshotPath /var/opt/xcalar/export/snapshots/simulationRig/
+
+To stop all the premise runs:
+./src/bin/tests/simulationRig/test_rig_main.py --num-premises 1 --action stop
+
+With default parameters to the util, it creates
+du -sh /var/opt/xcalar/export/
+238M    /var/opt/xcalar/export/
+
+In-memory 455MB of shared premise data (ref_rig_shared)
+In-memory 1.31GB of private premise data (rig_app_0)
+
+
+Test plan files:
+
+Controller runs as an xcalar app and the input to the app is the config files
+which describes the universe definition and python adaptor and call back modules.
+
+properties.json
+This file contains the git information, universe adaptor and call backs information which are used by the controller.
+
+test_rig_universe.json
+    This file has universe information which contains source/sink definitions.
+    Tables definitions to be loaded into xcalar.
+    Runtime parameters.
+
+test_rig_refdata_universe.json
+    This file is also a universe file and data from this universe is shared with all other universes.
+
+test_rig_universe_adapter.py
+    This is the python adaptor file controller will invoke to get the universe information and schema of tables.
+
+test_rig_callbacks.py
+    This file contains various callback functions which controller uses to decide the workflow.
+    This is how the user controls the dynamic workflow of the controller.
+
+rig_kafka_dist.py
+    This file contains information on how to partition kafka topics/partitions to Xcalar XPUs during kafka ingestion.
+
+gs_schema.json
+    This file has up-to-date customer4 tables schema information.
+
+* These files should be moved to Azure/AWS VM where simulation rig is running and should be at least accessible
+to node 0 of xcalar cluster.
+
+XXX The following are hardcoded in the configuration files which should be changed if moving to a different environment.
+
+1) Kafka server is hardcoded in rig_kafka_dist.py file.
+    Replace localhost:9092 to any new kafka server in the new environment.
+2) Xpu count is hardcoded in getXpuPartitionMap function in test_rig_callbacks.py module.
+    Replace it with how many total cores the new xcalar cluster has.
+3) This function decisionCallBack4TestRefiner in the test_rig_callbacks.py module always returns True.
+    This is to force the refiner run on every cycle even though we don't get data from kafka.

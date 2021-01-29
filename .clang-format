@@ -1,0 +1,22 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+AccessModifierOffset: -2
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakAfterDefinitionReturnType: TopLevel
+BinPackArguments: false
+ForEachMacros: [ json_object_foreach, json_array_foreach ]
+BinPackParameters: false
+BreakBeforeBraces: Linux
+IndentCaseLabels: false
+IndentWidth: 4
+ColumnLimit: 80
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: true
+PenaltyBreakBeforeFirstCallParameter: 1000
+SortIncludes: false
+SpaceAfterCStyleCast : true
+TabWidth: 4
+# Enable once we move to latest version of clang-format
+# SpaceBeforeCpp11BracedList: true
+...

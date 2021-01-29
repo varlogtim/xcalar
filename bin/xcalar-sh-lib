@@ -1,0 +1,354 @@
+#!/bin/bash
+#
+# Xcalar helper functions
+
+# shellcheck disable=SC2154,SC2046,SC2086,SC2206,SC2207
+
+xtrace() {
+    export PS4='# [${PWD}] ${BASH_SOURCE#$PWD/}:${LINENO}: ${FUNCNAME[0]}() - ${container:+[$container] }[${SHLVL},${BASH_SUBSHELL},$?] '
+    set -x
+}
+
+docker_clean() {
+    docker ps -aq --filter status=exited | xargs -r docker rm -v || true
+    docker images --filter=dangling=true -q | xargs -r docker rmi || true
+    docker volume ls -qf dangling=true | grep -E '^[a-z0-9]{64}$' | xargs -r docker volume rm
+    docker images --filter reference="registry.int.xcalar.com/xcalar/xcalar:v*" -q | xargs -r docker rmi
+}
+
+core_path() {
+    local core_pattern
+    if ! core_pattern=$(</proc/sys/kernel/core_pattern); then
+        return 1
+    fi
+    local path="${core_pattern%/*}"
+    if [ -z "$path" ]; then
+        warn "No core pattern set in /proc/sys/kernel/core_pattern"
+        return 1
+    fi
+    if [ "$path" = / ]; then
+        warn "cores are set to save in /"
+        return 1
+    fi
+    r="${path:0:1}"
+    if [ "$r" = '|' ]; then
+        warn "core_pattern is set to pipe to a file. ignoring $core_pattern"
+        return 1
+    fi
+    if ! test -d "$(dirname $core_pattern)"; then
+        warn "$0: Directory from core_pattern: $core_pattern doesn't exit. No cores will be save outside the container."
+        return 1
+    fi
+    echo "$path"
+    return 0
+}
+
+xcalar_stdenv() {
+    local xlrdir
+    xlrdir="$(
+        unset CDPATH
+        cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd
+    )"
+    if [ -n "$XLRDIR" ] && [ "$XLRDIR" != "$xlrdir" ]; then
+        echo >&2 "WARNING: XLRDIR=$XLRDIR doesn't match the location of this script $xlrdir/bin"
+        echo >&2 "WARNING: Resetting XLRDIR=$xlrdir"
+        unset XLRDIR
+        unset BUILD_DIR
+    fi
+    if [ -z "$XLRDIR" ]; then
+        export XLRDIR="$xlrdir"
+        export BUILD_DIR="$XLRDIR"/buildOut
+    else
+        export BUILD_DIR="${BUILD_DIR:-$XLRDIR/buildOut}"
+    fi
+    export XLRQADIR="$BUILD_DIR"/src/data/qa
+
+    export XLRINFRADIR="$(pickfirst "$XLRINFRADIR" "$XLRDIR"/xcalar-infra "$PWD"/xcalar-infra "$XLRDIR"/../xcalar-infra || true)"
+    export XLRGUIDIR="$(pickfirst "$XLRGUIDIR" "$XLRDIR"/xcalar-gui "$PWD"/xcalar-gui "$XLRDIR"/../xcalar-gui || true)"
+
+    export DEFAULT_PATH=${PREFIX:-/opt/xcalar}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin${JAVA_HOME:+:$JAVA_HOME/bin}
+    PATH="$XLRDIR/bin:${XLRINFRADIR:+$XLRINFRADIR/bin:}${DEFAULT_PATH}:$PATH"
+    hash -r
+    export PATH="$(dedupe_csep_var "$PATH")"
+    hash -r
+}
+
+enter_container() {
+    if in_container; then
+        return 0
+    fi
+
+    exec crunpwd el7-build "$0" "$@"
+    return $?
+}
+
+# Takes a tar and repackages it with files owned by root
+# $1 = input.tar
+# $2 = output.tar(.gz)
+tar_fakeroot() {
+    local repackDir output="$2"
+    if [ -z "$2" ]; then
+        output="${1}.gz"
+    fi
+    repackDir=$(mktemp -d -t repackageTar.XXXXXX) \
+        && tar xf "$1" -C "$repackDir" \
+        && tar caf "$output" --owner=0 --group=0 -C "$repackDir" . \
+        && rm -rf "$repackDir"
+}
+
+# Replace all uses of 'fakeroot tar ....' with fakeroot_tar
+# to get the same result
+fakeroot_tar() {
+    local prog="$1"
+    if [ "$(basename $prog)" != tar ]; then
+        echo >&2 "ERROR: fakeroot_tar: Invalid tar program: $prog"
+        return 1
+    fi
+    shift
+    $prog --owner=root --group=root "$@"
+}
+
+is_container_id() {
+    [[ $1 =~ ^([0-9a-f]{64})$ ]]
+}
+
+container_id_norm() {
+    docker container inspect --format='{{.Id}}'
+}
+
+container_id() {
+    if ! in_container; then
+        return 1
+    fi
+    local cid
+    if cid="$(basename $(cat /proc/self/cpuset))"; then
+        if [[ $cid =~ ^[0-9a-f]{64}$ ]]; then
+            [ "${1:-}" == '-q' ] || echo "$cid"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+is_systemd() {
+    test -d /run/systemd
+}
+
+in_container() {
+    [ -n "${container:-}" ] || test -e /run/systemd/container || /is_container 2>/dev/null
+}
+
+is_defined() {
+    declare -p "$@" >/dev/null 2>&1
+
+}
+
+in_jenkins_job() {
+    [ -n "$JOB_NAME" ] && [ -n "$BUILD_ID" ] && [ -n "$EXECUTOR_NUMBER" ] && [ -n "$HUDSON_URL" ]
+}
+
+is_mountpoint() {
+    local mnt
+    if mnt=$(
+        set -o pipefail
+        findmnt -nT "$1" | awk '{print $1}'
+    ); then
+        if [ "$mnt" == "$1" ]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+fileage() {
+    local file="$1" fmt="${2:-%s}"
+    if ! test -e "$file"; then
+        return 1
+    fi
+    date -d@$(($(date +%s) - $(stat -c %Y "$file"))) +"$fmt"
+}
+
+loadenv() {
+    local dir
+    dir="$(
+        unset CDPATH
+        cd "$(dirname -- "${BASH_SOURCE[0]}")" && pwd
+    )"
+    [ $# -gt 0 ] || set -- "$dir"/crun.env
+    cat "$@"
+}
+
+##
+# Takes a list of KEY or KEY=VALUE pairs, resolves
+# them in the current environment and prints them
+# back out. Providing a KEY=VALUE pair, prints the same.
+# Providing just the KEY, will print they key and its
+# value.
+mkenv() {
+    local -a envlist=()
+    local key value ii
+    for ii in "$@"; do
+        value="${ii#*=}"
+        key="${ii%=${value}}"
+        if [ "$key" = "$value" ]; then
+            value="${!key}"
+        elif [ -z "${value-unset}" ]; then
+            envlist+=("$key=")
+            echo "$key="
+            continue
+        fi
+        if [ -n "$value" ]; then
+            envlist+=("$key=$value")
+            printf '%s=%s\n' "$key" "$value"
+        fi
+    done
+}
+
+mkenvarg() {
+    mkenv "$@" | sed 's/^/-e /' | tr '\n' ' '
+}
+
+add_vol() {
+    if ! declare -p _aCVOLS >/dev/null 2>&1; then
+        declare -g -a _aCVOLS=()
+    fi
+    local dmap=(${1//:/ })
+    local dir="${dmap[0]}"
+    local vmap
+    for vmap in "${_aCVOLS[@]}"; do
+        local -a vols=(${vmap//:/ })
+        local svol="${vols[0]}"
+        if [[ $svol =~ ^/ ]]; then
+            if [ "$svol" = "$dir" ]; then
+                return
+            fi
+            if ! [[ ${dir#$svol/} =~ ^/ ]]; then
+                return
+            fi
+        fi
+    done
+    _aCVOLS+=("${1}")
+}
+
+# Dedupe a colon separated variable like PATH
+dedupe_csep_var() {
+    echo "${1//:/$'\n'}" | nl -n rz | awk '{print $1,$2}' | sort -k 2 | uniq -f 1 | sort -n | awk '{print $2}' | sed '/^$/d' | tr '\n' ':'
+}
+
+dcr_reduce_vols() {
+    local -a ary=($(dcr_vmap_sortsize <<<"$@" | awk '{print $3}'))
+    local -a fary=()
+    while [ "${#ary[@]}" -gt 0 ]; do
+        item="${ary[0]}"
+        fary+=($item)
+        ary=($(grep -v "$item" <<<"${ary[@]}"))
+    done
+}
+
+dcr_vmap_sortsize() {
+    grep -E '^/' | sed -r 's@:.*$@@' | {
+        cnt=0
+        while read -r entry; do
+            printf '%02d %02d %s\n' "${#entry}" $cnt "${entry}"
+            ((cnt++))
+        done
+    } | sort -n
+}
+
+# Given a list of directories, check each one and return the first one that exists
+pickfirst() {
+    local ii
+    for ii; do
+        (
+            unset CDPATH
+            test -f "$ii" && cd "$(dirname "$ii")" && pwd
+        ) \
+            && return 0 || :
+        (
+            unset CDPATH
+            test -d "$ii" && cd "$ii" && pwd
+        ) \
+            && return 0 || :
+    done
+    return 1
+}
+
+add_vol() {
+    if [ -z "$1" ] || [ "$1" = : ]; then
+        return 0
+    fi
+
+    # if it's just a path name (like add_vol /foo/bar), then
+    # turn it into Docker's $src:dest format where src=dest
+    if ! [[ $1 == *:* ]]; then
+        set -- "$1:$1"
+    fi
+    local dmap=(${1//:/ })
+    local dir="${dmap[0]}"
+    # if this is our very first mapping, add the mapping no-questions-asked
+    if ! declare -p CVOLS >/dev/null 2>&1; then
+        declare -g -a CVOLS=("$1")
+        return 0
+    fi
+    if test -S "$dir" || [[ $dir =~ ^[a-zA-Z0-9_] ]]; then
+        CVOLS+=("$1")
+        return 0
+    fi
+    if ! test -e "$dir"; then
+        info " Skipping mapping $1, as $dir doesn't exist."
+        return 0
+    fi
+    local vmap
+    for vmap in "${CVOLS[@]}"; do
+        local -a vols=(${vmap//:/ })
+        local svol="${vols[0]}"
+        if [[ $svol =~ ^/ ]]; then
+            if [ "$svol" = "$dir" ]; then
+                return 0
+            fi
+            if ! [[ ${dir#$svol/} =~ ^/ ]]; then
+                return 0
+            fi
+        fi
+    done
+    CVOLS+=("$1")
+    return 0
+}
+
+say() {
+    echo >&2 "$*"
+}
+
+info() {
+    if test -t 2; then
+        GREEN='\e[32m'
+        RESET='\e[0m'
+        echo >&2 -e "${GREEN}[INFO]${RESET} " "$@"
+    else
+        echo >&2 '[INFO] ' "$@"
+    fi
+}
+
+warn() {
+    if test -t 2; then
+        YELLOW='\e[33m'
+        RESET='\e[0m'
+        echo >&2 -e "${YELLOW}[WARN]${RESET} " "$@"
+    else
+        echo >&2 '[WARN] ' "$@"
+    fi
+}
+
+error() {
+    if test -t 2; then
+        RED='\e[31m'
+        RESET='\e[0m'
+        echo >&2 -e "${RED}[ERROR]${RESET} " "$@"
+    else
+        echo >&2 '[ERROR] ' "$@"
+    fi
+}
+
+if ((XTRACE)); then
+    xtrace
+fi

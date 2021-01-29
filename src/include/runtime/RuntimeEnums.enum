@@ -1,0 +1,6 @@
+enum RuntimeType {
+    RuntimeTypeLatency = 0,
+    RuntimeTypeThroughput = 1,
+    RuntimeTypeImmediate = 2,
+    RuntimeTypeInvalid = 3,
+};

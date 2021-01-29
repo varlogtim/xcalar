@@ -1,0 +1,708 @@
+#!/bin/bash
+# Copyright 2015 - 2017 Xcalar, Inc. All rights reserved.
+#
+# No use, or distribution, of this source code is permitted in any form or
+# means without a valid, written license agreement with Xcalar, Inc.
+# Please refer to the included "COPYING" file for terms and conditions
+# regarding the use and redistribution of this software.
+
+# Change defaults for your installation in the following file
+
+DIR="$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)"
+
+INSTALL_DIR="$(dirname $(dirname $(dirname $DIR) ) )"
+
+if [ -r "/etc/default/xcalar" ]; then
+    . /etc/default/xcalar
+elif [ -n "$XCE_DEFAULTS" ]; then
+    . "$XCE_DEFAULTS"
+elif [ -r "$INSTALL_DIR/etc/default/xcalar" ]; then
+    . "$INSTALL_DIR/etc/default/xcalar"
+fi
+
+XCE_CONFIG="${XCE_CONFIG:-/etc/xcalar/default.cfg}"
+XCE_HOME="${XCE_HOME:-/var/opt/xcalar}"
+XCE_WORKDIR="${XCE_WORKDIR:-/var/tmp/xcalar-root}"
+XCE_SUPERVISOR_CONFIG="${XCE_SUPERVISOR_CONFIG:-/etc/xcalar/supervisor.conf}"
+XLRDIR="${XLRDIR:-/opt/xcalar}"
+XLRGUIDIR="${XLRGUIDIR:-/opt/xcalar/xcalar-gui}"
+LIBHDFS3_CONF="${LIBHDFS3_CONF:-/etc/xcalar/hdfs-client.xml}"
+XCE_LICENSEDIR="${XCE_LICENSEDIR:-/etc/xcalar}"
+# umask setting for usrnode -- default is "000" (no file permissions masking)
+XCE_UMASK="${XCE_UMASK:-000}"
+XCE_CADDYFILE="${XCE_CADDYFILE:-/etc/xcalar/Caddyfile}"
+XCE_HTTP_ROOT="${XCE_HTTP_ROOT:-/var/www}"
+XCE_HTTP_PORT="${XCE_HTTP_PORT:-80}"
+XCE_HTTPS_PORT="${XCE_HTTPS_PORT:-443}"
+PYTHONHOME="${PYTHONHOME:-/opt/xcalar}"
+XCE_LIC_FILE="${XCE_LIC_FILE:-XcalarLic.key}"
+XCE_LICENSEFILE="${XCE_LICENSEFILE:-$XCE_LICENSEDIR/$XCE_LIC_FILE}"
+JWT_SECRET="${JWT_SECRET:-3fPh4BmUwdzxvTk1iuh1ahxsUhwNANDtKK}"
+XCE_ACCESS_URL="${XCE_ACCESS_URL:-/assets/htmlFiles/login.html}"
+XCE_LOGIN_PAGE="${XCE_LOGIN_PAGE:-/assets/htmlFiles/login.html}"
+XCE_CLOUD_MODE="${XCE_CLOUD_MODE:-'0'}"
+XCE_SQLDF_CLOUD_OPTS="${XCE_SQLDF_CLOUD_OPTS:-}"
+XCE_CLOUD_SESSION_TABLE="${XCE_CLOUD_SESSION_TABLE:-}"
+XCE_CLOUD_USER_POOL_ID="${XCE_CLOUD_USER_POOL_ID:-}"
+XCE_CLOUD_CLIENT_ID="${XCE_CLOUD_CLIENT_ID:-}"
+XCE_SAAS_AUTH_LAMBDA_URL="${XCE_SAAS_AUTH_LAMBDA_URL:-}"
+XCE_SAAS_MAIN_LAMBDA_URL="${XCE_SAAS_MAIN_LAMBDA_URL:-}"
+XCE_CLOUD_REGION="${XCE_CLOUD_REGION:-}"
+XCE_CLOUD_PREFIX="${XCE_CLOUD_PREFIX:-xc}"
+XCE_CLOUD_HASH_KEY="${XCE_CLOUD_HASH_KEY:-id}"
+
+if [ "1" == "$XCE_CLOUD_MODE" ]; then
+    export XCE_CLOUD_MODE XCE_CLOUD_SESSION_TABLE XCE_CLOUD_USER_POOL_ID XCE_CLOUD_CLIENT_ID XCE_SAAS_AUTH_LAMBDA_URL XCE_SAAS_MAIN_LAMBDA_URL XCE_CLOUD_REGION XCE_CLOUD_PREFIX XCE_CLOUD_HASH_KEY
+    XCE_SQLDF_CLOUD_OPTS="${XCE_SQLDF_CLOUD_OPTS} -l ${XCE_CLOUD_MODE}"
+fi
+
+export XCE_CONFIG XCE_USER XCE_HOME XLRDIR XLRGUIDIR LIBHDFS3_CONF XCE_LICENSEFILE XCE_CADDYFILE XCE_HTTP_ROOT XCE_HTTP_PORT XCE_HTTPS_PORT XCE_WORKDIR PYTHONHOME JWT_SECRET XCE_ACCESS_URL XCE_LOGIN_PAGE XCE_SQLDF_CLOUD_OPTS XCE_EXP_TIMEOUT
+
+# Comes into play only if coverage has been built into the installer
+# in which case we want profdata to be generated
+LLVM_PROFILE_FILE="${LLVM_PROFILE_FILE:-/var/opt/xcalar/coverage/usrnode.%p.rawprof}"
+export LLVM_PROFILE_FILE
+
+PATH="$XLRDIR/bin:$XLRDIR/scripts:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+LD_LIBRARY_PATH="$XLRDIR/lib:$XLRDIR/lib64:$LD_LIBRARY_PATH"
+
+export PATH LD_LIBRARY_PATH
+
+source $XLRDIR/bin/java.sh
+
+# Kerberos5 config specified in XCE_CONFIG
+#KRB5_TRACE=
+
+test -n "$KRB5_CONFIG" && export KRB5_CONFIG
+test -n "$KRB5_KDC_PROFILE" && export KRB5_KDC_PROFILE
+test -n "$KRB5_KTNAME" && export KRB5_KTNAME
+test -n "$KRB5CCNAME" && export KRB5CCNAME
+test -n "$KPROP_PORT" && export KPROP_PORT
+test -n "$KRB5RCACHETYPE" && export KRB5RCACHETYPE
+test -n "$KRB5RCACHEDIR" && export KRB5RCACHEDIR
+test -n "$LD_PRELOAD" && export LD_PRELOAD
+
+CGROUP_XCALAR_XCE=xcalar_xce_${USER}
+CGROUP_XCALAR_MW=xcalar_middleware_${USER}
+CGROUPS_ENABLED=$(grep '^Constants.Cgroups' "$XCE_CONFIG" | tail -1 | cut -d '=' -f 2)
+( [ -n "${container}" ] || /is_container 2>/dev/null ) && CGROUPS_ENABLED="false"
+
+if [ "$CGROUPS_ENABLED" != "false" ]; then
+    . cgroupMgmtUtils.sh
+
+    declare -a CGROUPS_V1_CONTROLLERS=("memory" "cpu" "cpuacct" "cpuset")
+    cgroupMode
+
+    joinBy() { local IFS="$1"; shift; echo "$*"; }
+    CGROUP_UNIT_PATH="xcalar.slice/xcalar-usrnode.service"
+
+    for controller_mount in "${CGROUPS_V1_CONTROLLER_MOUNTS[@]}"; do
+        if [[ "$controller_mount" != *"cpuset"* ]]; then
+            CREATED_CONTROLLER_PATHS+=("${controller_mount}/${CGROUP_UNIT_PATH}")
+        fi
+    done
+    CREATED_CONTROLLER_PATHS=($(echo "${CREATED_CONTROLLER_PATHS[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+
+    export XCE_CHILDNODE_PATHS=$(joinBy ':' "${CREATED_CONTROLLER_PATHS[@]}")
+    export XCE_CGROUP_CONTROLLER_MAP=$(joinBy ':' "${CGROUPS_V1_CONTROLLER_MAP[@]}")
+    export XCE_CGROUP_CONTROLLERS=$(joinBy ' ' "${CGROUPS_V1_CONTROLLERS[@]}")
+    export XCE_CGROUP_UNIT_PATH="$CGROUP_UNIT_PATH"
+    export XCE_CHILDNODE_SCOPES="sys_xpus-sched0 sys_xpus-sched1 sys_xpus-sched2 usr_xpus-sched0 usr_xpus-sched1 usr_xpus-sched2"
+fi
+
+setupLogDir ()
+{
+    XCE_LOGDIR="$(awk -F'=' '/^Constants.XcalarLogCompletePath/ {a=$2} END{print a}' $XCE_CONFIG)"
+    XCE_LOGDIR="${XCE_LOGDIR:-/var/log/xcalar}"
+    export XCE_LOGDIR
+}
+
+verbose()
+{
+    $VERBOSE && echo "$*"
+}
+
+# Run support-generate.sh in the background when there is a coredump
+
+# We check the pidfile for a currently executing support-generate.sh
+# and don't rerun it.
+check_asup ()
+{
+    local verbose=${1:-true}
+    local core_pattern=$(</proc/sys/kernel/core_pattern)
+    local core_basename=""
+    local core_path="$(pwd)"
+    if [[ "$core_pattern" =~ ^/ ]]; then
+        core_path="$(dirname $core_pattern)"
+        core_basename="$(echo $(basename $core_pattern) | sed -e 's/%./*/g')"
+    elif [[ "$core_pattern" =~ ^\| ]]; then
+        $verbose && echo >&2 "WARNING: Core pattern is set to pipe to an external program: $core_pattern"
+    else # the case when core_pattern is just "core.%e.%p"
+        core_basename="$(echo $(basename $core_pattern) | sed -e 's/%./*/g')"
+    fi
+    [ "$core_path" != "/" ] && core_path="${core_path} /"
+    local asup_pidfile="$XCE_LOGDIR/support-generate.pid"
+    local asup_pid="$(cat $asup_pidfile 2>/dev/null)"
+    if [ $? -eq 0 ] && [ "$asup_pid" != "" ] && kill -0 $asup_pid 2>/dev/null; then
+        :
+    elif [ -n "$core_basename" ] && test -n "$(find ${core_path} -mindepth 1 -maxdepth 1 -name "$core_basename" 2>/dev/null)"; then
+        nohup bash $XLRDIR/scripts/support-generate.sh >> $XCE_LOGDIR/support-generate.log 2>&1 </dev/null &
+        echo $! > "$asup_pidfile"
+    else
+        rm -f "$asup_pidfile"
+    fi
+}
+
+# Determine the list of nodeIds (numbers) associated with this host.
+# This results in a space-separated string, e.g., "0 1 2 3".
+determineNodeId()
+{
+    # Lookup hostname in config.
+    hostname_f="$(hostname -f 2>/dev/null)"
+    if [ $? -ne 0 ] || [ -z "$hostname_f" ]; then
+        hostname_f="$(hostname 2>/dev/null)"
+    fi
+    # Bug Xc-6331
+    # We only want to look for node numbers in the Node.<num>.Ipaddr lines where hostnames
+    # and IP addresses will be found, and not in lines like Constants.XcalarRootCompletePath
+    # which might have the hostname (or some variant of it) in a path or other string.
+    if [ -n "$hostname_f" ]; then
+        nodeId=$(grep -E '^Node\.[0-9]+\.IpAddr' "$XCE_CONFIG" | grep -E "($(hostname -s)|${hostname_f}|localhost|127\.0\.0\.1)\$" | cut -d '.' -f 2)
+    else
+        nodeId=$(grep -E '^Node\.[0-9]+\.IpAddr' "$XCE_CONFIG" | grep -E "($(hostname -s)|localhost|127\.0\.0\.1)\$" | cut -d '.' -f 2)
+    fi
+    hostId=$(hostname)
+    if [ -z "$nodeId" ]; then
+        # Try IP addresses.
+        # This handles both EL6/Ubuntu and EL7 ifconfig output.  The former
+        # prepends the IP addresses with "inet addr:", while the latter uses
+        # "inet ".  The ":" delimiter is not found in EL7, but the trailing
+        # "cut" command still behaves correctly.
+        for ip in `ifconfig | grep "inet " | sed -e 's/^ *//' | cut -d ' ' -f 2 | cut -d ':' -f 2`
+        do
+            nodeId=$(grep -E '^Node\.[0-9]+\.IpAddr' "$XCE_CONFIG" | grep $ip | cut -d '.' -f 2)
+            if [ ! -z "$nodeId" ]; then
+                break
+            fi
+        done
+    fi
+
+    XCE_NODE_LIST="$nodeId"
+    export XCE_NODE_LIST
+}
+
+setupMain()
+{
+    local verbose=${1:-true}
+    if [ ! -r "$XCE_CONFIG" ]; then
+        verbose "Failed to read $XCE_CONFIG"
+        exit 1
+    fi
+
+    # Parse config file to determine which nodes are on this host.
+    determineNodeId
+    if [ -z "$nodeId" ]; then
+        verbose "Could not determine node ID for this host. Please check your config file (${XCE_CONFIG})."
+        exit 1
+    fi
+
+    # nodeId is a string containing the list of all the node numbers in the .cfg file
+    # running on the local node
+    # this converts that string to an array, and uses the first entry to find the
+    # ApiPort for one usrnode process running on the local node and the monitor port
+    # if we are running one usrnode process per host
+    nodeIdArr=($nodeId)
+
+    XCE_MONITORPORT="$(grep "^Node.${nodeIdArr[0]}.MonitorPort" $XCE_CONFIG | awk -F'=' '{print $2}')"
+    export XCE_MONITORPORT
+
+    verbose "Node ID: ${nodeIdArr[0]}"
+
+    if [ -z "$XCE_MONITORPORT" ]; then
+        verbose "Node.${nodeIdArr[0]}.MonitorPort not found. Possibly outdated or corrupt config file (${XCE_CONFIG})."
+        exit 1
+    fi
+
+    apiPortNum=$(grep "^Node.${nodeIdArr[0]}.ApiPort" "$XCE_CONFIG" | cut -d '=' -f 2)
+
+    if [ -z "$apiPortNum" ]; then
+        verbose "Node.${nodeIdArr[0]}.ApiPort value not found.  Possibly outdated or corrupt config file (${XCE_CONFIG})."
+        exit 1
+    fi
+
+    numNodes=$(grep -v '^//' "$XCE_CONFIG" | grep 'NumNodes' | cut -d '=' -f 2)
+    if [ -z "$numNodes" ] ||  [ "$numNodes" -ne "$numNodes" ] 2>/dev/null; then
+       verbose "Failed to determine number of nodes. Possibly corrupt config file (${XCE_CONFIG})."
+       exit 1
+    fi
+
+    # Count the usrnode instances configured for this host
+    numLocalNodes=0
+    for ii in $nodeId;
+    do
+        ((numLocalNodes++))
+    done
+
+    rootPath="$(awk -F'=' '/^Constants.XcalarRootCompletePath/ {a=$2} END{print a}' $XCE_CONFIG)"
+
+    if [ -f "$rootPath"/config/authSecret ]; then
+        JWT_SECRET=$(cat "$rootPath"/config/authSecret)
+        export JWT_SECRET
+    fi
+
+    if [ -n "$XCE_CLUSTER_URL" ] && ( [ "$CLUSTER_ALIAS" = "1" ] || [ "${nodeIdArr[0]}" != "0" ] ); then
+        if [ "${nodeIdArr[0]}" != "0" ]; then
+            XCE_LOGIN_PAGE="/assets/htmlFiles/nologin.html"
+            export XCE_LOGIN_PAGE
+        fi
+        XCE_ACCESS_URL="${XCE_CLUSTER_URL}"
+        export XCE_ACCESS_URL
+    fi
+
+    read THPG_DEFRAG < /sys/kernel/mm/transparent_hugepage/defrag
+    read KHPGD_DEFRAG < /sys/kernel/mm/transparent_hugepage/khugepaged/defrag
+
+    if [[ $THPG_DEFRAG =~ never$ ]] || [ "$KHPGD_DEFRAG" == "1" ] || [ "$KHPGD_DEFRAG" == "yes" ]; then
+        verbose "WARNING: transparent hugepage defragmentation is active"
+        verbose "WARNING: this may result in reduced performance for Xcalar"
+        verbose "/sys/kernel/mm/transparent_hugepage/defrag = $THPG_DEFRAG"
+        verbose "/sys/kernel/mm/transparent_hugepage/khugepaged/defrag = $KHPGD_DEFRAG"
+    fi
+
+}
+
+getSupervisord()
+{
+    supervisord_pid=$(cat ${XCE_WORKDIR}/supervisord.pid 2>/dev/null)
+    [ -n "${supervisord_pid}" ] && kill -0 "${supervisord_pid}"  &&
+    grep -q 'bin/supervisord' "/proc/${supervisord_pid}/cmdline" &&
+    supervisord_user=$(ps -o user ${supervisord_pid} | tail -n1) && return 0
+    return 1
+}
+
+getCliBackendVersion()
+{
+    cliBackendVersion=$(TERM=dumb $XLRDIR/bin/xccli -c "version" --port $1 | grep "Backend Version" | cut -d ':' -f2)
+}
+
+supervisordErrMsg()
+{
+    echo "error communicating with supervisord"
+    echo "supervisorctl error: $1"
+
+    if getSupervisord; then
+        my_user="$(id -un)"
+        echo "supervisord is running as user $supervisord_user, supervisorctl running as user $my_user"
+        echo "you may need to be logged in as $supervisord_user to use $0"
+    else
+        echo "supervisord is not running"
+    fi
+}
+
+supervisordRunning()
+{
+    local status_verbose=${2:-true}
+    local serviceStatus="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG status xcalar:$1)"
+    [[ $serviceStatus =~ ^error* ]] && supervisordErrMsg "$serviceStatus" && return 1
+
+    local serviceIsRunning="$(echo $serviceStatus | awk '{ print $2 }')"
+
+    if [[ "$serviceIsRunning" == "RUNNING" || "$serviceIsRunning" == "STARTING" ]]; then
+        $status_verbose && echo "xcalar:$1 is already running"
+        return 0
+    fi
+
+    return 1
+}
+
+supervisordStart()
+{
+    local startMsg
+    if [ "$CGROUPS_ENABLED" != "false" ]; then
+        startMsg="$(env -u PYTHONHOME cgexec -g cpu,cpuacct,memory:${CGROUP_XCALAR_MW} --sticky env LD_LIBRARY_PATH=${LD_LIBRARY_PATH} supervisorctl -c $XCE_SUPERVISOR_CONFIG start xcalar:$1)"
+    else
+        startMsg="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG start xcalar:$1)"
+    fi
+    [[ $startMsg =~ ^error* ]] && supervisordErrMsg "$startMsg" && return 1
+
+    local retval="$(echo $startMsg | awk '{ print $2 }')"
+
+    [ "$retval" == "started" ] && echo "xcalar:${1} started" && return 0
+
+    echo "Failed to spawn $1"
+
+    return 1
+}
+
+supervisordStop()
+{
+    local status_verbose=${1:-true}
+    shift
+    declare -a services=()
+    for svc in "$@"
+    do
+        $status_verbose && echo "stopping $svc"
+        services+=("xcalar:$svc")
+    done
+
+    local stopMsg="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG stop ${services[@]})"
+    [[ $stopMsg =~ ^error* ]] && supervisordErrMsg "$stopMsg"
+}
+
+supervisordStatus()
+{
+    local status_verbose=${1:-true}
+    shift
+    declare -a services=()
+    for svc in "$@"
+    do
+        $status_verbose && echo "getting status of $svc"
+        services+=("xcalar:$svc")
+    done
+
+    supervisordStatusMsg="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG status ${services[@]} | sed 's/xcalar://g')"
+}
+
+supervisordShutdown()
+{
+    local shutdownMsg="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG shutdown)"
+    [[ $stopMsg =~ ^error* ]] && supervisordErrMsg "$shutdownMsg"
+}
+
+doStart()
+{
+    startSupervisor="${1:-false}"
+
+    cd "$XCE_WORKDIR"
+    supervisord_up=true
+
+    if [ -z "$rootPath" ]; then
+        echo "No XcalarRootCompletePath specified in $XCE_CONFIG"
+        return 1
+    fi
+
+    if ! [ -d "$rootPath" ]; then
+        echo "XcalarRootCompletePath ($rootPath) doesn't exist!"
+        return 1
+    fi
+
+    if [ $numLocalNodes -lt $numNodes ]; then
+        rootFileSystem="$(stat -f -L -c %T "$rootPath")"
+        if [ "$rootFileSystem" != "nfs" ]; then
+            echo "WARNING: XcalarRootCompletePath ($rootPath) is not on a shared file system ($rootFileSystem)"
+        fi
+    fi
+
+    # setupMain() checked for XCE_MONITORPORT - so that must be valid here
+    if ! $startSupervisor; then
+        if [ `pgrep xcmonitor | wc -l` -eq 0 ]; then
+            SAVED_UMASK=$(umask)
+            umask $XCE_UMASK
+            for ii in $nodeId; do
+                if [ "$CGROUPS_ENABLED" != "false" ]; then
+                    nohup cgexec -g cpu,cpuacct,memory:${CGROUP_XCALAR_XCE} --sticky env LD_LIBRARY_PATH=${LD_LIBRARY_PATH} xcmonitor -n $ii -m $numNodes -c "$XCE_CONFIG" -k "$XCE_LICENSEFILE" 1>> "$XCE_LOGDIR/xcmonitor.out" 2>&1 < /dev/null &
+                else
+                    nohup xcmonitor -n $ii -m $numNodes -c "$XCE_CONFIG" -k "$XCE_LICENSEFILE" 1>> "$XCE_LOGDIR/xcmonitor.out" 2>&1 < /dev/null &
+                fi
+                declare pid=$!
+                sleep 3
+                kill -0 $pid 2>/dev/null && \
+                    echo "Spawned xcmonitor node $ii (pid: $pid)" || \
+                    echo "Failed to spawn xcmonitor node $ii"
+            done
+            umask $SAVED_UMASK
+        else
+            echo "Xcmonitor already running"
+        fi
+    fi
+
+    if getSupervisord; then
+        echo "Supervisord already running"
+    else
+        supervisord_up=false
+        if [ "$CGROUPS_ENABLED" != "false" ]; then
+            env -u PYTHONHOME cgexec -g cpu,cpuacct,memory:${CGROUP_XCALAR_MW} --sticky env LD_LIBRARY_PATH=${LD_LIBRARY_PATH} supervisord -c "$XCE_SUPERVISOR_CONFIG" && echo "Supervisord started" ||  echo "Failed to spawn supervisord"
+        else
+            env -u PYTHONHOME supervisord -c "$XCE_SUPERVISOR_CONFIG" && echo "Supervisord started" ||  echo "Failed to spawn supervisord"
+        fi
+
+        for i in `seq 1 12`; do
+            sleep 5
+            supervisordPid="$(env -u PYTHONHOME supervisorctl -c $XCE_SUPERVISOR_CONFIG pid)"
+            rc=$?
+
+            if [ "$rc" = "0" ] && [[ "$supervisordPid" =~ ^[0-9]+$ ]]; then
+                echo "Supervisord running and responding"
+                break;
+            fi
+        done
+        if [ "$rc" != "0" ]; then
+            echo "Supervisord startup failed"
+            return 1
+        fi
+    fi
+
+    # xcmgmtd is now managed by supervisord
+
+    ! supervisordRunning 'caddy' && supervisordStart 'caddy'
+    if ! $startSupervisor; then
+        [ "${nodeIdArr[0]}" = "0" ] && ! supervisordRunning 'sqldf' && supervisordStart 'sqldf'
+        ! supervisordRunning 'xcmgmtd' && supervisordStart 'xcmgmtd'
+        ! supervisordRunning 'jupyter' && supervisordStart 'jupyter'
+        ! $supervisord_up && echo "(xcmgmtd runs automatically on supervisord start)"
+
+        for i in `seq 1 30`; do
+            sleep 10
+
+            getCliBackendVersion $apiPortNum
+            if [ -n "$cliBackendVersion" ]; then
+                return 0
+            fi
+        done
+        echo  >&2 "getCliBackendVersion failed: backend is not responding"
+        return 1
+    fi
+
+    return 0
+}
+
+getPids()
+{
+    pids="$(pgrep 'usrnode|childnode')"
+}
+
+getNodePids()
+{
+    pids="$(pgrep 'usrnode')"
+}
+
+# Used by doStop() when monitor is running.
+# It takes two arguments:
+# Arg 1: the signal number/name used to kill the pids (with a leading '-')
+# Arg 2: regular expression for program name(s) to be killed (in quotes)
+#        '<pgm_name1>|<pgm_name2>| ...' or '<pgm_name_prefix>*|<pgm_name_2>'
+killWaitLoop()
+{
+    local i=
+    local signal=$1
+    local pgmNames=$2
+    for i in `seq 1 100`;
+    do
+        pkill $signal $pgmNames 2> /dev/null
+        #
+        # need to check for pids b/c pkill returns 0/success if there are pids
+        # matching the pgrep pattern that was supplied - even if pkill couldn't
+        # actually kill the pids (e.g. due to lack of permission to kill). So
+        # checking for success from pkill isn't sufficient.
+        #
+        if [ -z "$(pgrep $pgmNames)" ]; then
+            return 0
+        fi
+        sleep 1
+    done
+    return 1
+}
+
+#
+# Kill programs initially with -TERM, then forcefully with -9 if -TERM fails
+# to kill them.
+#
+# Arg 1: regular expression for program name(s) to be killed (in quotes)
+#        '<pgm_name1>|<pgm_name2>| ...' or '<pgm_name_prefix>*|<pgm_name_2>'
+killWaitTermLoop()
+{
+    local pgmNames=$1
+    if ! killWaitLoop -TERM $pgmNames; then
+        echo "killing $pgmNames forcefully"
+        killWaitLoop -9 $pgmNames
+    fi
+}
+
+doStopXcmPids()
+{
+    if [ -z "$(pgrep 'usrnode|childnode|xcmonitor')" ]; then
+        echo "Xcalar is not running"
+    else
+        killWaitTermLoop xcmonitor
+    fi
+}
+
+doStop()
+{
+    local pids=
+
+    stopSupervisor="${1:-false}"
+
+    if $stopSupervisor && getSupervisord; then
+        echo "Stopping Supervisor Services"
+        supervisordStop true all
+
+        echo "Stopping Supervisor"
+        supervisordShutdown
+    fi
+
+    if ! $stopSupervisor; then
+        supervisordStop true 'sqldf'
+        supervisordStop true 'xcmgmtd'
+        supervisordStop true 'jupyter'
+    fi
+
+    # Kill XPUs first so we can get coverage data (if so instrumented)
+    killWaitTermLoop 'childnode'
+    # Stopping xcmonitor will stop usrnodes
+    doStopXcmPids
+    # But just to make sure...
+    killWaitTermLoop 'usrnode|childnode'
+
+    pids="$(pgrep 'usrnode|childnode')"
+
+    if [ -n "$pids" ]; then
+        echo "Failed to stop Xcalar (pids: $pids)"
+        xce_pid="$(echo $pids | awk '{ print $1 }')"
+        xce_user="$(ps -o user $xce_pid | tail -1)"
+        echo "you may need to be logged in as $xce_user to use $0"
+        return 1
+    else
+        # XD looks for the following string / message to detect that the stop
+        # succeeded. Eventually, XD could use an API instead of searching for
+        # strings in output files (e.g. "xcalarctl status" ? Note that xcalarctl
+        # probably needs to be enhanced to support this).
+        echo "Stopped Xcalar"
+        return 0
+    fi
+}
+
+doStatus()
+{
+    local -i rc=0
+    statusSupervisor="${1:-false}"
+
+    echo "Getting Xcalar Status"
+
+    if ! $statusSupervisor; then
+        numUsrNodes=`pgrep usrnode | wc -l`
+        if [ $numUsrNodes = '0' ]; then
+            echo "Usrnodes not started"
+            rc=1
+        elif [ $numUsrNodes = $numLocalNodes ]; then
+            echo "Usrnodes started ($numUsrNodes / $numLocalNodes instances on this host)"
+            echo "$numNodes total usrnode instances configured in the cluster"
+        else
+            echo "$numUsrNodes / $numLocalNodes Usrnodes up and running. Please restart usrnodes"
+            rc=1
+        fi
+
+        numChild=`pgrep childnode | wc -l`
+        if [ "$numChild" = '0' ]; then
+            echo "childnode not started"
+            rc=$(( $rc + 2 ))
+        else
+            echo "$numChild childnodes started"
+        fi
+
+        numXcmNodes=`pgrep xcmonitor | wc -l`
+        if [ $numXcmNodes = '0' ]; then
+            echo "xcmonitor not started"
+            rc=$(( $rc + 64 ))
+        else
+            echo "xcmonitor started"
+        fi
+    fi
+
+    if getSupervisord; then
+        echo "Supervisord started (pid: $supervisord_pid)"
+    else
+        echo "Supervisord not started"
+        rc=$(( $rc + 4 ))
+    fi
+
+    if supervisordRunning 'xcmgmtd' false; then
+        echo "Mgmtd started"
+    else
+        echo "Mgmtd not started"
+        rc=$(( $rc + 8 ))
+    fi
+
+    if supervisordRunning 'expserver' false; then
+        echo "expServer started"
+    else
+        echo "expServer not started"
+        rc=$(( $rc + 32 ))
+    fi
+
+    if supervisordRunning 'sqldf' false; then
+        echo "sqldf started"
+    else
+        echo "sqldf not started"
+        rc=$(( $rc + 16 ))
+    fi
+
+    if supervisordRunning 'caddy' false; then
+        echo "caddy started"
+    else
+        echo "caddy not started"
+        rc=$(( $rc + 128 ))
+    fi
+
+    return $rc
+}
+
+# we do not need warning messages just to get the node-id
+VERBOSE=true
+[ "$1" == "node-id" ] && VERBOSE=false
+
+setupLogDir
+
+# we do not need warning messages just to get the node-id
+status_verbose=true
+[ "$1" == "node-id" ] && status_verbose=false
+
+check_asup $status_verbose
+
+setupMain $status_verbose
+
+case "$1" in
+    start)
+        doStart
+        ;;
+    stop)
+        doStop
+        ;;
+    status)
+        doStatus
+        ;;
+    program-start)
+        shift
+        for svc in "$@"
+        do
+            supervisordStart "$svc"
+        done
+        ;;
+    program-stop)
+        shift
+        supervisordStop true "$@"
+        ;;
+    program-status)
+        shift
+        supervisordStatus true "$@"
+        echo "$supervisordStatusMsg"
+        ;;
+    start-supervisor)
+        doStart true
+        ;;
+    stop-supervisor)
+        doStop true
+        ;;
+    status-supervisor)
+        doStatus true
+        ;;
+    node-id)
+        echo "$nodeId"
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|start-supervisor|stop-supervisor|program-start|program-stop|program-status|node-id}" >&2
+        exit 2
+        ;;
+esac
+
+exit $?

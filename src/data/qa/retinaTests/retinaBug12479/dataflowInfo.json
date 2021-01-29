@@ -1,0 +1,314 @@
+{
+    "tables": [
+        {
+            "name": "a#6",
+            "columns": [
+                {
+                    "columnName": "row",
+                    "headerAlias": "row"
+                },
+                {
+                    "columnName": "int",
+                    "headerAlias": "int"
+                },
+                {
+                    "columnName": "float",
+                    "headerAlias": "float"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.4.1-1-bli-1e9b1f35-25f8c8a8",
+    "udfs": [
+        {
+            "fileName": "udfs/loadseq.py",
+            "moduleName": "loadseq",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.admin.64014.ds100",
+                "loadArgs": {
+                    "parseArgs": {
+                        "parserFnName": "loadseq:loadSeq",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "sourceArgsList": [
+                        {
+                            "recursive": false,
+                            "path": "100",
+                            "targetName": "QA memory",
+                            "fileNamePattern": ""
+                        }
+                    ],
+                    "size": 10737418240
+                }
+            },
+            "tag": "",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.admin.64014.ds100",
+                "dest": "ds100#1",
+                "prefix": "ds100",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "ds100-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "indexFromDataset#1",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds100#1",
+                "dest": "ds100#7",
+                "eval": [
+                    {
+                        "evalString": "int(string(ds100::row), 10)",
+                        "newField": "ds100-row_60018"
+                    },
+                    {
+                        "evalString": "int(string(ds100::int), 10)",
+                        "newField": "ds100-int_45168"
+                    },
+                    {
+                        "evalString": "int(string(ds100::float), 10)",
+                        "newField": "ds100-float_73364"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds100#1",
+                "dest": "ds100#8",
+                "eval": [
+                    {
+                        "evalString": "int(string(ds100::row), 10)",
+                        "newField": "ds100-row_23993"
+                    },
+                    {
+                        "evalString": "int(string(ds100::int), 10)",
+                        "newField": "ds100-int_06509"
+                    },
+                    {
+                        "evalString": "int(string(ds100::float), 10)",
+                        "newField": "ds100-float_42790"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds100#7",
+                "dest": "ds100#9",
+                "eval": [
+                    {
+                        "evalString": "concat(ifStr(exists(string(ds100-row_60018)), string(ds100-row_60018), \"XC_FNF\"), concat(\".Xc.\", concat(ifStr(exists(string(ds100-int_45168)), string(ds100-int_45168), \"XC_FNF\"), concat(\".Xc.\", ifStr(exists(string(ds100-float_73364)), string(ds100-float_73364), \"XC_FNF\")))))",
+                        "newField": "XC_CONCAT77298"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds100#8",
+                "dest": "ds100#10",
+                "eval": [
+                    {
+                        "evalString": "concat(ifStr(exists(string(ds100-row_23993)), string(ds100-row_23993), \"XC_FNF\"), concat(\".Xc.\", concat(ifStr(exists(string(ds100-int_06509)), string(ds100-int_06509), \"XC_FNF\"), concat(\".Xc.\", ifStr(exists(string(ds100-float_42790)), string(ds100-float_42790), \"XC_FNF\")))))",
+                        "newField": "XC_CONCAT18767"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "ds100#9",
+                "dest": "ds100.index#11",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "XC_CONCAT77298",
+                        "ordering": "Unordered",
+                        "keyFieldName": "XC_CONCAT77298",
+                        "type": "DfString"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "ds100#10",
+                "dest": "ds100.index#12",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "XC_CONCAT18767",
+                        "ordering": "Unordered",
+                        "keyFieldName": "XC_CONCAT18767",
+                        "type": "DfString"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "args": {
+                "dedup": true,
+                "source": [
+                    "ds100.index#11",
+                    "ds100.index#12"
+                ],
+                "dest": "a#6",
+                "unionType": "unionStandard",
+                "key": [
+                    ["XC_CONCAT77298"],
+                    ["XC_CONCAT18767"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "ds100-row_60018",
+                            "columnType": "DfInt64",
+                            "destColumn": "row"
+                        },
+                        {
+                            "sourceColumn": "ds100-int_45168",
+                            "columnType": "DfInt64",
+                            "destColumn": "int"
+                        },
+                        {
+                            "sourceColumn": "ds100-float_73364",
+                            "columnType": "DfInt64",
+                            "destColumn": "float"
+                        },
+                        {
+                            "sourceColumn": "XC_CONCAT77298",
+                            "columnType": "DfString",
+                            "destColumn": "XC_UNION_INDEX40958"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "ds100-row_23993",
+                            "columnType": "DfInt64",
+                            "destColumn": "row"
+                        },
+                        {
+                            "sourceColumn": "ds100-int_06509",
+                            "columnType": "DfInt64",
+                            "destColumn": "int"
+                        },
+                        {
+                            "sourceColumn": "ds100-float_42790",
+                            "columnType": "DfInt64",
+                            "destColumn": "float"
+                        },
+                        {
+                            "sourceColumn": "XC_CONCAT18767",
+                            "columnType": "DfString",
+                            "destColumn": "XC_UNION_INDEX40958"
+                        }
+                    ]
+                ]
+            },
+            "tag": "union#6",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "a#6",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-a#6.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.a#6",
+                "columns": [
+                    {
+                        "headerName": "row",
+                        "columnName": "row"
+                    },
+                    {
+                        "headerName": "int",
+                        "columnName": "int"
+                    },
+                    {
+                        "headerName": "float",
+                        "columnName": "float"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        }
+    ],
+    "dataflowVersion": 1
+}

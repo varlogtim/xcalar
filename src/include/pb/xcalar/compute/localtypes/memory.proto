@@ -1,0 +1,42 @@
+// Copyright 2020 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/Workbook.proto";
+
+package xcalar.compute.localtypes.memory;
+
+message GetUsageRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+}
+
+message TableMemoryUsage {
+    string table_name = 1;
+    uint64 table_id = 2;
+    uint64 total_bytes = 3;
+}
+
+message SessionMemoryUsage {
+    string session_name = 1;
+    repeated TableMemoryUsage table_memories = 2;
+}
+
+message UserMemoryUsage {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    repeated SessionMemoryUsage session_memories = 2;
+}
+
+message GetUsageResponse {
+    UserMemoryUsage user_memory = 1;
+}
+
+service Memory {
+    // rpc for XcalarApiGetMemoryUsage
+    rpc GetUsage(GetUsageRequest) returns (GetUsageResponse);
+};

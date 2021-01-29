@@ -1,0 +1,4 @@
+enum LibDemystifyFuncTestConfig {
+    LibDemystifyNumThreads:"LibDemystifyNumThreads",
+    LibDemystifyNumRowsToSend:"LibDemystifyNumRowsToSend",
+}

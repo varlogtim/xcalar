@@ -1,0 +1,14 @@
+[
+    { "recNum3": 1, "fickleField": 1 },
+    { "recNum3": 2, "fickleField": 3.14 },
+    { "recNum3": 3, "fickleField": "Hello World!" },
+    { "recNum3": 4, "fickleField": [1, 2] },
+    { "recNum3": 5, "fickleField": { "kids": 1 } },
+    { "recNum3": 6, "fickleField": [1, 2.1] },
+    { "recNum3": 7, "fickleField": 42 },
+    { "recNum3": 8, "fickleField": false },
+    { "recNum3": 9, "fickleField": null },
+    { "recNum3": 10, "fickleField": 9.21 },
+    { "recNum3": 11, "fickleField": "Goodbye Cruel World" },
+    { "recNum3": 12, "fickleField": true }
+]

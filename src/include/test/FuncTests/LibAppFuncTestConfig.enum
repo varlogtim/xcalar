@@ -1,0 +1,6 @@
+enum LibAppFuncTestConfig {
+    LibAppFuncTotalThreadCount:"LibAppFuncTotalThreadCount",
+    LibAppFuncBigTestThreadCount:"LibAppFuncBigTestThreadCount",
+    LibAppFuncLittleTestIters:"LibAppFuncLittleTestIters",
+    LibAppFuncBigTestIters:"LibAppFuncBigTestIters",
+}

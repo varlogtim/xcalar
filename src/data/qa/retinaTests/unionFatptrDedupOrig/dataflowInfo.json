@@ -1,0 +1,500 @@
+{
+    "tables": [
+        {
+            "name": "temp-3705464",
+            "columns": [
+                {
+                    "columnName": "prefix-32397-3231174::column16",
+                    "headerAlias": "prefix-32397-3231174::column16"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column44",
+                    "headerAlias": "prefix-32397-3231174::column44"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column6",
+                    "headerAlias": "prefix-32397-3231174::column6"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column17",
+                    "headerAlias": "prefix-32397-3231174::column17"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column45",
+                    "headerAlias": "prefix-32397-3231174::column45"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column7",
+                    "headerAlias": "prefix-32397-3231174::column7"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column10",
+                    "headerAlias": "prefix-32397-3231174::column10"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column18",
+                    "headerAlias": "prefix-32397-3231174::column18"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column46",
+                    "headerAlias": "prefix-32397-3231174::column46"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column8",
+                    "headerAlias": "prefix-32397-3231174::column8"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column19",
+                    "headerAlias": "prefix-32397-3231174::column19"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column47",
+                    "headerAlias": "prefix-32397-3231174::column47"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column12",
+                    "headerAlias": "prefix-32397-3231174::column12"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column40",
+                    "headerAlias": "prefix-32397-3231174::column40"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column2",
+                    "headerAlias": "prefix-32397-3231174::column2"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column1",
+                    "headerAlias": "prefix-32397-3231174::column1"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column48",
+                    "headerAlias": "prefix-32397-3231174::column48"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column13",
+                    "headerAlias": "prefix-32397-3231174::column13"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column3",
+                    "headerAlias": "prefix-32397-3231174::column3"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column49",
+                    "headerAlias": "prefix-32397-3231174::column49"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column57",
+                    "headerAlias": "prefix-32397-3231174::column57"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column20",
+                    "headerAlias": "prefix-32397-3231174::column20"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column4",
+                    "headerAlias": "prefix-32397-3231174::column4"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column42",
+                    "headerAlias": "prefix-32397-3231174::column42"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column14",
+                    "headerAlias": "prefix-32397-3231174::column14"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column15",
+                    "headerAlias": "prefix-32397-3231174::column15"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column22",
+                    "headerAlias": "prefix-32397-3231174::column22"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column23",
+                    "headerAlias": "prefix-32397-3231174::column23"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column51",
+                    "headerAlias": "prefix-32397-3231174::column51"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column24",
+                    "headerAlias": "prefix-32397-3231174::column24"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column25",
+                    "headerAlias": "prefix-32397-3231174::column25"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column53",
+                    "headerAlias": "prefix-32397-3231174::column53"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column26",
+                    "headerAlias": "prefix-32397-3231174::column26"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column54",
+                    "headerAlias": "prefix-32397-3231174::column54"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column27",
+                    "headerAlias": "prefix-32397-3231174::column27"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column55",
+                    "headerAlias": "prefix-32397-3231174::column55"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column56",
+                    "headerAlias": "prefix-32397-3231174::column56"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column32",
+                    "headerAlias": "prefix-32397-3231174::column32"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column34",
+                    "headerAlias": "prefix-32397-3231174::column34"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column35",
+                    "headerAlias": "prefix-32397-3231174::column35"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column37",
+                    "headerAlias": "prefix-32397-3231174::column37"
+                },
+                {
+                    "columnName": "prefix-32397-3231174::column38",
+                    "headerAlias": "prefix-32397-3231174::column38"
+                },
+                {
+                    "columnName": "prefix-32397-3231174-column11",
+                    "headerAlias": "prefix-32397-3231174-column11"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-bli-faf49ead-af9f79a3",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-1-node0-32398-180101",
+                "loadArgs": {
+                    "size": 104857600,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "<pathToQaDatasets>/gdelt-small",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-2-node0-32339-1443366",
+                "loadArgs": {
+                    "size": 104857600,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "<pathToQaDatasets>/gdelt-small",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-1-node0-32398-180101",
+                "dest": "temp-3362335",
+                "prefix": "prefix-32398-3361684",
+                "key": [
+                    {
+                        "name": "column12",
+                        "ordering": "Unordered",
+                        "keyFieldName": "prefix-32398-3361684-column12",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-2-node0-32339-1443366",
+                "dest": "RN0temp-3233704",
+                "prefix": "prefix-32397-3231174",
+                "key": [
+                    {
+                        "name": "column11",
+                        "ordering": "Unordered",
+                        "keyFieldName": "prefix-32397-3231174-column11",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "args": {
+                "dedup": true,
+                "source": [
+                    "RN0temp-3233704",
+                    "temp-3362335"
+                ],
+                "dest": "temp-3705464",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-32397-3231174",
+                            "columnType": "DfFatptr",
+                            "destColumn": "prefix-32397-3231174"
+                        },
+                        {
+                            "sourceColumn": "prefix-32397-3231174-column11",
+                            "columnType": "DfString",
+                            "destColumn": "prefix-32397-3231174-column11"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-32398-3361684",
+                            "columnType": "DfFatptr",
+                            "destColumn": "prefix-32397-3231174"
+                        },
+                        {
+                            "sourceColumn": "prefix-32398-3361684-column12",
+                            "columnType": "DfString",
+                            "destColumn": "prefix-32397-3231174-column11"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 16325797761122362,
+                "targetName": "Default",
+                "splitSize": 16325797761122362,
+                "headerType": "every",
+                "source": "temp-3705464",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-3705464.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-3705464",
+                "columns": [
+                    {
+                        "headerName": "prefix-32397-3231174::column16",
+                        "columnName": "prefix-32397-3231174::column16"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column44",
+                        "columnName": "prefix-32397-3231174::column44"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column6",
+                        "columnName": "prefix-32397-3231174::column6"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column17",
+                        "columnName": "prefix-32397-3231174::column17"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column45",
+                        "columnName": "prefix-32397-3231174::column45"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column7",
+                        "columnName": "prefix-32397-3231174::column7"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column10",
+                        "columnName": "prefix-32397-3231174::column10"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column18",
+                        "columnName": "prefix-32397-3231174::column18"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column46",
+                        "columnName": "prefix-32397-3231174::column46"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column8",
+                        "columnName": "prefix-32397-3231174::column8"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column19",
+                        "columnName": "prefix-32397-3231174::column19"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column47",
+                        "columnName": "prefix-32397-3231174::column47"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column12",
+                        "columnName": "prefix-32397-3231174::column12"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column40",
+                        "columnName": "prefix-32397-3231174::column40"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column2",
+                        "columnName": "prefix-32397-3231174::column2"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column1",
+                        "columnName": "prefix-32397-3231174::column1"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column48",
+                        "columnName": "prefix-32397-3231174::column48"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column13",
+                        "columnName": "prefix-32397-3231174::column13"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column3",
+                        "columnName": "prefix-32397-3231174::column3"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column49",
+                        "columnName": "prefix-32397-3231174::column49"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column57",
+                        "columnName": "prefix-32397-3231174::column57"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column20",
+                        "columnName": "prefix-32397-3231174::column20"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column4",
+                        "columnName": "prefix-32397-3231174::column4"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column42",
+                        "columnName": "prefix-32397-3231174::column42"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column14",
+                        "columnName": "prefix-32397-3231174::column14"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column15",
+                        "columnName": "prefix-32397-3231174::column15"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column22",
+                        "columnName": "prefix-32397-3231174::column22"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column23",
+                        "columnName": "prefix-32397-3231174::column23"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column51",
+                        "columnName": "prefix-32397-3231174::column51"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column24",
+                        "columnName": "prefix-32397-3231174::column24"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column25",
+                        "columnName": "prefix-32397-3231174::column25"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column53",
+                        "columnName": "prefix-32397-3231174::column53"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column26",
+                        "columnName": "prefix-32397-3231174::column26"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column54",
+                        "columnName": "prefix-32397-3231174::column54"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column27",
+                        "columnName": "prefix-32397-3231174::column27"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column55",
+                        "columnName": "prefix-32397-3231174::column55"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column56",
+                        "columnName": "prefix-32397-3231174::column56"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column32",
+                        "columnName": "prefix-32397-3231174::column32"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column34",
+                        "columnName": "prefix-32397-3231174::column34"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column35",
+                        "columnName": "prefix-32397-3231174::column35"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column37",
+                        "columnName": "prefix-32397-3231174::column37"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174::column38",
+                        "columnName": "prefix-32397-3231174::column38"
+                    },
+                    {
+                        "headerName": "prefix-32397-3231174-column11",
+                        "columnName": "prefix-32397-3231174-column11"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

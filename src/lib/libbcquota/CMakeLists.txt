@@ -1,0 +1,1 @@
+add_xce_library(libbcquota STATIC BufferCacheQuota.cpp)

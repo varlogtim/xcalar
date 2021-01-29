@@ -1,0 +1,277 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Fresh Materialize GS Controller",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "materialize",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Continue Materialize GS Controller",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "materialize_continue",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Materialize From Snapshot",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "materialize",
+                "--using_latest_snaphot_from_universe_id",
+                "vac_${env:HOSTNAME}",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "some_random_universe",
+                "--session",
+                "some_random_universe"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Test adjustment",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "adjustment",
+                "--tables",
+                "ds77",
+                "--action",
+                "add",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Adjust Offsets",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "adjustment",
+                "--offset_table",
+                "--topic",
+                "controller_test4",
+                "--partitions",
+                "0",
+                "--new_offset",
+                "0",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Incremental GS Controller",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "incremental",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Incremental 2 Times",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "incremental",
+                "--num_runs",
+                "2",
+                "--properties",
+                "${workspaceFolder}/xcalar/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Recover GS Controller",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "recover",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Only Snapshot GS Controller",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/controller.py",
+            "console": "integratedTerminal",
+            "args": [
+                "snapshot",
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Git Check In",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/xcgitutil.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false"
+            },
+            "args": [
+                "--url",
+                "https://gitlab.com/api/v4",
+                "--project_id",
+                "14164315",
+                "--access_token",
+                "Tavay5JsBjYzTq25DyXV",
+                "--path",
+                "first",
+                "--branch_name",
+                "test",
+                "--xcalar_url",
+                "https://xdp-jdev-69.westus2.cloudapp.azure.com",
+                "--xcalar_username",
+                "xdpadmin",
+                "--xcalar_password",
+                "Welcome1",
+                "--workbook_name",
+                "modular_refiner",
+                "--dataflow_names",
+                "all_counts_full"
+            ]
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PUBLISH_TO_KAFKA": "true"
+            },
+        },
+        {
+            "name": "Python: Xcalar Shell",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/bin/sdk/controller/xcalar/solutions/tools/xcalar_shell.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--properties",
+                "${workspaceFolder}/src/bin/tests/controllerTest/test_cli_properties.json",
+                "--universe_id",
+                "vac_${env:HOSTNAME}",
+                "--session",
+                "vac_${env:HOSTNAME}"
+            ],
+            "env": {
+                "XLR_PYSDK_VERIFY_SSL_CERT": "false",
+                "PYTHONPATH": "${workspaceFolder}/src/bin/tests/controllerTest"
+                // "PYTHONPATH": "${workspaceFolder}/src/bin/sdk/controller"
+            }
+        }
+    ]
+}

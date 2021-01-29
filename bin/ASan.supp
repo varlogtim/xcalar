@@ -1,0 +1,4 @@
+interceptor_via_fun:_Py*
+interceptor_via_fun:Py*
+interceptor_via_fun:UdfPyFunction::*
+interceptor_via_fun:UdfPythonImpl::*

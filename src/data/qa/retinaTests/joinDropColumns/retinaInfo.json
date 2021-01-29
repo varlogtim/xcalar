@@ -1,0 +1,27 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "temp-353288",
+            "columns": [
+                {
+                    "columnName": "dsPrefix-18759-50088885::floatCol",
+                    "headerAlias": "dsPrefix-18759-50088885::floatCol"
+                },
+                {
+                    "columnName": "dsPrefix-18759-50088885::intCol",
+                    "headerAlias": "dsPrefix-18759-50088885::intCol"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.1.1-3168-jenkins-28dbb7c3",
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"memory://1000\" --format json --size 0B  --name \"<datasetName>\" --apply \"operatorsfunctestloadMem:loadRandom\";index --key \"stringCol\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-temp-351914\" --prefix stringCol;index --key \"stringCol\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-RN0temp-351978\" --prefix stringCol2;join --leftTable \"<tablePrefix>-RN0temp-351978\" --rightTable \"<tablePrefix>-temp-351914\" --joinType innerJoin  --joinTable \"temp-353288\" --collisionCheck --leftRenameMap stringCol:dsPrefix-18759-50083386:0 --rightRenameMap stringCol:dsPrefix-18759-50088885:0;"
+}

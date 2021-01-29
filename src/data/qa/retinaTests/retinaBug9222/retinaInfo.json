@@ -1,0 +1,39 @@
+{
+    "tables": [
+        {
+            "name": "temp-144115188075881303",
+            "columns": [
+                {
+                    "columnName": "prefix-32145-144115188075873008::a\\.b",
+                    "headerAlias": "prefix-32145-144115188075873008::a\\.b"
+                },
+                {
+                    "columnName": "prefix-32145-144115188075873008::cols.object.val\\.2",
+                    "headerAlias": "prefix-32145-144115188075873008::cols.object.val\\.2"
+                },
+                {
+                    "columnName": "prefix-25191-144115188075856653::a.b",
+                    "headerAlias": "prefix-25191-144115188075856653::a.b"
+                },
+                {
+                    "columnName": "prefix-25191-144115188075856653::a\\.b",
+                    "headerAlias": "prefix-25191-144115188075856653::a\\.b"
+                },
+                {
+                    "columnName": "prefix-25191-144115188075856653::cols.array[2]",
+                    "headerAlias": "prefix-25191-144115188075856653::cols.array[2]"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"memory://1000\" --format json --size 0B  --name \"<datasetName>\" --apply \"operatorsfunctestloadMem:loadRandom\";index --key \"a\\\\.b\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-144115188075856718\" --prefix prefix-25191-144115188075856653;index --key \"cols.array[1]\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-144115188075873156\" --prefix prefix-32145-144115188075873008;join --leftTable \"<tablePrefix>-144115188075873156\" --rightTable \"<tablePrefix>-144115188075856718\" --joinType innerJoin  --joinTable \"temp-144115188075881303\" --leftRenameMap prefix-32145-144115188075873008:prefix-32145-144115188075873008:0 --rightRenameMap prefix-25191-144115188075856653:prefix-25191-144115188075856653:0 --collisionCheck;",
+    "xcalarVersion": "1.2.0-1000-xcalardev-ebb19723-ebb19723",
+    "retinaVersion": 1
+}

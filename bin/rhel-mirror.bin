@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# Setup a RHEL mirror to ease the pain of setting
+# up a subscription for automation purposes.
+#
+# 2. Launch a RHEL instance on GCE
+# 3. Use reposync to download the repo to a local dir
+# 4. Use createrepo to regenerate the repo metadata
+# 5. Use gsutil to copy your local repo to your mirror
+#
+
+
+GSBUCKET=repo.xcalar.net
+RELEASEVER=6Server
+ARCH=x86_64
+REPOPATH=mirror/rhel/${RELEASEVER}/${ARCH}/
+REPOURL=gs://${GSBUCKET}/${REPOPATH}/
+LOCALDIR=/srv/reposync/${REPOPATH}/
+
+set -e
+
+mkdir -p $LOCALDIR
+cd $LOCALDIR
+reposync -p `pwd`/ -n --downloadcomps --download-metadat --gpgcheck -l
+createrepo -v `pwd` \
+    -g ./rhui-rhel-6-server-rhui-supplementary-rpms/comps.xml \
+    -g ./rhui-rhel-6-server-rhui-rh-common-rpms/comps.xml \
+    -g ./rhui-rhel-6-server-rhui-rpms/comps.xml \
+    -g ./rhui-rhel-6-server-rhui-optional-rpms/comps.xml
+gsutil -m rsync -n -c -d -r `pwd`/ $REPOURL
+

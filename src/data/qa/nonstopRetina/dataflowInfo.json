@@ -1,0 +1,83 @@
+{
+    "tables": [
+        {
+            "name": "tempTable",
+            "columns": [
+                {
+                    "columnName": "fans",
+                    "headerAlias": "fans"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "fileName": "udfs/qmNonStoppingModule.py",
+            "moduleName": "qmNonStoppingModule",
+            "udfType": "python"
+        }
+    ],
+
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.randDs",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "<LibQmQaYelpUserPath>",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.randDs",
+                "dest": "indexT",
+                "key": [
+                    {
+                        "name": "fans",
+                        "keyFieldName": "fans",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "p",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "indexT",
+                "dest": "tempTable",
+                "eval": [
+                    {
+                        "evalString": "qmNonStoppingModule:sleep(1000000)",
+                        "newField": "tempField"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "1.3.0-1-bli-a720a835-af9f79a3",
+    "dataflowVersion": 1
+}

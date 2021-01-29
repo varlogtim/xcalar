@@ -1,0 +1,35 @@
+[
+    {
+        "name": "g_las-g_las-GB#Si8491",
+        "columns": [
+            {
+                "columnName": "SHOPID",
+                "headerAlias": "SHOPID"
+            },
+            {
+                "columnName": "IOFLAG",
+                "headerAlias": "IOFLAG"
+            },
+            {
+                "columnName": "IOTYPE",
+                "headerAlias": "IOTYPE"
+            },
+            {
+                "columnName": "CODE",
+                "headerAlias": "CODE"
+            },
+            {
+                "columnName": "COLORID",
+                "headerAlias": "COLORID"
+            },
+            {
+                "columnName": "AMOUNT",
+                "headerAlias": "AMOUNT"
+            },
+            {
+                "columnName": "SALE",
+                "headerAlias": "SALE"
+            }
+        ]
+    }
+]

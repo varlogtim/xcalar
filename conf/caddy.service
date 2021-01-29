@@ -1,0 +1,47 @@
+[Unit]
+Description=Caddy HTTP/2 web server
+Documentation=https://caddyserver.com/docs
+After=network-online.target
+Wants=network-online.target
+Before=xcalar-usrnode.service
+PartOf=xcalar.service
+
+[Service]
+Restart=always
+RestartSec=5
+Slice=xcalar.slice
+CPUAccounting=true
+MemoryAccounting=true
+
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+Environment=CADDYPATH=/var/opt/xcalar/ssl
+Environment=ACME_AGREE=true
+
+PermissionsStartOnly=true
+ExecStartPre=/opt/xcalar/bin/caddy -conf ${XCE_CADDYFILE} -validate
+ExecStartPre=/bin/mkdir -p -m 0755 ${CADDYPATH}
+ExecStartPre=/bin/chmod 0755 ${CADDYPATH}
+ExecStart=/opt/xcalar/bin/caddy-service.sh
+ExecReload=/bin/kill -USR1 $MAINPID
+
+KillSignal=SIGQUIT
+TimeoutStopSec=5s
+
+LimitNOFILE=32768:1048576
+LimitNPROC=65536
+
+PrivateTmp=true
+; ReadWriteDirectories need to already exist to avoid 226/NAMESPACE
+ReadWriteDirectories=/var/log/xcalar
+RuntimeDirectory=xcalar-caddy
+WorkingDirectory=/run/xcalar-caddy
+
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_RAW
+NoNewPrivileges=true
+
+SyslogIdentifier=xcalar-caddy

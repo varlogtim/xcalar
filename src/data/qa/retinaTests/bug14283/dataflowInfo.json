@@ -1,0 +1,148 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398509702508",
+            "columns": [
+                {
+                    "columnName": "prefix-30363-18014398509699981::yelping_since",
+                    "headerAlias": "retCol-31144-18014398509715308"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::review_count",
+                    "headerAlias": "retCol-31144-18014398509715309"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::name",
+                    "headerAlias": "retCol-31144-18014398509715310"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::user_id",
+                    "headerAlias": "retCol-31144-18014398509715311"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::fans",
+                    "headerAlias": "retCol-31144-18014398509715312"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::average_stars",
+                    "headerAlias": "retCol-31144-18014398509715313"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981::type",
+                    "headerAlias": "retCol-31144-18014398509715314"
+                },
+                {
+                    "columnName": "prefix-30363-18014398509699981-average_stars",
+                    "headerAlias": "retCol-31144-18014398509715315"
+                },
+                {
+                    "columnName": "col-31144-18014398509702489",
+                    "headerAlias": "retCol-31144-18014398509715316"
+                },
+                {
+                    "columnName": "col-31144-18014398509702497",
+                    "headerAlias": "retCol-31144-18014398509715317"
+                },
+                {
+                    "columnName": "col-31144-18014398509702505",
+                    "headerAlias": "retCol-31144-18014398509715318"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-0-node1",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "<pathToQaDatasets>/yelp/user",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 104857600
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-0-node1",
+                "dest": "RN0temp-18014398509700004",
+                "key": [
+                    {
+                        "name": "average_stars",
+                        "keyFieldName": "prefix-30363-18014398509699981-average_stars",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-30363-18014398509699981",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-18014398509700004",
+                "dest": "temp-18014398509702508",
+                "eval": [
+                    {
+                        "evalString": "timestamp(prefix-30363-18014398509699981::type)",
+                        "newField": "col-31144-18014398509702481"
+                    },
+                    {
+                        "evalString": "concat(string(prefix-30363-18014398509699981::votes.cool), string(prefix-30363-18014398509699981::friends[0]))",
+                        "newField": "col-31144-18014398509702489"
+                    },
+                    {
+                        "evalString": "explodeString(string(prefix-30363-18014398509699981::yelping_since), \".\")",
+                        "newField": "col-31144-18014398509702497"
+                    },
+                    {
+                        "evalString": "add(float(prefix-30363-18014398509699981::review_count), float(prefix-30363-18014398509699981::average_stars))",
+                        "newField": "col-31144-18014398509702505"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "1.4.1-14816-jenkins-4220f6db-7486b65d",
+    "dataflowVersion": 1
+}

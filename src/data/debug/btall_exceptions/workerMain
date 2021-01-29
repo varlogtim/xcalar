@@ -1,0 +1,4 @@
+sem_wait
+BlockableRuntimeThread::suspendRunningFiber
+Semaphore::wait
+workerMain

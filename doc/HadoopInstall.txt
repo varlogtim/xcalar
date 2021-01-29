@@ -1,0 +1,350 @@
+Assumes ubuntu 12.04 LTS + packages from xcalar/README
+
+1.  Install hadoop package dependencies
+$ sudo apt-get install cmake maven pkg-config openjdk-7-jdk libssl-dev zlib1g-dev libglib2.0-dev
+$ cd /tmp
+$ wget http://mirrors.kernel.org/ubuntu/pool/universe/f/findbugs/findbugs_2.0.3+repack-1_all.deb
+$ wget http://mirrors.kernel.org/ubuntu/pool/main/libj/libjdepend-java/libjdepend-java_2.9.1-1_all.deb
+$ wget http://mirrors.kernel.org/ubuntu/pool/universe/libj/libjcip-annotations-java/libjcip-annotations-java_20060626-3_all.deb
+$ wget http://mirrors.kernel.org/ubuntu/pool/universe/f/findbugs-bcel/libfindbugs-bcel-java_6.0~20130831-1_all.deb
+$ wget http://mirrors.kernel.org/ubuntu/pool/universe/j/jformatstring/libjformatstring-java_0.10~20131207-1_amd64.deb
+$ sudo dpkg -i *.deb
+
+2.  Setup /usr/src
+$ sudo adduser `whoami` src
+$ sudo chgrp -R src /usr/src
+$ sudo chmod 775 /usr/src
+$ sudo chmod g+s /usr/src
+
+3.  Setup hadoop user & group
+$ sudo addgroup hadoop
+$ sudo adduser --ingroup hadoop hadoop
+$ sudo su hadoop
+hadoop$ ssh-keygen -t rsa
+hadoop$ cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+hadoop$ exit
+$ sudo reboot
+
+4.  Install protobuf from source
+    NOTE ubuntu's protobuf package is only version 2.4.1; hadoop needs 2.5.0
+$ cd /usr/src
+$ wget http://protobuf.googlecode.com/files/protobuf-2.5.0.tar.bz2
+$ sha1sum protobuf-2.5.0.tar.bz2
+62c10dcdac4b69cc8c6bb19f73db40c264cb2726  protobuf-2.5.0.tar.bz2
+$ tar -jxvf protobuf-2.5.0.tar.bz2
+$ cd protobuf-2.5.0
+$ ./configure
+$ make
+$ make check
+$ sudo make install
+$ echo "/usr/local/lib" > /tmp/usr_local_lib.conf
+$ sudo mv /tmp/usr_local_lib.conf /etc/ld.so.conf.d
+$ sudo ldconfig
+$ cd python
+$ python setup.py build
+$ python setup.py test
+$ sudo python setup.py install
+$ cd ../java
+$ mvn test
+$ sudo mvn install
+
+6. Download hadoop & patch it for HADOOP-10110
+$ cd /usr/src
+$ wget http://www.dsgnwrld.com/am/hadoop/common/hadoop-2.2.0/hadoop-2.2.0-src.tar.gz
+$ sha1sum hadoop-2.2.0-src.tar.gz 
+dac2c5773080c8a4b8fb3ce306df1c742351c6f2  hadoop-2.2.0-src.tar.gz
+$ wget https://issues.apache.org/jira/secure/attachment/12614482/HADOOP-10110.patch
+$ tar -zxvf hadoop-2.2.0-src.tar.gz
+$ cd hadoop-2.2.0-src
+$ patch -p0 < ../HADOOP-10110.patch 
+
+7.  Build hadoop
+# maven is flaky and may randomly barf
+# native fails for some reason when building hadoop-pipes"
+#$ mvn package -Pdist,native,docs -DskipTests -Dtar
+# $ mvn package -Pdist,docs -DskipTests -Dtar
+# try re-running each mvn step below if it fails
+$ export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+$ mvn compile
+$ mvn package -Pdist -DskipTests -Dtar
+
+8.  Install hadoop
+$ sudo ln -s /usr/src/hadoop-2.2.0-src/hadoop-dist/target/hadoop-2.2.0 /usr/local/hadoop
+$ sudo chown -R hadoop:hadoop /usr/src/hadoop-2.2.0-src/hadoop-dist/target/hadoop-2.2.0
+
+9.  Disable ipv6
+
+$ echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
+$ echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
+$ echo "net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
+$ sudo sysctl -p
+
+10.  Change JAVA_HOME in /usr/local/hadoop/etc/hadoop/hadoop-env.sh to /usr/lib/jvm/java-7-openjdk-amd64
+
+11.  Setup hadoop user's environment
+
+$ sudo su hadoop
+hadoop$ echo "export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64" | tee -a ~/.bashrc 
+hadoop$ echo "export HADOOP_HOME=/usr/local/hadoop" | tee -a ~/.bashrc 
+hadoop$ echo "export HADOOP_INSTALL=\$HADOOP_HOME" | tee -a ~/.bashrc 
+hadoop$ echo "export PATH=\$PATH:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin" | tee -a ~/.bashrc
+hadoop$ echo "export HADOOP_COMMON_HOME=\$HADOOP_HOME" | tee -a ~/.bashrc
+hadoop$ echo "export HADOOP_MAPRED_HOME=\$HADOOP_HOME" | tee -a ~/.bashrc
+hadoop$ echo "export HADOOP_YARN_HOME=\$HADOOP_MAPRED_HOME" | tee -a ~/.bashrc
+hadoop$ echo "export YARN_HOME=\$HADOOP_YARN_HOME" | tee -a ~/.bashrc
+hadoop$ echo "export HADOOP_HDFS_HOME=\$HADOOP_HOME" | tee -a ~/.bashrc
+hadoop$ echo "export HADOOP_CONF_DIR=\$HADOOP_HOME/etc/hadoop" | tee -a ~/.bashrc
+hadoop$ echo "export YARN_CONF_DIR=\$HADOOP_CONF_DIR" | tee -a ~/.bashrc
+
+12.  Configure hadoop
+
+12a.  Edit $HADOOP_CONF_DIR/core-site.xml and paste the following between <configuration>:
+
+<property>
+   <name>fs.default.name</name>
+   <value>hdfs://localhost:9000</value>
+</property>
+
+12b.  Edit $YARN_CONF_DIR/yarn-site.xml and paste the following between <configuration>:
+
+<property>
+   <name>yarn.nodemanager.aux-services</name>
+   <value>mapreduce_shuffle</value>
+</property>
+<property>
+   <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+   <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+
+12c.  Copy $HADOOP_CONF_DIR/mapred-site.xml.template to $HADOOP_CONF_DIR/mapred-site.xml & paste the following between <configuration>:
+
+<property>
+   <name>mapreduce.framework.name</name>
+   <value>yarn</value>
+</property>
+<property>
+   <name>mapred.child.java.opts</name>
+   <value>-Xmx4096m</value>
+</property>
+
+12d.  Choose a location for HDFS data & make directories.  e.x./mnt/fioa/hdfs
+
+$ sudo mkdir /mnt/fioa/hdfs
+$ sudo mkdir /mnt/fioa/hdfs/namenode
+$ sudo mkdir /mnt/fioa/hdfs/datanode
+$ sudo chown hadoop:hadoop /mnt/fioa/hdfs
+
+12e.  Edit $HADOOP_CONF_DIR/hdfs-site.xml and paste the following between <configuration>:
+
+<property>
+   <name>dfs.replication</name>
+   <value>1</value>
+ </property>
+ <property>
+   <name>dfs.namenode.name.dir</name>
+   <value>file:/mnt/fioa/hdfs/namenode</value>
+ </property>
+ <property>
+   <name>dfs.datanode.data.dir</name>
+   <value>file:/mnt/fioa/hdfs/datanode</value>
+ </property>
+ <property>
+    <name>dfs.support.append</name>
+    <value>true</value>
+  </property>
+
+  Next change file:/mnt/fioa/hdfs above to point to the location you chose from step 12d.
+
+12f.  Format the namenode
+
+$ sudo su hadoop
+hadoop$ hdfs namenode -format
+
+13.  Download & install HBase
+Note this is an install of pre-compiled HBase.  I could not figure out
+how to install HBase from source.
+
+$ cd /tmp
+$ wget http://www.dsgnwrld.com/am/hbase/hbase-0.96.1.1/hbase-0.96.1.1-hadoop2-bin.tar.gz
+$ sudo -i
+# cd /usr/local
+# tar -zxvf /tmp/hbase-0.96.1.1-hadoop2-bin.tar.gz
+# ln -s hbase-0.96.1.1-hadoop2 hbase
+# chown -R hadoop:hadoop hbase-0.96.1.1-hadoop2
+# su hadoop
+hadoop$ echo "export HBASE_HOME=/usr/local/hbase" | tee -a ~/.bashrc
+hadoop$ echo "export PATH=\$PATH:\$HBASE_HOME/bin" | tee -a ~/.bashrc
+
+14.  Configure HBase
+
+14a.  Edit $HBASE_HOME/conf/hbase-site.xml and paste the following between <configuration>:
+
+<property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://localhost:9000/hbase</value>
+</property>
+<property>
+    <name>hbase.master</name>
+    <value>localhost:60000</value>
+    <description>The host and port that the HBase master runs at.</description>
+</property>
+<property>
+    <name>hbase.regionserver.port</name>
+    <value>60020</value>
+    <description>The host and port that the HBase master runs at.</description>
+</property>
+<property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+</property>
+<property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>localhost</value>
+</property>
+<property>
+    <name>dfs.replication</name>
+    <value>1</value>
+</property>
+<property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2181</value>
+    <description>Property from ZooKeeper's config zoo.cfg.                      
+    The port at which the clients will connect.                                 
+    </description>
+</property>                                                                     
+<property>
+    <name>zookeeper.session.timeout</name>
+    <value>1800000</value>
+    <description>Session Time out.</description>
+</property>
+<property>
+    <name>hbase.client.scanner.caching</name>
+    <value>500</value>
+</property>
+<property>
+    <name>hbase.regionserver.lease.period</name>
+    <value>240000</value>
+</property>
+<property>
+    <name>dfs.support.append</name>
+    <value>true</value>
+</property>
+
+
+14b.  Edit $HBASE_HOME/conf/hbase-env.sh and append the following:
+
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export HBASE_REGIONSERVERS=/usr/local/hbase/conf/regionservers
+export HBASE_LOG_DIR=/tmp/hbase/logs
+export HBASE_PID_DIR=/tmp/hbase/pid
+export HBASE_MANAGES_ZK=true
+
+15.  Download & compile HIVE
+
+$ cd /usr/src
+$ wget http://www.dsgnwrld.com/am/hive/hive-0.12.0/hive-0.12.0.tar.gz
+$ tar -zxvf hive-0.12.0.tar.gz
+$ cd hive-0.12.0/src
+$ ant clean package -Dhadoop.version=2.2.0 -Dhadoop-0.23.version=2.2.0 -Dhadoop.mr.rev=23
+
+16.  Install HIVE
+
+$ sudo ln -s /usr/src/hive-0.12.0/src/build/dist /usr/local/hive
+$ sudo chown -R hadoop:hadoop /usr/src/hive-0.12.0/src/build/dist
+$ sudo su hadoop
+hadoop$ hadoop fs -mkdir /tmp
+hadoop$ hadoop fs -mkdir -p /user/hive/warehouse
+hadoop$ hadoop fs -chmod g+w   /tmp
+hadoop$ hadoop fs -chmod g+w   /user/hive/warehouse
+hadoop$ echo "export HIVE_HOME=/usr/local/hive" | tee -a ~/.bashrc
+hadoop$ echo "export PATH=\$PATH:\$HIVE_HOME/bin" | tee -a ~/.bashrc
+hadoop@ echo "export HIVE_AUX_JARS_PATH=/usr/local/hbase/lib" | tee -a /usr/local/hive/conf/hive-env.sh
+
+17.  Replace HBase jar's in hive
+
+$ sudo su hadoop
+hadoop$ cd /usr/local/hive/lib
+hadoop$ mv hbase-0.94.6.1.jar hbase-0.94.6.1.jar.bak
+hadoop$ ln -s /usr/local/hbase/lib/hbase-client-0.96.1.1-hadoop2.jar .
+hadoop$ ln -s /usr/local/hbase/lib/hbase-server-0.96.1.1-hadoop2.jar .
+hadoop$ ln -s /usr/local/hbase/lib/hbase-protocol-0.96.1.1-hadoop2.jar .
+hadoop$ ln -s /usr/local/hbase/lib/htrace-core-2.01.jar .
+hadoop$ ln -s /usr/local/hbase/lib/zookeeper-3.4.5.jar .
+
+18.  Centralize conf dirs
+
+$ sudo su hadoop
+hadoop$ cd /usr/local/hbase
+hadoop$ cp -i /usr/local/hbase/conf/* /usr/local/hadoop/etc/hadoop
+hadoop$ rmdir conf
+hadoop$ ln -s /usr/local/hadoop/etc/hadoop /usr/local/hbase/conf
+hadoop$ cd /usr/local/hive
+hadoop$ cp -i /usr/local/hive/conf/* /usr/local/hadoop/etc/hadoop
+hadoop$ rmdir conf
+hadoop$ ln -s /usr/local/hadoop/etc/hadoop /usr/local/hive/conf
+
+19.  Start hadoop services
+
+$ sudo su hadoop
+hadoop$ start-dfs.sh
+
+If you are asked:
+
+The authenticity of host '0.0.0.0 (0.0.0.0)' can't be established.
+ECDSA key fingerprint is a8:c1:ff:ab:9b:79:fa:70:53:76:d1:8b:69:31:bf:26.
+Are you sure you want to continue connecting (yes/no)?
+
+answer yes.
+
+hadoop$ start-yarn.sh
+hadoop$ start-hbase.sh
+
+Validate everything is running with:
+
+hadoop$ jps
+17080 NodeManager
+19045 HMaster
+19370 HRegionServer
+17704 NameNode
+17981 DataNode
+16822 ResourceManager
+18313 SecondaryNameNode
+18954 HQuorumPeer
+19538 Jps
+
+You should do this each time you reboot
+
+20.  Setup intel hadoop benchmark
+
+$ cd /usr/src
+$ git clone https://github.com/intel-hadoop/HiBench.git
+$ cd HiBench
+$ git checkout yarn
+$ cd ..
+$ sudo chown -R hadoop HiBench
+$ sudo su hadoop
+hadoop$ cd HiBench
+hadoop$ echo "export COMPRESS_GLOBAL=0" | tee -a ~/.bashrc
+
+21.  Running intel hadoop benchmark (optional)
+
+$ sudo su hadoop
+hadoop$ cd /usr/src/HiBench
+hadoop$ bin/run-all.sh
+
+All ready to go!
+
+References:
+
+http://www.javatute.com/javatute/faces/post/hadoop/2014/setting-hadoop-2.2.0-on-ubuntu-12-lts.xhtml
+http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html
+http://hbase.apache.org/book/build.html
+http://openwires.blogspot.com/p/hbase-setup-guide.html
+http://bigdatahandler.com/2013/10/28/setting-up-hive/
+http://rajesh-hadoop.blogspot.com/2013/01/hadoop-and-hbase-configuration-for.html
+http://hank-ca.blogspot.com/2014/02/setup-install-hadoop-220-hbase-096-on.html
+http://translate.google.com/translate?hl=en&sl=zh-CN&u=http://blog.csdn.net/kunshan_shenbin/article/details/17575967&prev=/search%3Fq%3Dhbase-0.96.1.1%2Bhive-0.12.0%26num%3D20%26safe%3Doff
+http://hortonworks.com/community/forums/topic/hive-hbase-integration-issues/
+http://mail-archives.apache.org/mod_mbox/hive-user/201402.mbox/%3CCAAXmExUSN9e5m_Pk48T=Jc2a=bP9t5x=+7GvJnz2+Cf3JFV9SQ@mail.gmail.com%3E
+https://github.com/intel-hadoop/HiBench
+http://stackoverflow.com/questions/13674190/cdh-4-1-error-running-child-java-lang-outofmemoryerror-java-heap-space

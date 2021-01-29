@@ -1,0 +1,12 @@
+{
+    "xcalarVersion": "2.0.5-1-vgonela-f1b56fb3-87306129",
+    "workbookVersion": 4,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "add1module",
+            "fileName": "workbook/udfs/add1module.py",
+            "udfType": "python"
+        }
+    ]
+}

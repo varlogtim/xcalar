@@ -1,0 +1,57 @@
+.PHONY: all submodules distclean clean shell
+
+CONTAINER_UID   ?= $(shell id -u)
+CONTAINER_USER  ?= $(shell id -un)
+XLRDIR          ?= $(shell pwd)
+XLRGUIDIR       ?= $(shell pwd)/xcalar-gui
+BUILD_NUMBER    ?= 1
+JOB_NAME        ?= $(shell id -un)
+TZ              ?= America/Los_Angeles
+CONTAINER_IMAGE ?= xcbuilder/$(CONTAINER_USER)
+CONTAINER_NAME  ?= xcbuilder-$(CONTAINER_USER)
+CONTAINER_HOSTNAME ?= $(CONTAINER_NAME)
+CONTAINER_ARGS = --cap-add=ALL --privileged --rm \
+                 --security-opt seccomp:unconfined \
+                 --ulimit core=-1:-1 \
+                 --ulimit nofile=64960 \
+                 --ulimit nproc=140960:140960 \
+                 --ulimit memlock=-1:-1 \
+                 --ulimit stack=-1:-1 \
+                 -v /var/run/docker.sock:/var/run/docker.sock \
+                 -v $(HOME):$(HOME) \
+                 -e TZ=$(TZ) -e IN_DOCKER=1 \
+                 -e XLRGUIDIR=$(XLRGUIDIR) -e XLRDIR=$(XLRDIR) \
+                 -e BUILD_NUMBER=$(BUILD_NUMBER) -e JOB_NAME=$(JOB_NAME) \
+                 -e http_proxy \
+                 -w $(XLRDIR) \
+                 -u $(CONTAINER_USER) \
+                 $(CONTAINER_IMAGE)
+
+all: submodules configure bin/provision.sh
+
+submodules:
+	@if test -d .git; then git submodule update --init --recursive; fi
+
+configure: Makefile.am configure.ac
+	autoreconf --install
+
+Makefile:
+	automake --force-missing
+
+.PHONY: distclean
+distclean: Makefile
+	-make -f Makefile distclean
+
+.PHONY: clean
+clean: distclean
+	-find . -name Makefile.in -type f -exec rm -f {} \;
+	-find . -name "*.gcda" -type f -exec rm -f {} \;
+	-find . -name "*.pyc" -type f -exec rm -f {} \;
+	-rm -rf aclocal.m4 autom4te.cache src/include/config.h.in configure depcomp install-sh missing config.guess config.sub ltmain.sh m4 Makefile compile test-driver tap-driver.sh tap-driver.pl build debian coverage coverageTotal.info coverage.info BUILD_SHA
+	-rm -rf doc/doxygen
+
+bin/provision.sh: docker/ub14/ub14-build/Dockerfile
+	bin/docker2bash.sh $< > $@.tmp && /bin/bash -n $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+
+shell:
+	docker run -ti --entrypoint=/bin/bash $(CONTAINER_ARGS) -l

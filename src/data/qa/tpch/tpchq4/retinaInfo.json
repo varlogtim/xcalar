@@ -1,0 +1,27 @@
+{
+    "udfs": [
+        {
+            "moduleName": "adddateinterval_modified",
+            "fileName": "udfs/adddateinterval_modified.py",
+            "udfType": "python"
+        }
+    ],
+    "tables": [
+        {
+            "name": "EndResult-tpchq4",
+            "columns": [
+                {
+                    "columnName": "O_ORDERPRIORITY_count",
+                    "headerAlias": "O_ORDERPRIORITY_count"
+                },
+                {
+                    "columnName": "O_ORDERPRIORITY",
+                    "headerAlias": "O_ORDERPRIORITY"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-jenkins-8088a6fa-a568cfd8",
+    "query": "load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#L9359\" --prefix orders;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#L9358\" --prefix lineitem;filter --srctable orders#L9359 --eval \"ge(orders::O_ORDERDATE, \\\"1993-07-01\\\")\"  --dsttable \"orders#L9391\";filter --srctable lineitem#L9358 --eval \"lt(lineitem::L_COMMITDATE, lineitem::L_RECEIPTDATE)\"  --dsttable \"lineitem#L9388\";map --srctable \"orders#L9391\" --fieldName O_ORDERDATE_udf --eval \"adddateinterval_modified:dateltinputdate(orders::O_ORDERDATE, \\\"1993-07-01\\\", 3)\" --dsttable \"orders#L9392\";index --key \"lineitem::L_ORDERKEY\" --keyType 1  --srctable \"lineitem#L9388\" --dsttable \"lineitem.index#L9390\";filter --srctable orders#L9392 --eval \"eq(O_ORDERDATE_udf, \\\"True\\\")\"  --dsttable \"orders#L9393\";groupBy --srctable \"lineitem.index#L9390\" --eval \"count(lineitem::L_ORDERKEY)\" --fieldName \"L_ORDERKEY_count\" --newKeyFieldName \"L_ORDERKEY\" --dsttable \"subq_litem_grpby#L9389\" --nosample;index --key \"orders::O_ORDERKEY\" --keyType 1  --srctable \"orders#L9393\" --dsttable \"orders.index#L9395\";join --leftTable \"orders.index#L9395\" --rightTable \"subq_litem_grpby#L9389\" --joinType innerJoin  --joinTable \"outer_inner_join#L9394\" --collisionCheck;index --key \"orders::O_ORDERPRIORITY\" --keyType 1  --srctable \"outer_inner_join#L9394\" --dsttable \"outer_inner_join.index#L9397\";groupBy --srctable \"outer_inner_join.index#L9397\" --eval \"count(orders::O_ORDERPRIORITY)\" --fieldName \"O_ORDERPRIORITY_count\" --newKeyFieldName \"O_ORDERPRIORITY\" --dsttable \"Q4_output_final#L9396\" --nosample;index --key \"O_ORDERPRIORITY\" --keyType 1  --srctable \"Q4_output_final#L9396\" --dsttable \"EndResult-tpchq4\" --sorted;",
+    "retinaVersion": 1
+}

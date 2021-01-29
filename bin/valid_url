@@ -1,0 +1,2 @@
+#!/bin/sh
+test "$(curl -sL -w "%{http_code}" "$1" -o /dev/null)" -eq 200

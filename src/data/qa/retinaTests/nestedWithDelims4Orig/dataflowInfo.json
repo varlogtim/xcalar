@@ -1,0 +1,70 @@
+{
+    "tables": [
+        {
+            "name": "foo",
+            "columns": [
+                {
+                    "columnName": "prefix-8891-1665020-cols\\.array\\[1\\]",
+                    "headerAlias": "foo1"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-blim-17bf9363-d5a44043",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.fooDs",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "1000",
+                        "targetName": "QA memory",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.fooDs",
+                "dest": "foo",
+                "prefix": "prefix-8891-1665020",
+                "key": [
+                    {
+                        "name": "cols.array[1]",
+                        "ordering": "Unordered",
+                        "keyFieldName": "prefix-8891-1665020-cols.array[1]",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

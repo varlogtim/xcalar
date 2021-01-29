@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.3.2-1-xcalardev-8eeba9ad-8e164e50",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5f1a0a81349e16e9",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1595542145",
+        "tvNsec": "882775785"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1595542787",
+        "tvNsec": "245605231"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1595542799",
+        "tvNsec": "339750181"
+    },
+    "sessionName": "StatsMart_Internal"
+}

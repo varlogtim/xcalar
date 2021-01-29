@@ -1,0 +1,22 @@
+{
+    "xcalarVersion": "2.3.2-4554-xcalardev-a70c238b-8e164e50",
+    "workbookVersion": 4,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "logmart_controller_parser",
+            "fileName": "workbook/udfs/logmart_controller_parser.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "sql",
+            "fileName": "workbook/udfs/sql.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "dml_insert",
+            "fileName": "workbook/udfs/dml_insert.py",
+            "udfType": "python"
+        }
+    ]
+}

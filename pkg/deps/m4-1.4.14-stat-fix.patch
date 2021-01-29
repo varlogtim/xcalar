@@ -1,0 +1,11 @@
+--- a/src/path.c 2016-10-10 13:55:54.227785397 -0700
++++ b/src/path.c 2016-10-10 13:56:10.596046385 -0700
+@@ -24,6 +24,8 @@
+ 
+ #include "m4.h"
+ 
++#include <sys/stat.h>
++
+ struct includes
+ {
+   struct includes *next;        /* next directory to search */

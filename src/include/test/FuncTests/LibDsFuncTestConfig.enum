@@ -1,0 +1,8 @@
+enum LibDsFuncTestConfig {
+    LibDsFuncStressUsers:"LibDsFuncStressUsers",
+    LibDsFuncStressThreads:"LibDsFuncStressThreads",
+    LibDsQaYelpReviewsUrl:"LibDsQaYelpReviewsUrl",
+    LibDsQaRandomJsonUrl:"LibDsQaRandomJsonUrl",
+    LibDsQaYelpUserUrl:"LibDsQaYelpUserUrl",
+    LibDsQaGDeltUrl:"LibDsQaGDeltUrl",
+}

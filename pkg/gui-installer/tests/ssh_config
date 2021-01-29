@@ -1,0 +1,7 @@
+Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile no
+    User root
+    Port 22
+    LogLevel ERROR
+    IdentityFile id_rsa

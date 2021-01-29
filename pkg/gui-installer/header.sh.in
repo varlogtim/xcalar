@@ -1,0 +1,197 @@
+#!/bin/bash
+set -o pipefail
+
+IMAGE='xcalar/gui-installer:@PACKAGE_VERSION@.@GIT_SHA1@'
+NAME='xcalar-gui-installer'
+INSTALL_PORT=${INSTALL_PORT:-8543}
+OSX_URL="https://docs.docker.com/docker-for-mac/"
+SCRIPT="${BASH_SOURCE[0]}"
+UNAME_S="$(uname -s)"
+declare -a DOCKER_ARGS
+
+say () {
+    echo >&2 "$*"
+}
+
+die () {
+    local err=$1
+    shift
+    say "ERROR($err): $*"
+    exit $err
+}
+
+have_command () {
+    command -v "$@" &>/dev/null
+}
+
+stat_fmt () {
+    case "$UNAME_S" in
+        Darwin) stat -f "$@" ;;
+        *) stat -c "$@" ;;
+    esac
+}
+
+if ! have_command docker &>/dev/null; then
+    say "You need to have docker installed."
+    say ""
+    case "$UNAME_S" in
+        Linux)
+            say "See https://get.docker.io for a script you can download and run locally"
+            say ""
+            say "Linux install instructions:"
+            say ""
+            say " curl -sSL https://get.docker.io > docker.sh"
+            say " bash docker.sh"
+            say " sudo usermod -aG docker \$USER"
+            say ""
+            ;;
+        Darwin)
+            say "On OSX you can install Docker for Mac"
+            say "Opening $OSX_URL ..."
+            open $OSX_URL
+            ;;
+        *)
+            say "Unknown OS (uname -s returned $UNAME_S). Please see https://docker.com for Docker installation instructions."
+            ;;
+    esac
+    exit 1
+fi
+
+case "$UNAME_S" in
+    Darwin) gnu_sed="gsed";;
+    *) gnu_sed="sed";;
+esac
+
+if ! have_command "$gnu_sed" &>/dev/null; then
+    say "Unable to find a version of gnu-sed. On OSX please install brew, then install gnu-sed:"
+    say ""
+    say " /usr/bin/ruby -e \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""
+    say " brew install gnu-sed"
+    exit 1
+fi
+
+if [ -z "$DOCKER_HOST" ]; then
+    if [ "$UNAME_S" = Darwin ]; then
+        DEPLOY_HOST=localhost
+    else
+        DEPLOY_HOST="$(hostname -f)"
+    fi
+    socket="/var/run/docker.sock"
+elif [[ "$DOCKER_HOST" =~ ^unix:// ]]; then
+    DEPLOY_HOST="$(hostname -f)"
+    socket="${DOCKER_HOST##unix://}"
+else
+    DEPLOY_HOST="${DOCKER_HOST##*://}"
+    DEPLOY_HOST="${DEPLOY_HOST%%:*}"
+fi
+
+if [ "$DEPLOY_HOST" = localhost ]; then
+    DEPLOY_IP="127.0.0.1"
+else
+    ns1="$(grep '^nameserver' /etc/resolv.conf | head -1 | awk '{print $2}')"
+    ns2="8.8.8.8"
+    ethdev="$(ip route get $ns2 | head -1 | awk '{print $3}')"
+    DEPLOY_IP="$(ip route get $ns2 | head -1 | awk '{print $(NF)}')"
+fi
+
+if [ -n "$socket" ]; then
+    if [ -S "$socket" ]; then
+        if ! [ -w "$socket" ]; then
+            sudo=sudo
+        fi
+    else
+        say "Unable to find local docker socket. Please ensure docker is installed and running or"
+        say "export DOCKER_HOST=unix:///path/to/your/docker.sock"
+        exit 1
+    fi
+fi
+if [ "$(docker images -q "$IMAGE")" = "" ]; then
+    say "Loading image $IMAGE ..."
+    if [ -n "$sudo" ]; then
+        $sudo bash -c "docker load -i <($gnu_sed '0,/^#__DOCKER_IMAGE__#/d' $SCRIPT | gzip -d -c)"
+    else
+        docker load -i <($gnu_sed '0,/^#__DOCKER_IMAGE__#/d' $SCRIPT | gzip -d -c)
+    fi
+    rc=$?
+    if [ $rc -ne 0 ]; then
+        die $rc "Failed to load image into docker"
+    fi
+else
+    say "Using previously loaded image $IMAGE ..."
+fi
+
+XCE_GUICONFIG="${XCE_GUICONFIG-$HOME/.xcalar-config}"
+if [ -d "$XCE_GUICONFIG" ]; then
+    if ! [ -w  "$XCE_GUICONFIG" ]; then
+        say "$XCE_GUICONFIG exists but is not writable"
+    else
+        echo "Running xcalar/gui-installer docker with your configuration saved to $XCE_GUICONFIG"
+        DOCKER_ARGS+=(-v $XCE_GUICONFIG:/config)
+        DOCKER_ARGS+=(-e UIDGID="$(stat_fmt '%u:%g' $XCE_GUICONFIG)")
+    fi
+fi
+
+NO_PING=0
+
+say "### Parsing input flags"
+
+while [ $# -gt 0 ]; do
+    cmd="$1"
+    case "$cmd" in
+        -n|--no_ping) NO_PING=1;;
+        *) break;;
+    esac
+    shift
+done
+
+export NO_PING
+
+say ""
+say "Running docker container, press Ctrl-C to stop"
+say ""
+say "Please open your browser to one of:"
+say ""
+say "    https://$DEPLOY_IP:8543"
+say "    https://$DEPLOY_HOST:8543"
+say ""
+say ""
+say "Or use the appropriate IP for where you ran this script from."
+if [ -d "$XCE_GUICONFIG" ]; then
+    say ""
+    say "Your config files are saved to $XCE_GUICONFIG. You can rerun this script at a later date to control your cluster."
+fi
+say ""
+$sudo docker rm -fv $NAME &>/dev/null || true
+if [ -n "$LOGNAME" ]; then
+    DOCKERLOGDIR="/tmp/$LOGNAME"
+elif [ -n "$USER" ]; then
+    DOCKERLOGDIR="/tmp/$USER"
+else
+    DOCKERLOGDIR="/tmp/gui-install"
+fi
+mkdir -p $DOCKERLOGDIR
+docker_log="$DOCKERLOGDIR/gui-install-docker.log"
+
+$sudo docker run \
+    -e DEPLOY_IP="$DEPLOY_IP" \
+    -e DEPLOY_HOST="$DEPLOY_HOST" \
+    -e NO_PING="$NO_PING" \
+    --rm --name="$NAME" -p $INSTALL_PORT:$INSTALL_PORT "${DOCKER_ARGS[@]}" "$IMAGE" "$@" \
+    2>&1 | tee $docker_log
+rc=${PIPESTATUS[0]}
+if [ $rc -ne 0 ] && [ $rc -ne 130 ]; then
+    # Bug Xc-6361
+    xc6361ex1='iptables -t nat -A DOCKER'
+    xc6361ex2='iptables --wait -t nat -A DOCKER'
+    xc6361=$(grep -e "$xc6361ex1" -e "$xc6361ex2" $docker_log)
+    if [ -n "$xc6361" ]; then
+        say "Docker cannot correctly communicate through the firewall."
+        say "Please try restarting the docker daemon and run $0 again."
+    fi
+    die $rc "Failed to run docker container"
+fi
+
+rm -rf $DOCKERLOGDIR
+exit 0
+
+#__DOCKER_IMAGE__#

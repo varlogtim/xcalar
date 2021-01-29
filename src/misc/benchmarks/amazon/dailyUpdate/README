@@ -1,0 +1,1 @@
+To run daily_update_xcalar.py, you must first set up an azblob target called "azblob". Then load it into Jupyter and run

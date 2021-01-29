@@ -1,0 +1,63 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "xcalar/compute/localtypes/Workbook.proto";
+import "xcalar/compute/localtypes/ProtoFieldValue.proto";
+
+package xcalar.compute.localtypes.ResultSet;
+enum MakeType
+{
+    TABLE = 0;
+    DATASET = 1;
+}
+
+message ResultSetMakeRequest {
+    string name = 1;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 2;
+    bool error_dataset = 3;
+};
+
+message ResultSetMakeResponse {
+    fixed64 result_set_id = 1;
+    uint64 num_rows = 2;
+};
+
+message ResultSetReleaseRequest {
+    fixed64 result_set_id = 1;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 2;
+};
+
+message ResultSetNextRequest {
+    fixed64 result_set_id = 1;
+    uint64 num_rows = 2;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 3;
+};
+
+message ResultSetNextResponse {
+    message RowMeta {
+        repeated string column_names = 1;
+    };
+    repeated RowMeta metas = 1;
+    repeated ProtoRow rows = 2;
+};
+
+message ResultSetSeekRequest {
+    fixed64 result_set_id = 1;
+    uint64 row_index = 2;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 3;
+};
+
+service ResultSet{
+    rpc Make (ResultSetMakeRequest) returns (ResultSetMakeResponse);
+    rpc Release (ResultSetReleaseRequest) returns (google.protobuf.Empty);
+    rpc Next (ResultSetNextRequest) returns (ResultSetNextResponse);
+    rpc Seek (ResultSetSeekRequest) returns (google.protobuf.Empty);
+};

@@ -1,0 +1,114 @@
+// Copyright 2018-2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/Workbook.proto";
+import "google/protobuf/empty.proto";
+import "xcalar/compute/localtypes/ColumnAttribute.proto";
+
+package xcalar.compute.localtypes.Table;
+
+message IndexRequest {
+    string table_name = 1;
+    string key_name = 2;
+};
+
+// TODO: Current APIs require a username/session name to retrieve
+// a session ID and associated DAG.  In the future, this will change
+// to just include the session ID (as an integer)
+message PublishRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string table_name = 2;
+};
+
+message PublishResponse {
+    string fully_qual_table_name = 1;
+};
+
+message UnpublishRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string table_name = 2;
+};
+
+message ListTablesRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string pattern = 2;
+};
+
+message ListTablesResponse {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    repeated string table_names = 2;
+    // Key = Table name, Value = Table metadeta
+    map<string, TableMetaResponse> table_meta_map = 3;
+};
+
+message TableStatsPerNode {
+    string status = 1;
+    uint64 num_rows = 2;
+    uint64 num_pages = 3;
+    uint32 num_slots = 4;
+    uint64 size_in_bytes = 5;
+    // Key = slot index, Value = number of rows
+    map<uint32, uint64> rows_per_slot = 6;
+    // Key = slot index, Value = number of pages
+    map<uint32, uint64> pages_per_slot = 7;
+    uint64 pages_consumed_in_bytes = 8;
+    uint64 pages_allocated_in_bytes = 9;
+    uint64 pages_sent = 10;
+    uint64 pages_received = 11;
+};
+
+message TableAttributes {
+    string table_name = 1;
+    uint64 table_id = 2;
+    uint64 xdb_id = 3;
+    string state = 4;
+    bool pinned = 5;
+    bool shared = 6;
+    repeated string datasets = 7;
+    repeated fixed64 result_set_ids = 8;
+};
+
+message TableAggregatedStats {
+    uint64 total_records_count = 1;
+    uint64 total_size_in_bytes = 2;
+    repeated uint64 rows_per_node = 3;
+    repeated uint64 size_in_bytes_per_node = 4;
+};
+
+message TableSchema {
+    repeated xcalar.compute.localtypes.ColumnAttribute.ColumnAttributeProto column_attributes = 1;
+    repeated xcalar.compute.localtypes.ColumnAttribute.KeyAttributeProto key_attributes = 2;
+};
+
+message TableMetaRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 1;
+    string table_name = 2;
+    bool include_per_node_stats = 3;
+};
+
+message TableMetaResponse {
+    TableAttributes attributes = 1;
+    TableSchema schema = 2;
+    TableAggregatedStats aggregated_stats = 3;
+    map<string, TableStatsPerNode> stats_per_node = 4;
+
+    // the error status of table, if failed to fetch
+    // meta information
+    string status = 5;
+};
+
+service Table {
+    rpc AddIndex (IndexRequest) returns (google.protobuf.Empty);
+    rpc RemoveIndex (IndexRequest) returns (google.protobuf.Empty);
+    rpc PublishTable (PublishRequest) returns (PublishResponse);
+    rpc UnpublishTable (UnpublishRequest) returns (google.protobuf.Empty);
+    rpc ListTables (ListTablesRequest) returns (ListTablesResponse);
+    rpc TableMeta (TableMetaRequest) returns (TableMetaResponse);
+};

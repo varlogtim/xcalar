@@ -1,0 +1,6 @@
+enum LibKvStoreFuncTestConfig {
+    LibKvStoreThreadsPerCore:"LibKvStoreThreadsPerCore",
+    LibKvStoreRunsPerThread:"LibKvStoreRunsPerThread",
+    LibKvStoreRandomLoopIterations:"LibKvStoreRandomLoopIterations",
+    LibKvStoreCommonStoreTestEnabled:"LibKvStoreCommonStoreTestEnabled",
+}

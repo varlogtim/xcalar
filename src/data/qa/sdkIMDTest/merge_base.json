@@ -1,0 +1,19 @@
+[
+    {"PK1": 0, "PK2": 0, "COL1": "B01", "COL2": "B02", "XCALAROPCODE": 1, "XCALARRANKOVER": 0},
+    {"PK1": 1, "PK2": 1, "COL1": "B11", "COL2": "B12", "XCALAROPCODE": 1, "XCALARRANKOVER": 0},
+    {"PK1": 1, "PK2": 1, "COL1": "null", "COL2": "B12", "XCALAROPCODE": 0, "XCALARRANKOVER": 1},
+    {"PK1": 1, "PK2": 1, "COL1": "B11", "COL2": "B12", "XCALAROPCODE": 1, "XCALARRANKOVER": 2},
+    {"PK1": 2, "PK2": 2, "COL1": "B21", "COL2": null, "XCALAROPCODE": 1, "XCALARRANKOVER": 0},
+    {"PK1": 2, "PK2": 2, "COL1": "B21", "COL2": null, "XCALAROPCODE": 1, "XCALARRANKOVER": 1},
+    {"PK1": 5, "PK2": 5, "COL1": null, "COL2": null, "XCALAROPCODE": 1, "XCALARRANKOVER": 0},
+    {"PK1": 6, "PK2": 6, "COL1": "B61", "COL2": "B62", "XCALAROPCODE": 1, "XCALARRANKOVER": 0},
+    {"PK1": 6, "PK2": 6, "COL1": "B61", "COL2": "null", "XCALAROPCODE": 0, "XCALARRANKOVER": 4},
+    {"PK1": 6, "PK2": 6, "COL1": null, "COL2": "B61", "XCALAROPCODE": 0, "XCALARRANKOVER": 2},
+    {"PK1": 6, "PK2": 6, "COL1": null, "COL2": null, "XCALAROPCODE": 0, "XCALARRANKOVER": 1},
+    {"PK1": 6, "PK2": 6, "COL1": "B61", "COL2": "B62", "XCALAROPCODE": 1, "XCALARRANKOVER": 8},
+    {"PK1": 7, "PK2": 7, "COL1": "B71", "COL2": "B72", "XCALAROPCODE": 0, "XCALARRANKOVER": 2},
+    {"PK1": 8, "PK2": 8, "COL1": "B81", "COL2": null, "XCALAROPCODE": 0, "XCALARRANKOVER": 2},
+    {"PK1": 8, "PK2": 8, "COL1": null, "COL2": "B82", "XCALAROPCODE": 0, "XCALARRANKOVER": 8},
+    {"PK1": 8, "PK2": 8, "COL1": null, "COL2": null, "XCALAROPCODE": 0, "XCALARRANKOVER": 11},
+    {"PK1": 9, "PK2": 9, "COL1": "B91", "COL2": "B92", "XCALAROPCODE": 1, "XCALARRANKOVER": 11}
+]

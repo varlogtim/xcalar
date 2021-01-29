@@ -1,0 +1,30 @@
+[
+    {
+        "int": 1,
+        "float": 1.2,
+        "string": "1.23",
+        "bool": true,
+        "arrayInt": [1, 2],
+        "arrayFloat": [1.2, 2.3],
+        "object": {
+            "int": 2,
+            "float": 2.3,
+            "string": "2.34",
+            "bool": false
+        }
+    },
+    {
+        "int": 2,
+        "float": 2.3,
+        "string": "2.34",
+        "bool": false,
+        "arrayInt": [2, 3],
+        "arrayFloat": [2.3, 3.4],
+        "object": {
+            "int": 3,
+            "float": 3.4,
+            "string": "3.45",
+            "bool": true
+        }
+    }
+]

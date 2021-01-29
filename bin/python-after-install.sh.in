@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PREFIX=@PREFIX@
+
+# We want to remove the empty python2 directory in
+# Jupyter so it doesn't show up in the GUI as a 
+# selectable option
+
+JUPYTER_PYTHON2_KERNEL="$PREFIX/share/jupyter/kernels/python2"
+if test -e "$JUPYTER_PYTHON2_KERNEL"; then
+    # Don't remove non-empty directory
+    rmdir "$JUPYTER_PYTHON2_KERNEL" || true
+fi

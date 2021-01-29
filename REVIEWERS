@@ -1,0 +1,69 @@
+# Top level directory
+src                     xce-gatekeepers
+pkg                     abakshi,thaining
+docker                  abakshi,thaining
+bin                     abakshi,dwillis,thaining
+scripts                 xce-gatekeepers,abakshi,thaining
+cmake                   dwillis,thaining,abakshi
+conf                    dwillis,thaining,abakshi
+
+# Upper half
+src/lib/liboperators    bli,skrishnamachari,ecohen
+src/lib/libapis         bli,skrishnamachari
+src/lib/libexec         bli,skrishnamachari
+src/lib/libexport       dwillis,bli
+src/lib/liboptimizer    bli,swatanabe
+src/lib/libqueryeval    bli
+src/lib/libquerymanager bli
+src/lib/libqueryparser  swatanabe
+
+# Data layer
+src/lib/libxdb          skrishnamachari,bli,ecohen
+
+# Microkernel
+src/lib/libmsg          skrishnamachari,bli,swatanabe
+src/lib/libstats        dwillis
+src/lib/libbc           skrishnamachari,swatanabe
+src/lib/libgvm2         skrishnamachari
+src/lib/libkvbuf        skrishnamachari,bli,ecohen
+src/lib/liblog          skrishnamachari,ecohen
+src/lib/libmoninterface dshah
+src/lib/libns           skrishnamachari,bli
+src/lib/libruntime      skrishnamachari,ecohen
+src/lib/libshmsg        skrishnamachari
+src/lib/libusrnode      skrishnamachari
+src/lib/libmonitor      dshah
+
+
+# XPU
+src/lib/libapp          dwillis
+src/lib/libchild        dwillis
+src/lib/liblocalmsg     dwillis
+src/lib/libparent       dwillis
+src/lib/libudf          dwillis
+
+
+# Util
+src/lib/libdag          swatanabe,ecohen
+src/lib/libbcquota      skrishnamachari
+src/lib/libcallout      skrishnamachari
+src/lib/libcommon       swatanabe,ecohen
+src/lib/libconfig       swatanabe
+src/lib/libconstants    swatanabe
+src/lib/libenum         swatanabe
+src/lib/libfaulthandler
+src/lib/libhash         swatanabe,bli
+src/lib/libkvstore      ecohen
+src/lib/liblicense      thaining,dwillis
+src/lib/libprotobuf     dwillis,ecohen
+src/lib/libscalars      swatanabe,bli
+src/lib/libstrings      swatanabe
+src/lib/libsupport      abakshi
+src/lib/libsys          swatanabe
+src/lib/libutil         swatanabe
+
+# Misc
+src/lib/libdf           dwillis
+src/lib/libds           dwillis
+src/lib/libsession      bli,ecohen
+src/lib/tests           blim

@@ -1,0 +1,7 @@
+enum SourceType {
+    SrcUnknown:"Unknown" = 0,
+    SrcDataset:"Dataset" = 1,
+    SrcTable:"Table" = 2,
+    SrcConstant:"Constant" = 3,
+    SrcExport:"Export" = 4,
+};

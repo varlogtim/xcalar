@@ -1,0 +1,31 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq12",
+            "columns": [
+                {
+                    "columnName": "high_line_count_sum",
+                    "headerAlias": "high_line_count_sum"
+                },
+                {
+                    "columnName": "low_line_count_sum",
+                    "headerAlias": "low_line_count_sum"
+                },
+                {
+                    "columnName": "L_SHIPMODE",
+                    "headerAlias": "L_SHIPMODE"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "fileName": "udfs/adddateinterval_modified.py",
+            "moduleName": "adddateinterval_modified",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#L9321\" --prefix orders;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;map --eval \"if(or(eq(orders::O_ORDERPRIORITY,\\\"1-URGENT\\\"),eq(orders::O_ORDERPRIORITY,\\\"2-HIGH\\\")), 1, 0)\" --srctable \"orders#L9321\" --fieldName \"high_line_count\" --dsttable \"orders#L9324\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#L9322\" --prefix lineitem1;map --eval \"if(and(neq(orders::O_ORDERPRIORITY,\\\"1-URGENT\\\"),neq(orders::O_ORDERPRIORITY,\\\"2-HIGH\\\")), 1, 0)\" --srctable \"orders#L9324\" --fieldName \"low_line_count\" --dsttable \"orders#L9325\";index --key \"lineitem1::L_ORDERKEY\" --keyType 1  --srctable \"lineitem#L9322\" --dsttable \"lineitem.index#L9328\";index --key \"orders::O_ORDERKEY\" --keyType 1  --srctable \"orders#L9325\" --dsttable \"orders.index#L9327\";join --leftTable \"orders.index#L9327\" --rightTable \"lineitem.index#L9328\" --joinType innerJoin  --joinTable \"order_litem_join#L9326\" --collisionCheck;filter --srctable order_litem_join#L9326 --eval \"or(eq(lineitem1::L_SHIPMODE, \\\"SHIP\\\"), eq(lineitem1::L_SHIPMODE, \\\"MAIL\\\"))\"  --dsttable \"order_litem_join#L9329\";filter --srctable order_litem_join#L9329 --eval \"lt(lineitem1::L_COMMITDATE, lineitem1::L_RECEIPTDATE)\"  --dsttable \"order_litem_join#L9330\";filter --srctable order_litem_join#L9330 --eval \"lt(lineitem1::L_SHIPDATE, lineitem1::L_COMMITDATE)\"  --dsttable \"order_litem_join#L9332\";filter --srctable order_litem_join#L9332 --eval \"ge(lineitem1::L_RECEIPTDATE, \\\"1994-01-01\\\")\"  --dsttable \"order_litem_join#L9333\";map --eval \"adddateinterval_modified:dateltyearinputdate(lineitem1::L_RECEIPTDATE, \\\"1994-01-01\\\", 1)\" --srctable \"order_litem_join#L9333\" --fieldName \"L_RECEIPTDATE_udf\" --dsttable \"order_litem_join#L9334\";filter --srctable order_litem_join#L9334 --eval \"eq(L_RECEIPTDATE_udf, \\\"True\\\")\"  --dsttable \"order_litem_join#L9335\";index --key \"lineitem1::L_SHIPMODE\" --keyType 1  --srctable \"order_litem_join#L9335\" --dsttable \"order_litem_join.index#L9337\";groupBy --srctable \"order_litem_join.index#L9337\" --eval \"sum(low_line_count)\" --fieldName \"low_line_count_sum\" --newKeyFieldName \"L_SHIPMODE\" --dsttable \"Final_q12_output#L9339\" --nosample;groupBy --srctable \"order_litem_join.index#L9337\" --eval \"sum(high_line_count)\" --fieldName \"high_line_count_sum\" --newKeyFieldName \"L_SHIPMODE\" --dsttable \"Final_q12_output#L9338\" --nosample;join --leftTable \"Final_q12_output#L9338\" --rightTable \"Final_q12_output#L9339\" --joinType innerJoin  --joinTable \"Final_q12_output#L9340\" --collisionCheck --rightRenameMap L_SHIPMODE:L_SHIPMODE_GB144:1;index --key \"L_SHIPMODE\" --keyType 1  --srctable \"Final_q12_output#L9340\" --dsttable \"EndResult-tpchq12\" --sorted;",
+    "xcalarVersion": "1.2.1-1-jenkins-efd2531c-fc9162cb",
+    "retinaVersion": 1
+}

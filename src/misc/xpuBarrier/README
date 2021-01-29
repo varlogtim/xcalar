@@ -1,0 +1,11 @@
+This is just a staging ground directory for initial work on XPU barriers.  Doing
+a make in this directory builds the executable "xpuBarr" which when run, will
+run a test on the barrier logic using an assumed set of send/recv interfaces.
+
+Eventually, the c++ code/logic will land in UdfPyXcalar.cpp, and the send/recv
+interfaces will be replaced by the final send/recv XPU <-> XPU interfaces.
+
+And finally, the c++ code/logic will be re-written in python. The initial work
+in C++ is just to get the logic working quickly with simulated send/recv
+interfaces, and XPUs simulated as threads (each XPU = a pthread, with a XPUid
+assigned to each thread).

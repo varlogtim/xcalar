@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.0.0-1-swatanabe-566f9480-bfe28db2",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5c771d3123c8719a",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1551310129",
+        "tvNsec": "600338842"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1551310243",
+        "tvNsec": "807587160"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1551310253",
+        "tvNsec": "867725542"
+    },
+    "sessionName": "Sprint2DefOfDone"
+}

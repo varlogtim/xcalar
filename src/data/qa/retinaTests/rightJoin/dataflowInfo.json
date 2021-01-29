@@ -1,0 +1,227 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398510643238",
+            "columns": [
+                {
+                    "columnName": "col-798-18014398510643231",
+                    "headerAlias": "col-798-18014398510643231"
+                },
+                {
+                    "columnName": "col-798-18014398510643233",
+                    "headerAlias": "col-798-18014398510643233"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-3-node1-798-18014398509907585",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.ds-operatorsFuncTestUser-3-node1-798-18014398510477808",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-3-node1-798-18014398509907585",
+                "dest": "RN10temp-18014398510182788",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-798-18014398510150988-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-798-18014398510150988",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.ds-operatorsFuncTestUser-3-node1-798-18014398510477808",
+                "dest": "temp-18014398510514210",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-800-18014398510484030-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-800-18014398510484030",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "RN10temp-18014398510182788",
+                "dest": "RN0temp-18014398510254773",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-798-18014398510150988::a\\.b)",
+                        "newField": "col-800-18014398510254770"
+                    }
+                ],
+                "newKeyField": "key-800-18014398510254771",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "RN0temp-18014398510254773",
+                    "temp-18014398510514210"
+                ],
+                "key": [
+                    [],
+                    ["prefix-800-18014398510484030-a\\.b"]
+                ],
+                "dest": "RN0temp-18014398510558566",
+                "joinType": "rightJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "key-800-18014398510254771",
+                            "destColumn": "key-800-18014398510254771",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-800-18014398510254770",
+                            "destColumn": "col-800-18014398510254770",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-800-18014398510484030",
+                            "destColumn": "prefix-800-18014398510484030",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-800-18014398510484030-a\\.b",
+                            "destColumn": "prefix-800-18014398510484030-a\\.b",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "RN0temp-18014398510558566",
+                "dest": "temp-18014398510643238",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-800-18014398510484030::a\\.b)",
+                        "newField": "col-798-18014398510643231"
+                    },
+                    {
+                        "evalString": "count(prefix-800-18014398510484030::a\\.b)",
+                        "newField": "col-798-18014398510643232"
+                    },
+                    {
+                        "evalString": "count(prefix-800-18014398510484030::a\\.b)",
+                        "newField": "col-798-18014398510643233"
+                    },
+                    {
+                        "evalString": "count(prefix-800-18014398510484030::a\\.b)",
+                        "newField": "col-798-18014398510643234"
+                    },
+                    {
+                        "evalString": "count(prefix-800-18014398510484030::a\\.b)",
+                        "newField": "col-798-18014398510643235"
+                    }
+                ],
+                "newKeyField": "key-798-18014398510643236",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-18014398510643238",
+                "fileName": "export-temp-18014398510643238.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-18014398510643238",
+                "columns": [
+                    {
+                        "columnName": "col-798-18014398510643231",
+                        "headerName": "col-798-18014398510643231"
+                    },
+                    {
+                        "columnName": "col-798-18014398510643233",
+                        "headerName": "col-798-18014398510643233"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 24513,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1-bli-8c1d0d66-47dc41de",
+    "dataflowVersion": 1
+}

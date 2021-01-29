@@ -1,0 +1,441 @@
+{
+    "tables": [
+        {
+            "name": "temp-228518",
+            "columns": [
+                {
+                    "columnName": "RowNum",
+                    "headerAlias": "retCol-56142-234577"
+                },
+                {
+                    "columnName": "ParamVal",
+                    "headerAlias": "retCol-56142-234578"
+                },
+                {
+                    "columnName": "rename-col-56143-223150",
+                    "headerAlias": "retCol-56142-234579"
+                },
+                {
+                    "columnName": "rename-col-56143-223151",
+                    "headerAlias": "retCol-56142-234580"
+                },
+                {
+                    "columnName": "rename-col-56143-223153",
+                    "headerAlias": "retCol-56142-234581"
+                },
+                {
+                    "columnName": "prefix-56143-222804-RowNum",
+                    "headerAlias": "retCol-56142-234582"
+                },
+                {
+                    "columnName": "XcalarRankOver",
+                    "headerAlias": "retCol-56142-234583"
+                },
+                {
+                    "columnName": "XcalarOpCode",
+                    "headerAlias": "retCol-56142-234584"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "loadMemRandParam",
+            "fileName": "udfs/loadMemRandParam.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "loadMemDefault",
+            "fileName": "udfs/loadMemDefault.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.table--55636-220801",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "1000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "loadMemDefault:loadMemory",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.table--55636-220801",
+                "dest": "RN0temp-221189",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-55150-220966-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-55150-220966",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-221189",
+                "dest": "temp-221765",
+                "key": [
+                    {
+                        "name": "prefix-55150-220966::a\\.b",
+                        "keyFieldName": "prefix-55150-220966-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-1-node0-56143-222806",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "1000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "loadMemRandParam:loadMemory",
+                        "parserArgJson": "{\"schema\": \"{'ParamVal': 444, 'Cols': { 'Col0': 'int', 'Col1': 'string', 'Col2': 'string', 'Col3': 'float', 'Col4': 'int'}}\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-1-node0-56143-222806",
+                "dest": "temp-223088",
+                "key": [
+                    {
+                        "name": "RowNum",
+                        "keyFieldName": "prefix-56143-222804-RowNum",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-56143-222804",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-223088",
+                "dest": "temp-223157",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-56143-222804::RowNum",
+                        "destColumn": "RowNum",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::ParamVal",
+                        "destColumn": "ParamVal",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::Col0",
+                        "destColumn": "rename-col-56143-223150",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::Col1",
+                        "destColumn": "rename-col-56143-223151",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::Col2",
+                        "destColumn": "rename-col-56143-223152",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::Col3",
+                        "destColumn": "rename-col-56143-223153",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804::Col4",
+                        "destColumn": "rename-col-56143-223154",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-56143-222804-RowNum",
+                        "destColumn": "rename-col-56143-223155",
+                        "columnType": "DfInt64"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-223157",
+                "dest": "RN0temp-223204",
+                "eval": [
+                    {
+                        "evalString": "int(RowNum)",
+                        "newField": "RowNum"
+                    },
+                    {
+                        "evalString": "int(1)",
+                        "newField": "XcalarRankOver"
+                    },
+                    {
+                        "evalString": "int(1)",
+                        "newField": "XcalarOpCode"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-223204",
+                "dest": "RN0temp-224304",
+                "eval": [
+                    {
+                        "evalString": "gt(float(ParamVal), float(29))"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "RN0temp-224304",
+                    "temp-221765"
+                ],
+                "dest": "RN0temp-226335",
+                "key": [
+                    [
+                        "prefix-56143-222804-RowNum"
+                    ],
+                    [
+                        "prefix-55150-220966-a\\.b"
+                    ]
+                ],
+                "dedup": false,
+                "unionType": "unionStandard",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "RowNum",
+                            "destColumn": "RowNum",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "ParamVal",
+                            "destColumn": "ParamVal",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "rename-col-56143-223150",
+                            "destColumn": "rename-col-56143-223150",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "rename-col-56143-223151",
+                            "destColumn": "rename-col-56143-223151",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "rename-col-56143-223152",
+                            "destColumn": "rename-col-56143-223152",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "rename-col-56143-223153",
+                            "destColumn": "rename-col-56143-223153",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "rename-col-56143-223154",
+                            "destColumn": "rename-col-56143-223154",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "prefix-56143-222804-RowNum",
+                            "destColumn": "prefix-56143-222804-RowNum",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "XcalarRankOver",
+                            "destColumn": "XcalarRankOver",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "XcalarOpCode",
+                            "destColumn": "XcalarOpCode",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-55150-220966",
+                            "destColumn": "prefix-55150-220966",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-55150-220966-a\\.b",
+                            "destColumn": "XcalarOpCode",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-226335",
+                "dest": "temp-228518",
+                "eval": [
+                    {
+                        "evalString": "default:multiJoin(float(XcalarRankOver), float(51))"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-228518",
+                "dest": ".XcalarLRQExport.temp-228518",
+                "columns": [
+                    {
+                        "columnName": "RowNum",
+                        "headerName": "retCol-56142-234577"
+                    },
+                    {
+                        "columnName": "ParamVal",
+                        "headerName": "retCol-56142-234578"
+                    },
+                    {
+                        "columnName": "rename-col-56143-223150",
+                        "headerName": "retCol-56142-234579"
+                    },
+                    {
+                        "columnName": "rename-col-56143-223151",
+                        "headerName": "retCol-56142-234580"
+                    },
+                    {
+                        "columnName": "rename-col-56143-223153",
+                        "headerName": "retCol-56142-234581"
+                    },
+                    {
+                        "columnName": "prefix-56143-222804-RowNum",
+                        "headerName": "retCol-56142-234582"
+                    },
+                    {
+                        "columnName": "XcalarRankOver",
+                        "headerName": "retCol-56142-234583"
+                    },
+                    {
+                        "columnName": "XcalarOpCode",
+                        "headerName": "retCol-56142-234584"
+                    }
+                ],
+                "driverName": "single_csv",
+                "driverParams": "{\"file_path\": \"temp-228518.csv\"}"
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "1.4.1-15184-jenkins-83810139-71f4a862",
+    "dataflowVersion": 1
+}

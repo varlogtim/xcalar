@@ -1,0 +1,499 @@
+{
+    "tables": [
+        {
+            "name": "join#AW26",
+            "columns": [
+                {
+                    "columnName": "rowNum",
+                    "headerAlias": "rowNum"
+                },
+                {
+                    "columnName": "floatCol_count",
+                    "headerAlias": "floatCol_count"
+                },
+                {
+                    "columnName": "stringCol_count",
+                    "headerAlias": "stringCol_count"
+                },
+                {
+                    "columnName": "add_int",
+                    "headerAlias": "add_int"
+                },
+                {
+                    "columnName": "floatCol1",
+                    "headerAlias": "floatCol1"
+                },
+                {
+                    "columnName": "intCol",
+                    "headerAlias": "intCol"
+                },
+                {
+                    "columnName": "floatCol2",
+                    "headerAlias": "floatCol2"
+                },
+                {
+                    "columnName": "intCol2",
+                    "headerAlias": "intCol2"
+                },
+                {
+                    "columnName": "stringCol",
+                    "headerAlias": "stringCol"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "a",
+            "fileName": "udfs/a.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.bli.52666.ds1000",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.bli.52666.ds1000",
+                "dest": "ds1000#AW8",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Random"
+                    }
+                ],
+                "prefix": "ds1000",
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "ds1000#AW8",
+                "dest": "ds1000#AW9",
+                "eval": [
+                    {
+                        "evalString": "int(a:b(ds1000::floatCol), 10)",
+                        "newField": "floatCol"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "ds1000#AW9",
+                "dest": "ds1000#AW10",
+                "eval": [
+                    {
+                        "evalString": "neq(floatCol, 626)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "ds1000#AW10",
+                "dest": "ds1000#AW11",
+                "eval": [
+                    {
+                        "evalString": "int(ds1000::intCol, 10)",
+                        "newField": "intCol"
+                    },
+                    {
+                        "evalString": "int(ds1000::stringCol, 10)",
+                        "newField": "stringCol"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "ds1000#AW11",
+                "dest": "ds1000#AW13",
+                "eval": [
+                    {
+                        "evalString": "concat(string(floatCol), concat(\".Xc.\", string(intCol)))",
+                        "newField": "multiGroupBy01547"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "ds1000#AW13",
+                "dest": "ds1000.index#AW14",
+                "key": [
+                    {
+                        "name": "multiGroupBy01547",
+                        "keyFieldName": "multiGroupBy01547",
+                        "type": "DfString",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "args": {
+                "source": "ds1000#AW11",
+                "dest": "count",
+                "eval": [
+                    {
+                        "evalString": "count(floatCol)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "ds1000.index#AW14",
+                "dest": "gb#AW16",
+                "eval": [
+                    {
+                        "evalString": "count(stringCol)",
+                        "newField": "stringCol_count"
+                    }
+                ],
+                "newKeyField": "multiGroupBy01547",
+                "includeSample": false,
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "ds1000.index#AW14",
+                "dest": "gb#AW15",
+                "eval": [
+                    {
+                        "evalString": "count(floatCol)",
+                        "newField": "floatCol_count"
+                    }
+                ],
+                "newKeyField": "multiGroupBy01547",
+                "includeSample": false,
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "ds1000.index#AW14",
+                "dest": "gb#AW17",
+                "eval": [
+                    {
+                        "evalString": "sum(add(intCol, ^count))",
+                        "newField": "add_int"
+                    }
+                ],
+                "newKeyField": "multiGroupBy01547",
+                "includeSample": false,
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "gb#AW15",
+                    "gb#AW16"
+                ],
+                "dest": "gb#AW18",
+                "joinType": "innerJoin",
+                "columns": [
+                    [],
+                    [
+                        {
+                            "sourceColumn": "multiGroupBy01547",
+                            "destColumn": "multiGroupBy01547_GB185",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "gb#AW18",
+                    "gb#AW17"
+                ],
+                "dest": "gb#AW19",
+                "joinType": "innerJoin",
+                "columns": [
+                    [],
+                    [
+                        {
+                            "sourceColumn": "multiGroupBy01547",
+                            "destColumn": "multiGroupBy01547_GB865",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "gb#AW19",
+                "dest": "gb#AW20",
+                "eval": [
+                    {
+                        "evalString": "int(cut(multiGroupBy01547, 1, \".Xc.\"))",
+                        "newField": "floatCol"
+                    },
+                    {
+                        "evalString": "int(cut(multiGroupBy01547, 2, \".Xc.\"))",
+                        "newField": "intCol"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "ds1000#AW11",
+                "dest": "ds1000.index#AW23",
+                "key": [
+                    {
+                        "name": "floatCol",
+                        "keyFieldName": "floatCol",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "gb#AW20",
+                "dest": "gb.index#AW22",
+                "key": [
+                    {
+                        "name": "floatCol",
+                        "keyFieldName": "floatCol",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "gb.index#AW22",
+                    "ds1000.index#AW23"
+                ],
+                "dest": "join#AW21",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "floatCol",
+                            "destColumn": "floatCol1",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "floatCol",
+                            "destColumn": "floatCol2",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "intCol",
+                            "destColumn": "intCol2",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "args": {
+                "source": [
+                    "gb.index#AW22",
+                    "ds1000.index#AW23"
+                ],
+                "dest": "union",
+                "dedup": false,
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "floatCol",
+                            "destColumn": "floatCol1",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "floatCol",
+                            "destColumn": "floatCol2",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "intCol",
+                            "destColumn": "intCol2",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "join#AW21",
+                "dest": "join#AW24",
+                "columns": [
+                    "floatCol2",
+                    "add_int",
+                    "intCol2",
+                    "floatCol1",
+                    "floatCol_count",
+                    "stringCol",
+                    "stringCol_count",
+                    "intCol",
+                    "ds1000::stringCol",
+                    "ds1000::floatCol",
+                    "ds1000::intCol"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiGetRowNum",
+            "args": {
+                "source": "join#AW24",
+                "dest": "join#AW25",
+                "newField": "rowNum"
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "join#AW25",
+                "dest": "join#AW26",
+                "key": [
+                    {
+                        "name": "rowNum",
+                        "keyFieldName": "rowNum",
+                        "type": "DfInt64",
+                        "ordering": "Descending"
+                    }
+                ],
+                "prefix": "",
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "join#AW26",
+                "targetName": "Default",
+                "targetType": "file",
+                "fileName": "export-join#AW26.csv",
+                "dest": "export-join#AW26.csv",
+                "columns": [
+                    {
+                        "columnName": "rowNum",
+                        "headerName": "rowNum"
+                    },
+                    {
+                        "columnName": "floatCol_count",
+                        "headerName": "floatCol_count"
+                    },
+                    {
+                        "columnName": "stringCol_count",
+                        "headerName": "stringCol_count"
+                    },
+                    {
+                        "columnName": "add_int",
+                        "headerName": "add_int"
+                    },
+                    {
+                        "columnName": "floatCol1",
+                        "headerName": "floatCol1"
+                    },
+                    {
+                        "columnName": "intCol",
+                        "headerName": "intCol"
+                    },
+                    {
+                        "columnName": "floatCol2",
+                        "headerName": "floatCol2"
+                    },
+                    {
+                        "columnName": "intCol2",
+                        "headerName": "intCol2"
+                    },
+                    {
+                        "columnName": "stringCol",
+                        "headerName": "stringCol"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.2.2-1-bli-e84ba62a-13794680",
+    "dataflowVersion": 1
+}

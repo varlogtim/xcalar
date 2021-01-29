@@ -1,0 +1,23 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "joinTable",
+            "columns": [
+                {
+                    "columnName": "fans",
+                    "headerAlias": "fans"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "0.9.10.11-blim-37e7959d",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url file:///var/tmp/qa/yelp/user --format json --name randDs;index --key non-exist --dataset .XcalarDS.randDsxxx --dsttable indexT --prefix p;join --leftTable indexT --rightTable indexT --joinType fullOuterJoin --joinTable joinTable"
+}

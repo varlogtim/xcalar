@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+
+package xcalar.compute.localtypes.Version;
+
+message GetVersionResponse {
+    string version = 1;
+    string thrift_version_signature_full = 2;
+    uint32 thrift_version_signature_short = 3;
+    string xcrpc_version_signature_full = 4;
+    uint32 xcrpc_version_signature_short = 5;
+}
+
+service Version{
+    rpc GetVersion(google.protobuf.Empty) returns (GetVersionResponse);
+}

@@ -1,0 +1,10 @@
+leak:_Py*
+leak:Py*
+leak:createBlockableThread
+leak:LibNs::publishLocal
+leak:LibNs::updateLocal
+leak:AppMgr::createLocalHandler
+leak:AppMgr::updateLocalHandler
+leak:ParentChild::create
+leak:KvStoreLib::dlmUpdateKvStoreCompletion
+leak:KvStoreLib::openLocal

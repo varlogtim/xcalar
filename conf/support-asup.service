@@ -1,0 +1,32 @@
+[Unit]
+Description=Xcalar Support Asup Generator
+After=network-online.target
+Wants=network-online.target
+; no Before, runs concurrently with xcalar-usrnode
+PartOf=xcalar-usrnode.service
+
+[Service]
+Slice=xcalar.slice
+
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+
+ExecStart=/opt/xcalar/bin/asup-service.sh
+
+; this will not block any services that Want it,
+; only services that are After it
+Type=oneshot
+RemainAfterExit=yes
+SendSIGKILL=yes
+TimeoutStopSec=100s
+
+LimitNOFILE=1048576
+
+ReadWriteDirectories=/var/log/xcalar
+WorkingDirectory=/var/tmp/xcalar-root
+
+SyslogIdentifier=xcalar-support-asup

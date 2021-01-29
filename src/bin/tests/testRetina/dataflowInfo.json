@@ -1,0 +1,320 @@
+{
+    "tables": [
+        {
+            "name": "retinaTests-persistRetinaTests-sortedTable",
+            "columns": [
+                {
+                    "columnName": "timeReceived",
+                    "headerAlias": "timeReceived"
+                },
+                {
+                    "columnName": "status",
+                    "headerAlias": "status"
+                },
+                {
+                    "columnName": "Description",
+                    "headerAlias": "Description"
+                },
+                {
+                    "columnName": "numEntries",
+                    "headerAlias": "numEntries"
+                }
+            ]
+        }
+    ],
+    "dataflowVersion": 1,
+    "xcalarVersion": "1.3.2-1-blim-6aaed25d-f9fdabe2",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/retinaParseAccessLog.py",
+            "moduleName": "retinaParseAccessLog",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/retinaDatetime.py",
+            "moduleName": "retinaDatetime",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.temp-298",
+                "loadArgs": {
+                    "parseArgs": {
+                        "parserFnName": "retinaParseAccessLog:parseAccessLog",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "sourceArgsList": [
+                        {
+                            "recursive": false,
+                            "path": "/var/tmp/blim-qa/apacheLogs/access.log",
+                            "targetName": "Default Shared Root",
+                            "fileNamePattern": ""
+                        }
+                    ],
+                    "size": 0
+                }
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.temp-298",
+                "dest": "retinaTests/persistRetinaTests/srcTable",
+                "prefix": "p",
+                "key": [
+                    {
+                        "name": "recordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "p-recordNum",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.temp-560",
+                "loadArgs": {
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"header\", \"fieldDelim\": \",\", \"linesToSkip\": 139706696204288, \"quoteDelim\": \"\\\"\", \"isCRLF\": false, \"recordDelim\": \"\\n\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "sourceArgsList": [
+                        {
+                            "recursive": false,
+                            "path": "/var/tmp/blim-qa/apacheLogs/http-status-cod",
+                            "targetName": "Default Shared Root",
+                            "fileNamePattern": ""
+                        }
+                    ],
+                    "size": 1048576
+                }
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "retinaTests/persistRetinaTests/srcTable",
+                "dest": "retinaTests/persistRetinaTests/mapTable",
+                "eval": [
+                    {
+                        "evalString": "retinaDatetime:getDay(p::time_received_tz_datetimeobj)",
+                        "newField": "timeReceived"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.temp-560",
+                "dest": "retinaTests/persistRetinaTests/rightJoin",
+                "prefix": "p2",
+                "key": [
+                    {
+                        "name": "Value",
+                        "ordering": "Unordered",
+                        "keyFieldName": "p2-Value",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "retinaTests/persistRetinaTests/mapTable",
+                "dest": "retinaTests/persistRetinaTests/leftJoin",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "p::status",
+                        "ordering": "Unordered",
+                        "keyFieldName": "p-status",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "retinaTests/persistRetinaTests/leftJoin",
+                    "retinaTests/persistRetinaTests/rightJoin"
+                ],
+                "key": [
+                    [],
+                    []
+                ],
+                "joinType": "innerJoin",
+                "dest": "retinaTests/persistRetinaTests/joinTable",
+                "columns": [
+                    [],
+                    []
+                ],
+                "evalString": ""
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "retinaTests/persistRetinaTests/joinTable",
+                "dest": "retinaTests/persistRetinaTests/concatTable",
+                "eval": [
+                    {
+                        "evalString": "concat(p::status, concat(\",\", timeReceived))",
+                        "newField": "timeReceivedAndStatus"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "retinaTests/persistRetinaTests/concatTable",
+                "dest": "retinaTests/persistRetinaTests/groupBySrcTable",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "timeReceivedAndStatus",
+                        "ordering": "Unordered",
+                        "keyFieldName": "timeReceivedAndStatus",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "groupAll": false,
+                "source": "retinaTests/persistRetinaTests/groupBySrcTable",
+                "includeSample": true,
+                "dest": "retinaTests/persistRetinaTests/groupByDstTable",
+                "eval": [
+                    {
+                        "evalString": "count(timeReceivedAndStatus)",
+                        "newField": "numEntries"
+                    }
+                ],
+                "newKeyField": "",
+                "icv": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "retinaTests/persistRetinaTests/groupByDstTable",
+                "dest": "retinaTests-persistRetinaTests-sortedTable",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "timeReceivedAndStatus",
+                        "ordering": "Ascending",
+                        "keyFieldName": "timeReceivedAndStatus",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": ""
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "retinaTests-persistRetinaTests-sortedTable",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-retinaTests-persistRetinaTests-sortedTable.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.retinaTests-persistRetinaTests-sortedTable",
+                "columns": [
+                    {
+                        "headerName": "timeReceived",
+                        "columnName": "timeReceived"
+                    },
+                    {
+                        "headerName": "status",
+                        "columnName": "status"
+                    },
+                    {
+                        "headerName": "Description",
+                        "columnName": "Description"
+                    },
+                    {
+                        "headerName": "numEntries",
+                        "columnName": "numEntries"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": ""
+        }
+    ]
+}

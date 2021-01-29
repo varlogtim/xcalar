@@ -1,0 +1,15 @@
+#!/bin/bash
+# This script is invoked by bash function "xcmeter activeNodes"
+
+# Copy conkyrc to /tmp
+cp ~/bin/base_xcalar_stats_fb_conkyrc /tmp/conkyrc.$@
+
+# Augment conkyrc with an execgraph for each node
+numNodes=$@
+for ii in `seq $numNodes`;
+do
+    ii=$(( $ii - 1 ))
+    printf "Node $ii " >> /tmp/conkyrc.$@
+    echo "\${execgraph /home/vjoshi/bin/bin_conky $ii}" >> /tmp/conkyrc.$@
+done
+conky -c /tmp/conkyrc.$@

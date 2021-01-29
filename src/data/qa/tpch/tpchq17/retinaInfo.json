@@ -1,0 +1,18 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq17",
+            "columns": [
+                {
+                    "columnName": "avg_yearly",
+                    "headerAlias": "avg_yearly"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-jenkins-3b38bb0b-a568cfd8",
+    "query": "load --url \"<pathToTpchDatasets>/part.tbl\" --format csv --size 0B  --name \"demo.47465.part\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.47465.part\" --dsttable \"part#R1734\" --prefix part;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;filter --srctable part#R1734 --eval \"and(eq(part::P_BRAND, \\\"Brand#23\\\"), eq(part::P_CONTAINER, \\\"MED BOX\\\"))\"  --dsttable \"part#R1736\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#R1733\" --prefix lineitem;map --srctable \"part#R1736\" --fieldName P_PARTKEY_integer --eval \"int(part::P_PARTKEY, 10)\" --dsttable \"part#R1737\";map --srctable \"lineitem#R1733\" --fieldName L_PARTKEY_integer --eval \"int(lineitem::L_PARTKEY, 10)\" --dsttable \"lineitem#R1738\";index --key \"P_PARTKEY_integer\" --keyType 4  --srctable \"part#R1737\" --dsttable \"part.index#R1740\";index --key \"L_PARTKEY_integer\" --keyType 4  --srctable \"lineitem#R1738\" --dsttable \"lineitem.index#R1741\";join --leftTable \"lineitem.index#R1741\" --rightTable \"part.index#R1740\" --joinType innerJoin  --joinTable \"lineitem_partkey#R1739\" --collisionCheck;map --srctable \"lineitem_partkey#R1739\" --fieldName L_QUANTITY_integer --eval \"int(lineitem::L_QUANTITY, 10)\" --dsttable \"lineitem_partkey#R1754\";index --key \"P_PARTKEY_integer\" --keyType 4  --srctable \"lineitem_partkey#R1754\" --dsttable \"lineitem_partkey.index#R1755\";groupBy --srctable \"lineitem_partkey.index#R1755\" --eval \"avg(L_QUANTITY_integer)\" --fieldName \"average_l_quantity\" --newKeyFieldName \"P_PARTKEY_integer\" --dsttable \"lineitem_partkey-GB#R1756\" --nosample;join --leftTable \"lineitem_partkey.index#R1755\" --rightTable \"lineitem_partkey-GB#R1756\" --joinType fullOuterJoin  --joinTable \"lineitem_partkey-GB#R1757\" --collisionCheck --rightRenameMap P_PARTKEY_integer:P_PARTKEY_integer_GB042:1;map --srctable \"lineitem_partkey-GB#R1757\" --fieldName reduced_average_l_quantity --eval \"mult(average_l_quantity, 0.2)\" --dsttable \"lineitem_partkey-GB#R1763\";map --srctable \"lineitem_partkey-GB#R1763\" --fieldName L_QUANTITY_integer_float --eval \"float(L_QUANTITY_integer)\" --dsttable \"lineitem_partkey-GB#R1767\";filter --srctable lineitem_partkey-GB#R1767 --eval \"lt(L_QUANTITY_integer_float, reduced_average_l_quantity)\"  --dsttable \"lineitem_partkey-GB#R1768\";map --srctable \"lineitem_partkey-GB#R1768\" --fieldName L_EXTENDEDPRICE_float --eval \"float(lineitem::L_EXTENDEDPRICE)\" --dsttable \"lineitem_partkey-GB#R1769\";map --srctable \"lineitem_partkey-GB#R1769\" --fieldName count --eval \"int(1,10)\" --dsttable \"lineitem_partkey-GB#R1770\";index --key \"count\" --keyType 4  --srctable \"lineitem_partkey-GB#R1770\" --dsttable \"lineitem_partkey-GB.index#R1772\";groupBy --srctable \"lineitem_partkey-GB.index#R1772\" --eval \"sum(L_EXTENDEDPRICE_float)\" --fieldName \"total_yearly\" --newKeyFieldName \"count\" --dsttable \"q17_revenue_result#R1771\" --nosample;map --srctable \"q17_revenue_result#R1771\" --fieldName avg_yearly --eval \"div(total_yearly, 7)\" --dsttable \"EndResult-tpchq17\";",
+    "schema hints": [],
+    "retinaVersion": 1,
+    "udfs": []
+}

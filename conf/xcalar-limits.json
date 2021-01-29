@@ -1,0 +1,30 @@
+{
+    "count": 4,
+    "data":
+    [
+        {
+            "name": "core",
+            "flag": "-c",
+            "soft": "unlimited",
+            "hard": "unlimited"
+        },
+        {
+            "name": "nproc",
+            "flag": "-u",
+            "soft": 65536,
+            "hard": "unlimited"
+        },
+        {
+            "name": "nofile",
+            "flag": "-n",
+            "soft": 32768,
+            "hard": 1048576
+        },
+        {
+            "name": "memlock",
+            "flag": "-l",
+            "soft": "unlimited",
+            "hard": "unlimited"
+        }
+    ]
+}

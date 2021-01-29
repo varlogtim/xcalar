@@ -1,0 +1,17 @@
+-c constraints.txt
+ansible
+colorama
+confluent-kafka
+contextvars
+fastavro
+ipython
+jsonpickle
+pandas
+protobuf
+pyparsing
+requests
+requests_kerberos
+sqlparse
+structlog
+tabulate
+transitions

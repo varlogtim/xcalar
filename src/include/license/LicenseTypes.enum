@@ -1,0 +1,23 @@
+enum LicensePlatform {
+    LicPlatformAll:"ALL_PLATFORMS",
+    LicPlatformLinuxX64:"LINUX_X64",
+    LicPlatformMacOs:"MAC_OS",
+};
+
+enum LicenseProduct {
+    LicProductAll:"ALL_PRODUCTS",
+    LicProductXdp:"Xcalar Data Platform",
+    LicProductXdCe:"Xcalar Design CE",
+    LicProductXdEe:"Xcalar Design EE",
+}
+
+enum LicenseProductFamily {
+    LicProductFamAll:"ALL_FAMILIES",
+    LicProductFamXdp:"Xcalar Data Platform",
+    LicProducctFamXd:"Xcalar Design",
+}
+
+enum LicenseExpiryBehavior {
+    LicExpiryBehaviorWarn:"Warn",
+    LicExpiryBehaviorDisable:"Disable",
+}

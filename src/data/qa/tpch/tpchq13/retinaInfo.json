@@ -1,0 +1,31 @@
+{
+    "query": "load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/customer.tbl\" --format csv --size 0B  --name \"demo.60456.customer\" --fielddelim | --crlf --header;index --key \"O_CUSTKEY\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders.index#MQ159\" --sorted=partial --prefix orders;filter --eval \"eq(like(orders::O_COMMENT, \\\"*special*requests*\\\"), false)\" --srctable \"orders.index#MQ159\" --dsttable \"orderFilter\";index --key \"C_CUSTKEY\" --dataset \".XcalarDS.demo.60456.customer\" --dsttable \"customer.index#MQ152\" --sorted=partial --prefix customer;join --leftTable \"customer.index#MQ152\" --rightTable \"orderFilter\" --joinType leftJoin  --joinTable \"cust_order_lojoin#MQ158\" --collisionCheck;groupBy --srctable \"cust_order_lojoin#MQ158\" --eval \"count(orders::O_ORDERKEY)\" --fieldName \"C_CUSTKEY_count\" --newKeyFieldName \"C_CUSTKEY\" --dsttable \"cust_order_lojoin_grpby#MQ163\" --nosample;index --key \"C_CUSTKEY_count\" --keyType 4  --srctable \"cust_order_lojoin_grpby#MQ163\" --dsttable \"cust_order_lojoin_grpby.index#MQ169\";groupBy --srctable \"cust_order_lojoin_grpby.index#MQ169\" --eval \"count(C_CUSTKEY)\" --fieldName \"C_CUSTKEY_count_count\" --newKeyFieldName \"C_CUSTKEY_count\" --dsttable \"final_q13_grpby#MQ168\" --nosample;map --eval \"concat(concat(substring(\\\"000\\\", 1, int(sub(3, len(string(C_CUSTKEY_count))), 10)), string(C_CUSTKEY_count)), concat(\\\"ttxct\\\", concat(substring(\\\"00000\\\", 1, int(sub(5, len(string(C_CUSTKEY_count_count))), 10)), string(C_CUSTKEY_count_count))))\" --srctable \"final_q13_grpby#MQ168\" --fieldName \"Fields_concat\" --dsttable \"final_q13_grpby#MQ191\";index --key \"Fields_concat\" --keyType 1  --srctable \"final_q13_grpby#MQ191\" --dsttable \"EndResult-tpchq13\" --sorted=desc;",
+    "tables": [
+        {
+            "name": "EndResult-tpchq13",
+            "columns": [
+                {
+                    "columnName": "C_CUSTKEY_count_count",
+                    "headerAlias": "C_CUSTKEY_count_count"
+                },
+                {
+                    "columnName": "C_CUSTKEY_count",
+                    "headerAlias": "C_CUSTKEY_count"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "customer--C_CUSTKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "orders--O_CUSTKEY",
+            "type": "DfInt64"
+        }
+    ],
+    "udfs": [],
+    "xcalarVersion": "1.2.1-1-jenkins-417e2c36-fc9162cb",
+    "retinaVersion": 1
+}

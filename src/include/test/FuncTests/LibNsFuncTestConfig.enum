@@ -1,0 +1,15 @@
+enum LibNsFuncTestConfig {
+    LibNsFuncTestNumberOfCores:"LibNsFuncTestNumberOfCores",
+    LibNsFuncTestNumThreadPerCore:"LibNsFuncTestNumThreadPerCore",
+    LibNsFuncTestEnableMultiOpTest:"LibNsFuncTestEnableMultiOpTest",
+    LibNsFuncTestDeletionFreq:"LibNsFuncTestDeletionFreq",
+    LibNsFuncTestNumObjPerThread:"LibNsFuncTestNumObjPerThread",
+    LibNsFuncTestNumLoop:"LibNsFuncTestNumLoop",
+    LibNsFuncTestEnableCreateObjTest:"LibNsFuncTestEnableCreateObjTest",
+    LibNsFuncTestNumObjCreationTest:"LibNsFuncTestNumObjCreationTest",
+    LibNsFuncTestEnablePathInfoTest:"LibNsFuncTestEnablePathInfoTest",
+    LibNsFuncTestNumObjPathInfoTest:"LibNsFuncTestNumObjPathInfoTest",
+    LibNsFuncTestNumPathInfoCalls:"LibNsFuncTestNumPathInfoCalls",
+    LibNsFuncTestEnableHugeObjTest:"LibNsFuncTestEnableHugeObjTest",
+    LibNsFuncTestNumHugeObjects:"LibNsFuncTestNumHugeObjects",
+}

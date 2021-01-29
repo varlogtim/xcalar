@@ -1,0 +1,17 @@
+#!/usr/bin/expect -f
+
+#
+# Signs an RPM with the key configured in ~/.rpmmacros.
+#
+# argv[0]: Path to RPM.
+# argv[1]: Passphrase for private key.
+#
+
+spawn rpm --addsign [lindex $argv 0]
+
+expect -exact "Enter pass phrase: "
+
+send -- [lindex $argv 1]
+send -- "\r"
+
+expect eof

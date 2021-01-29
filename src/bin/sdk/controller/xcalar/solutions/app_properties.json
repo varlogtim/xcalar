@@ -1,0 +1,10 @@
+{
+    "controllerApp": {
+        "stateChange": {
+            "numTries": 20,
+            "sleepIntervalInSec": 10
+        },
+        "appFilePath": "/opt/xcalar/apps/streaming_controller/",
+        "appPropertiesFilePath": "/opt/xcalar/apps/streaming_controller/properties.json"
+    }
+}

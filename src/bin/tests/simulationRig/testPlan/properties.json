@@ -1,0 +1,9 @@
+{
+    "git": {
+        "url": "https://gitlab.com/api/v4",
+        "projectId": "14164315",
+        "accessToken": "jALRsUHgQ2EC52WSg3Wv"
+    },
+    "callbacksPluginName": "test_rig_callbacks",
+    "universeAdapterPluginName": "test_rig_universe_adapter"
+}

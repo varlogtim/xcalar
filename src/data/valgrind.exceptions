@@ -1,0 +1,22 @@
+# NOTE: In order to remove the test from valgrind, delete all the appearance
+# of the test name in this file, INCLUDING COMMENTS.
+#
+# Exception syntax is <programName>
+# memhog, libapisRUST, libapisSanity, liboperatorsSanity and libbplustreeTest allocs a HUGE chunk of memory
+# thereby causing valgrind to run unacceptably slow and unreliably
+memhog
+libapisRUST
+libapisSanity
+libbplustreeSanity
+libbplustreeRUST
+liboperatorsTest
+# XXX - libOperatorsSanity is leaking. Remove as soon as leak is fixed
+liboperatorsSanity
+libdssanity
+libxdbsanity
+libmsgsanity # Overhead of xdbNew(XdbMaxPages) causes valgrind to run slow
+liblogsanity
+libkvstoresanity
+libnstest
+libdagsanity # Overhead of initializing twoPc infrastructure (msgNew, schedNew,
+             # xdbNew...) cause valgrind to run slow

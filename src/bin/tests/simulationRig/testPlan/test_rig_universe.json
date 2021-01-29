@@ -1,0 +1,560 @@
+{
+    "properties": {
+        "deltaIntervalInSeconds": 15,
+        "batchRetentionSeconds": 5000,
+        "minimumSleepIntervalInSeconds": 5,
+        "snapshotDataTargetName": "snapshot",
+        "snapshotMaxRetentionNumber": 5,
+        "snapshotMaxRetentionPeriodSeconds": 604800,
+        "IMDThreadCount": 2,
+        "snapshotThreadCount": 1,
+        "distributer": {},
+        "parallelOperations": true
+    },
+    "params": {
+        "lake_infinity": 999999999,
+        "infdt1": 253399622400000000,
+        "infdt2": 253370782800000000,
+        "PWM_Accounts_Account_Refined_Path": "PWM_Accounts_Account_Refined/",
+        "P2000CodesTB_Path": "P2000CodesTB/",
+        "ClassAssoc_Path": "ClassAssoc/",
+        "Taxlots_Cost_Path": "Taxlots_Cost/",
+        "quantum_products_Path": "quantum_products/",
+        "BDACustIntTBV2_Path": "BDACustIntTB/",
+        "BDADailyBalAccrlTBV2_Path": "BDADailyBalAccrlTB/",
+        "GASSAnnChoiceTB_Path": "GASSAnnChoiceTB/",
+        "DailyAccrualTBV2_Path": "DailyAccrualTBV2/",
+        "Currency_FX_Rate_Path": "Currency_FX_Rate/",
+        "NFidsAccrInfoTB_Path": "NFidsAccrInfoTB/",
+        "GSEntlPosnTB_Path": "GSEntlPosnTB/",
+        "EDSAnnounceTB_Path": "EDSAnnounceTB/",
+        "GASSAnnounceTB_Path": "GASSAnnounceTB/",
+        "GSCVALDailyMarksTB_Path": "GSCVALDailyMarksTB/",
+        "GainLossSTB_Path": "GainLossSTB/",
+        "ISG_Schema_Path": "ISG_Schema/",
+        "LkpAssocTB_Path": "LkpAssocTB/",
+        "PWM_Prices_Latest_Path": "PWM_Prices_Latest/",
+        "PWM_Unit_FI_Accruals_Path": "PWM_Unit_FI_Accruals/",
+        "PositionsSTB_Path": "PositionsSTB/",
+        "StockRetentionTB_Path": "StockRetentionTB/",
+        "ASEVRmpROTB_Path": "ASEVRmpROTB/",
+        "GSEntlInflightTBV2_Path": "GSEntlInflightTB/",
+        "GSGassEresponseTBV2_Path": "GSGassEresponseTB/",
+        "GSUnitEqAccrlTBV2_Path": "GSUnitEqAccrlTB/",
+        "PWM_Prices_Path": "PWM_Prices/",
+        "ASEVSwissAnnoROTB_Path": "asevSwissAnnoROTB/"
+    },
+    "source_defs": {
+        "base_tables_parquet": {
+            "targetName": "data_lake_parquet",
+            "type": "dataset",
+            "parseArgs": {
+                "parquetParser": "native"
+            },
+            "parserFnName": "/sharedUDFs/default:parseParquet",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                },
+                "source_extract_from_ts": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "local_csv": {
+            "targetName": "data_lake_csv",
+            "type": "dataset",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "deskew": false,
+            "forceCast": false,
+            "forceTrim": true,
+            "parserFnName": "default:parseCsv",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                },
+                "source_extract_from_ts": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "snapshot": {
+            "targetName": "snapshot",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "deskew": false,
+            "forceCast": false,
+            "forceTrim": true,
+            "parserFnName": "default:parseCsv",
+            "literals": {}
+        },
+        "kafka-base": {
+            "targetName": "kafka-base",
+            "parserFnName": "parse_kafka_topic",
+            "parserTemplateName": "kafka_import_confluent",
+            "deskew": true,
+            "forceCast": false,
+            "forceTrim": true,
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                },
+                "source_extract_from_ts": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "vac_git": {
+            "type": "application_repository",
+            "args": {
+                "url": "https://gitlab.com/api/v4",
+                "projectId": "14164315",
+                "accessToken": "Tavay5JsBjYzTq25DyXV",
+                "branchName": "test"
+            },
+            "driver": "git.git_api:GitCheckinUtil"
+        }
+    },
+    "sink_defs": {
+        "kafkaexport": {
+            "targetName": "Default Shared Root",
+            "parserTemplateName": "kafka_export_confluent",
+            "args": {
+                "avscFname": "/mnt/xcalar/customer4.avsc",
+                "batchSize": 100,
+                "producerProperties": {
+                    "bootstrap.servers": "kafka-vm-1:9092"
+                }
+            }
+        }
+    },
+    "universeRefs": {
+        "Currency_FX_Rate": {
+            "schema": "Currency_FX_Rate",
+            "from_universe_id": "ref_rig_shared",
+            "name": "Currency_FX_Rate"
+        },
+        "PWM_Accounts_Account_Refined": {
+            "schema": "PWM_Accounts_Account_Refined",
+            "from_universe_id": "ref_rig_shared",
+            "name": "PWM_Accounts_Account_Refined"
+        },
+        "ISG_Schema": {
+            "schema": "ISG_Schema",
+            "from_universe_id": "ref_rig_shared",
+            "name": "ISG_Schema"
+        },
+        "LkpAssocTB": {
+            "schema": "LkpAssocTB",
+            "from_universe_id": "ref_rig_shared",
+            "name": "LkpAssocTB"
+        },
+        "PWM_Prices_Latest": {
+            "schema": "PWM_Prices_Latest",
+            "from_universe_id": "ref_rig_shared",
+            "name": "PWM_Prices_Latest"
+        },
+        "PWM_Unit_FI_Accruals": {
+            "schema": "PWM_Unit_FI_Accruals",
+            "from_universe_id": "ref_rig_shared",
+            "name": "PWM_Unit_FI_Accruals"
+        },
+        "PWM_Prices": {
+            "schema": "PWM_Prices",
+            "from_universe_id": "ref_rig_shared",
+            "name": "PWM_Prices"
+        }
+    },
+    "universe": {
+        "ValuedAsset": {
+            "schema": "Reflow_Driver",
+            "app": {
+                "barrierCallBackName": "decisionCallBack4TestRefiner",
+                "runtimeParamsCallBackName": "getRuntimeParamsForVac",
+                "path": "test_rig_final/customer4_refiner_1/ValuedAsset",
+                "sourceDef": "vac_git"
+            },
+            "sink": {
+                "path": "test_rig_ValueAsset/test_rig_ValueAsset",
+                "sinkDef": "kafkaexport"
+            }
+        },
+        "P2000CodesTB": {
+            "schema": "P2000CodesTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<P2000CodesTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "ClassAssoc": {
+            "schema": "ClassAssoc",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<ClassAssoc_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "Taxlots_Cost": {
+            "schema": "Taxlots_Cost",
+            "source": {
+                "filter": "eq(1,1)",
+                "path": "<Taxlots_Cost_Path>",
+                "isFolder": true,
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "quantum_products": {
+            "schema": "quantum_products",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<quantum_products_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "BDACustIntTBV2": {
+            "schema": "BDACustIntTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<BDACustIntTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "BDACustIntTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "BDADailyBalAccrlTBV2": {
+            "schema": "BDADailyBalAccrlTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<BDADailyBalAccrlTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "BDADailyBalAccrlTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GASSAnnChoiceTB": {
+            "schema": "GASSAnnChoiceTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GASSAnnChoiceTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "GASSAnnChoiceTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "DailyAccrualTBV2": {
+            "schema": "DailyAccrualTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<DailyAccrualTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "DailyAccrualTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "NFidsAccrInfoTB": {
+            "schema": "NFidsAccrInfoTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<NFidsAccrInfoTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GSEntlPosnTB": {
+            "schema": "GSEntlPosnTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GSEntlPosnTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "EDSAnnounceTB": {
+            "schema": "EDSAnnounceTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<EDSAnnounceTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "path": "EDSAnnouncementTB",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GASSAnnounceTB": {
+            "schema": "GASSAnnounceTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GASSAnnounceTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GSCVALDailyMarksTB": {
+            "schema": "GSCVALDailyMarksTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GSCVALDailyMarksTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GainLossSTB": {
+            "schema": "GainLossSTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GainLossSTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "PositionsSTB": {
+            "schema": "PositionsSTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<PositionsSTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "StockRetentionTB": {
+            "schema": "StockRetentionTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<StockRetentionTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "ASEVRmpROTB": {
+            "schema": "ASEVRmpROTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<ASEVRmpROTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            }
+        },
+        "GSEntlInflightTBV2": {
+            "schema": "GSEntlInflightTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GSEntlInflightTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "GSEntlInflightTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "GSGassEresponseTBV2": {
+            "schema": "GSGassEresponseTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GSGassEresponseTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "GSGassEresponseTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "ASEVSwissAnnoROTB": {
+            "schema": "ASEVSwissAnnoROTB",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<ASEVSwissAnnoROTB_Path>",
+                "sourceDef": "base_tables_parquet"
+            }
+        },
+        "GSUnitEqAccrlTBV2": {
+            "schema": "GSUnitEqAccrlTBV2",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<GSUnitEqAccrlTBV2_Path>",
+                "sourceDef": "base_tables_parquet"
+            },
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base",
+                "path": "GSUnitEqAccrlTB",
+                "milestoneId": {
+                    "col": "source_extract_from_ts",
+                    "type": "int"
+                }
+            }
+        },
+        "PositionsSTB_Driver": {
+            "schema": "PositionsSTB_Driver",
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "Reflow_Driver": {
+            "schema": "Reflow_Driver",
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        },
+        "Snapshot_Details": {
+            "schema": "Snapshot_Details",
+            "stream": {
+                "filter": "eq(1,1)",
+                "sourceDef": "kafka-base"
+            }
+        }
+    }
+}

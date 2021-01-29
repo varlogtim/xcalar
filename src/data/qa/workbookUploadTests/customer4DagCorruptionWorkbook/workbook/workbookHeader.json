@@ -1,0 +1,17 @@
+{
+    "xcalarVersion": "1.4.1-1-blim-5e11fda7-148e411a",
+    "workbookVersion": 1,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "workbook/udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "batchcontext",
+            "fileName": "workbook/udfs/batchcontext.py",
+            "udfType": "python"
+        }
+    ]
+}

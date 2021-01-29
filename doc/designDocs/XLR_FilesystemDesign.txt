@@ -1,0 +1,466 @@
+Xcalar Filesystem Design 1.0
+======================================
+
+History
+======================================
+12/5/2013: first draft
+
+References
+======================================
+R1. "Design and implementation of a log structured filesystem", http://www.stanford.edu/~ouster/cgi-bin/papers/lfs.pdf
+2. "File System Design for an NFS File Server Appliance", http://pages.cs.wisc.edu/~remzi/Classes/838/Fall2001/Papers/netapp.pdf
+R3. "FlexVol: Flexible, Efficient File Volume Virtualization in WAFL", https://communities.netapp.com/servlet/JiveServlet/download/38-40085/flexvol_usenix08.pdf
+R4. "ZFS, the last word in filesystems", http://www.cs.utexas.edu/users/dahlin/Classes/GradOS/papers/zfs_lc_preso.pdf
+R5. "ZFS design principles", nexentastor.org/attachments/262/zfs-lk-2012.pdf‎
+R6. "ZFS intent log", http://nex7.blogspot.com/2013/04/zfs-intent-log.html
+R7. "Btrfs: The Linux B-Tree filesystem" http://domino.watson.ibm.com/library/CyberDig.nsf/papers/6E1C5B6A1B6EDD9885257A38006B6130/$File/rj10501.pdf
+
+Design Objective(s)
+======================================
+Build the world's meanest distributed filesystem using only commodity hardware.
+
+Dependencies
+======================================
+libns for locking & caching
+
+Requirements
+======================================
+  Hard
+  ====================================
+  RH1.  POSIX consistency (other consistency models later)
+  RH2.  Scales out to 32-nodes
+  RH3.  Scales out to 2048 spindle/flash devices
+  RH4.  Spans multiple logical devices (raid sets)
+  RH5.  Highly reliable
+  RH6.  Highly available
+  RH7.  Highly performant
+  RH8.  Optimized for databases
+  RH9.  Store LUNs, files, objects, and databases
+
+  Soft
+  ====================================
+  RS1.  Optimized for random writes
+  RS2.  Snapshots
+  RS3.  Clones
+  RS4.  Thin provisioning
+  RS5.  Sparse addressing
+  RS6.  Deduplication
+  RS7.  Compression
+  RS8.  Auto-tiering (DRAM, flash, spindle today; others later)
+
+Non-Requirements
+====================================
+  Hard
+  ==================================
+
+
+  Soft
+  ==================================
+
+
+Design Axioms
+====================================
+
+  Permanent
+  ==================================
+  AP1.  libns' namespace log(s) cannot be stored on the filesystem.
+       Since the filesystem publishes its metadata objects into libns, 
+       filesystem availability depends on libns availability.  During a node 
+       failure, libns becomes unavailable until the namespace is recovered 
+       from its logs.  If its logs were persisted on the filesystem, they
+       could not be read because the filesystem is not available without
+       libns availability.
+
+  Transient
+  ==================================
+
+
+Design Choices
+====================================
+
+Proposal 1: 
+====================================
+Global log structured FS w/ intent logging within the fs, extents, checkpointing, refcounted blocks, multiple inode address spaces, single free space address.
+
+  TODO:
+  ==================================
+  checksums, dedupe, snapshots, clones
+
+  Definitions:
+  ==================================
+  data node: a server running the Xcalar software
+
+  compute node: a server not running the Xcalar software but consumes 
+  storage provided by Xcalar data nodes via NFS, iSCSI, or other transport.
+
+  cluster: a set of up to 32(RH2) data nodes
+
+  persistence medium: a durable data storage area.  Data is preserved in the 
+  absence of power.  Data is addressed contiguously in fixed size sectors.
+
+  physical persistence medium: a persistence medium that is instantiated by a 
+  physical device such as an SSD, flash device, or spinning disk.
+
+  logical persistence medium: a persistence medium that is instantiated 
+  logically by providing a layer of abstraction between itselt and a set of 
+  other persistence media.  e.x. 2 spinning disks may be grouped together to 
+  form 1 logical persistence medium.
+
+  partition: a logical persistence medium allowing for a single persistence 
+  medium to be divided into multiples.  The division occurs on contiguous 
+  address ranges and is set at creation time.  This allows the address 
+  translation to occur arithmatically.
+
+  raidset: a logical persistence medium which provides increased reliability 
+  and performance arithmatically through the use of some form of erasure 
+  encoding.
+
+  raidset number: a unique number identifying a specific raidset within a 
+  cluster
+
+  volume: a single logical instantiation of a filesystem
+
+  user volume: A volume made visible for consumption by compute nodes.  It 
+  is equivalent to a "FlexVol" in NetApp jargon (R3) or a "sub-volume" in 
+  Btrfs jargon (R7).
+
+  user volume number: A unique number identifying a specific user volume within 
+  a cluster.
+
+  system volume: a volume made visible to all data nodes within the cluster 
+  and only to data nodes within the cluster.  The system volume is principally
+  responsible for storing multiple user volumes.  There is 1 single, global, 
+  system volume distributed across every raidset present across the entire 
+  cluster.
+
+  filesystem block: the smallest unit of capacity allocated to a filesystem 
+  object.  (typically 4k).
+
+  extent: a physically contiguous range of filesystem blocks.  it is described 
+  by the raidset number, starting block number, and a length.
+
+  extent tree: a tree of extents providing a map which translates between
+  <file, offset> and <raidset, lba>.  Each key in the map is a file offset 
+  that is guaranteed to be aligned on a filesystem blocksize granularity.
+
+  inode: a filesystem metadata structure principally responsible for 
+  maintaining file metadata (modification time, uid, gid, permissions, etc)
+  as well as the file's extent tree.
+
+  inode address space: the complete collection of inodes associated with a
+  volume.  There are multiple inode address spaces in XcalarFS.
+
+  inode number: a unique number within an inode address space.
+
+  system inode: an inode present in the system volume's inode address space.
+
+  user inode: an inode present in a user volume's inode address space.
+
+  inode table: a logically contiguous layout of every inode within an 
+  inode address space ordered by inode number.  there is 1 inode table per 
+  volume.
+
+  system inode table: the system volume's inode table
+
+  user inode table: a user volume's inode table
+
+  inode free map: a bitmap tracking which inodes within the inode table are 
+  allocated and which are free.  the inode free map is not required for 
+  correctness; the inode allocator could instead simply scan the inode table 
+  looking for empty entries.  the inode free map is a performance optimization.
+
+  system inode free map: the system volume's inode free map
+
+  user inode free map: the user volume's inode free map
+
+  directory entry(dentry): a filesystem metadata structure principally 
+  responsible for maintaining directory content.  Directory content 
+  contains the mapping between file name and inode number for each file 
+  within the directory.
+
+  system dentry: a dentry present within the system volume
+
+  user dentry: a dentry present within a user volume
+
+  root dentry: a volume's root ("/") dentry
+
+  system root dentry: the system volume's root dentry
+
+  user root dentry: a user volume's root dentry
+
+  block reference map: a per raidset table maintaining a reference 
+  count on every physical location maintained at filesystem block size 
+  granularity.  The table is ordered by filesystem block numbers.
+
+  block inverse map: a per raidset table maintaining a list of 
+  <user volume number, user inode number> tuples.  The table is ordered by 
+  filesystem block numbers.  The number of tuples per row is indicated by the 
+  appropriate reference count within the block reference map.
+
+  change vector: a logical filesystem operation requiring eventual 
+  modification to an inode within a volume.  e.x. write "hello" to 
+  /user/mbrown/foo.txt at offset 10.  The operation only includes the user's 
+  data (if any) and the minimum amount of information required to 
+  determine the user's intent.  The operation _DOES NOT_ include any 
+  information regarding updates to filesystem metadata structures such as an
+  inode.
+
+  intent log: sequentially written log of change vectors.  there is 1 intent 
+  log per volume.
+
+  volume super block: a filesystem metadata structure principally responsible 
+  for maintaining volume information such as creation time, last mount
+  time, whether the volume was unmounted cleanly, etc.  Most importantly it 
+  contains the block address of the inode table's inode, the root dentry
+  inode number, and the inode free map inode number.
+
+  user volume super block: a user volume's super block
+
+  system volume super block: the system volume's super block.  In addition to
+  containing the standard super block information, the system volume super 
+  block also contains the inode number(s) for each raidset's block 
+  reference map.
+
+  checkpoint: a stable, consistent filesystem state.
+
+  processing the log for checkpoint: an action that consists of the following 
+  operations:
+     1.  reading the intent log
+     2.  calculating the resulting changes to each volume's inodes, dentries, 
+         inode table, inode free map, and superblock
+     3.  calculating the resulting changes to the system volume's inodes, 
+         dentries, inode table, inode free map, and superblock
+     4.  calculating the resulting changes to each raidset's block reference 
+         map and block inverse map
+     5.  writing the results to the appropriate raidsets
+     6.  updating the raidsets' MBR to point to the new system volume superblock
+
+  Architecture:
+  ==================================
+  TODO
+
+  Detailed Discussion:
+  ==================================
+  INITIALIZATION:
+  Physical persistence medium are divided by class (flash, spindle) and then 
+  organized into groups of 20.  Where possible each member of a group of 20 
+  exists on a unique data node.  A raidset is created from each group of 20 
+  using Reed-Solomon erasure coding with 4 parity media and 16 data media.
+  Each persistence medium stores which raidset it is a member of, and its
+  position within the raidset into the MBR at the beginning of the medium.
+
+  All flash raidsets are partitioned into 2 areas: log partition, fs partition.
+
+  A raidset is created from each flash raidset's log partition using RAID0 
+  striping.  This raidset is used to store the intent log.  Each member of 
+  the log raidset stores which raidset it is a member of and its position 
+  within the raidset into the MBR at the beginning of the log partition.
+
+  A system volume is initialized by allocating block reference maps and block 
+  inverse maps for each raidset(except for the log raidset), the system inode 
+  table, the system inode free map, the system root dentry, and the initial 
+  system superblock.  All metadata structures are initially stored entirely 
+  on flash raidsets.  The initial system superblock's location is stored in 
+  each flash raidset's MBR.
+
+  A user volume is initialized by allocating a user inode table, user inode 
+  free map, user root dentry, and initial user superblock.  The initial user 
+  superblock's location is stored in a file, <user volume number>.sb, on the 
+  system volume.
+
+  BOOTSTRAP:
+  During a data node's boot cycle, each of its physical persistence media's 
+  MBR are read.  Each MBR contains the requisite information to determine which
+  raidset the medium is a member of as well as its position within the raidset.
+  Once all 1st level raidsets are available, the flash raidsets' MBR are read
+  in order to determine each log partition's position within the log raidset.
+  Once the log raidset is available, a flash's fs partition is read to 
+  find the location of the most recent checkpoint of the system volume 
+  superblock.  If the system volume was not unmounted cleanly, the intent log 
+  is then processed for checkpoint.
+
+  LIFE-of-READ:
+  A compute node issues a read of length 5000 bytes to file "/foo.txt" at 
+  offset 16k within user volume 4.  The i/os is processed via the following 
+  filesystem operations:
+      1.  System volume's superblock is read into memory
+      2.  System volume's system inode table inode is read into memory by 
+          using its location stored within the superblock.
+      3.  Using the system root dentry inode number stored in the superblock, 
+          the system root dentry's inode is read into memory by reading it from 
+          the system inode table.
+      4.  The system root dentry is read into memory
+      5.  The system root dentry is searched for <user volume number>.sb in
+          order to obtain the system inode number for the user volume's 
+          superblock.
+      6.  <user volume number>.sb's inode is read into memory by reading it
+          from the system inode table.
+      7.  User volume's user inode table inode is read into memory by 
+          using its location stored within the user superblock.
+      8.  Using the user root dentry inode number stored in the user 
+          superblock, the user root dentry's inode is read into memory by 
+          reading it from the user inode table.
+      9.  The user root dentry is read into memory
+      10.  The user root dentry is searched for foo.txt in order to obtain its 
+           user inode number.
+      11.  foo.txt's user inode is read into memory by reading it from the user
+           inode table.
+      **** In the common case, steps 1-11 are skipped since the requisite
+           metadata structures are likely to already be cached in memory.
+      12.  foo.txt's inode extent tree is traversed searching for the extent 
+           whose key is offset 16k.  The i/o request is rounded up to the 
+           nearest filesystem blocksize multiple.  This number of blocks is
+           read from the location pointed to by the extent.
+      **** 12 may be skipped if the extent's data is already cached in memory
+      13.  The checksum for data read is calculated and compared against the
+           checksums for each filesystem block.
+      14a.  If the checksum matches, the data is returned to compute node.
+      14b.  If the checksum does not match, the data is re-read from the 
+            raidset by exploiting raid parity to recover the corrupted data.
+      14b.1 If the checksum still does not match, the data is re-read from the
+            raidset by exploiting additional parity disks to recover the 
+            corrupted data.
+      14b.2 14b.1 is repeated as necessary until all parity disks have been 
+            exhausted.
+      14b.3 If the checksum of the data still does not match after exhausting 
+            all parity drives, a DATA LOSS has occured.  The I/O is returned to
+            compute node with a failure status.
+
+  LIFE-of-WRITE:
+  (aligned case) - similar to "immediate write" in ZFS jargon (R6)
+  A compute node issues a write of length 64k bytes to file "/foo.txt" at 
+  offset 16k within user volume 4.  The i/o is processed via the following 
+  log & filesystem operations:
+      1.  A flash raidset is chosen to store the data.
+      2.  The requiste number of filesystem blocks are allocated from the 
+          raidset's block reference map.  IN MEMORY ONLY.
+      *** NOTE the portion of the block reference map modified is likely
+          to be cached since blocks are allocated from it sequentially
+      3.  An extent is created to represent the blocks allocated from the 
+          raidset's block reference map.
+      4.  The user data is written to the raidset at the locations allocated 
+          from the block reference map.
+      5.  A change vector is created
+      6.  The change vector is populated containing the write operation, the 
+          write length, the user volume number, the filename, the file 
+          offset, the extent, the data's checksum, and a checksum for the
+          change vector.
+      7.  The change vector is written to the tail of the intent log buffer
+      8.  Depending on policy, the completion may be held off until the 
+          log buffer has captured enough change vectors to fill a flash raidset
+          stripe size.
+      9.  The log buffer commits the set of change vectors from step 8 to the
+          tail of the intent log.
+      10.  The tail of the intent log is advanced.
+  (unaligned case)
+  A compute node issues a write of length 4 bytes to file "/foo.txt" at 
+  offset 16k within user volume 4.  The i/o is processed via the following 
+  log operations:
+      1.  A change vector is created
+      2.  The change vector is populated containing the write operation, the 
+          write length, the user volume number, the filename, the file 
+          offset, the user's data, and a checksum for the change vector.
+      3.  The change vector is written to the tail of the intent log buffer
+      4.  Depending on policy, the completion may be held off until the 
+          log buffer has captured enough change vectors to fill a flash raidset
+          stripe size.
+      5.  The log buffer commits the set of change vectors from step 4 to the
+          tail of the intent log.
+      6.  The tail of the intent log is advanced.
+  COMMIT POLICY:
+  Holding off completions before committing to the log increases i/o latency 
+  to the compute node.  Depending on SLA this may not be acceptable.  
+  Alternatively, under idle loads an individual i/o cannot be held captive 
+  indefinitely.  In either case, when an insufficient number of change vectors
+  can fill a flash raidset stripe width, the unused space is wasted.  We choose
+  to waste space rather than overwrite the intent log tail in order to be
+  crash consistent (RH1, RH5).  If we crashed while overwriting the intent log
+  tail the data written becomes non-deterministic.  We would therefore risk
+  DATA CORRUPTION.
+
+  PROCESSING-THE-LOG-FOR-CHECKPOINT:
+      1.  Write any outstanding change vectors to the log
+      2.  Start reading from the log head, for all change vectors compute
+          all necessary fs metadata changes in-memory.  This may include
+          read-modifies of user data for unaligned user writes.
+      3.  Reads from #2 ideally come from logbuf cache in order to avoid
+          flash I/Os. 
+      4.  Batch write all fs changes in raidset stripe size multiples.
+      5.  Update the flash raidsets' MBR to point to the new system volume
+          superblock
+      6.  Advance the intent log head
+      *** what if we crash between step 5 & 6?
+
+  SCRUBBING:
+      0.  Background processing
+      1.  1 raidset at a time
+      2.  Hint the fastpath that new writes should avoid this raidset while
+          scrubbing
+      3.  Sequentially read raidset looking for checksum mismatches.  Use
+          same code as LIFE-OF-A-READ 13-14b.3
+
+  CLONES:
+  TODO - can we update reference counts lazily?
+      0.  write clone change vector into the log
+      1.  Stall the log
+      2.  Process the log for checkpoint
+      3.  Mark in-memory caches of user volume structures COW
+      4.  Stall future checkpoints
+      5.  Stall background processing
+      6.  Unlock the log
+      7.  Copy the user volume superblock into a new volume's superblock
+      8.  For all inodes & extents: bump block refcounts & append entry to
+          the inverse map
+      9.  Unlock background processing
+      10.  Unlock future checkpoints
+      11.  Acq the clone to the user
+
+  SNAPSHOTS:
+  same as clones, plus mark read-only
+
+  AUTOTIERING:
+  flash-to-spindle:
+     1.  Clock algorithm; keep clock bits per flash fs block in memory
+     2.  While scrubbing, background processor looks for cold blocks via
+         the clock bits
+     3.  If data is cold, lookup the volumes & inodes pointing to the cold
+         blocks via the block inverse map
+     4.  Allocate blocks on spindle raidsets
+     5.  Copy the data into the spindle raidsets
+     6.  Update the volumes & inode extents to point to the spindle raidsets
+     7.  Mark the flash blocks free in the block reference map
+     8.  Copy the volumes & inodes from the flash block inverse map into
+         the appropriate location in the spindle block inverse map
+     9.  Clear the entries in the flash block inverse map
+     10.  Done.
+  spindle-to-flash:
+     1.  During LIFE-OF-A-READ, append step 15:
+       15.  after acq'ing the read to
+            the compute node, exploit same code as flash-to-spindle except
+            in reverse.
+
+  GROOMING / SPACE reclamation:
+     1.  Essentially the same as AUTOTIERING except move the hot data to
+         a different flash raidset
+
+  DEDUPE:
+  TODO - background, exploit existing checksums,
+         exploit block inverse map & refcounts
+
+  DEFRAG:
+  TODO - defrag here means taking a logically contiguous extent tree that
+         is currently physically discontiguous & making it physically 
+         contiguous.  should exploit same code as AUTOTIERING/GROOMING for
+         movement.
+
+  Competing Component / Subcomponent Design Tradeoffs:
+  ==================================
+  TODO
+
+Patents
+====================================
+TODO
+
+Future Directions
+====================================
+TODO

@@ -1,0 +1,5 @@
+enum LibSessionFuncTestConfig {
+    LibSessionFuncTestNumThread:"LibSessionFuncTestNumThread",
+    LibSessionFuncTestNumSessionPerThread:"LibSessionFuncTestNumSessionPerThread",
+    LibSessionQaYelpUserPath:"LibSessionQaYelpUserPath",
+}

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -ne "1" ]; then
+    echo "Usage: $0 nodeId"
+    exit 1
+fi
+
+inputFile="/tmp/xcalar_stat.node.$1.out"
+key="statAbsAllocedMessages"
+
+MaxMessage=`grep --text "$key" $inputFile | cut -d \  -f 2`
+
+AllocedMessage=`grep --text "$key" $inputFile | cut -d \  -f 3`
+
+Percentage=$(( ($AllocedMessage * 100) / $MaxMessage ))
+echo $Percentage

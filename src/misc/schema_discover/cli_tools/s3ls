@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import re
+import sys
+import boto3
+
+USAGE = """
+What it does:
+    - lists "file paths" in s3
+Usage:
+    {script} /<bucket>/<key>
+
+""".format(script=sys.argv[0])
+
+err = sys.stderr.write
+path_regex = re.compile(r'^\/([^\/]+)\/(.*)$')
+
+
+##
+# SETUP Cli args
+def do_usage():
+    err(USAGE)
+    sys.exit(1)
+
+
+if len(sys.argv) != 2:
+    do_usage()
+
+file_path = sys.argv[1]
+
+match = re.match(path_regex, file_path)
+if match is None:
+    err("Path is not in correct format\n")
+    do_usage()
+
+bucket = match.group(1)
+key = match.group(2)
+
+##
+# Setup AWS stuff
+
+client = boto3.client('s3')
+resp = client.list_objects(Bucket=bucket, Prefix=key)
+for contents in resp.get('Contents', []):
+    print(f"/{bucket}/{contents.get('Key')}")

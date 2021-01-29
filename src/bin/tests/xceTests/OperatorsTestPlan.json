@@ -1,0 +1,37 @@
+{
+    "test_name": "test_operators",
+    "comment": "Test FASJ operators.",
+    "udfs": [{
+        "name": "import_data_gen",
+        "sourcePath": "$XLRDIR/src/bin/tests/xceTests/udf/import_data_gen.py"
+    }],
+    "user_name_prefix": "OperatorsTestUser",
+    "session_name_prefix": "OperatorsTestSession",
+    "users_count": 3,
+    "sessions_per_user_count": 3,
+    "dataset_name_prefix": "operators_test_ds",
+    "datasets_count": 3,
+    "dataset_min_rows": 1024,
+    "dataset_max_rows": 5120,
+    "comment_schema_limits": "BulkLoad Parse args seems to limit schema size that can be passed in. So limit schema column count for now.",
+    "schema_min_columns": 1,
+    "schema_max_columns": 10,
+    "column_name_prefix": "col",
+    "table_name_prefix": "operators_test_tab",
+    "scalar_name_prefix": "operators_test_scalar",
+    "query_name_prefix": "op_query",
+    "df_name_prefix": "op_df",
+    "dataset_prefix": "op_ds_prefix",
+    "query_wait_poll_interval_secs": 1,
+    "table_drop_percent": 10,
+    "df_persist_path": ".",
+    "df_restore_path": ".",
+    "quiece_timeout_in_seconds": 600,
+    "limit_saved_dfs_in_teardown": 16,
+    "limit_restored_dfs_in_setup": 16,
+    "dataSource": {
+        "udf": {
+            "function": "import_data_gen:gen_data"
+        }
+    }
+}

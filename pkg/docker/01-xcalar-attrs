@@ -1,0 +1,6 @@
+/etc/xcalar            true  xcalar:xcalar 0644 0755
+/var/log/xcalar        true  xcalar:xcalar 0644 0755
+/var/opt/xcalar        true  xcalar:xcalar 0644 0755
+/var/opt/xcalar/config false xcalar:xcalar 0600 0700
+/var/opt/xcalar/config/defaultAdmin.json false xcalar:xcalar 0600 0700
+/etc/xcalar/default.cfg false xcalar:xcalar 0644 0755

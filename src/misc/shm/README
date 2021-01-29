@@ -1,0 +1,16 @@
+To build:
+g++ shm.c -lrt
+
+This experiment demonstrates the process and cgroup behavior in Linux memory accounting:
+1) When you run this via ./a.out, the parent will mlock 1GB of shared memory, and fork 3 children
+2) Each children will then touch every byte of the 1GB of shared memory.
+
+When looking at /proc/<pid>/smaps, grep for testShm, and notice that RSS for each child is 1GB.
+
+When you put the parent and children in different cgroups, you will see that parent cgroup
+memory controller reports just over 1GB and the cgroup memory controller of the children is
+just a few MB.
+
+This validates "first-touch" memory accounting as documented by the cgroup memory controller
+(Section 2.3 Shared Page Accounting) here:
+https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/memory.html

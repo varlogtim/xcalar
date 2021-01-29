@@ -1,0 +1,238 @@
+{
+    "tables": [
+        {
+            "name": "ds1000#11",
+            "columns": [
+                {
+                    "columnName": "concatCol_explodeString",
+                    "headerAlias": "concatCol_explodeString"
+                },
+                {
+                    "columnName": "concatCol_explodeString_udf",
+                    "headerAlias": "concatCol_explodeString_udf"
+                },
+                {
+                    "columnName": "concatCol",
+                    "headerAlias": "concatCol"
+                },
+                {
+                    "columnName": "intCol",
+                    "headerAlias": "intCol"
+                },
+                {
+                    "columnName": "ds1000::stringCol",
+                    "headerAlias": "stringCol"
+                },
+                {
+                    "columnName": "floatCol",
+                    "headerAlias": "floatCol"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.4.0-1-bli-01fb17f3-ef21fec3",
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadmem.py",
+            "moduleName": "operatorsfunctestloadmem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.admin.60406.ds1000",
+                "loadArgs": {
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadmem:loadRandom",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "sourceArgsList": [
+                        {
+                            "recursive": false,
+                            "path": "1000",
+                            "targetName": "QA memory",
+                            "fileNamePattern": ""
+                        }
+                    ],
+                    "size": 10737418240
+                }
+            },
+            "tag": "",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.admin.60406.ds1000",
+                "dest": "ds1000#4",
+                "prefix": "ds1000",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "ds1000-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            },
+            "tag": "indexFromDataset#4",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds1000#4",
+                "dest": "ds1000#6",
+                "eval": [
+                    {
+                        "evalString": "string(ds1000::intCol)",
+                        "newField": "intCol"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "changeType#6",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds1000#6",
+                "dest": "ds1000#7",
+                "eval": [
+                    {
+                        "evalString": "string(ds1000::floatCol)",
+                        "newField": "floatCol"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "changeType#7",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds1000#7",
+                "dest": "ds1000#8",
+                "eval": [
+                    {
+                        "evalString": "concat(intCol, \",\", ds1000::stringCol, \",\", floatCol, \",\", \",\")",
+                        "newField": "concatCol"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "map#8",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds1000#8",
+                "dest": "ds1000#9",
+                "eval": [
+                    {
+                        "evalString": "explodeString(concatCol, \",\")",
+                        "newField": "concatCol_explodeString"
+                    },
+                    {
+                        "evalString": "explodeString(concatCol, \"2\")",
+                        "newField": "concatCol_explodeString2"
+                    },
+                    {
+                        "evalString": "explodeString(concatCol, \"1\")",
+                        "newField": "concatCol_explodeString1"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "map#9",
+            "state": "Dropped"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "ds1000#9",
+                "dest": "ds1000#11",
+                "eval": [
+                    {
+                        "evalString": "explodeString(operatorsfunctestloadmem:a(concatCol), \",\")",
+                        "newField": "concatCol_explodeString_udf"
+                    }
+                ],
+                "icv": false
+            },
+            "tag": "map#11",
+            "state": "Created"
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "ds1000#11",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-ds1000#11.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.ds1000#11",
+                "columns": [
+                    {
+                        "headerName": "concatCol_explodeString",
+                        "columnName": "concatCol_explodeString"
+                    },
+                    {
+                        "headerName": "concatCol_explodeString_udf",
+                        "columnName": "concatCol_explodeString_udf"
+                    },
+                    {
+                        "headerName": "concatCol",
+                        "columnName": "concatCol"
+                    },
+                    {
+                        "headerName": "intCol",
+                        "columnName": "intCol"
+                    },
+                    {
+                        "headerName": "stringCol",
+                        "columnName": "ds1000::stringCol"
+                    },
+                    {
+                        "headerName": "floatCol",
+                        "columnName": "floatCol"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            },
+            "tag": "",
+            "state": "Created"
+        }
+    ],
+    "dataflowVersion": 1
+}

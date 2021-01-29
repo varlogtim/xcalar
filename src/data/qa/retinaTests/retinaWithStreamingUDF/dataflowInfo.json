@@ -1,0 +1,215 @@
+{
+    "tables": [
+        {
+            "name": "BBO_8000#4",
+            "columns": [
+                {
+                    "columnName": "BBO_8000::Time",
+                    "headerAlias": "Time"
+                },
+                {
+                    "columnName": "BBO_8000::Exchange",
+                    "headerAlias": "Exchange"
+                },
+                {
+                    "columnName": "BBO_8000::Symbol",
+                    "headerAlias": "Symbol"
+                },
+                {
+                    "columnName": "BidPrice_udf",
+                    "headerAlias": "BidPrice_udf"
+                },
+                {
+                    "columnName": "BidPrice",
+                    "headerAlias": "BidPrice"
+                },
+                {
+                    "columnName": "BBO_8000::BidSize",
+                    "headerAlias": "BidSize"
+                },
+                {
+                    "columnName": "BBO_8000::AskPrice",
+                    "headerAlias": "AskPrice"
+                },
+                {
+                    "columnName": "BBO_8000::AskSize",
+                    "headerAlias": "AskSize"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "customer11",
+            "fileName": "udfs/customer11.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "myudfmodule",
+            "fileName": "udfs/myudfmodule.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.admin.95427.BBO_8000",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/customer11BBO/NYSE/BBO_8000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "customer11:fixed_to_dict",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#1",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.admin.95427.BBO_8000",
+                "dest": "BBO_8000#1",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "BBO_8000",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "changeType#2",
+            "state": "Created",
+            "args": {
+                "source": "BBO_8000#1",
+                "dest": "BBO_8000#2",
+                "eval": [
+                    {
+                        "evalString": "int(BBO_8000::BidPrice, 10)",
+                        "newField": "BidPrice"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "map#3",
+            "state": "Created",
+            "args": {
+                "source": "BBO_8000#2",
+                "dest": "BBO_8000#3",
+                "eval": [
+                    {
+                        "evalString": "myudfmodule:addOne(BidPrice)",
+                        "newField": "BidPrice_udf"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "filter#4",
+            "state": "Created",
+            "args": {
+                "source": "BBO_8000#3",
+                "dest": "BBO_8000#4",
+                "eval": [
+                    {
+                        "evalString": "eq(BBO_8000::Exchange, \"P\")"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "BBO_8000#4",
+                "fileName": "export-BBO_8000#4.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.BBO_8000#4",
+                "columns": [
+                    {
+                        "columnName": "BBO_8000::Time",
+                        "headerName": "Time"
+                    },
+                    {
+                        "columnName": "BBO_8000::Exchange",
+                        "headerName": "Exchange"
+                    },
+                    {
+                        "columnName": "BBO_8000::Symbol",
+                        "headerName": "Symbol"
+                    },
+                    {
+                        "columnName": "BidPrice_udf",
+                        "headerName": "BidPrice_udf"
+                    },
+                    {
+                        "columnName": "BidPrice",
+                        "headerName": "BidPrice"
+                    },
+                    {
+                        "columnName": "BBO_8000::BidSize",
+                        "headerName": "BidSize"
+                    },
+                    {
+                        "columnName": "BBO_8000::AskPrice",
+                        "headerName": "AskPrice"
+                    },
+                    {
+                        "columnName": "BBO_8000::AskSize",
+                        "headerName": "AskSize"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-swatanabe-369eadf5-4d99d367",
+    "dataflowVersion": 1
+}

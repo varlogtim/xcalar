@@ -1,0 +1,34 @@
+[Unit]
+Description=Xcalar Management Daemon
+After=network-online.target
+Wants=network-online.target
+Before=xcalar-usrnode.service
+PartOf=xcalar.service
+
+[Service]
+Restart=always
+RestartSec=5
+Slice=xcalar.slice
+MemoryAccounting=true
+
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+
+ExecStart=/opt/xcalar/bin/xcmgmtd-service.sh
+
+KillSignal=SIGTERM
+TimeoutStopSec=5s
+
+LimitNOFILE=1048576
+LimitNPROC=32768
+
+ReadWriteDirectories=/var/log/xcalar
+WorkingDirectory=/var/tmp/xcalar-root
+
+NoNewPrivileges=false
+
+SyslogIdentifier=xcalar-xcmgmtd

@@ -1,0 +1,87 @@
+[
+    {
+        "operation": "XcalarApiBulkLoad",
+        "comment": "",
+        "args": {
+            "dest": ".XcalarDS.stevew.04596.BBO_8000",
+            "loadArgs": {
+                "parseArgs": {
+                    "parserFnName": "streamingmodule:fixed_to_dict",
+                    "parserArgJson": "{}",
+                    "fileNameFieldName": "",
+                    "recordNumFieldName": "",
+                    "allowFileErrors": false,
+                    "allowRecordErrors": false,
+                    "schema": []
+                },
+                "sourceArgsList": [
+                    {
+                        "recursive": false,
+                        "path": "/netstore/datasets/customer11BBO/NYSE/BBO_8000",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    }
+                ],
+                "size": 10737418240
+            }
+        },
+        "tag": "",
+        "state": "Created"
+    },
+    {
+        "operation": "XcalarApiIndex",
+        "comment": "",
+        "args": {
+            "source": ".XcalarDS.stevew.04596.BBO_8000",
+            "dest": "BBO_8000#h50",
+            "prefix": "BBO_8000",
+            "key": [
+                {
+                    "name": "xcalarRecordNum",
+                    "ordering": "Unordered",
+                    "keyFieldName": "BBO_8000-xcalarRecordNum",
+                    "type": "DfInt64"
+                }
+            ],
+            "delaySort": false,
+            "dhtName": "",
+            "broadcast": false
+        },
+        "tag": "indexFromDataset#h50",
+        "state": "Created"
+    },
+    {
+        "operation": "XcalarApiMap",
+        "comment": "",
+        "args": {
+            "source": "BBO_8000#h50",
+            "dest": "BBO_8000#h51",
+            "eval": [
+                {
+                    "evalString": "int(BBO_8000::Time, 10)",
+                    "newField": "Time"
+                }
+            ],
+            "icv": false
+        },
+        "tag": "changeType#h51",
+        "state": "Created"
+    },
+    {
+        "operation": "XcalarApiMap",
+        "comment": "",
+        "args": {
+            "source": "BBO_8000#h51",
+            "dest": "BBO_8000#h52",
+            "eval": [
+                {
+                    "evalString": "add1module:addone(Time)",
+                    "newField": "Time_udf"
+                }
+            ],
+            "icv": false
+        },
+        "tag": "map#h52",
+        "state": "Created"
+    }
+]

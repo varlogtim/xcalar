@@ -1,0 +1,16 @@
+enum XcalarEvalArgType {
+  OptionalArg:"optional",
+  RequiredArg:"required",
+  VariableArg:"variable",
+};
+
+enum AccumulatorType {
+  AccumulatorMax:"max",
+  AccumulatorMin:"min",
+  AccumulatorCount:"count",
+  AccumulatorAvg:"avg",
+  AccumulatorAvgNumeric:"avgNumeric",
+  AccumulatorSumFloat:"sum",
+  AccumulatorSumInteger:"sumInteger",
+  AccumulatorSumNumeric:"sumNumeric",
+};

@@ -1,0 +1,37 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq18",
+            "columns": [
+                {
+                    "columnName": "C_NAME",
+                    "headerAlias": "C_NAME"
+                },
+                {
+                    "columnName": "C_CUSTKEY_integer",
+                    "headerAlias": "C_CUSTKEY_integer"
+                },
+                {
+                    "columnName": "O_ORDERKEY_integer",
+                    "headerAlias": "O_ORDERKEY_integer"
+                },
+                {
+                    "columnName": "O_ORDERDATE",
+                    "headerAlias": "O_ORDERDATE"
+                },
+                {
+                    "columnName": "O_TOTALPRICE_float",
+                    "headerAlias": "O_TOTALPRICE_float"
+                },
+                {
+                    "columnName": "total_quantity",
+                    "headerAlias": "total_quantity"
+                }
+            ]
+        }
+    ],
+    "udfs": [],
+    "query": "load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#Wb26\" --prefix lineitem;index --key \"lineitem::L_ORDERKEY\" --keyType 1  --srctable \"lineitem#Wb26\" --dsttable \"lineitem.index#Wb30\";load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;groupBy --srctable \"lineitem.index#Wb30\" --eval \"sum(int(lineitem::L_QUANTITY, 10))\" --fieldName \"sum_quantity\" --newKeyFieldName \"L_ORDERKEY\" --dsttable \"group_by_lquantity#Wb29\" --nosample;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#Wb28\" --prefix orders;load --url \"<pathToTpchDatasets>/customer.tbl\" --format csv --size 0B  --name \"demo.60456.customer\" --fielddelim | --crlf --header;filter --srctable group_by_lquantity#Wb29 --eval \"gt(sum_quantity,300)\"  --dsttable \"group_by_lquantity#Wb32\";index --key \"orders::O_ORDERKEY\" --keyType 1  --srctable \"orders#Wb28\" --dsttable \"orders.index#Wb34\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.60456.customer\" --dsttable \"customer#Wb22\" --prefix customer;join --leftTable \"orders.index#Wb34\" --rightTable \"group_by_lquantity#Wb32\" --joinType innerJoin  --joinTable \"orders_large_quantity#Wb33\" --collisionCheck;index --key \"customer::C_CUSTKEY\" --keyType 1  --srctable \"customer#Wb22\" --dsttable \"customer.index#Wb37\";index --key \"orders::O_CUSTKEY\" --keyType 1  --srctable \"orders_large_quantity#Wb33\" --dsttable \"orders_large_quantity.index#Wb36\";join --leftTable \"orders_large_quantity.index#Wb36\" --rightTable \"customer.index#Wb37\" --joinType innerJoin  --joinTable \"order_customer#Wb35\" --collisionCheck;index --key \"orders::O_ORDERKEY\" --keyType 1  --srctable \"order_customer#Wb35\" --dsttable \"order_customer.index#Wb39\";join --leftTable \"lineitem.index#Wb30\" --rightTable \"order_customer.index#Wb39\" --joinType innerJoin  --joinTable \"order_customer_lineitem#Wb38\" --collisionCheck;map --eval \"int(lineitem::L_QUANTITY, 10)\" --srctable \"order_customer_lineitem#Wb38\" --fieldName \"L_QUANTITY_integer\" --dsttable \"order_customer_lineitem#Wb44\";map --eval \"int(orders::O_ORDERKEY, 10)\" --srctable \"order_customer_lineitem#Wb44\" --fieldName \"O_ORDERKEY_integer\" --dsttable \"order_customer_lineitem#Wb45\";map --eval \"float(orders::O_TOTALPRICE)\" --srctable \"order_customer_lineitem#Wb45\" --fieldName \"O_TOTALPRICE_float\" --dsttable \"order_customer_lineitem#Wb46\";map --eval \"int(customer::C_CUSTKEY, 10)\" --srctable \"order_customer_lineitem#Wb46\" --fieldName \"C_CUSTKEY_integer\" --dsttable \"order_customer_lineitem#Wb47\";map --eval \"concat(string(O_ORDERKEY_integer), concat(\\\".Xc.\\\", concat(string(O_TOTALPRICE_float), concat(\\\".Xc.\\\", concat(string(orders::O_ORDERDATE), concat(\\\".Xc.\\\", concat(string(C_CUSTKEY_integer), concat(\\\".Xc.\\\", string(customer::C_NAME)))))))))\" --srctable \"order_customer_lineitem#Wb47\" --fieldName \"multiGroupBy21283\" --dsttable \"order_customer_lineitem#Wb57\";index --key \"multiGroupBy21283\" --keyType 1  --srctable \"order_customer_lineitem#Wb57\" --dsttable \"order_customer_lineitem.index#Wb58\";groupBy --srctable \"order_customer_lineitem.index#Wb58\" --eval \"sumInteger(L_QUANTITY_integer)\" --fieldName \"total_quantity\" --newKeyFieldName \"multiGroupBy21283\" --dsttable \"large_volume_customer#Wb56\" --nosample;map --eval \"int(cut(multiGroupBy21283, 1, \\\".Xc.\\\"))\" --srctable \"large_volume_customer#Wb56\" --fieldName \"O_ORDERKEY_integer\" --dsttable \"large_volume_customer#Wb59\";map --eval \"float(cut(multiGroupBy21283, 2, \\\".Xc.\\\"))\" --srctable \"large_volume_customer#Wb59\" --fieldName \"O_TOTALPRICE_float\" --dsttable \"large_volume_customer#Wb60\";map --eval \"cut(multiGroupBy21283, 3, \\\".Xc.\\\")\" --srctable \"large_volume_customer#Wb60\" --fieldName \"O_ORDERDATE\" --dsttable \"large_volume_customer#Wb61\";map --eval \"int(cut(multiGroupBy21283, 4, \\\".Xc.\\\"))\" --srctable \"large_volume_customer#Wb61\" --fieldName \"C_CUSTKEY_integer\" --dsttable \"large_volume_customer#Wb62\";map --eval \"cut(multiGroupBy21283, 5, \\\".Xc.\\\")\" --srctable \"large_volume_customer#Wb62\" --fieldName \"C_NAME\" --dsttable \"large_volume_customer#Wb63\";map --eval \"concat(concat(substring(\\\"0000000\\\", 1, int(sub(7, len(cut(string(O_TOTALPRICE_float), 1, \\\".\\\"))), 10)), string(O_TOTALPRICE_float)), concat(\\\"ttxct\\\", O_ORDERDATE))\" --srctable \"large_volume_customer#Wb63\" --fieldName \"Fields_concat\" --dsttable \"large_volume_customer#Wb77\";index --key \"Fields_concat\" --keyType 1  --srctable \"large_volume_customer#Wb77\" --dsttable \"EndResult-tpchq18\" --sorted=desc;",
+    "xcalarVersion": "1.2.1-1044-xcalardev-67cf7211-67cf7211",
+    "retinaVersion": 1
+}

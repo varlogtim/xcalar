@@ -1,0 +1,41 @@
+FROM centos:7
+MAINTAINER Xcalar, Inc <info@xcalar.com>
+
+ENV container docker
+# See: https://hub.docker.com/_/centos/
+RUN cd /lib/systemd/system/sysinit.target.wants/ && \
+    for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -vf $i; done ; \
+    rm -vf /lib/systemd/system/multi-user.target.wants/*; \
+    rm -vf /etc/systemd/system/*.wants/*; \
+    rm -vf /lib/systemd/system/local-fs.target.wants/*; \
+    rm -vf /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -vf /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -vf /lib/systemd/system/basic.target.wants/*; \
+    rm -vf /lib/systemd/system/anaconda.target.wants/*; \
+    mkdir -p /etc/selinux/targeted/contexts/ ; \
+    echo '<busconfig><selinux></selinux></busconfig>' > /etc/selinux/targeted/contexts/dbus_contexts
+RUN curl -fL https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz | tar zxf - --transform=s,^./bin,./usr/bin,g --exclude ./usr/bin/execlineb \
+    && curl -fL https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 -o /usr/bin/gosu \
+    && chmod +x /usr/bin/gosu \
+    && curl -L https://get.docker.com/builds/Linux/x86_64/docker-1.13.1.tgz | tar zxvf - -C /usr/local docker/docker \
+    && ln -sfn ../docker/docker /usr/local/bin/docker \
+    && groupdel input \
+    && groupadd --system -g 999 docker \
+    && groupadd --system input
+ADD ./deps.txt /root/
+RUN yum install -y epel-release sudo openssh-server openssh-clients syslog-ng cronie logrotate curl ca-certificates \
+    && yum install -y $(cat /root/deps.txt) && yum clean all && rm -rf /var/cache/yum/*
+RUN groupadd --system sudo && mkdir -m 0755 -p /etc/sudoers.d && echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99-sudo && chmod 0440 /etc/sudoers.d/99-sudo
+RUN sed -i -E -e 's/Defaults\s+requiretty/Defaults\t!requiretty/g' /etc/sudoers
+RUN groupadd -g 1000 xctest && useradd -u 1000 -g 1000 -m -s /bin/bash xctest && mkdir -m 0700 -p /home/xctest/.ssh/
+ADD .ssh/id_xctest.pub /home/xctest/.ssh/authorized_keys
+RUN usermod -aG sudo,docker xctest \
+    && chown -v -R xctest:xctest /home/xctest \
+    && chmod 0755 /home/xctest \
+    && chmod 0600 /home/xctest/.ssh/authorized_keys \
+    && groupadd -g 1001 xcalar \
+    && useradd -u 1001 -g 1001 -m -s /bin/bash xcalar \
+    && mkdir -m 0700 -p /var/opt/xcalar/config/ \
+    && chown -R xcalar:xcalar /var/opt/xcalar
+
+# vim: ft=dockerfile

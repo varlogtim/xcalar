@@ -1,0 +1,12 @@
+enum LibQmFuncTestConfig {
+    LibQmNumQueryCreationThread:"LibQmNumQueryCreationThread",
+    LibQmNumLoop:"LibQmNumLoop",
+    LibQmNumStateRequestThread:"LibQmNumStateRequestThread",
+    LibQmNumCancellationThread:"LibQmNumCancellationThread",
+    LibQmNumLoopCheckingState:"LibQmNumLoopCheckingState",
+    LibQmNumLoopCancelQuery:"LibQmNumLoopCancelQuery",
+    LibQmQaYelpUserPath:"LibQmQaYelpUserPath2",
+    LibQmQaNonstopRetinaDir:"LibQmQaNonstopRetinaDir",
+    LibQmQaErrorRetinaDir:"LibQmQaErrorRetinaDir",
+    LibQmQueryLatencyOptimized:"LibQmQueryLatencyOptimized",
+}

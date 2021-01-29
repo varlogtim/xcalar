@@ -1,0 +1,17 @@
+{
+    "xcalarVersion": "1.4.1-2348-xcalardev-583e564f-4d99d367",
+    "workbookVersion": 1,
+    "workBookHealth": "Good",
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "workbook/udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "daxfns",
+            "fileName": "workbook/udfs/daxfns.py",
+            "udfType": "python"
+        }
+    ]
+}

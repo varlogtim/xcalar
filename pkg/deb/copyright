@@ -1,0 +1,22 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: xcalar
+Source: http://www.xcalar.com
+
+Files: *
+Copyright: 2015 Xcalar Inc.
+
+# If you want to use GPL v2 or later for the /debian/* files use
+# the following clauses, or change it to suit. Delete these two lines
+Files: debian/*
+Copyright: 2015 Xcalar Inc.  <support@xcalar.com>
+
+ No use, or distribution, of this source code is permitted in any form or
+ means without a valid, written license agreement with xcalar, Inc.
+ Please refer to the included "COPYING" file for terms and conditions
+ regarding the use and redistribution of this software.
+
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.
+# Please avoid to pick license terms that are more restrictive than the
+# packaged work, as it may make Debian's contributions unacceptable upstream.

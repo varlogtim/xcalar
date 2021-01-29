@@ -1,0 +1,142 @@
+Xcalar Ager - large variable extent cooperative paging
+======================================
+
+History
+======================================
+mbrown - 3/21/2016 - initial cut
+
+References
+======================================
+
+Design Objective(s)
+======================================
+1.  Allow Xcalar LRQ to process dataset sizes which exceed the size of system
+DRAM even after fields-of-interest have been filtered.
+2.  Allow interactive users to continue working even after the aggregate 
+output of their work exceeds the size of system DRAM.
+
+Dependencies
+======================================
+
+Requirements
+======================================
+  Hard
+  ====================================
+  R1.  Support serializing to HDFS
+  R2.  Recover DRAM 
+
+  Soft
+  ====================================
+  R9.  Support serializing to local flash
+
+Non-Requirements
+====================================
+  Hard
+  ==================================
+
+  Soft
+  ==================================
+
+Design Axioms
+====================================
+  Permanent
+  ==================================
+  A1.  Worst case total number of extents in the system is O(10k)
+  A2.  Object ids are globally unique, independent of namespace
+  A3.  Object names are unique per-namespace, but not across all
+       namespaces.
+
+  Transient
+  ==================================
+  A4.  Extent access patterns are sequential for both LRQ and interactive
+       queries
+
+Design Choices
+====================================
+Proposal 1: 
+====================================
+  Public types:
+  ----------------------------------
+  NsHandle -> represents an independent namespace
+  NsObject -> represents a xcalar distributed object
+  Xid -> used to uniquely identify an object
+
+  Public interfaces:
+  ----------------------------------
+  Initialization/Destruction:
+    init() -> initialize the namespace library
+    destroy() -> uninitialize the namespace library
+    createNamespace() -> create & initialize a new namespace
+    destroyNamespace() -> destroy a namespace
+    createObj(NsHandle, params...) -> creates an object
+    deleteObj(NsObject) -> destroys an object
+    deleteAllObjs() -> delete all objects
+
+  Object lookup & referencing:
+    lookupByName(NsHandle, name) -> returns NsObject || NULL
+    lookupById(Xid) -> returns NsObject || NULL
+    put(NsObject) -> drops reference on obj && destroys it if refCount==0
+
+  Utilities:
+    putAndDelete(NsObject) -> convenient composition of put() & deleteObj()
+    getXid(NsObject) -> returns an object id
+    getXidFromName(NsHandle, name) -> returns an object name given its id
+    getRefCountFromName(NsHAndle, name) -> returns current object reference
+                                           count given a name
+    getRefCount(NsObject) -> returns current object reference count
+    getName(NsObject) -> returns object name
+    getNameFromXid(Xid) -> returns an object name given its id
+    getList(NsHandle) -> returns a list of object ids
+
+  Architecture:
+  ==================================
+
+  -----------------
+  | libns clients |
+  -----------------
+     |
+     V
+  ---------------     ----------     -----------
+  | libns       | <-> - libgvm - <-> - twoPc() -
+  |             |     ----------     -----------
+  |             |____________________________
+  | objNameHash -> map of all named objects |
+  |                                         |
+  | objXidHash  -> map of all objects       |
+  ------------------------------------------|
+
+  Detailed Discussion:
+  ==================================
+  Internally, libns leverages the functionality provided by GVM (globally
+  visable memory) to publish or remove objects on all nodes in a xcalar 
+  cluster.  Locally, objects are allocated at createObj() time and tracked
+  locally in 2 hash tables; the first facilitating lookup-by-xid and the
+  second facilitating lookup-by-name.
+
+  Namespaces _are not_ explicitly tracked as independent entities by libns.
+  Instead, namespaces are tracked implicitly.  This works by creating a 
+  new namespace id upon every createNamespace() call.  This namespace id is
+  embedded within the NsHandle and managed only locally (exploiting A6).
+  Any objects that are created are tagged with this namespace id.  Any node
+  can find all of the objects associated with a specific namespace by walking
+  the id hash table and searching for objects tagged with this namespace id.
+  
+  Competing Component / Subcomponent Design Tradeoffs:
+  ==================================
+  Tracking namespaces implicitly simplifies the implementation as we do not
+  need to explicitly allocate & publish them as independent entities via GVM.
+  The cost is finding all objects associated with a namespace is O(n) rather
+  than O(1) + increased risk of lock contention on the hashes.  Both drawbacks
+  are deemed acceptable due to A5.
+
+Data Integrity
+====================================
+Objects are persisted with liblog & therefore benefit from log entry checksums
+and preservation of older entries.
+
+Patents
+====================================
+
+Future Directions
+====================================
+

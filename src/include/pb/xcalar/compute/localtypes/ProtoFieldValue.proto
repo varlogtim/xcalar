@@ -1,0 +1,51 @@
+// Copyright 2017 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+option cc_enable_arenas = true;
+
+// option optimize_for = LITE_RUNTIME;
+import "google/protobuf/timestamp.proto";
+
+// Basic unit represent a value in a record in a dataset
+message ProtoFieldValue {
+    message ArrayValue {
+        repeated ProtoFieldValue elements = 1;
+    };
+    message ObjectValue {
+        map<string, ProtoFieldValue> values = 1;
+    };
+    message NumericVal {
+        repeated uint64 val = 1;
+    };
+
+    // The int values use the 'sint' types in order to more predictably
+    // handle signed integers; using int32 would result in negative numbers
+    // taking up a lot of space
+    oneof dataValue {
+        string stringVal = 1;
+        bool boolVal = 2;
+        uint32 uint32Val = 3;
+        sint32 int32Val = 4;
+        uint64 uint64Val = 5;
+        sint64 int64Val = 6;
+        float float32Val = 7;
+        double float64Val = 8;
+        bytes byteVal = 9;
+
+        ArrayValue arrayValue = 10;
+        ObjectValue objectValue = 11;
+
+        google.protobuf.Timestamp timeVal = 12;
+        NumericVal numericVal = 13;
+    };
+};
+
+message ProtoRow {
+    map<string, ProtoFieldValue> fields = 1;
+}

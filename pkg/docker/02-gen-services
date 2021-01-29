@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Generate s6-overlay (https://github.com/just-containers/s6-overlay) compatible
+# init scripts. These scripts (*/run) execute a single process that is monitored
+# by the s6-init process (/init) set as ENTRYPOINT in the Dockerfile.
+#
+
+if [ -r /etc/default/xcalar ]; then
+    . /etc/default/xcalar
+fi
+export XLRDIR="${XLRDIR:-/opt/xcalar}"
+XCE_CONFIG="${XCE_CONFIG:-/etc/xcalar/default.cfg}"
+NUM_NODES="$(awk -F= '/Node.NumNodes/{print $2}' $XCE_CONFIG)"
+NUM_LOCAL_NODES="$(grep -P "Node\.\d+\.IpAddr=($(hostname -s)|$(hostname -f))" -c $XCE_CONFIG)"
+if [ "$NUM_LOCAL_NODES" != "1" ]; then
+    echo "There must be exactly 1 local node"
+    exit 1
+fi
+# This returns all the nodeIDs matching hostname as space delimited numbers
+NODE_ID="$(grep -oP "Node\.\K\d+(?=\.IpAddr=($(hostname -s)|$(hostname -f)))" $XCE_CONFIG)"
+svc=/etc/services.d/usrnode-${NODE_ID}
+mkdir -p $svc
+cat > $svc/run <<-EOF
+#!/usr/bin/with-contenv sh
+exec ${XLRDIR}/bin/usrnode --nodeId ${NODE_ID} --numNodes ${NUM_NODES} --configFile ${XCE_CONFIG}
+EOF
+
+mkdir -p /etc/services.d/xcmgmtd/
+cat > /etc/services.d/xcmgmtd/run<<EOF
+#!/usr/bin/with-contenv sh
+exec ${XLRDIR}/bin/xcmgmtd ${XCE_CONFIG}
+EOF
+
+mkdir -p /etc/services.d/rsyslog/
+cat > /etc/services.d/rsyslog/run<<EOF
+#!/usr/bin/with-contenv sh
+exec /usr/sbin/rsyslogd -n -c5
+EOF
+
+#mkdir -p /etc/services.d/apache2/
+#cat > /etc/services.d/apache2/run<<EOF
+##!/usr/bin/with-contenv sh
+#/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
+#EOF
+
+find /etc/services.d -type f -name run -exec chmod +x {} \;

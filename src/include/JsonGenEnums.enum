@@ -1,0 +1,16 @@
+enum JgFieldType {
+    JgString = 0,
+    JgUnsignedInteger = 1,
+    JgSignedInteger = 2,
+    JgFloat = 3,
+    JgBool = 4,
+    JgStringInt = 5,
+    JgStringFloat = 6,
+    JgPrimaryKey = 7,
+    JgUnsignedInteger32 = 8,
+    JgSignedInteger32 = 9,
+    JgFloat32 = 10,
+    JgArray = 11,
+    JgObject = 12,
+    JgTypeUnknown = 13,
+};

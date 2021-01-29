@@ -1,0 +1,51 @@
+############## PAPERS ##############
+
+Data integrity:
+"Triple Parity RAID and Beyond" -http://sites.google.com/site/distributedstoragetheory/ACM_Leventhal_Review.pdf
+"An Analysis of Data Corruption in the Storage Stack" -http://www.cs.cmu.edu/~bianca/fast08.pdf
+"Understanding the Robustness of SSDs under Power Fault" -https://www.usenix.org/system/files/conference/fast13/fast13-final80.pdf
+
+Erasure encoding:
+"Row-Diagonal Parity for Double Disk Failure Correction" -http://static.usenix.org/event/fast04/tech/corbett/corbett_html/
+"RAID Triple Parity" -https://communities.netapp.com/servlet/JiveServlet/download/38-40564/RTP_Goel.pdf
+"XORing Elephants: Novel Erasure Codes for Big Data" -http://www-scf.usc.edu/~asteris/repository/PVLDB2013-XORingElephants.pdf
+"Erasure coding in windows azure storage" -http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-36-55-papers/0820.WindowsAzureStorage_2D00_ErasureCoding.pdf
+
+Local Filesystems:
+"Design and implementation of a log structured filesystem" -http://www.stanford.edu/~ouster/cgi-bin/papers/lfs.pdf
+"File System Design for an NFS File Server Appliance" -http://pages.cs.wisc.edu/~remzi/Classes/838/Fall2001/Papers/netapp.pdf
+"SnapMirror: File-System-Based Asynchronous Mirroring for Disaster Recovery" -http://bnrg.eecs.berkeley.edu/~randy/Courses/CS294.F07/9.2.pdf
+"FlexVol: Flexible, Efficient File Volume Virtualization in WAFL" -https://communities.netapp.com/servlet/JiveServlet/download/38-40085/flexvol_usenix08.pdf
+"BTRFS: The Linux B-tree Filesystem" -http://domino.watson.ibm.com/library/CyberDig.nsf/papers/6E1C5B6A1B6EDD9885257A38006B6130/$File/rj10501.pdf
+"The Zettabyte File System" -http://users.soe.ucsc.edu/~scott/courses/Fall04/221/zfs_overview.pdf
+
+Distributed/Clustered Filesystems:
+"The Google File System" -http://www.cs.ucla.edu/classes/fall03/cs239/l1/papers/SOSP03/google.pdf
+"The Hadoop Distributed File System" -http://storageconference.org/2010/Papers/MSST/Shvachko.pdf
+"PVFS: A Parallel File System for Linux Clusters" -http://nanobio.kangwon.ac.kr/home/page/semFile/2002sum_data/1_06.pdf
+"Ceph: A Scalable, High-Performance Distributed File System -http://paperhub.s3.amazonaws.com/9fc432b16fb9af82b224f070f12e53e9.pdf
+"GPFS: A Shared-Disk File System for Large Computing Clusters" -http://faculty.utpa.edu/reillycf/courses/CSCI6175-F11/papers/GPFS.pdf
+
+Databases:
+"Bigtable: A Distributed Storage System for Structured Data" -http://brewerja.wcrews.net/Cloud/BigTable.pdf
+"Spanner: Google's Globally Distributed Database" -https://www.usenix.org/system/files/conference/osdi12/osdi12-final-16.pdf
+"Cassandra - A Decentralized Structured Storage System" -http://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf
+"Greenplum - A Unified Engine for RDBMS and MapReduce" -http://docs.huihoo.com/greenplum/Greenplum-MapReduce-Whitepaper.pdf
+"Dremel: Interactive Analysis of Web-Scale Datasets" -http://research.google.com/pubs/archive/36632.pdf
+
+Distrubted Systems:
+"Time, Clocks, and the Ordering of Events in a Distributed System" -http://www.cs.utexas.edu/users/lorenzo/corsi/cs380d/papers/time-clocks.pdf
+
+Misc:
+"The Spring Name Service" -http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.54.3439&rep=rep1&type=pdf
+"The case for RAMClouds: scalable high-performance storage entirely in DRAM" -http://ilpubs.stanford.edu:8090/942/1/ramcloud.pdf
+"MapReduce: Simplified Data Processing on Large Clusters" -http://news.cs.nyu.edu/~jinyang/sp07/papers/mapreduce.pdf
+"The Log-Structured Merge-Tree (LSM-Tree)" -http://staff.ustc.edu.cn/~jpq/paper/flash/1996-The%20Log-Structured%20Merge-Tree%20%28LSM-Tree%29.pdf
+"The Ubiquitous B-Tree", -http://people.cs.aau.dk/~simas/aalg06/UbiquitBtree.pdf
+
+############## BOOKS ##############
+
+"Hadoop: The Definitive Guide" -http://shop.oreilly.com/product/9780596521981.do
+"HBase: The Definitive Guide" -http://shop.oreilly.com/product/0636920014348.do
+
+"Transaction Processing: Concepts and Techniques" -http://www.amazon.com/Transaction-Processing-Concepts-Techniques-Management/dp/1558601902

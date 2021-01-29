@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package xcalar.compute.localtypes.SchemaLoad;
+
+// XXX leaving this generic for the time being
+message AppRequest {
+    string json = 1;
+};
+
+message AppResponse {
+    string json = 1;
+};
+
+service SchemaLoad {
+    rpc AppRun (AppRequest) returns (AppResponse);
+};

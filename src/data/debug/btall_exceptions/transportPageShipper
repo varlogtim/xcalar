@@ -1,0 +1,6 @@
+sem_wait
+DedicatedThread::suspendRunningSchedObj
+SchedObject::waitMultiple
+Semaphore::wait
+TransportPageMgr::getTransportPageMsg
+TransportPageMgr::ship

@@ -1,0 +1,391 @@
+{
+    "tables": [
+        {
+            "name": "j#5",
+            "columns": [
+                {
+                    "columnName": "nation::N_NATIONKEY",
+                    "headerAlias": "N_NATIONKEY"
+                },
+                {
+                    "columnName": "nation::N_NAME",
+                    "headerAlias": "N_NAME"
+                },
+                {
+                    "columnName": "N_REGIONKEY",
+                    "headerAlias": "N_REGIONKEY"
+                },
+                {
+                    "columnName": "nation::N_COMMENT",
+                    "headerAlias": "N_COMMENT"
+                },
+                {
+                    "columnName": "nation::column4",
+                    "headerAlias": "column4"
+                },
+                {
+                    "columnName": "R_REGIONKEY",
+                    "headerAlias": "R_REGIONKEY"
+                },
+                {
+                    "columnName": "region::R_NAME",
+                    "headerAlias": "R_NAME"
+                },
+                {
+                    "columnName": "region::R_COMMENT",
+                    "headerAlias": "R_COMMENT"
+                },
+                {
+                    "columnName": "region::column3",
+                    "headerAlias": "column3"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "N_NATIONKEY",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "N_NAME",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "N_REGIONKEY",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "N_COMMENT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column4",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "R_REGIONKEY",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "R_NAME",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "R_COMMENT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "column3",
+            "type": "DfUnknown"
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.admin.56181.nation",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpch_sf1/nation.tbl",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "N_NATIONKEY",
+                                "destColumn": "N_NATIONKEY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "N_NAME",
+                                "destColumn": "N_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "N_REGIONKEY",
+                                "destColumn": "N_REGIONKEY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "N_COMMENT",
+                                "destColumn": "N_COMMENT",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "column4",
+                                "destColumn": "column4",
+                                "columnType": "DfString"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#1",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.admin.56181.nation",
+                "dest": "nation#1",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "nation",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "changeType#3",
+            "state": "Created",
+            "args": {
+                "source": "nation#1",
+                "dest": "nation#3",
+                "eval": [
+                    {
+                        "evalString": "int(nation::N_REGIONKEY, 10)",
+                        "newField": "N_REGIONKEY"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.admin.74372.region",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpch_sf1/region.tbl",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":true,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "R_REGIONKEY",
+                                "destColumn": "R_REGIONKEY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "R_NAME",
+                                "destColumn": "R_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "R_COMMENT",
+                                "destColumn": "R_COMMENT",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "column3",
+                                "destColumn": "column3",
+                                "columnType": "DfString"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#2",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.admin.74372.region",
+                "dest": "region#2",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "region",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "changeType#4",
+            "state": "Created",
+            "args": {
+                "source": "region#2",
+                "dest": "region#4",
+                "eval": [
+                    {
+                        "evalString": "int(region::R_REGIONKEY, 10)",
+                        "newField": "R_REGIONKEY"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "{\"userComment\":\"\",\"meta\":{\"operation\":\"Cross Join\"}}",
+            "tag": "join#5",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "nation#3",
+                    "region#4"
+                ],
+                "dest": "j#5",
+                "joinType": "crossJoin",
+                "key": [
+                    [],
+                    []
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "nation",
+                            "destColumn": "nation",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "N_REGIONKEY",
+                            "destColumn": "N_REGIONKEY",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "region",
+                            "destColumn": "region",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "R_REGIONKEY",
+                            "destColumn": "R_REGIONKEY",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": "eq(N_REGIONKEY, R_REGIONKEY)"
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "j#5",
+                "fileName": "export-j#5.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.j#5",
+                "columns": [
+                    {
+                        "columnName": "nation::N_NATIONKEY",
+                        "headerName": "N_NATIONKEY"
+                    },
+                    {
+                        "columnName": "nation::N_NAME",
+                        "headerName": "N_NAME"
+                    },
+                    {
+                        "columnName": "N_REGIONKEY",
+                        "headerName": "N_REGIONKEY"
+                    },
+                    {
+                        "columnName": "nation::N_COMMENT",
+                        "headerName": "N_COMMENT"
+                    },
+                    {
+                        "columnName": "nation::column4",
+                        "headerName": "column4"
+                    },
+                    {
+                        "columnName": "R_REGIONKEY",
+                        "headerName": "R_REGIONKEY"
+                    },
+                    {
+                        "columnName": "region::R_NAME",
+                        "headerName": "R_NAME"
+                    },
+                    {
+                        "columnName": "region::R_COMMENT",
+                        "headerName": "R_COMMENT"
+                    },
+                    {
+                        "columnName": "region::column3",
+                        "headerName": "column3"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-bli-b310d671-4df00ba5",
+    "dataflowVersion": 1
+}

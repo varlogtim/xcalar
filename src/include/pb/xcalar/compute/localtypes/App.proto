@@ -1,0 +1,35 @@
+// Copyright 2020 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.App;
+
+message AppStatusRequest {
+    uint64 group_id = 1;
+}
+
+message AppStatusResponse {
+    bool is_alive = 1;
+}
+
+message DriverRequest {
+    string input_json = 1;
+}
+
+message DriverResponse {
+    string output_json = 1;
+}
+
+service App {
+    rpc AppStatus(AppStatusRequest) returns (AppStatusResponse);
+    // rpc for XcalarApiDriver
+    rpc Driver(DriverRequest) returns (DriverResponse);
+};

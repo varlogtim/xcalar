@@ -1,0 +1,38 @@
+{
+    "xcalarVersion": "0.9.8.7",
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "retinaTests-airlineTests-air-tempJoinTable-53838-GroupBy05332",
+            "columns": [
+                {
+                    "columnName": "groupBy84410",
+                    "headerAlias": "NumUniqueCarriers"
+                },
+                {
+                    "columnName": "flight::Dest",
+                    "headerAlias": "Destination"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "flight--UniqueCarrier",
+            "type": "DfString"
+        },
+        {
+            "columnName": "flight--ArrDelay",
+            "type": "DfString"
+        },
+        {
+            "columnName": "flight--Dest",
+            "type": "DfString"
+        }
+    ],
+
+    "query": "load --url \"nfs://<pathToQaDatasets>/flight/airports.csv\" --format csv --size 0B --name \"airport81\" --fielddelim , --crlf --header; load --url \"nfs://<pathToQaDatasets>/flight/airlines_2007.csv\" --format csv --size 0B --name \"flight73\" --fielddelim , --crlf --header; index --key \"xcalarRecordNum\" --dataset \".XcalarDS.flight73\" --dsttable \"retinaTests-airlineTests-air-flight73\" --prefix \"flight\"; index --key \"xcalarRecordNum\" --dataset \".XcalarDS.airport81\" --dsttable \"retinaTests-airlineTests-air-airport81\" --prefix \"airport\"; map --eval \"int(flight::ArrDelay)\" --srctable \"retinaTests-airlineTests-air-flight73\" --fieldName \"ArrDelay_integer\" --dsttable \"retinaTests-airlineTests-air-flight73#vD0\"; filter --srctable \"retinaTests-airlineTests-air-flight73#vD0\" --eval \"gt(ArrDelay_integer, 0)\" --dsttable \"retinaTests-airlineTests-air-flight73#vD1\"; index --key \"flight::Dest\" --srctable \"retinaTests-airlineTests-air-flight73#vD1\" --dsttable \"retinaTests-airlineTests-air-flight73#vD2\"; index --key \"airport::iata\" --srctable \"retinaTests-airlineTests-air-airport81\" --dsttable \"retinaTests-airlineTests-air-airport81#vD3\"; join --leftTable \"retinaTests-airlineTests-air-flight73#vD2\" --rightTable \"retinaTests-airlineTests-air-airport81#vD3\" --joinType innerJoin --joinTable \"retinaTests-airlineTests-air-tempJoinTable-53838\"; groupBy --srctable \"retinaTests-airlineTests-air-tempJoinTable-53838\" --eval \"count(flight::UniqueCarrier)\" --fieldName groupBy84410 --dsttable \"retinaTests-airlineTests-air-tempJoinTable-53838-GroupBy05332\";",
+
+    "udfs": [
+    ]
+}

@@ -1,0 +1,307 @@
+diff --git a/build/docker/centos6/Dockerfile b/build/docker/centos6/Dockerfile
+new file mode 100644
+index 0000000..05a7438
+--- /dev/null
++++ b/build/docker/centos6/Dockerfile
+@@ -0,0 +1,136 @@
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++# Apache Thrift Docker build environment for Centos
++#
++# Known missing client libraries:
++#  - D
++#  - Haxe
++#  - Lua
++#
++
++FROM centos:6
++MAINTAINER Apache Thrift <dev@thrift.apache.org>
++
++ENV HOME /root
++
++# RUN yum -y update
++
++# General dependencies
++RUN yum -y install -y tar m4 perl gcc git libtool zlib-devel openssl-devel autoconf make flex rubygems-devel
++
++RUN yum -y groupinstall "Development Tools"
++
++
++RUN mkdir -p /tmp/epel && \
++    curl -SL "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" -o /tmp/epel-release-6-8.noarch.rpm && \
++    cd /tmp/ && \
++    rpm -ivh epel-release*.rpm && \
++    cd $HOME
++
++# Autoconf
++RUN mkdir -p /tmp/autoconf && \
++    curl -SL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz" | tar -xzC /tmp/autoconf && \
++    cd /tmp/autoconf/autoconf-2.69 && \
++    ./configure --prefix=/usr && \
++    make && \
++    make install && \
++    cd $HOME
++
++# Automake
++RUN mkdir -p /tmp/automake && \
++    curl -SL "http://ftp.gnu.org/gnu/automake/automake-1.14.tar.gz" | tar -xzC /tmp/automake && \
++    cd /tmp/automake/automake-1.14 && \
++    ./configure --prefix=/usr && \
++    make && \
++    make install && \
++    cd $HOME
++
++# libtool
++RUN mkdir -p /tmp/libtool && \
++   curl -SL "http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz" | tar -xzC /tmp/libtool && \
++   cd /tmp/libtool/libtool-2.4.6 && \
++   ./configure --prefix=/usr && \
++   make && \
++   make install && \
++   cd $HOME
++
++# bison
++RUN mkdir -p /tmp/bison && \
++    curl -SL "http://ftp.gnu.org/gnu/bison/bison-2.7.1.tar.gz" | tar -xzC /tmp/bison && \
++    cd /tmp/bison/bison-2.7.1 && \
++    ./configure --prefix=/usr && \
++    make && \
++    make install && \
++    cd $HOME
++
++# Boost
++RUN mkdir -p /tmp/boost && \
++    curl -SL "http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1.59_0.tar.gz" | tar -xzC /tmp/boost && \
++    cd /tmp/boost/boost_1.59_0 && \
++    ./bootstrap.sh --prefix=/usr/local &&\
++    ./b2 --prefix=/usr/local install &&\
++    cd $HOME
++
++
++# C++ dependencies
++RUN yum install -y libevent-devel  zlib-devel openssl-devel
++
++# Java Dependencies
++RUN yum install -y ant junit ant-nodeps ant-junit java-1.7.0-openjdk-devel
++
++# Python Dependencies
++RUN yum install -y python-devel python-setuptools python-twisted
++
++# Ruby Dependencies
++RUN yum install -y ruby ruby-devel rubygems && \
++    gem install bundler rake
++
++# Perl Dependencies
++RUN yum install -y perl-Bit-Vector perl-Class-Accessor perl-ExtUtils-MakeMaker perl-Test-Simple
++
++# PHP Dependencies
++RUN yum install -y php php-devel php-pear re2c
++
++# GLibC Dependencies
++RUN yum install -y glib2-devel
++
++# Erlang Dependencies
++RUN curl -sSL http://packages.erlang-solutions.com/rpm/centos/erlang_solutions.repo -o /etc/yum.repos.d/erlang_solutions.repo && \
++    yum install -y erlang-kernel erlang-erts erlang-stdlib erlang-eunit erlang-rebar
++
++# Go Dependencies
++RUN curl -sSL https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz | tar -C /usr/lib/ -xz && \
++    mkdir -p /usr/share/go
++
++ENV GOROOT /usr/lib/go
++ENV GOPATH /usr/share/go
++ENV PATH ${GOROOT}/bin:${GOPATH}/bin:$PATH
++
++
++
++# Node.js Dependencies
++RUN yum install -y nodejs nodejs-devel npm rpm-build
++
++# C# Dependencies
++RUN yum install -y mono-core mono-devel mono-web-devel mono-extras mingw32-binutils mingw32-runtime mingw32-nsis
++
++# Haskell Dependencies
++RUN yum -y install cabal-dev && \
++    cd $HOME
++
++# Clean up
++RUN rm -rf /tmp/* && \
++    mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} && \
++    yum clean all
++
++WORKDIR $HOME
+diff --git a/configure.ac b/configure.ac
+index 5fa611e..6991562 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -130,6 +130,7 @@ have_cpp=no
+ if test "$with_cpp" = "yes";  then
+   AX_BOOST_BASE([1.54.0])
+   if test "x$succeeded" = "xyes" ; then
++    AC_SUBST([BOOST_LIB_DIR], [$(echo "$BOOST_LDFLAGS" | sed -e 's/^\-L//')])
+     have_cpp="yes"
+   fi
+ 
+diff --git a/contrib/thrift.spec b/contrib/thrift.spec
+index 0eb7b06..14749ce 100644
+--- a/contrib/thrift.spec
++++ b/contrib/thrift.spec
+@@ -177,6 +177,11 @@ export RUBYLIB=${PWD}/lib/rb/lib
+   %{!?without_php:     PHP_PREFIX=${RPM_BUILD_ROOT}/usr/lib/php } \
+   --without-csharp \
+   --without-erlang \
++  --without-haskell  \
++  --without-lua \
++  --without-go \
++  --with-c_glib\
++  --with-boost=yes
+ 
+ make %{?_smp_mflags}
+ 
+diff --git a/debian/libthrift-dev.install b/debian/libthrift-dev.install
+index 58b5223..31e34fd 100644
+--- a/debian/libthrift-dev.install
++++ b/debian/libthrift-dev.install
+@@ -1,4 +1,4 @@
+-usr/lib/*.a
+-usr/lib/*.la
+-usr/lib/pkgconfig
+-usr/include
++opt/xcalar/usr/lib/*.a
++opt/xcalar/usr/lib/*.la
++opt/xcalar/usr/lib/pkgconfig
++opt/xcalar/usr/include
+diff --git a/debian/libthrift0.install b/debian/libthrift0.install
+index ec74efc..c455755 100755
+--- a/debian/libthrift0.install
++++ b/debian/libthrift0.install
+@@ -1,5 +1,5 @@
+-usr/lib/libthrift.so*
+-usr/lib/libthrift-*.so*
+-usr/lib/libthriftnb*.so*
+-usr/lib/libthriftqt*.so*
+-usr/lib/libthriftz*.so*
++opt/xcalar/usr/lib/libthrift.so*
++opt/xcalar/usr/lib/libthrift-*.so*
++opt/xcalar/usr/lib/libthriftnb*.so*
++opt/xcalar/usr/lib/libthriftqt*.so*
++opt/xcalar/usr/lib/libthriftz*.so*
+diff --git a/debian/postinst b/debian/postinst
+new file mode 100644
+index 0000000..872c0b8
+--- /dev/null
++++ b/debian/postinst
+@@ -0,0 +1,7 @@
++#!/bin/sh
++set -e
++echo " Adding /opt/xcalar/usr/lib to ld.so.conf"
++
++echo "/opt/xcalar/usr/lib" >> /etc/ld.so.conf.d/xcalar.conf
++
++
+diff --git a/debian/rules b/debian/rules
+index 633b17e..b9f1925 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -11,11 +11,13 @@
+ # build-arch and build-indep targets  by Bill Allombert 2001
+ 
+ # Uncomment this to turn on verbose mode.
+-#export DH_VERBOSE=1
++export DH_VERBOSE=1
+ 
+ # This has to be exported to make some magic below work.
+ export DH_OPTIONS
+ 
++MAKEVARS=prefix=/opt/xcalar/usr
++
+ PYVERS := $(shell pyversions -r)
+ 
+ configure: configure-stamp
+@@ -23,7 +25,7 @@ configure-stamp:
+ 	dh_testdir
+ 	# Add here commands to configure the package.
+ 	if [ -f bootstrap.sh ]; then $(CURDIR)/bootstrap.sh; fi
+-	$(CURDIR)/configure --prefix=/usr --with-c_glib --without-erlang
++	$(CURDIR)/configure --prefix=/opt/xcalar/usr --with-c_glib --without-erlang
+ 
+ 	touch configure-stamp
+ 
+diff --git a/lib/cpp/test/Makefile.am b/lib/cpp/test/Makefile.am
+index 9111201..d98b79e 100755
+--- a/lib/cpp/test/Makefile.am
++++ b/lib/cpp/test/Makefile.am
+@@ -99,7 +99,7 @@ endif
+ 
+ UnitTests_LDADD = \
+   libtestgencpp.la \
+-  -l:libboost_unit_test_framework.a
++  $(BOOST_LIB_DIR)/libboost_unit_test_framework.a
+ 
+ TransportTest_SOURCES = \
+ 	TransportTest.cpp
+@@ -107,7 +107,7 @@ TransportTest_SOURCES = \
+ TransportTest_LDADD = \
+   libtestgencpp.la \
+   $(top_builddir)/lib/cpp/libthriftz.la \
+-  -l:libboost_unit_test_framework.a \
++  $(BOOST_LIB_DIR)/libboost_unit_test_framework.a \
+   -lz
+ 
+ ZlibTest_SOURCES = \
+@@ -116,7 +116,7 @@ ZlibTest_SOURCES = \
+ ZlibTest_LDADD = \
+   libtestgencpp.la \
+   $(top_builddir)/lib/cpp/libthriftz.la \
+-  -l:libboost_unit_test_framework.a \
++  $(BOOST_LIB_DIR)/libboost_unit_test_framework.a \
+   -lz
+ 
+ EnumTest_SOURCES = \
+@@ -124,14 +124,14 @@ EnumTest_SOURCES = \
+ 
+ EnumTest_LDADD = \
+   libtestgencpp.la \
+-  -l:libboost_unit_test_framework.a
++  $(BOOST_LIB_DIR)/libboost_unit_test_framework.a
+ 
+ TFileTransportTest_SOURCES = \
+ 	TFileTransportTest.cpp
+ 
+ TFileTransportTest_LDADD = \
+   libtestgencpp.la \
+-  -l:libboost_unit_test_framework.a
++  $(BOOST_LIB_DIR)/libboost_unit_test_framework.a
+ 
+ #
+ # TFDTransportTest
+@@ -228,16 +228,16 @@ processor_test_SOURCES = \
+ processor_test_LDADD = libprocessortest.la \
+                        $(top_builddir)/lib/cpp/libthrift.la \
+                        $(top_builddir)/lib/cpp/libthriftnb.la \
++                       $(BOOST_LIB_DIR)/libboost_unit_test_framework.a \
+                        $(BOOST_LDFLAGS) \
+-                       -levent \
+-                       -l:libboost_unit_test_framework.a
++                       -levent
+ 
+ OpenSSLManualInitTest_SOURCES = \
+ 	OpenSSLManualInitTest.cpp
+ 
+ OpenSSLManualInitTest_LDADD = \
+ 	$(top_builddir)/lib/cpp/libthrift.la \
+-	-l:libboost_unit_test_framework.a
++	$(BOOST_LIB_DIR)/libboost_unit_test_framework.a
+ 
+ #
+ # Common thrift code generation rules

@@ -1,0 +1,3 @@
+^http:\/\/.*/([^\/]*\.(?:deb|rpm))	http://rpm-deb-cache/$1
+^http:\/\/.*/([0-9a-f]*-(prestodelta|primary|other|filelists|updateinfo)\.(xml|sqlite)\.(gz|bz2))	http://rpm-meta/$1
+^http:\/\/.*/([^\/]*\.(?:deb|rpm))	$1

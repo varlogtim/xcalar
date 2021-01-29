@@ -1,0 +1,37 @@
+Environment used to test the parquet performance are
+Machine: Dev machine with Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz of 8 such processors and 32 GB Memory.
+
+Test file: /netstore/datasets/parquet/synth/sparse/600_sparse0.0
+copied the test file locally.
+
+ran as: python -m cProfile -s tottime load_parquet_file_v1.py 600_sparse0.0 > profile_v1.txt
+Change the version as you run different versions
+
+Version1:
+This is the baseline code already checked in the product.memory consumption: While this program is running, resident memory consumption is 26.3G
+Time using profile is 379.504 seconds
+
+Version2:
+This has performance enhancements by removing isInstance to be called only on first record only instead of all records.
+memory consumption: While this program is running, resident memory consumption is 26.3G
+Time using profile is 147.785 seconds, a decrease of 61.06% from baseline
+
+Version3:
+Cythonised the rowGen function which will add type hints to improve performance.
+Running the following command will generate the .so(share object) which can be imported into the python script llike a regular python module.
+python setup.py build_ext --inplace
+
+memory consumption: While this program is running, resident memory consumption is 26.3G
+Time using profile is 137.339 seconds, a decrease of 63.81% from baseline
+
+Version4:
+In this version, to_batches(https://arrow.apache.org/docs/python/generated/pyarrow.Table.html#pyarrow.Table.to_batches) is used to limit
+the memory usage while runnning parquet parser. The parquet file is loaded into memory which would be in compressed format as a pyarrow.Table
+object. When we call to_pydict on pyarrow.Table, this will uncompresses it and creates a dictionary object with columns as keys and records as
+list of values consuming lot of memory, which we convert to records format to feed yield to usrnode.
+Instead of creating everything to a python dictionary, we can to that in batches and yield the batch parsed. This will keep memory consumption
+in control for reading large/sparse files avoiding swap issues. Also, seen performance improvement in time.
+
+With chunk size of a batch chosen as 1000, the following are the results
+memory consumption: While this program is running, resident memory consumption is 4G
+Time using profile is 132.847 seconds, a decrease of 64.99% from baseline

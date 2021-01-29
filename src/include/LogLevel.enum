@@ -1,0 +1,20 @@
+# Message levels allowed - all the standard linux levels
+enum XcalarSyslogMsgLevel {
+    XlogEmerg = 0,   # LOG_EMERG
+    XlogAlert = 1,   # LOG_ALERT
+    XlogCrit = 2,    # LOG_CRIT
+    XlogErr = 3,     # LOG_ERR
+    XlogWarn = 4,    # LOG_WARNING
+    XlogNote = 5,    # LOG_NOTICE
+    XlogInfo = 6,    # LOG_INFO
+    XlogDebug = 7,   # LOG_DEBUG
+    XlogVerbose = 8, # XlogDebug + 1
+    XlogInval = 9,   # XlogVerbose + 1 invalid; used for no change
+};
+
+# Message flush levels allowed for the log flush API
+enum XcalarSyslogFlushLevel {
+    XlogFlushNone = 0,
+    XlogFlushGlobal = 1,
+    XlogFlushLocal = 2,
+};

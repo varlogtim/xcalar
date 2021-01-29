@@ -1,0 +1,1 @@
+add_xce_library(libcallout STATIC CalloutQueue.cpp)

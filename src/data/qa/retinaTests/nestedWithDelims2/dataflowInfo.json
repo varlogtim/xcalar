@@ -1,0 +1,618 @@
+{
+    "tables": [
+        {
+            "name": "temp-667186",
+            "columns": [
+                {
+                    "columnName": "dsPrefix-25239-8840__row\\\\\\\\\\\\\\.num\\\\\\.string\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.col",
+                    "headerAlias": "dsPrefix-25239-8840__row\\\\\\\\\\\\\\.num\\\\\\.string\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.col"
+                },
+                {
+                    "columnName": "dsPrefix-25239-8840__a\\\\\\\\\\\\\\.b",
+                    "headerAlias": "dsPrefix-25239-8840__a\\\\\\\\\\\\\\.b"
+                },
+                {
+                    "columnName": "dsPrefix-25239-8840__flaky",
+                    "headerAlias": "dsPrefix-25239-8840__flaky"
+                },
+                {
+                    "columnName": "col-25239-8841",
+                    "headerAlias": "col-25239-8841"
+                },
+                {
+                    "columnName": "dsPrefix-25239-8842__a\\\\\\.b",
+                    "headerAlias": "dsPrefix-25239-8842__a\\\\\\.b"
+                },
+                {
+                    "columnName": "col-25238-20299",
+                    "headerAlias": "col-25238-20299"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.retina__25243-508283-520955:operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.retina__25243-508283-520955:operatorsFuncTestUser-1-node0",
+                "dest": "retina__25243-508283-520955:RN0temp-1761",
+                "key": [
+                    {
+                        "name": "row\\.num.float\\.\\.col",
+                        "keyFieldName": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-21622-1702",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "retina__25243-508283-520955:RN0temp-1761",
+                    "retina__25243-508283-520955:RN0temp-1761"
+                ],
+                "dest": "retina__25243-508283-520955:RN0temp-8928",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-21622-1702",
+                            "destColumn": "dsPrefix-25239-8840",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                            "destColumn": "col-25239-8841",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-21622-1702",
+                            "destColumn": "dsPrefix-25239-8842",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                            "destColumn": "col-25239-8843",
+                            "columnType": "DfFloat64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "comment": "",
+            "args": {
+                "source": "retina__25243-508283-520955:RN0temp-8928",
+                "dest": "retina__25243-508283-520955:RN0temp-24997",
+                "columns": [
+                    "dsPrefix-25239-8840::row\\.num.int\\.col",
+                    "dsPrefix-25239-8840::cols.object.val\\.2",
+                    "dsPrefix-25239-8840::flaky",
+                    "col-25239-8841",
+                    "dsPrefix-25239-8842::cols.object.val\\.2",
+                    "dsPrefix-25239-8842::a.b",
+                    "dsPrefix-25239-8842::flaky",
+                    "col-25239-8843"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "retina__25243-508283-520955:RN0temp-24997",
+                "dest": "retina__25243-508283-520955:temp-370334",
+                "key": [
+                    {
+                        "name": "dsPrefix-25239-8840::a\\.b",
+                        "keyFieldName": "dsPrefix-25239-8840-a\\.b",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    },
+                    {
+                        "name": "dsPrefix-25239-8842::a.b",
+                        "keyFieldName": "dsPrefix-25239-8842-a.b",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    },
+                    {
+                        "name": "dsPrefix-25239-8842::flaky",
+                        "keyFieldName": "dsPrefix-25239-8842-flaky",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "retina__25243-508283-520955:temp-370334",
+                "dest": "retina__25243-508283-520955",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::a.b",
+                        "destColumn": "dsPrefix-25239-8840__a.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25239-8841",
+                        "destColumn": "col-25239-8841",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::row\\.num.float\\.\\.col",
+                        "destColumn": "dsPrefix-25239-8842__row\\.num.float\\.\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::cols.object.val\\.2",
+                        "destColumn": "dsPrefix-25239-8842__cols.object.val\\.2",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::a.b",
+                        "destColumn": "dsPrefix-25239-8842__a.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25239-8843",
+                        "destColumn": "col-25239-8843",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840-a\\\\\\.b",
+                        "destColumn": "dsPrefix-25239-8840-a\\\\\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842-a\\.b",
+                        "destColumn": "dsPrefix-25239-8842-a\\.b",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.RN0retina__25238-451218-462090:retina__25243-290470-305326:operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.RN0retina__25238-451218-462090:retina__25243-290470-305326:operatorsFuncTestUser-1-node0",
+                "dest": "RN0retina__25238-451218-462090:retina__25243-290470-305326:RN0temp-1761",
+                "key": [
+                    {
+                        "name": "row\\.num.float\\.\\.col",
+                        "keyFieldName": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-21622-1702",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "RN0retina__25238-451218-462090:retina__25243-290470-305326:RN0temp-1761",
+                    "RN0retina__25238-451218-462090:retina__25243-290470-305326:RN0temp-1761"
+                ],
+                "dest": "RN0retina__25238-451218-462090:retina__25243-290470-305326:RN0temp-8928",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-21622-1702",
+                            "destColumn": "dsPrefix-25239-8840",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                            "destColumn": "col-25239-8841",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-21622-1702",
+                            "destColumn": "dsPrefix-25239-8842",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-21622-1702-row\\.num.float\\.\\.col",
+                            "destColumn": "col-25239-8843",
+                            "columnType": "DfFloat64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "RN0retina__25238-451218-462090:retina__25243-290470-305326:RN0temp-8928",
+                "dest": "RN0retina__25238-451218-462090:retina__25243-290470-305326:temp-20302",
+                "eval": [
+                    {
+                        "evalString": "concat(string(dsPrefix-25239-8842::cols.object.val\\.2), string(9))",
+                        "newField": "col-25238-19644"
+                    },
+                    {
+                        "evalString": "add(float(dsPrefix-25239-8842::a.b), float(27))",
+                        "newField": "col-25238-20299"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "RN0retina__25238-451218-462090:retina__25243-290470-305326:temp-20302",
+                "dest": "RN0retina__25238-451218-462090:retina__25243-290470-305326",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::row\\.num.string\\\\\\.col",
+                        "destColumn": "dsPrefix-25239-8840__row\\.num.string\\\\\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::cols.object.val\\.1",
+                        "destColumn": "dsPrefix-25239-8840__cols.object.val\\.1",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::a.b",
+                        "destColumn": "dsPrefix-25239-8840__a.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::a\\.b",
+                        "destColumn": "dsPrefix-25239-8840__a\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840::flaky",
+                        "destColumn": "dsPrefix-25239-8840__flaky",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25239-8841",
+                        "destColumn": "col-25239-8841",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::row\\.num.int\\.col",
+                        "destColumn": "dsPrefix-25239-8842__row\\.num.int\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::cols.object.val\\.2",
+                        "destColumn": "dsPrefix-25239-8842__cols.object.val\\.2",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::a.b",
+                        "destColumn": "dsPrefix-25239-8842__a.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::a\\.b",
+                        "destColumn": "dsPrefix-25239-8842__a\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842::flaky",
+                        "destColumn": "dsPrefix-25239-8842__flaky",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25238-19644",
+                        "destColumn": "col-25238-19644",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25238-20299",
+                        "destColumn": "col-25238-20299",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "args": {
+                "source": "RN0retina__25238-451218-462090:retina__25243-290470-305326",
+                "dest": "RN0retina__25238-451218-462090",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840__row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                        "destColumn": "dsPrefix-25239-8840__row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840__a\\.b",
+                        "destColumn": "dsPrefix-25239-8840__a\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840__a\\\\\\.b",
+                        "destColumn": "dsPrefix-25239-8840__a\\\\\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8840__flaky",
+                        "destColumn": "dsPrefix-25239-8840__flaky",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25239-8841",
+                        "destColumn": "col-25239-8841",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842__row\\\\\\.num\\.int\\\\\\.col",
+                        "destColumn": "dsPrefix-25239-8842__row\\\\\\.num\\.int\\\\\\.col",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842__a\\.b",
+                        "destColumn": "dsPrefix-25239-8842__a\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842__a\\\\\\.b",
+                        "destColumn": "dsPrefix-25239-8842__a\\\\\\.b",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "dsPrefix-25239-8842__flaky",
+                        "destColumn": "dsPrefix-25239-8842__flaky",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "col-25238-20299",
+                        "destColumn": "col-25238-20299",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "args": {
+                "source": [
+                    "RN0retina__25238-451218-462090",
+                    "retina__25243-508283-520955"
+                ],
+                "dest": "RN10temp-571282",
+                "dedup": false,
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840__row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                            "destColumn": "dsPrefix-25239-8840__row\\\\\\.num\\.string\\\\\\\\\\\\\\.col",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840__a\\.b",
+                            "destColumn": "dsPrefix-25239-8840__a\\.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840__a\\\\\\.b",
+                            "destColumn": "dsPrefix-25239-8840__a\\\\\\.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840__flaky",
+                            "destColumn": "dsPrefix-25239-8840__flaky",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-25239-8841",
+                            "destColumn": "col-25239-8841",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842__a\\.b",
+                            "destColumn": "dsPrefix-25239-8842__a\\.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842__a\\\\\\.b",
+                            "destColumn": "dsPrefix-25239-8842__a\\\\\\.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-25238-20299",
+                            "destColumn": "col-25238-20299",
+                            "columnType": "DfFloat64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840__a.b",
+                            "destColumn": "dsPrefix-25239-8842__a\\\\\\.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-25239-8841",
+                            "destColumn": "col-25238-20299",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842__cols.object.val\\.2",
+                            "destColumn": "dsPrefix-25239-8842__cols.object.val\\.2",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842__a.b",
+                            "destColumn": "dsPrefix-25239-8842__a.b",
+                            "columnType": "DfScalarObj"
+                        },
+                        {
+                            "sourceColumn": "col-25239-8843",
+                            "destColumn": "col-25239-8843",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842-a\\.b",
+                            "destColumn": "dsPrefix-25239-8842-a\\.b",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8840-a\\.b",
+                            "destColumn": "dsPrefix-25239-8840-a\\.b",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "dsPrefix-25239-8842-a.b",
+                            "destColumn": "dsPrefix-25239-8842-a.b",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "RN10temp-571282",
+                "dest": "temp-667186",
+                "eval": [
+                    {
+                        "evalString": "gt(float(dsPrefix-25239-8840__a\\\\\\\\\\\\\\.b), float(7))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "source": "temp-667186",
+                "fileName": "export-temp-667186.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-667186",
+                "columns": [
+                    {
+                        "columnName": "dsPrefix-25239-8840__row\\\\\\\\\\\\\\.num\\\\\\.string\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.col",
+                        "headerName": "dsPrefix-25239-8840__row\\\\\\\\\\\\\\.num\\\\\\.string\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.col"
+                    },
+                    {
+                        "columnName": "dsPrefix-25239-8840__a\\\\\\\\\\\\\\.b",
+                        "headerName": "dsPrefix-25239-8840__a\\\\\\\\\\\\\\.b"
+                    },
+                    {
+                        "columnName": "dsPrefix-25239-8840__flaky",
+                        "headerName": "dsPrefix-25239-8840__flaky"
+                    },
+                    {
+                        "columnName": "col-25239-8841",
+                        "headerName": "col-25239-8841"
+                    },
+                    {
+                        "columnName": "dsPrefix-25239-8842__a\\\\\\.b",
+                        "headerName": "dsPrefix-25239-8842__a\\\\\\.b"
+                    },
+                    {
+                        "columnName": "col-25238-20299",
+                        "headerName": "col-25238-20299"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1461-xcalardev-7a52d6b7-d5a44043",
+    "dataflowVersion": 1
+}

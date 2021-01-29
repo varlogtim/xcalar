@@ -1,0 +1,26 @@
+---
+exclude: '^$'
+fail_fast: false
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v1.4.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-case-conflict
+  - id: check-merge-conflict
+- repo: local
+  hooks:
+  - id: shfmt
+    name: Shell format
+    language: system
+    types: [shell]
+    entry: shfmt
+    args: ['-i','4','-ci','-s','-w']
+- repo: local
+  hooks:
+  - id: clang-format
+    name: Clang Format C/C++
+    language: script
+    entry: /bin/bash bin/clang-format.sh
+    always_run: true

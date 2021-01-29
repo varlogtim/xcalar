@@ -1,0 +1,6 @@
+enum LibDfFuncTestConfig {
+    LibDsFuncStressThreads:"LibDsFuncStressThreads",
+    LibDsFuncStressIterations:"LibDsFuncStressIterations",
+    LibDsCSVFormatTestTemplate1Threads:"LibDsCSVFormatTestTemplate1Threads",
+    LibDsCSVFormatTestTemplate2Threads:"LibDsCSVFormatTestTemplate2Threads",
+}

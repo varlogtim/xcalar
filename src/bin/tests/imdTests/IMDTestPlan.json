@@ -1,0 +1,61 @@
+{
+    "merge_txn_tests": {
+        "comment": "Test the correctness/transactions of the IMD APIs.",
+        "udfs": [{
+            "name": "ImdLoadData",
+            "sourcePath": "$XLRDIR/src/bin/tests/imdTests/udf/import_imd_data.py"
+        }, {
+            "name": "pg_imd",
+            "sourcePath": "$XLRDIR/src/bin/tests/imdTests/udf/pg_imd_export_driver.py",
+            "type": "public"
+        }],
+        "testCases": {
+            "basic": {
+                "updateSize": 10000,
+                "testIteration": 15,
+                "tables": ["imd0", "imd1", "imd2", "imd3"],
+                "schema": [{
+                        "name": "COL0",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "COL1",
+                        "type": "float"
+                    },
+                    {
+                        "name": "COL2",
+                        "type": "string"
+                    },
+                    {
+                        "name": "COL3",
+                        "type": "money"
+                    }
+                ],
+                "rules": {
+                    "imd0": {
+                        "COL1": "round(add(COL1, 1), 3)",
+                        "COL2": "concat('VERIFY_', COL2)"
+                    },
+                    "imd1": {
+                        "COL3": "subNumeric(COL3, money(\"10\"))"
+                    },
+                    "imd2": {
+                        "COL0": "addInteger(COL0, 3)"
+                    }
+                },
+                "validation": "postgres",
+                "dataSource": {
+                    "udf": {
+                        "function": "ImdLoadData:genData"
+                    }
+                },
+                "boundary_queries": [
+                    "SELECT * FROM {IMD0} imd0 FULL OUTER JOIN {IMD1} imd1 ON ROUND(imd0.PK0 * 1.1, 1) = imd1.PK1 WHERE ROUND(imd1.COL1+1, 3) != imd0.COL1",
+                    "SELECT * FROM {IMD0} FULL OUTER JOIN {IMD2} ON CONCAT('imd test pk ', {IMD0}.PK0) = {IMD2}.PK2 WHERE CONCAT('VERIFY_', {IMD2}.COL2) != {IMD0}.COL2",
+                    "SELECT * FROM {IMD1} imd1 FULL OUTER JOIN {IMD3} imd3 ON  INT(ROUND(imd1.PK1/1.1, 1)) = INT(imd3.PK3/1.11) WHERE imd3.COL3 - 10 != imd1.COL3",
+                    "SELECT * FROM {IMD2} FULL OUTER JOIN {IMD0} ON CONCAT('imd test pk ', {IMD0}.PK0) = {IMD2}.PK2 WHERE {IMD0}.COL0+3 != {IMD2}.COL0"
+                ]
+            }
+        }
+    }
+}

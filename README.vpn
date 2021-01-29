@@ -1,0 +1,22 @@
+Linux VPN instructions:
+------------------------
+One-time setup
+---------------
+1.  sudo apt-get install openvpn
+2.  navigate to https://vpn.xcalar.com/?src=connect and download client.ovpn which is the bottom link on the page (hard to tell by looking)
+
+Connecting
+---------------------------------------
+1.  sudo openvpn --config client.ovpn
+minimize the terminal as the cmd runs in the forground and looks like it has hung login with the same credentials you use to login to dogfood.
+2.  edit your local /etc/resolv.conf and add:
+
+nameserver 10.10.2.136
+
+as the top line.
+3.  use FQDNs like faraday.int.xcalar.com, not short names like faraday
+
+Disconnecting
+---------------------------------------
+1.  when you are done working, ctrl-c the openvpn command and remove
+the nameserver line from resolv.conf that you added above. If the line is not resmoved you will not be able to resolve hostnames from home quickly.

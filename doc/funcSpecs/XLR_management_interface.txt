@@ -1,0 +1,388 @@
+XSCALR management interface
+======================================
+
+History
+======================================
+12/11/2013: mbrown: initial cut
+
+References
+======================================
+
+Use Cases
+======================================
+
+
+Overview
+======================================
+
+
+Operations
+======================================
+LU
+
+Non-Operations
+======================================
+
+
+Dependencies
+======================================
+
+External Behavior & User Interface
+======================================
+typedef enum {
+    XLR_STATUS_OK,
+    XLR_STATUS_INVAL,
+    ...
+} xlr_status_t;
+
+typedef uint8_t xlr_uid_t[128];
+typedef xlr_uid_t xlr_regionUid_t;
+typedef xlr_uid_t xlr_avZoneUid_t;
+typedef xlr_uid_t xlr_clusterUid_t;
+typedef xlr_uid_t xlr_nodeUid_t;
+typedef xlr_uid_t xlr_nicUid_t;
+typedef xlr_uid_t xlr_raidSetUid_t;
+typedef xlr_uid_t xlr_raidSetGroupUid_t;
+typedef xlr_uid_t xlr_bDevUid_t;
+typedef xlr_uid_t xlr_userDevUid_t;
+typedef xlr_uid_t xlr_aclUid_t;
+typedef xlr_uid_t xlr_userRangeUid_t;
+typedef xlr_uid_t xlr_perfScalarUid_t;
+typedef xlr_uid_t xlr_perfVecUid_t;     // group of scalars &&'d together
+typedef xlr_uid_t xlr_perfProfUid_t;    // group of vectors ||'d together
+typedef xlr_uid_t xlr_SLOUid_t;
+
+typedef struct {
+    xlr_uid_t uid;
+    string_t name;
+    string_t description;
+} xlr_objDesc_t;
+
+typedef struct {
+    string_t vendor;
+    string_t product;
+    string_t productVersion;
+} xlr_hwDesc_t;
+
+typedef struct {
+    double longitude; // meridian
+    double latitude;  // parallel
+} xlr_gpsLocation_t;
+
+typedef double xlr_gpsDistance_t; // kilometers
+
+typedef struct {
+    uint32_t floorNum;
+    uint32_t officeNum;
+} xlr_localLocation_t;
+
+typedef struct {
+    union {
+        xlr_regionUid_t regionUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_gpsLocation_t gpsLocation;
+    xlr_gpsDistance_t gpsDistance;
+} xlr_regionDesc_t;
+
+typedef struct {
+    union {
+        xlr_avZoneUid_t avZoneUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_regionUid_t regionUid;
+    string_t address;
+    xlr_gpsLocation_t gpsLocation;
+    xlr_localLocation_t localLocation;
+} xlr_avZoneDesc_t;
+
+typedef struct {
+    union {
+        xlr_clusterUid_t clusterUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_avZoneUid_t avZoneUid;
+} xlr_clusterDesc_t;
+
+typedef struct {
+    xlr_hw_t hw;
+    xlr_SLOUid_t SLOUid;
+    uint32_t numCores;
+    uint32_t numThreads;
+    uint32_t stepping;
+    uint64_t featureMask;
+} xlr_cpuDesc_t;
+
+// reference: http://www.crucial.com/support/memory_speeds.aspx
+typedef enum {
+    XLR_MEM_DDR2,
+    XLR_MEM_DDR3,
+    XLR_MEM_DDR4,
+} xlr_memType_t;
+
+typedef struct {
+    xlr_hw_t hw;
+    xlr_SLOUid_t SLOUid;
+    uint32_t capacity;
+    xlr_memType_t memType;
+    bool isEcc;
+} xlr_memDesc_t;
+
+typedef struct {
+    union {
+        xlr_nodeUid_t nodeUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_clusterUid_t clusterUid;
+    xlr_SLOUid_t SLOUid;
+    xlr_hw_t hw;
+    string_t DNSName;
+    xlr_cpu_t cpu;
+    xlr_mem_t mem;
+} xlr_nodeDesc_t;
+
+typedef enum {
+    XLR_READ,
+    XLR_WRITE,
+    XLR_NONE,
+    XLR_BOTH,
+} xlr_ioDirection_t;
+
+typedef enum {
+    XLR_RANDOM,
+    XLR_SEQUENTIAL
+} xlr_ioPattern_t;
+
+typedef enum {
+    XLR_MIN,
+    XLR_MAX,
+    XLR_AVG,
+} xlr_metric_t;
+
+typedef struct {
+    union {
+        xlr_perfScalarUid_t uid;
+        xlr_obj_t obj;
+    };
+
+    uint64_t ioSize;
+    uint64_t IOPS;
+    uint64_t MBPS;
+    uint64_t latencyUs;
+    xlr_ioPattern_t pattern;
+    xlr_ioDirection_t direction;
+    xlr_metric_t metric;
+} xlr_perfScalar_t;
+
+typedef struct {
+    union {
+        xlr_perfVecUid_t perfVecUid;
+        xlr_obj_t obj;
+    };
+
+} xlr_perfVector_t;
+
+typedef struct {
+    union {
+        xlr_perfProfUid_t perfProfUid;
+        xlr_obj_t obj;
+    };
+
+} xlr_perfProfile_t;
+
+typedef struct {
+    union {
+        xlr_SLOUid_t SLOUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_perfProfUid_t perfProfUid;
+    double durabilityPct;
+    double availabilityPct;
+} xlr_SLO_t;
+
+typedef struct {
+    union {
+        xlr_nicUid_t nicUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_hw_t hw;
+    xlr_nodeUid_t nodeUid;
+    xlr_nicSpeed_t nicSpeed;
+    xlr_MACAddr_t macAddr;
+} xlr_nicDesc_t;
+
+// a bdev is an individual spindle or flash device
+// a raidSet is a set of bdevs
+// a bdev may be a member of {0..1} raidSet
+// a raidSetGroup is a set of raidSets
+// a raidSet may be a member of {0..n} raidSetGroups
+// a userDev is the logical storage we present to users
+// a userRange is a subset of a userDev
+// a userDev may be backed by {1..n} userRanges
+// a userRange may be backed by 1 raidSetGroup
+// a raidSetGroup may back {0..n} userRanges
+typedef struct {
+    union {
+        xlr_userRangeUid_t userRangeUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_userDevUid_t userDevUid;
+    xlr_raidSetGroupUid_t raidSetGroupUid;
+    xlr_SLOUid_t SLOUid;
+    uint64_t startLba;
+    uint64_t lbc;
+} xlr_userRange_t;
+
+typedef enum {
+    XLR_USR_DEV_VOL,
+    XLR_USR_DEV_FILE,
+    XLR_USR_DEV_OBJ,
+} xlr_userDevType_t;
+
+typedef struct {
+    union {
+        xlr_userDevUid_t userDevUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_clusterUid_t clusterUid;
+    xlr_userDevType_t userDevType;
+    uint64_t capacity;
+} xlr_userDevDesc_t;
+
+typedef struct {
+    union {
+        xlr_bRangeUid_t bRangeUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_userDevUid_t userDevUid;
+    xlr_SLOUid_t SLOUid;
+    uint64_t startLba;
+    uint64_t lbc;
+} xlr_blockRange_t;
+
+typedef enum {
+    XLR_USR_DEV_VOL,
+    XLR_USR_DEV_FILE,
+    XLR_USR_DEV_OBJ,
+} xlr_userDevType_t;
+
+typedef struct {
+    union {
+        xlr_raidSetUid_t raidSetUid;
+        xlr_obj_t obj;
+    };
+
+    uint64_t capacity;
+    xlr_SLOUid_t SLOUid;
+    xlr_raidEncoding_t raidEncoding;
+} xlr_raidSetDesc_t;
+
+typedef struct {
+    union {
+        xlr_raidSetGroupUid_t raidSetGroupUid;
+        xlr_obj_t obj;
+    };
+
+    uint64_t capacity;
+    xlr_SLOUid_t SLOUid;
+} xlr_raidSetGroup_t;
+
+typedef enum {
+   XLR_BDEV_FLASH,
+   XLR_BDEV_SPINDLE,
+} xlr_bDevType_t;
+
+typedef struct {
+    union {
+        xlr_bDevUid_t bDevUid;
+        xlr_obj_t obj;
+    };
+
+    xlr_raidSetUid_t raidSetUid;
+    xlr_SLOUid_t SLOUid;
+    xlr_bDevType_t bDevType;
+    xlr_hw_t hw;
+    uint64_t capacity;
+} xlr_bDev_t;
+
+================ functions ===============
+
+xlr_status_t xlr_regionDescInit(xlr_regionDesc_t *regionDesc);
+xlr_status_t xlr_regionCreate(xlr_regionDesc_t *regionDesc);
+xlr_status_t xlr_regionDestroy(xlr_regionUid_t regionUid);
+xlr_status_t xlr_regionGetList(xlr_regionUid_t *regionUids,
+                               uint32_t *numRegions, uint32_t maxListLen);
+xlr_status_t xlr_regionGetDesc(xlr_regionUid_t regionUid,
+                               xlr_regionDesc_t *regionDesc);
+xlr_status_t xlr_regionSetName(xlr_regionUid_t regionUid, string_t name);
+xlr_status_t xlr_regionSetName(xlr_regionUid_t regionUid, string_t name);
+
+xlr_status_t xlr_avZoneCreate(xlr_avZoneDesc_t *avZoneDesc);
+xlr_status_t xlr_avZoneDestroy(xlr_avZoneUid_t avZoneUid);
+xlr_status_t xlr_avZoneGetList(xlr_avZoneUid_t *avZoneUids,
+                               uint32_t *numAvZones, uint32_t maxListLen);
+xlr_status_t xlr_avZoneGetDesc(xlr_avZoneUid_t avZoneUid,
+                               xlr_avZoneDesc_t *avZoneDesc);
+xlr_status_t xlr_avZoneSetDesc(xlr_avZoneUid_t avZoneUid,
+                               xlr_avZoneDesc_t *avZoneDesc);
+
+xlr_status_t xlr_clusterCreate(xlr_clusterDesc_t *clusterDesc);
+xlr_status_t xlr_clusterDestroy(xlr_clusterUid_t clusterUid);
+xlr_status_t xlr_clusterGetList(xlr_clusterUid_t *clusterUids,
+                                uint32_t *numClusters, uint32_t maxListLen);
+xlr_status_t xlr_clusterGetNodeList(xlr_nodeUid_t *nodeUids,
+                                    uint32_t *numNodes, uint32_t maxListLen);
+xlr_status_t xlr_clusterGetDesc(xlr_clusterUid_t clusterUid,
+                                xlr_clusterDesc_t *clusterDesc);
+xlr_status_t xlr_clusterSetDesc(xlr_clusterUid_t clusterUid,
+                                xlr_clusterDesc_t *clusterDesc);
+xlr_status_t xlr_clusterAddNode(xlr_clusterUid_t clusterUid,
+                                xlr_nodeUid_t nodeUid);
+xlr_status_t xlr_clusterDelNode(xlr_clusterUid_t clusterUid,
+                                xlr_nodeUid_t nodeUid);
+
+xlr_status_t xlr_nodeCreate(xlr_nodeDesc_t *nodeDesc);
+xlr_status_t xlr_nodeDestroy(xlr_nodeUid_t nodeUid);
+xlr_status_t xlr_nodeGetList(xlr_nodeUid_t *nodeUids,
+                             uint32_t *numNodes, uint32_t maxListLen);
+xlr_status_t xlr_nodeGetDesc(xlr_nodeUid_t nodeUid,
+                             xlr_nodeDesc_t *nodeDesc);
+xlr_status_t xlr_nodeSetDesc(xlr_nodeUid_t nodeUid,
+                             xlr_nodeDesc_t *nodeDesc);
+
+xlr_status_t xlr_perfScalarCreate(xlr_perfScalarDesc_t *perfScalarDesc);
+xlr_status_t xlr_perfScalarDestroy(xlr_perfScalarUid_t perfScalarUid);
+xlr_status_t xlr_perfScalarGetList(xlr_perfScalarUid_t *perfScalarUids,
+                                   uint32_t *numPerfScalars,
+                                   uint32_t maxListLen);
+xlr_status_t xlr_perfScalarGetDesc(xlr_perfScalarUid_t perfScalarUid,
+                                   xlr_perfScalarDesc_t *perfScalarDesc);
+xlr_status_t xlr_perfScalarSetDesc(xlr_perfScalarUid_t perfScalarUid,
+                                   xlr_perfScalarDesc_t *perfScalarDesc);
+
+xlr_status_t xlr_perfVectorCreate(xlr_perfVectorDesc_t *perfVectorDesc);
+xlr_status_t xlr_perfVectorDestroy(xlr_perfVectorUid_t perfVectorUid);
+xlr_status_t xlr_perfVectorGetList(xlr_perfVectorUid_t *perfVectorUids,
+                                   uint32_t *numPerfVectors,
+                                   uint32_t maxListLen);
+xlr_status_t xlr_perfVectorGetDesc(xlr_perfVectorUid_t perfVectorUid,
+                                   xlr_perfVectorDesc_t *perfVectorDesc);
+xlr_status_t xlr_perfVectorSetDesc(xlr_perfVectorUid_t perfVectorUid,
+                                   xlr_perfVectorDesc_t *perfVectorDesc);
+
+
+
+Upgrade/Downgrade
+======================================
+
+Autosupport
+======================================

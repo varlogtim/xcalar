@@ -1,0 +1,24 @@
+// This goes into .bashrc
+
+alias conky0="conky -c ~/.conkyrc0&"
+alias conky1="conky -c ~/.conkyrc1&"
+
+# Invoke conky by passing nodeId
+function xcmeter()
+{
+    printf "Parameter: [activeNodes]\n\n"
+    xcalar_stats $@
+}
+
+# Pop-up xterms to display logs of each active node.
+function xcwatch()
+{
+    printf "Parameter: [activeNodes]\n\n"
+
+    for ii in `seq $@`;
+    do
+        ii=$(( $ii - 1 ))
+        xterm -title "node $ii" -geometry 56x11 -e watch -n 0.5 \
+                                            cat /tmp/xcalar_stat.node.$ii.out&
+    done
+}

@@ -1,0 +1,31 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Query;
+
+message ListRequest {
+    string name_pattern = 1;
+};
+
+message QueryInfo {
+    string name = 1;
+    uint64 milliseconds_elapsed = 2;
+    string state = 3;
+}
+
+message ListResponse {
+    repeated QueryInfo queries = 1;
+};
+
+service Query {
+    rpc List (ListRequest) returns (ListResponse);
+};

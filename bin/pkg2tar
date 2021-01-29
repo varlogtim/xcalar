@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# Convert a rpm or deb to tar.gz
+
+rpm2tar() {
+    local repackDir output="$2"
+    if [ -z "$2" ]; then
+        output="$(basename "$1" .rpm).tar.gz"
+    fi
+    repackDir=$(mktemp -d -t repackage.XXXXXX) \
+        && rpm2cpio "$1" | (cd $repackDir && cpio -dmi > /dev/null 2>&1) \
+        && tar caf "$output" --owner=0 --group=0 -C "$repackDir" . \
+        && rm -rf "$repackDir"
+}
+
+deb2tar() {
+    local repackDir output="$2" input
+    if [ -z "$2" ]; then
+        output="$(basename "$1" .deb).tar.gz"
+    fi
+    input="$(readlink -f "$1")"
+    repackDir=$(mktemp -d -t repackage.XXXXXX) \
+        && (cd $repackDir && ar x "$input") \
+        || return 1
+    if [ "${output##*.}" = tar ]; then
+        gzip -dc $repackDir/data.tar.gz > "${output}.$$" \
+            && mv "${output}".$$ "$output" \
+            || return 1
+    else
+        mv $repackDir/data.tar.gz "$output" || return 1
+    fi
+    rm -rf "$repackDir"
+}
+
+usage() {
+    cat << EOF
+    usage: $0 <rpm or deb> <optional: output.tar(.gz)>
+
+    Converts the given package to tar or tar.gz format
+
+EOF
+}
+
+main() {
+    if [ $# -eq 0 ]; then
+        usage >&2
+        exit 1
+    fi
+    if [ "$1" = -h ] || [ "$1" = --help ]; then
+        usage
+        exit 0
+    fi
+    case "${1##*.}" in
+        rpm) rpm2tar "$@" ;;
+        deb) deb2tar "$@" ;;
+        *)
+            usage >&2
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

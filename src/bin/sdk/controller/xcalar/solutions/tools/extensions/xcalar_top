@@ -1,0 +1,95 @@
+import getpass
+import os
+from xcalar.compute.util.xcalar_top_util import xcalar_top_main
+from colorama import Style
+from xcalar.external.client import Client
+from xcalar.solutions.properties_adapter import PropertiesAdapter
+from xcalar.solutions.tools.connector import XShell_Connector, xshell_conf
+
+
+def dispatcher(line):
+
+    #     {Style.NORMAL}xcalar_top {Style.DIM}-u [username] -p{Style.RESET_ALL}                    {Style.BRIGHT}- xcalar top{Style.RESET_ALL}
+    help = {
+        "show_all": f"""
+Usage:
+
+XCALAR TOP
+    {Style.NORMAL}xcalar_top {Style.DIM}{Style.RESET_ALL}                    {Style.BRIGHT}- xcalar top{Style.RESET_ALL}
+
+
+Description:
+    This utility reports live stats for jobs executing in optimized mode.
+
+    For each job, the following are reported (column headings are on left):
+
+    JOB:            Name of job (truncated after a limit)
+    SESSION:        Session-name or ID, depending on how job was invoked
+    STATE:          One of (Pending, Running, Success, Failed, Cancelled)
+    ELAPSED(s):     Elapsed time in seconds
+    NODES(%/w/c/f): % of graph-nodes completed, no. waiting/completed/failed
+    API:            Current running graph-node's API
+    API%:           % completion of currently running API
+    SIZE:           Total size of all tables across all graph-nodes
+    XPGS:           Total number of pages transferred between cluster-nodes
+    PGDENSE%:       % page density (Xcalar buffer cache page utilization)
+    SKEW:           Load imbalance across cluster nodes.
+                    Values are from 0 (perfectly balanced) to 100 (most imbalanced).
+                    Skew is across the job (including operators executed so far)
+    SKEWTIME%:      % of elapsed time spent in high skew (> 80) operators
+
+    The tool runs like 'htop' and will quit when the 'q' key is entered.
+
+    Entering one of the following sort keys will sort with that column as key:
+
+    "e": (default) ELPASED(s)
+    "s": SIZE
+
+    For a seamless experience, the tool must run in a window with at least 170
+    columns and a height which accomodates all jobs in the system. If not, the tool
+    may error out with a failure, asking the user to resize the window.    
+""",
+    }
+
+    tokens = line.split()
+    # signal(SIGINT, handler)
+    try:
+        xshell_connector = XShell_Connector()
+        client = xshell_connector.get_client()
+
+        if len(tokens) == 0:
+            # Create a Xcalar Client object
+            xcalar_top_main(
+                client,
+                xshell_conf.get("client").get("url"),
+                xshell_conf.get("client").get("username"),
+                xshell_conf.get("client").get("password"),
+            )
+
+        else:
+            print(help["show_all"])
+
+    except AttributeError as ex:
+        print(f"{Style.DIM}Warning: {Style.RESET_ALL} {ex}")
+    except Exception as e:
+        print(f"{Style.DIM}Warning: {Style.RESET_ALL} {e}")
+    except KeyboardInterrupt:
+        print(f"{Style.DIM}Warning: {Style.RESET_ALL} Ctrl-c detected.")
+        return
+
+
+def load_ipython_extension(ipython, *args):
+    def auto_completers(self, event):
+        return [
+            "-u",
+            "-p",
+        ]
+
+    ipython.register_magic_function(dispatcher, "line", magic_name="xcalar_top")
+    ipython.set_hook("complete_command", auto_completers, str_key="xcalar_top")
+    ipython.set_hook("complete_command", auto_completers, str_key="%xcalar_top")
+
+
+def unload_ipython_extension(ipython):
+    pass
+

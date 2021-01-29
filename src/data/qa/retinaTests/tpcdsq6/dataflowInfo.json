@@ -1,0 +1,1872 @@
+{
+    "tables": [
+        {
+            "name": "table_undefined_dag_5DF2BEF81BA81614_1576205478085_814#1576205814389_113",
+            "columns": [
+                {
+                    "columnName": "S_STORE_NAME",
+                    "headerAlias": "S_STORE_NAME"
+                },
+                {
+                    "columnName": "SUM_SS_NET_PROFIT",
+                    "headerAlias": "SUM_SS_NET_PROFIT"
+                }
+            ]
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589107022_37\"]}",
+            "tag": "",
+            "state": "Unknown state",
+            "args": {
+                "dest": "Optimized.76260.admin.68777.store_sales",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpcds_sf1_notrail/tpcds_sf1/upper/store_sales.dat",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "SS_SOLD_DATE_SK",
+                                "destColumn": "SS_SOLD_DATE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_SOLD_TIME_SK",
+                                "destColumn": "SS_SOLD_TIME_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_ITEM_SK",
+                                "destColumn": "SS_ITEM_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_CUSTOMER_SK",
+                                "destColumn": "SS_CUSTOMER_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_CDEMO_SK",
+                                "destColumn": "SS_CDEMO_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_HDEMO_SK",
+                                "destColumn": "SS_HDEMO_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_ADDR_SK",
+                                "destColumn": "SS_ADDR_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_STORE_SK",
+                                "destColumn": "SS_STORE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_PROMO_SK",
+                                "destColumn": "SS_PROMO_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_TICKET_NUMBER",
+                                "destColumn": "SS_TICKET_NUMBER",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_QUANTITY",
+                                "destColumn": "SS_QUANTITY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "SS_WHOLESALE_COST",
+                                "destColumn": "SS_WHOLESALE_COST",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_LIST_PRICE",
+                                "destColumn": "SS_LIST_PRICE",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_SALES_PRICE",
+                                "destColumn": "SS_SALES_PRICE",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_EXT_DISCOUNT_AMT",
+                                "destColumn": "SS_EXT_DISCOUNT_AMT",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_EXT_SALES_PRICE",
+                                "destColumn": "SS_EXT_SALES_PRICE",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_EXT_WHOLESALE_COST",
+                                "destColumn": "SS_EXT_WHOLESALE_COST",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_EXT_LIST_PRICE",
+                                "destColumn": "SS_EXT_LIST_PRICE",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_EXT_TAX",
+                                "destColumn": "SS_EXT_TAX",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_COUPON_AMT",
+                                "destColumn": "SS_COUPON_AMT",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_NET_PAID",
+                                "destColumn": "SS_NET_PAID",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_NET_PAID_INC_TAX",
+                                "destColumn": "SS_NET_PAID_INC_TAX",
+                                "columnType": "DfMoney"
+                            },
+                            {
+                                "sourceColumn": "SS_NET_PROFIT",
+                                "destColumn": "SS_NET_PROFIT",
+                                "columnType": "DfMoney"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.Optimized.76260.admin.68777.store_sales",
+                "dest": "table_undefined_dag_5DE973CA33834479_1575589107022_37#1576205814326_57",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "type": "DfUnknown",
+                        "keyFieldName": "",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "store_sales",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589107022_37\"]}"
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589111290_38\"]}",
+            "tag": "",
+            "state": "Unknown state",
+            "args": {
+                "dest": "Optimized.37369.admin.29251.date_dim",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpcds_sf1_notrail/tpcds_sf1/upper/date_dim.dat",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "D_DATE_SK",
+                                "destColumn": "D_DATE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_DATE_ID",
+                                "destColumn": "D_DATE_ID",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_DATE",
+                                "destColumn": "D_DATE",
+                                "columnType": "DfTimespec"
+                            },
+                            {
+                                "sourceColumn": "D_MONTH_SEQ",
+                                "destColumn": "D_MONTH_SEQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_WEEK_SEQ",
+                                "destColumn": "D_WEEK_SEQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_QUARTER_SEQ",
+                                "destColumn": "D_QUARTER_SEQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_YEAR",
+                                "destColumn": "D_YEAR",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_DOW",
+                                "destColumn": "D_DOW",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_MOY",
+                                "destColumn": "D_MOY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_DOM",
+                                "destColumn": "D_DOM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_QOY",
+                                "destColumn": "D_QOY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_FY_YEAR",
+                                "destColumn": "D_FY_YEAR",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_FY_QUARTER_SEQ",
+                                "destColumn": "D_FY_QUARTER_SEQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_FY_WEEK_SEQ",
+                                "destColumn": "D_FY_WEEK_SEQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_DAY_NAME",
+                                "destColumn": "D_DAY_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_QUARTER_NAME",
+                                "destColumn": "D_QUARTER_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_HOLIDAY",
+                                "destColumn": "D_HOLIDAY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_WEEKEND",
+                                "destColumn": "D_WEEKEND",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_FOLLOWING_HOLIDAY",
+                                "destColumn": "D_FOLLOWING_HOLIDAY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_FIRST_DOM",
+                                "destColumn": "D_FIRST_DOM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_LAST_DOM",
+                                "destColumn": "D_LAST_DOM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_SAME_DAY_LY",
+                                "destColumn": "D_SAME_DAY_LY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_SAME_DAY_LQ",
+                                "destColumn": "D_SAME_DAY_LQ",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "D_CURRENT_DAY",
+                                "destColumn": "D_CURRENT_DAY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_CURRENT_WEEK",
+                                "destColumn": "D_CURRENT_WEEK",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_CURRENT_MONTH",
+                                "destColumn": "D_CURRENT_MONTH",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_CURRENT_QUARTER",
+                                "destColumn": "D_CURRENT_QUARTER",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "D_CURRENT_YEAR",
+                                "destColumn": "D_CURRENT_YEAR",
+                                "columnType": "DfString"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.Optimized.37369.admin.29251.date_dim",
+                "dest": "table_undefined_dag_5DE973CA33834479_1575589111290_38#1576205814330_58",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "type": "DfUnknown",
+                        "keyFieldName": "",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "date_dim",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589111290_38\"]}"
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589116233_39\"]}",
+            "tag": "",
+            "state": "Unknown state",
+            "args": {
+                "dest": "Optimized.14240.admin.99231.store",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpcds_sf1_notrail/tpcds_sf1/upper/store.dat",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "S_STORE_SK",
+                                "destColumn": "S_STORE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_STORE_ID",
+                                "destColumn": "S_STORE_ID",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_REC_START_DATE",
+                                "destColumn": "S_REC_START_DATE",
+                                "columnType": "DfTimespec"
+                            },
+                            {
+                                "sourceColumn": "S_REC_END_DATE",
+                                "destColumn": "S_REC_END_DATE",
+                                "columnType": "DfTimespec"
+                            },
+                            {
+                                "sourceColumn": "S_CLOSED_DATE_SK",
+                                "destColumn": "S_CLOSED_DATE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_STORE_NAME",
+                                "destColumn": "S_STORE_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_NUMBER_EMPLOYEES",
+                                "destColumn": "S_NUMBER_EMPLOYEES",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_FLOOR_SPACE",
+                                "destColumn": "S_FLOOR_SPACE",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_HOURS",
+                                "destColumn": "S_HOURS",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_MANAGER",
+                                "destColumn": "S_MANAGER",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_MARKET_ID",
+                                "destColumn": "S_MARKET_ID",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_GEOGRAPHY_CLASS",
+                                "destColumn": "S_GEOGRAPHY_CLASS",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_MARKET_DESC",
+                                "destColumn": "S_MARKET_DESC",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_MARKET_MANAGER",
+                                "destColumn": "S_MARKET_MANAGER",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_DIVISION_ID",
+                                "destColumn": "S_DIVISION_ID",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_DIVISION_NAME",
+                                "destColumn": "S_DIVISION_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_COMPANY_ID",
+                                "destColumn": "S_COMPANY_ID",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_COMPANY_NAME",
+                                "destColumn": "S_COMPANY_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_STREET_NUMBER",
+                                "destColumn": "S_STREET_NUMBER",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_STREET_NAME",
+                                "destColumn": "S_STREET_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_STREET_TYPE",
+                                "destColumn": "S_STREET_TYPE",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_SUITE_NUMBER",
+                                "destColumn": "S_SUITE_NUMBER",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_CITY",
+                                "destColumn": "S_CITY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_COUNTY",
+                                "destColumn": "S_COUNTY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_STATE",
+                                "destColumn": "S_STATE",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_ZIP",
+                                "destColumn": "S_ZIP",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_COUNTRY",
+                                "destColumn": "S_COUNTRY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "S_GMT_OFFSET",
+                                "destColumn": "S_GMT_OFFSET",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "S_TAX_PERCENTAGE",
+                                "destColumn": "S_TAX_PERCENTAGE",
+                                "columnType": "DfMoney"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.Optimized.14240.admin.99231.store",
+                "dest": "table_undefined_dag_5DE973CA33834479_1575589116233_39#1576205814332_59",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "type": "DfUnknown",
+                        "keyFieldName": "",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "store",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589116233_39\"]}"
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589122046_40\"]}",
+            "tag": "",
+            "state": "Unknown state",
+            "args": {
+                "dest": "Optimized.84845.admin.20521.customer_address",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpcds_sf1_notrail/tpcds_sf1/upper/customer_address.dat",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "CA_ADDRESS_SK",
+                                "destColumn": "CA_ADDRESS_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "CA_ADDRESS_ID",
+                                "destColumn": "CA_ADDRESS_ID",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_STREET_NUMBER",
+                                "destColumn": "CA_STREET_NUMBER",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "CA_STREET_NAME",
+                                "destColumn": "CA_STREET_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_STREET_TYPE",
+                                "destColumn": "CA_STREET_TYPE",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_SUITE_NUMBER",
+                                "destColumn": "CA_SUITE_NUMBER",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_CITY",
+                                "destColumn": "CA_CITY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_COUNTY",
+                                "destColumn": "CA_COUNTY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_STATE",
+                                "destColumn": "CA_STATE",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_ZIP",
+                                "destColumn": "CA_ZIP",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "CA_COUNTRY",
+                                "destColumn": "CA_COUNTRY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "CA_GMT_OFFSET",
+                                "destColumn": "CA_GMT_OFFSET",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "CA_LOCATION_TYPE",
+                                "destColumn": "CA_LOCATION_TYPE",
+                                "columnType": "DfString"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.Optimized.84845.admin.20521.customer_address",
+                "dest": "table_undefined_dag_5DE973CA33834479_1575589122046_40#1576205814335_60",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "type": "DfUnknown",
+                        "keyFieldName": "",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "customer_address",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589122046_40\"]}"
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589128667_41\"]}",
+            "tag": "",
+            "state": "Unknown state",
+            "args": {
+                "dest": "Optimized.26520.admin.28243.customer",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/tpcds_sf1_notrail/tpcds_sf1/upper/customer.dat",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"|\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "C_CUSTOMER_SK",
+                                "destColumn": "C_CUSTOMER_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_CUSTOMER_ID",
+                                "destColumn": "C_CUSTOMER_ID",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_CURRENT_CDEMO_SK",
+                                "destColumn": "C_CURRENT_CDEMO_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_CURRENT_HDEMO_SK",
+                                "destColumn": "C_CURRENT_HDEMO_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_CURRENT_ADDR_SK",
+                                "destColumn": "C_CURRENT_ADDR_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_FIRST_SHIPTO_DATE_SK",
+                                "destColumn": "C_FIRST_SHIPTO_DATE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_FIRST_SALES_DATE_SK",
+                                "destColumn": "C_FIRST_SALES_DATE_SK",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_SALUTATION",
+                                "destColumn": "C_SALUTATION",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_FIRST_NAME",
+                                "destColumn": "C_FIRST_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_LAST_NAME",
+                                "destColumn": "C_LAST_NAME",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_PREFERRED_CUST_FLAG",
+                                "destColumn": "C_PREFERRED_CUST_FLAG",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_BIRTH_DAY",
+                                "destColumn": "C_BIRTH_DAY",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_BIRTH_MONTH",
+                                "destColumn": "C_BIRTH_MONTH",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_BIRTH_YEAR",
+                                "destColumn": "C_BIRTH_YEAR",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "C_BIRTH_COUNTRY",
+                                "destColumn": "C_BIRTH_COUNTRY",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_LOGIN",
+                                "destColumn": "C_LOGIN",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_EMAIL_ADDRESS",
+                                "destColumn": "C_EMAIL_ADDRESS",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "C_LAST_REVIEW_DATE",
+                                "destColumn": "C_LAST_REVIEW_DATE",
+                                "columnType": "DfInt64"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.Optimized.26520.admin.28243.customer",
+                "dest": "table_undefined_dag_5DE973CA33834479_1575589128667_41#1576205814337_61",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "type": "DfUnknown",
+                        "keyFieldName": "",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "customer",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DE973CA33834479_1575589128667_41\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589107022_37#1576205814326_57",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478158_829#1576205814347_62",
+                "columns": [
+                    {
+                        "sourceColumn": "store_sales::SS_SOLD_DATE_SK",
+                        "destColumn": "SS_SOLD_DATE_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "store_sales::SS_STORE_SK",
+                        "destColumn": "SS_STORE_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "store_sales::SS_NET_PROFIT",
+                        "destColumn": "SS_NET_PROFIT",
+                        "columnType": "DfMoney"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 3
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478158_829\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589111290_38#1576205814330_58",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478169_833#1576205814348_63",
+                "columns": [
+                    {
+                        "sourceColumn": "date_dim::D_DATE_SK",
+                        "destColumn": "D_DATE_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "date_dim::D_YEAR",
+                        "destColumn": "D_YEAR",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "date_dim::D_QOY",
+                        "destColumn": "D_QOY",
+                        "columnType": "DfInt64"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 3
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478169_833\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589116233_39#1576205814332_59",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478174_836#1576205814349_64",
+                "columns": [
+                    {
+                        "sourceColumn": "store::S_STORE_SK",
+                        "destColumn": "S_STORE_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "store::S_STORE_NAME",
+                        "destColumn": "S_STORE_NAME",
+                        "columnType": "DfString"
+                    },
+                    {
+                        "sourceColumn": "store::S_ZIP",
+                        "destColumn": "S_ZIP",
+                        "columnType": "DfInt64"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 3
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478174_836\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589122046_40#1576205814335_60",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478202_846#1576205814350_65",
+                "columns": [
+                    {
+                        "sourceColumn": "customer_address::CA_ZIP",
+                        "destColumn": "CA_ZIP",
+                        "columnType": "DfInt64"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 1
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478202_846\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589122046_40#1576205814335_60",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478266_855#1576205814350_66",
+                "columns": [
+                    {
+                        "sourceColumn": "customer_address::CA_ADDRESS_SK",
+                        "destColumn": "CA_ADDRESS_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "customer_address::CA_ZIP",
+                        "destColumn": "CA_ZIP",
+                        "columnType": "DfInt64"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 2
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478266_855\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DE973CA33834479_1575589128667_41#1576205814337_61",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478277_858#1576205814351_67",
+                "columns": [
+                    {
+                        "sourceColumn": "customer::C_CURRENT_ADDR_SK",
+                        "destColumn": "C_CURRENT_ADDR_SK",
+                        "columnType": "DfInt64"
+                    },
+                    {
+                        "sourceColumn": "customer::C_PREFERRED_CUST_FLAG",
+                        "destColumn": "C_PREFERRED_CUST_FLAG",
+                        "columnType": "DfString"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 2
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478277_858\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478158_829#1576205814347_62",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478154_828#1576205814351_68",
+                "columns": [
+                    "SS_SOLD_DATE_SK",
+                    "SS_STORE_SK",
+                    "SS_NET_PROFIT"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478154_828\"]}"
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478169_833#1576205814348_63",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478166_832#1576205814352_69",
+                "eval": [
+                    {
+                        "evalString": "and(eqNonNull(D_QOY,2),eqNonNull(D_YEAR,1998))",
+                        "newField": null
+                    }
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478166_832\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478174_836#1576205814349_64",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478172_835#1576205814353_70",
+                "columns": [
+                    "S_STORE_SK",
+                    "S_STORE_NAME",
+                    "S_ZIP"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478172_835\"]}"
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478202_846#1576205814350_65",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478198_845#1576205814353_71",
+                "eval": [
+                    {
+                        "evalString": "and(in(substring(string(CA_ZIP),0,5),\"24128\",\"76232\",\"65084\",\"87816\",\"83926\",\"77556\",\"20548\",\"26231\",\"43848\",\"15126\",\"91137\",\"61265\",\"98294\",\"25782\",\"17920\",\"18426\",\"98235\",\"40081\",\"84093\",\"28577\",\"55565\",\"17183\",\"54601\",\"67897\",\"22752\",\"86284\",\"18376\",\"38607\",\"45200\",\"21756\",\"29741\",\"96765\",\"23932\",\"89360\",\"29839\",\"25989\",\"28898\",\"91068\",\"72550\",\"10390\",\"18845\",\"47770\",\"82636\",\"41367\",\"76638\",\"86198\",\"81312\",\"37126\",\"39192\",\"88424\",\"72175\",\"81426\",\"53672\",\"10445\",\"42666\",\"66864\",\"66708\",\"41248\",\"48583\",\"82276\",\"18842\",\"78890\",\"49448\",\"14089\",\"38122\",\"34425\",\"79077\",\"19849\",\"43285\",\"39861\",\"66162\",\"77610\",\"13695\",\"99543\",\"83444\",\"83041\",\"12305\",\"57665\",\"68341\",\"25003\",\"57834\",\"62878\",\"49130\",\"81096\",\"18840\",\"27700\",\"23470\",\"50412\",\"21195\",\"16021\",\"76107\",\"71954\",\"68309\",\"18119\",\"98359\",\"64544\",\"10336\",\"86379\",\"27068\",\"39736\",\"98569\",\"28915\",\"24206\",\"56529\",\"57647\",\"54917\",\"42961\",\"91110\",\"63981\",\"14922\",\"36420\",\"23006\",\"67467\",\"32754\",\"30903\",\"20260\",\"31671\",\"51798\",\"72325\",\"85816\",\"68621\",\"13955\",\"36446\",\"41766\",\"68806\",\"16725\",\"15146\",\"22744\",\"35850\",\"88086\",\"51649\",\"18270\",\"52867\",\"39972\",\"96976\",\"63792\",\"11376\",\"94898\",\"13595\",\"10516\",\"90225\",\"58943\",\"39371\",\"94945\",\"28587\",\"96576\",\"57855\",\"28488\",\"26105\",\"83933\",\"25858\",\"34322\",\"44438\",\"73171\",\"30122\",\"34102\",\"22685\",\"71256\",\"78451\",\"54364\",\"13354\",\"45375\",\"40558\",\"56458\",\"28286\",\"45266\",\"47305\",\"69399\",\"83921\",\"26233\",\"11101\",\"15371\",\"69913\",\"35942\",\"15882\",\"25631\",\"24610\",\"44165\",\"99076\",\"33786\",\"70738\",\"26653\",\"14328\",\"72305\",\"62496\",\"22152\",\"10144\",\"64147\",\"48425\",\"14663\",\"21076\",\"18799\",\"30450\",\"63089\",\"81019\",\"68893\",\"24996\",\"51200\",\"51211\",\"45692\",\"92712\",\"70466\",\"79994\",\"22437\",\"25280\",\"38935\",\"71791\",\"73134\",\"56571\",\"14060\",\"19505\",\"72425\",\"56575\",\"74351\",\"68786\",\"51650\",\"20004\",\"18383\",\"76614\",\"11634\",\"18906\",\"15765\",\"41368\",\"73241\",\"76698\",\"78567\",\"97189\",\"28545\",\"76231\",\"75691\",\"22246\",\"51061\",\"90578\",\"56691\",\"68014\",\"51103\",\"94167\",\"57047\",\"14867\",\"73520\",\"15734\",\"63435\",\"25733\",\"35474\",\"24676\",\"94627\",\"53535\",\"17879\",\"15559\",\"53268\",\"59166\",\"11928\",\"59402\",\"33282\",\"45721\",\"43933\",\"68101\",\"33515\",\"36634\",\"71286\",\"19736\",\"58058\",\"55253\",\"67473\",\"41918\",\"19515\",\"36495\",\"19430\",\"22351\",\"77191\",\"91393\",\"49156\",\"50298\",\"87501\",\"18652\",\"53179\",\"18767\",\"63193\",\"23968\",\"65164\",\"68880\",\"21286\",\"72823\",\"58470\",\"67301\",\"13394\",\"31016\",\"70372\",\"67030\",\"40604\",\"24317\",\"45748\",\"39127\",\"26065\",\"77721\",\"31029\",\"31880\",\"60576\",\"24671\",\"45549\",\"13376\",\"50016\",\"33123\",\"19769\",\"22927\",\"97789\",\"46081\",\"72151\",\"15723\",\"46136\",\"51949\",\"68100\",\"96888\",\"64528\",\"14171\",\"79777\",\"28709\",\"11489\",\"25103\",\"32213\",\"78668\",\"22245\",\"15798\",\"27156\",\"37930\",\"62971\",\"21337\",\"51622\",\"67853\",\"10567\",\"38415\",\"15455\",\"58263\",\"42029\",\"60279\",\"37125\",\"56240\",\"88190\",\"50308\",\"26859\",\"64457\",\"89091\",\"82136\",\"62377\",\"36233\",\"63837\",\"58078\",\"17043\",\"30010\",\"60099\",\"28810\",\"98025\",\"29178\",\"87343\",\"73273\",\"30469\",\"64034\",\"39516\",\"86057\",\"21309\",\"90257\",\"67875\",\"40162\",\"11356\",\"73650\",\"61810\",\"72013\",\"30431\",\"22461\",\"19512\",\"13375\",\"55307\",\"30625\",\"83849\",\"68908\",\"26689\",\"96451\",\"38193\",\"46820\",\"88885\",\"84935\",\"69035\",\"83144\",\"47537\",\"56616\",\"94983\",\"48033\",\"69952\",\"25486\",\"61547\",\"27385\",\"61860\",\"58048\",\"56910\",\"16807\",\"17871\",\"35258\",\"31387\",\"35458\",\"35576\"),exists(substring(string(CA_ZIP),0,5)))",
+                        "newField": null
+                    }
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478198_845\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478266_855#1576205814350_66",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478227_854#1576205814354_72",
+                "columns": [
+                    "CA_ADDRESS_SK",
+                    "CA_ZIP"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478227_854\"]}"
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478277_858#1576205814351_67",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478273_857#1576205814354_73",
+                "eval": [
+                    {
+                        "evalString": "eqNonNull(C_PREFERRED_CUST_FLAG,\"Y\")",
+                        "newField": null
+                    }
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478273_857\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478166_832#1576205814352_69",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478163_831#1576205814355_74",
+                "columns": [
+                    "D_DATE_SK"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478163_831\"]}"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478198_845#1576205814353_71",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478194_844#1576205814355_75",
+                "eval": [
+                    {
+                        "evalString": "substring(string(CA_ZIP),0,5)",
+                        "newField": "CA_ZIP"
+                    }
+                ],
+                "icv": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478194_844\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478273_857#1576205814354_73",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478270_856#1576205814356_76",
+                "columns": [
+                    "C_CURRENT_ADDR_SK"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478270_856\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478154_828#1576205814351_68",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478154_828.index#1576205814357_78",
+                "key": [
+                    {
+                        "name": "SS_SOLD_DATE_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "SS_SOLD_DATE_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478150_827\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478163_831#1576205814355_74",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478163_831.index#1576205814358_79",
+                "key": [
+                    {
+                        "name": "D_DATE_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "D_DATE_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478150_827\"]}"
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478154_828.index#1576205814357_78",
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478163_831.index#1576205814358_79"
+                ],
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478150_827#1576205814357_77",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "SS_SOLD_DATE_SK",
+                            "destColumn": "SS_SOLD_DATE_SK",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "SS_STORE_SK",
+                            "destColumn": "SS_STORE_SK",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "SS_NET_PROFIT",
+                            "destColumn": "SS_NET_PROFIT",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "D_DATE_SK",
+                            "destColumn": "D_DATE_SK",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ],
+                "evalString": "",
+                "keepAllColumns": false,
+                "nullSafe": false,
+                "key": [
+                    [
+                        "SS_SOLD_DATE_SK"
+                    ],
+                    [
+                        "D_DATE_SK"
+                    ]
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478150_827\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478194_844#1576205814355_75",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478192_843#1576205814359_80",
+                "columns": [
+                    "CA_ZIP"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478192_843\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478227_854#1576205814354_72",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478227_854.index#1576205814361_82",
+                "key": [
+                    {
+                        "name": "CA_ADDRESS_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "CA_ADDRESS_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478224_853\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478270_856#1576205814356_76",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478270_856.index#1576205814361_83",
+                "key": [
+                    {
+                        "name": "C_CURRENT_ADDR_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "C_CURRENT_ADDR_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478224_853\"]}"
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478227_854.index#1576205814361_82",
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478270_856.index#1576205814361_83"
+                ],
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478224_853#1576205814360_81",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "CA_ADDRESS_SK",
+                            "destColumn": "CA_ADDRESS_SK",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "CA_ZIP",
+                            "destColumn": "CA_ZIP",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "C_CURRENT_ADDR_SK",
+                            "destColumn": "C_CURRENT_ADDR_SK",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ],
+                "evalString": "",
+                "keepAllColumns": false,
+                "nullSafe": false,
+                "key": [
+                    [
+                        "CA_ADDRESS_SK"
+                    ],
+                    [
+                        "C_CURRENT_ADDR_SK"
+                    ]
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478224_853\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478150_827#1576205814357_77",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478147_826#1576205814362_84",
+                "columns": [
+                    "SS_STORE_SK",
+                    "SS_NET_PROFIT"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478147_826\"]}"
+        },
+        {
+            "operation": "XcalarApiGetRowNum",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478192_843#1576205814359_80",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478189_842#1576205814363_85",
+                "newField": "XC_LROWNUM_COL_1576205286786_302_T_1576205286779_289"
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478189_842\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478224_853#1576205814360_81",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478220_852#1576205814364_86",
+                "columns": [
+                    "CA_ZIP"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478220_852\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478147_826#1576205814362_84",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478147_826.index#1576205814365_88",
+                "key": [
+                    {
+                        "name": "SS_STORE_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "SS_STORE_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478144_825\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478172_835#1576205814353_70",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478172_835.index#1576205814366_89",
+                "key": [
+                    {
+                        "name": "S_STORE_SK",
+                        "type": "DfUnknown",
+                        "keyFieldName": "S_STORE_SK",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478144_825\"]}"
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478147_826.index#1576205814365_88",
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478172_835.index#1576205814366_89"
+                ],
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478144_825#1576205814365_87",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "SS_STORE_SK",
+                            "destColumn": "SS_STORE_SK",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "SS_NET_PROFIT",
+                            "destColumn": "SS_NET_PROFIT",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "S_STORE_SK",
+                            "destColumn": "S_STORE_SK",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "S_STORE_NAME",
+                            "destColumn": "S_STORE_NAME",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "S_ZIP",
+                            "destColumn": "S_ZIP",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ],
+                "evalString": "",
+                "keepAllColumns": false,
+                "nullSafe": false,
+                "key": [
+                    [
+                        "SS_STORE_SK"
+                    ],
+                    [
+                        "S_STORE_SK"
+                    ]
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478144_825\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478220_852#1576205814364_86",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478220_852.index#1576205814367_91",
+                "key": [
+                    {
+                        "name": "CA_ZIP",
+                        "type": "DfUnknown",
+                        "keyFieldName": "CA_ZIP",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478217_851\"]}"
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478220_852.index#1576205814367_91",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478217_851#1576205814367_90",
+                "eval": [
+                    {
+                        "evalString": "count(1)",
+                        "newField": "COUNT_1"
+                    }
+                ],
+                "newKeyField": "CA_ZIP",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478217_851\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478144_825#1576205814365_87",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478141_824#1576205814369_92",
+                "columns": [
+                    "SS_NET_PROFIT",
+                    "S_STORE_NAME",
+                    "S_ZIP"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478141_824\"]}"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478217_851#1576205814367_90",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478213_850#1576205814373_93",
+                "eval": [
+                    {
+                        "evalString": "substring(string(CA_ZIP),0,5)",
+                        "newField": "CA_ZIP_ET_1576205286781_296"
+                    }
+                ],
+                "icv": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478213_850\"]}"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478141_824#1576205814369_92",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478137_823#1576205814374_94",
+                "eval": [
+                    {
+                        "evalString": "substring(string(S_ZIP),0,2)",
+                        "newField": "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0"
+                    }
+                ],
+                "icv": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478137_823\"]}"
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478213_850#1576205814373_93",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478209_849#1576205814374_95",
+                "eval": [
+                    {
+                        "evalString": "gt(COUNT_1,10)",
+                        "newField": null
+                    }
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478209_849\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478209_849#1576205814374_95",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478205_848#1576205814375_96",
+                "columns": [
+                    "CA_ZIP_ET_1576205286781_296"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478205_848\"]}"
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478189_842#1576205814363_85",
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478205_848#1576205814375_96"
+                ],
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478186_841#1576205814377_97",
+                "joinType": "crossJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "CA_ZIP",
+                            "destColumn": "CA_ZIP",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "XC_LROWNUM_COL_1576205286786_302_T_1576205286779_289",
+                            "destColumn": "XC_LROWNUM_COL_1576205286786_302_T_1576205286779_289",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "CA_ZIP_ET_1576205286781_296",
+                            "destColumn": "CA_ZIP_ET_1576205286781_296",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ],
+                "evalString": "eq(CA_ZIP,CA_ZIP_ET_1576205286781_296)",
+                "keepAllColumns": false,
+                "nullSafe": false,
+                "key": [
+                    [],
+                    []
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478186_841\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478186_841#1576205814377_97",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478186_841.index#1576205814378_99",
+                "key": [
+                    {
+                        "name": "XC_LROWNUM_COL_1576205286786_302_T_1576205286779_289",
+                        "type": "DfUnknown",
+                        "keyFieldName": "XC_LROWNUM_COL_1576205286786_302_T_1576205286779_289",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478183_840\"]}"
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478186_841.index#1576205814378_99",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478183_840#1576205814378_98",
+                "eval": [
+                    {
+                        "evalString": "count(1)",
+                        "newField": "XC_COUNT_1576205286787_305_T_1576205286787_304"
+                    }
+                ],
+                "newKeyField": "",
+                "includeSample": true,
+                "icv": false,
+                "groupAll": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478183_840\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478183_840#1576205814378_98",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478183_840.index#1576205814380_101",
+                "key": [
+                    {
+                        "name": "CA_ZIP",
+                        "type": "DfUnknown",
+                        "keyFieldName": "CA_ZIP",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478180_839\"]}"
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478183_840.index#1576205814380_101",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478180_839#1576205814380_100",
+                "eval": [
+                    {
+                        "evalString": "count(1)",
+                        "newField": "XC_GB_COL_1576205286788_308"
+                    }
+                ],
+                "newKeyField": "CA_ZIP",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478180_839\"]}"
+        },
+        {
+            "operation": "XcalarApiMap",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478180_839#1576205814380_100",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478177_838#1576205814381_102",
+                "eval": [
+                    {
+                        "evalString": "substring(CA_ZIP,0,2)",
+                        "newField": "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0"
+                    }
+                ],
+                "icv": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478177_838\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478137_823#1576205814374_94",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478137_823.index#1576205814383_104",
+                "key": [
+                    {
+                        "name": "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0",
+                        "type": "DfUnknown",
+                        "keyFieldName": "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478133_822\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478177_838#1576205814381_102",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478177_838.index#1576205814383_105",
+                "key": [
+                    {
+                        "name": "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0",
+                        "type": "DfUnknown",
+                        "keyFieldName": "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478133_822\"]}"
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478137_823.index#1576205814383_104",
+                    "table_undefined_dag_5DF2BEF81BA81614_1576205478177_838.index#1576205814383_105"
+                ],
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478133_822#1576205814382_103",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "SS_NET_PROFIT",
+                            "destColumn": "SS_NET_PROFIT",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "S_STORE_NAME",
+                            "destColumn": "S_STORE_NAME",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "S_ZIP",
+                            "destColumn": "S_ZIP",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0",
+                            "destColumn": "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0",
+                            "columnType": "DfUnknown"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "XC_GB_COL_1576205286788_308",
+                            "destColumn": "XC_GB_COL_1576205286788_308",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "CA_ZIP",
+                            "destColumn": "CA_ZIP",
+                            "columnType": "DfUnknown"
+                        },
+                        {
+                            "sourceColumn": "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0",
+                            "destColumn": "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0",
+                            "columnType": "DfUnknown"
+                        }
+                    ]
+                ],
+                "evalString": "",
+                "keepAllColumns": false,
+                "nullSafe": false,
+                "key": [
+                    [
+                        "XC_JOIN_COL_1576205286789_311_T_1576205286774_286_0"
+                    ],
+                    [
+                        "XC_JOIN_COL_1576205286789_313_T_1576205286789_310_0"
+                    ]
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478133_822\"]}"
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478133_822#1576205814382_103",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478128_821#1576205814384_106",
+                "columns": [
+                    "SS_NET_PROFIT",
+                    "S_STORE_NAME"
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478128_821\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478128_821#1576205814384_106",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478128_821.index#1576205814385_108",
+                "key": [
+                    {
+                        "name": "S_STORE_NAME",
+                        "type": "DfUnknown",
+                        "keyFieldName": "S_STORE_NAME",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478125_820\"]}"
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478128_821.index#1576205814385_108",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478125_820#1576205814385_107",
+                "eval": [
+                    {
+                        "evalString": "sumNumeric(SS_NET_PROFIT)",
+                        "newField": "SUM_SS_NET_PROFIT"
+                    }
+                ],
+                "newKeyField": "S_STORE_NAME",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478125_820\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478125_820#1576205814385_107",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478122_819#1576205814386_109",
+                "key": [
+                    {
+                        "name": "S_STORE_NAME",
+                        "type": "DfUnknown",
+                        "keyFieldName": "S_STORE_NAME",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478122_819\"]}"
+        },
+        {
+            "operation": "XcalarApiGetRowNum",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478122_819#1576205814386_109",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478118_818#1576205814387_110",
+                "newField": "XC_ROW_COL_1576205286793_322_T_1576205286792_321"
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478118_818\"]}"
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478118_818#1576205814387_110",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478114_817#1576205814388_111",
+                "eval": [
+                    {
+                        "evalString": "le(XC_ROW_COL_1576205286793_322_T_1576205286792_321,100)",
+                        "newField": null
+                    }
+                ]
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478114_817\"]}"
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478114_817#1576205814388_111",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478109_816#1576205814388_112",
+                "key": [
+                    {
+                        "name": "S_STORE_NAME",
+                        "type": "DfUnknown",
+                        "keyFieldName": "S_STORE_NAME",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478109_816\"]}"
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "args": {
+                "source": "table_undefined_dag_5DF2BEF81BA81614_1576205478109_816#1576205814388_112",
+                "dest": "table_undefined_dag_5DF2BEF81BA81614_1576205478085_814#1576205814389_113",
+                "columns": [
+                    {
+                        "sourceColumn": "S_STORE_NAME",
+                        "destColumn": "S_STORE_NAME"
+                    },
+                    {
+                        "sourceColumn": "SUM_SS_NET_PROFIT",
+                        "destColumn": "SUM_SS_NET_PROFIT"
+                    }
+                ],
+                "sameSession": true,
+                "numColumns": 2
+            },
+            "comment": "{\"nodeIds\":[\"dag_5DF2BEF81BA81614_1576205478085_814\"]}"
+        }
+    ]
+}

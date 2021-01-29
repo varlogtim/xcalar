@@ -1,0 +1,56 @@
+== One time setup for Centos 7 ==
+
+Update your system and add epel-release packages
+ $ sudo yum -y update
+ $ sudo yum -y install epel-release
+ $ sudo yum -y update
+ $ sudo reboot
+
+Install dependencies needed to develop Xcalar
+ $ sudo yum groupinstall -y 'Development Tools'
+ $ sudo yum install -y net-tools python-devel wget clang clang-analyzer jansson-devel libaio1 libaio-devel libbsd-devel zlib-devel readline-devel valgrind jq bc words httpd ruby-devel gcc gcc-c++ make git openssl-devel freetype-devel fontconfig-devel python-pip nfs-utils boost-devel libevent-devel glib2-devel protobuf-devel libuuid-devel libxml2-devel mysql mysql-devel
+ $ sudo pip install fake-factory enum34 apache_log_parser
+ $ sudo gem install less therubyracer
+
+Install phantomjs
+ $ cd /tmp
+ $ git clone git://github.com/ariya/phantomjs.git
+ $ cd phantomjs
+ $ git checkout 1.9
+ $ ./build.sh
+ $ cd rpm
+ $ ./mkrpm.sh phantomjs
+ $ cd /tmp
+ $ sudo rpm -i phantomjs-1.9.8-1.x86_64.rpm
+
+Mount netstore
+ $ sudo mkdir /netstore
+ $ sudo mount netstore.int.xcalar.com:/public/netstore /netstore
+ $ sudo -i
+ # echo "netstore:/public/netstore /netstore nfs defaults 0 0" >> /etc/fstab
+ # exit
+
+Install thrift via pre-built RPMs
+ $ pushd /netstore/users/mbrown/thrift-centos-rpms
+ $ sudo rpm -i thrift-0.9.2-0.x86_64.rpm
+ $ sudo rpm -i thrift-debuginfo-0.9.2-0.x86_64.rpm
+ $ sudo rpm -i thrift-lib-cpp-0.9.2-0.x86_64.rpm
+ $ sudo rpm -i thrift-lib-cpp-devel-0.9.2-0.x86_64.rpm
+ $ sudo rpm -i thrift-lib-php-0.9.2-0.x86_64.rpm
+ $ popd
+
+Follow instructions in README to clone xcalar repos and setup environment
+
+XXX There currently isn't a clean way to get the UI running with centos. Update
+    once this changes.
+
+Copy datasets to your local disk
+ $ cp -a /netstore/datasets/gdelt-small /var/tmp
+ $ cp -a /netstore/datasets/yelp /var/tmp
+ $ ln -s $XLRDIR/src/data/qa /var/tmp
+
+Create /opt/xcalar/scripts directory
+ $ sudo mkdir --parent /opt/xcalar
+ $ sudo chown $USER /opt/xcalar
+ $ ln -sfn "$XLRDIR/scripts" "/opt/xcalar/"
+

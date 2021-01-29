@@ -1,0 +1,7 @@
+This directory has been created from thrift source by:
+
+$ git clone https://github.com/apache/thrift
+$ cd thrift
+$ git checkout 0.9.2
+$ cp lib/js/src/thrift.js $XLRDIR/src/3rd/thrift/
+$ cp -R lib/py/src $XLRDIR/src/3rd/thrift/thrift_py_src

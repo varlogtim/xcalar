@@ -1,0 +1,341 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-Matrix",
+            "columns": [
+                {
+                    "columnName": "Row",
+                    "headerAlias": "Row"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-pmaddipatla-db01a150-af9f79a3",
+    "udfs": [
+        {
+            "fileName": "udfs/matrix.py",
+            "moduleName": "matrix",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.vsrihari.95047.matrixB",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "/netstore/datasets/matrixMultiply/partdata/",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "matrix:generateMatrixB",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.vsrihari.31015.partdata",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "/netstore/datasets/matrixMultiply/partdata/",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "matrix:generateMatrixA",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.vsrihari.95047.matrixB",
+                "dest": "matrixB#mV1",
+                "prefix": "matrixB",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "matrixB-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.vsrihari.31015.partdata",
+                "dest": "matrixA#mV0",
+                "prefix": "partdata",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "partdata-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "matrixB#mV1",
+                "dest": "matrixB.index#mV4",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "matrixB::Row",
+                        "ordering": "Unordered",
+                        "keyFieldName": "matrixB-Row",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "matrixA#mV0",
+                "dest": "matrixA.index#mV3",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "partdata::Column",
+                        "ordering": "Unordered",
+                        "keyFieldName": "partdata-Column",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "matrixA.index#mV3",
+                    "matrixB.index#mV4"
+                ],
+                "joinType": "innerJoin",
+                "dest": "joinAB#mV2",
+                "key": [
+                    ["partdata-Column"],
+                    ["matrixB-Row"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "partdata",
+                            "columnType": "DfFatptr",
+                            "destColumn": "partdata"
+                        },
+                        {
+                            "sourceColumn": "partdata-Column",
+                            "columnType": "DfInt64",
+                            "destColumn": "partdata-Column"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "matrixB",
+                            "columnType": "DfFatptr",
+                            "destColumn": "matrixB"
+                        },
+                        {
+                            "sourceColumn": "matrixB-Row",
+                            "columnType": "DfInt64",
+                            "destColumn": "matrixB-Row"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "joinAB#mV2",
+                "dest": "joinAB#mV5",
+                "eval": [
+                    {
+                        "evalString": "mult(partdata::Value, matrixB::Value)",
+                        "newField": "PartialProduct"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "joinAB#mV5",
+                "dest": "joinAB#mV7",
+                "eval": [
+                    {
+                        "evalString": "concat(string(partdata::Row), concat(\".Xc.\", string(matrixB::Column)))",
+                        "newField": "multiGroupBy37561"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "joinAB#mV7",
+                "dest": "joinAB#mV8",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "multiGroupBy37561",
+                        "ordering": "Unordered",
+                        "keyFieldName": "multiGroupBy37561",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "groupAll": false,
+                "source": "joinAB#mV8",
+                "includeSample": false,
+                "dest": "productAB#mV6",
+                "eval": [
+                    {
+                        "evalString": "sum(PartialProduct)",
+                        "newField": "Value"
+                    }
+                ],
+                "newKeyField": "multiGroupBy37561",
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "productAB#mV6",
+                "dest": "productAB#mV9",
+                "eval": [
+                    {
+                        "evalString": "int(cut(multiGroupBy37561, 1, \".Xc.\"))",
+                        "newField": "Row"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "productAB#mV9",
+                "dest": "productAB#mV10",
+                "eval": [
+                    {
+                        "evalString": "int(cut(multiGroupBy37561, 2, \".Xc.\"))",
+                        "newField": "Column"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "comment": "",
+            "args": {
+                "source": "productAB#mV10",
+                "dest": "MaxProductValue",
+                "eval": [
+                    {
+                        "evalString": "maxInteger(Value)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "productAB#mV10",
+                "dest": "EndResult-Matrix",
+                "eval": [
+                    {
+                        "evalString": "sub(Value, ^MaxProductValue)",
+                        "newField": "Max Spread"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "EndResult-Matrix",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-EndResult-Matrix.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.EndResult-Matrix",
+                "columns": [
+                    {
+                        "headerName": "Row",
+                        "columnName": "Row"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

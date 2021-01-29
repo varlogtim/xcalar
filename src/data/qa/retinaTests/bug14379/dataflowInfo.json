@@ -1,0 +1,436 @@
+{
+    "tables": [
+        {
+            "name": "grpbytbl#6",
+            "columns": [
+                {
+                    "columnName": "Carrier_count",
+                    "headerAlias": "Carrier_count"
+                },
+                {
+                    "columnName": "Carrier",
+                    "headerAlias": "Carrier"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "MonthDayYear",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DayOfWeek",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Carrier",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "FlightNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TailNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "AirTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Origin",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Destination",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Distance",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiIn",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiOut",
+            "type": "DfUnknown"
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.xdpadmin.93034.airlines",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/adventure/xcalar/airlines-empty.csv",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "MonthDayYear",
+                                "destColumn": "MonthDayYear",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "DayOfWeek",
+                                "destColumn": "DayOfWeek",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "DepTime",
+                                "destColumn": "DepTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "ArrTime",
+                                "destColumn": "ArrTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Carrier",
+                                "destColumn": "Carrier",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "FlightNum",
+                                "destColumn": "FlightNum",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TailNum",
+                                "destColumn": "TailNum",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "AirTime",
+                                "destColumn": "AirTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "ArrDelay",
+                                "destColumn": "ArrDelay",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "DepDelay",
+                                "destColumn": "DepDelay",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Origin",
+                                "destColumn": "Origin",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Destination",
+                                "destColumn": "Destination",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Distance",
+                                "destColumn": "Distance",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TaxiIn",
+                                "destColumn": "TaxiIn",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TaxiOut",
+                                "destColumn": "TaxiOut",
+                                "columnType": "DfInt64"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#1",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.xdpadmin.93034.airlines",
+                "dest": "airlines#1",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "airlines",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.xdpadmin.06762.carriers",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/adventure/xcalar/carriers.json",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#2",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.xdpadmin.06762.carriers",
+                "dest": "carriers#2",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "carriers",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "join#3",
+            "state": "Created",
+            "args": {
+                "source": "carriers#2",
+                "dest": "carriers.index#4",
+                "key": [
+                    {
+                        "name": "carriers::Carrier",
+                        "keyFieldName": "Carrier",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "join#3",
+            "state": "Created",
+            "args": {
+                "source": "airlines#1",
+                "dest": "airlines.index#5",
+                "key": [
+                    {
+                        "name": "airlines::Carrier",
+                        "keyFieldName": "Carrier",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "{\"userComment\":\"\",\"meta\":{\"operation\":\"Inner Join\"}}",
+            "tag": "join#3",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "airlines.index#5",
+                    "carriers.index#4"
+                ],
+                "dest": "jt#3",
+                "joinType": "innerJoin",
+                "key": [
+                    [
+                        "Carrier"
+                    ],
+                    [
+                        "Carrier"
+                    ]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "airlines",
+                            "destColumn": "airlines",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "Carrier",
+                            "destColumn": "Carrier_l_index35815",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "carriers",
+                            "destColumn": "carriers",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "Carrier",
+                            "destColumn": "Carrier_r_index89656",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "groupBy#6",
+            "state": "Created",
+            "args": {
+                "source": "jt#3",
+                "dest": "jt.index#7",
+                "key": [
+                    {
+                        "name": "carriers::Carrier",
+                        "keyFieldName": "Carrier",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "tag": "groupBy#6",
+            "state": "Created",
+            "args": {
+                "source": "jt.index#7",
+                "dest": "grpbytbl#6",
+                "eval": [
+                    {
+                        "evalString": "count(carriers::Carrier)",
+                        "newField": "Carrier_count"
+                    }
+                ],
+                "newKeyField": "Carrier",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "grpbytbl#6",
+                "fileName": "export-grpbytbl#6.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.grpbytbl#6",
+                "columns": [
+                    {
+                        "columnName": "Carrier_count",
+                        "headerName": "Carrier_count"
+                    },
+                    {
+                        "columnName": "Carrier",
+                        "headerName": "Carrier"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-2448-xcalardev-acdc2cb4-4d99d367",
+    "dataflowVersion": 1
+}

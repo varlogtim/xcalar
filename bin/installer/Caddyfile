@@ -1,0 +1,20 @@
+http://0.0.0.0 {
+	root /opt/xcalar/xcalar-gui
+	tls off
+	proxy /thrift/service http://127.0.0.1:9090/thrift/service {
+		max_fails 0
+		fail_timeout 14000s
+		keepalive 100
+		transparent
+	}
+	gzip
+	log / /var/log/caddy/access.log "{remote} - - [{when}] \"{method} {uri} {proto}\" {status} {size} \"-\" \"{>User-Agent}\"" {
+		rotate {
+			size 100 # Rotate after 100 MB
+			age  14  # Keep log files for 14 days
+			keep 10  # Keep at most 10 log files
+		}
+	}
+	errors /var/log/caddy/error.log
+}
+

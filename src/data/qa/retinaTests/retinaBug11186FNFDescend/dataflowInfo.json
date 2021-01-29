@@ -1,0 +1,1359 @@
+{
+    "tables": [
+        {
+            "name": "temp-36028797020057778",
+            "columns": [
+                {
+                    "columnName": "key-29359-36028797020057776",
+                    "headerAlias": "retCol-29357-36028797020223821"
+                },
+                {
+                    "columnName": "retCol-29358-36028797019326042",
+                    "headerAlias": "retCol-29357-36028797020223822"
+                },
+                {
+                    "columnName": "col-29359-36028797020057771",
+                    "headerAlias": "retCol-29357-36028797020223823"
+                },
+                {
+                    "columnName": "col-29359-36028797020057773",
+                    "headerAlias": "retCol-29357-36028797020223824"
+                },
+                {
+                    "columnName": "col-29359-36028797020057774",
+                    "headerAlias": "retCol-29357-36028797020223825"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "dest": ".XcalarDS.RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/gdelt-small/",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": ".XcalarDS.RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:operatorsFuncTestUser-1-node0",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:RN10temp-36028797018966841",
+                "key": [
+                    {
+                        "name": "column17",
+                        "keyFieldName": "prefix-24891-36028797018965889-column17",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-24891-36028797018965889",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "dest": ".XcalarDS.RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502:operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/gdelt-small/",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"none\", \"schemaFile\": \"\", \"typedColumns\": []}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:RN10temp-36028797018966841",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:temp-36028797018980053",
+                "key": [
+                    {
+                        "name": "prefix-24891-36028797018965889::column2",
+                        "keyFieldName": "prefix-24891-36028797018965889-column2",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    },
+                    {
+                        "name": "prefix-24891-36028797018965889::column47",
+                        "keyFieldName": "prefix-24891-36028797018965889-column47",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": ".XcalarDS.RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502:operatorsFuncTestUser-1-node0",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502:temp-36028797018966841",
+                "key": [
+                    {
+                        "name": "column17",
+                        "keyFieldName": "prefix-24891-36028797018965889-column17",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-24891-36028797018965889",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594:temp-36028797018980053",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column0",
+                        "destColumn": "retCol-29357-36028797019041629",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column1",
+                        "destColumn": "retCol-29357-36028797019041630",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column6",
+                        "destColumn": "retCol-29357-36028797019041631",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column8",
+                        "destColumn": "retCol-29357-36028797019041632",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column9",
+                        "destColumn": "retCol-29357-36028797019041633",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column10",
+                        "destColumn": "retCol-29357-36028797019041634",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column11",
+                        "destColumn": "retCol-29357-36028797019041635",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column12",
+                        "destColumn": "retCol-29357-36028797019041636",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column14",
+                        "destColumn": "retCol-29357-36028797019041637",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column17",
+                        "destColumn": "retCol-29357-36028797019041638",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column18",
+                        "destColumn": "retCol-29357-36028797019041639",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column19",
+                        "destColumn": "retCol-29357-36028797019041640",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column21",
+                        "destColumn": "retCol-29357-36028797019041641",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column22",
+                        "destColumn": "retCol-29357-36028797019041642",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column23",
+                        "destColumn": "retCol-29357-36028797019041643",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column24",
+                        "destColumn": "retCol-29357-36028797019041644",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column25",
+                        "destColumn": "retCol-29357-36028797019041645",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column26",
+                        "destColumn": "retCol-29357-36028797019041646",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column27",
+                        "destColumn": "retCol-29357-36028797019041647",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column28",
+                        "destColumn": "retCol-29357-36028797019041648",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column29",
+                        "destColumn": "retCol-29357-36028797019041649",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column30",
+                        "destColumn": "retCol-29357-36028797019041650",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column31",
+                        "destColumn": "retCol-29357-36028797019041651",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column34",
+                        "destColumn": "retCol-29357-36028797019041652",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column36",
+                        "destColumn": "retCol-29357-36028797019041653",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column37",
+                        "destColumn": "retCol-29357-36028797019041654",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column38",
+                        "destColumn": "retCol-29357-36028797019041655",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column39",
+                        "destColumn": "retCol-29357-36028797019041656",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column40",
+                        "destColumn": "retCol-29357-36028797019041657",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column41",
+                        "destColumn": "retCol-29357-36028797019041658",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column44",
+                        "destColumn": "retCol-29357-36028797019041659",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column45",
+                        "destColumn": "retCol-29357-36028797019041660",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column46",
+                        "destColumn": "retCol-29357-36028797019041661",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column47",
+                        "destColumn": "retCol-29357-36028797019041662",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column48",
+                        "destColumn": "retCol-29357-36028797019041663",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column49",
+                        "destColumn": "retCol-29357-36028797019041664",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column51",
+                        "destColumn": "retCol-29357-36028797019041665",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column53",
+                        "destColumn": "retCol-29357-36028797019041666",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column54",
+                        "destColumn": "retCol-29357-36028797019041667",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column55",
+                        "destColumn": "retCol-29357-36028797019041668",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column56",
+                        "destColumn": "retCol-29357-36028797019041669",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column57",
+                        "destColumn": "retCol-29357-36028797019041670",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889-column17",
+                        "destColumn": "retCol-29357-36028797019041671",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889-column2",
+                        "destColumn": "retCol-29357-36028797019041672",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889-column47",
+                        "destColumn": "retCol-29357-36028797019041673",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502:temp-36028797018966841",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column0",
+                        "destColumn": "retCol-29358-36028797018970334",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column3",
+                        "destColumn": "retCol-29358-36028797018970335",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column4",
+                        "destColumn": "retCol-29358-36028797018970336",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column5",
+                        "destColumn": "retCol-29358-36028797018970337",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column6",
+                        "destColumn": "retCol-29358-36028797018970338",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column7",
+                        "destColumn": "retCol-29358-36028797018970339",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column8",
+                        "destColumn": "retCol-29358-36028797018970340",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column10",
+                        "destColumn": "retCol-29358-36028797018970341",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column12",
+                        "destColumn": "retCol-29358-36028797018970342",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column13",
+                        "destColumn": "retCol-29358-36028797018970343",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column14",
+                        "destColumn": "retCol-29358-36028797018970344",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column15",
+                        "destColumn": "retCol-29358-36028797018970345",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column16",
+                        "destColumn": "retCol-29358-36028797018970346",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column20",
+                        "destColumn": "retCol-29358-36028797018970347",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column21",
+                        "destColumn": "retCol-29358-36028797018970348",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column22",
+                        "destColumn": "retCol-29358-36028797018970349",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column24",
+                        "destColumn": "retCol-29358-36028797018970350",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column25",
+                        "destColumn": "retCol-29358-36028797018970351",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column26",
+                        "destColumn": "retCol-29358-36028797018970352",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column27",
+                        "destColumn": "retCol-29358-36028797018970353",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column29",
+                        "destColumn": "retCol-29358-36028797018970354",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column30",
+                        "destColumn": "retCol-29358-36028797018970355",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column32",
+                        "destColumn": "retCol-29358-36028797018970356",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column34",
+                        "destColumn": "retCol-29358-36028797018970357",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column35",
+                        "destColumn": "retCol-29358-36028797018970358",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column36",
+                        "destColumn": "retCol-29358-36028797018970359",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column37",
+                        "destColumn": "retCol-29358-36028797018970360",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column38",
+                        "destColumn": "retCol-29358-36028797018970361",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column40",
+                        "destColumn": "retCol-29358-36028797018970362",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column41",
+                        "destColumn": "retCol-29358-36028797018970363",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column42",
+                        "destColumn": "retCol-29358-36028797018970364",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column43",
+                        "destColumn": "retCol-29358-36028797018970365",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column45",
+                        "destColumn": "retCol-29358-36028797018970366",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column46",
+                        "destColumn": "retCol-29358-36028797018970367",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column47",
+                        "destColumn": "retCol-29358-36028797018970368",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column48",
+                        "destColumn": "retCol-29358-36028797018970369",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column49",
+                        "destColumn": "retCol-29358-36028797018970370",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column50",
+                        "destColumn": "retCol-29358-36028797018970371",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column51",
+                        "destColumn": "retCol-29358-36028797018970372",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column52",
+                        "destColumn": "retCol-29358-36028797018970373",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column53",
+                        "destColumn": "retCol-29358-36028797018970374",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column54",
+                        "destColumn": "retCol-29358-36028797018970375",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column56",
+                        "destColumn": "retCol-29358-36028797018970376",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889::column57",
+                        "destColumn": "retCol-29358-36028797018970377",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889-column17",
+                        "destColumn": "retCol-29358-36028797018970378",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": [
+                    "RN0retina--29358-36028797019326034-36028797019348319:RN0retina--29358-36028797018970333-36028797018975502",
+                    "RN0retina--29358-36028797019326034-36028797019348319:retina--29357-36028797019041628-36028797019048594"
+                ],
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:RN0temp-36028797019151739",
+                "dedup": false,
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970335",
+                            "destColumn": "retCol-29358-36028797018970335",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970336",
+                            "destColumn": "retCol-29358-36028797018970336",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970337",
+                            "destColumn": "retCol-29358-36028797018970337",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970338",
+                            "destColumn": "retCol-29358-36028797018970338",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970340",
+                            "destColumn": "retCol-29358-36028797018970340",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970341",
+                            "destColumn": "retCol-29358-36028797018970341",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970342",
+                            "destColumn": "retCol-29358-36028797018970342",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970343",
+                            "destColumn": "retCol-29358-36028797018970343",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970344",
+                            "destColumn": "retCol-29358-36028797018970344",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970345",
+                            "destColumn": "retCol-29358-36028797018970345",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970346",
+                            "destColumn": "retCol-29358-36028797018970346",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970347",
+                            "destColumn": "retCol-29358-36028797018970347",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970348",
+                            "destColumn": "retCol-29358-36028797018970348",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970349",
+                            "destColumn": "retCol-29358-36028797018970349",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970350",
+                            "destColumn": "retCol-29358-36028797018970350",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970351",
+                            "destColumn": "retCol-29358-36028797018970351",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970352",
+                            "destColumn": "retCol-29358-36028797018970352",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970353",
+                            "destColumn": "retCol-29358-36028797018970353",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970354",
+                            "destColumn": "retCol-29358-36028797018970354",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970356",
+                            "destColumn": "retCol-29358-36028797018970356",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970358",
+                            "destColumn": "retCol-29358-36028797018970358",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970359",
+                            "destColumn": "retCol-29358-36028797018970359",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970360",
+                            "destColumn": "retCol-29358-36028797018970360",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970361",
+                            "destColumn": "retCol-29358-36028797018970361",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970362",
+                            "destColumn": "retCol-29358-36028797018970362",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970363",
+                            "destColumn": "retCol-29358-36028797018970363",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970364",
+                            "destColumn": "retCol-29358-36028797018970364",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970365",
+                            "destColumn": "retCol-29358-36028797018970365",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970366",
+                            "destColumn": "retCol-29358-36028797018970366",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970369",
+                            "destColumn": "retCol-29358-36028797018970369",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970370",
+                            "destColumn": "retCol-29358-36028797018970370",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970371",
+                            "destColumn": "retCol-29358-36028797018970371",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970372",
+                            "destColumn": "retCol-29358-36028797018970372",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970373",
+                            "destColumn": "retCol-29358-36028797018970373",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970374",
+                            "destColumn": "retCol-29358-36028797018970374",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970375",
+                            "destColumn": "retCol-29358-36028797018970375",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970376",
+                            "destColumn": "retCol-29358-36028797018970376",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970377",
+                            "destColumn": "retCol-29358-36028797018970377",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29358-36028797018970378",
+                            "destColumn": "retCol-29358-36028797018970378",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-24891-36028797018965889-column17",
+                            "destColumn": "prefix-24891-36028797018965889-column17",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041629",
+                            "destColumn": "prefix-24891-36028797018965889-column17",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041630",
+                            "destColumn": "retCol-29357-36028797019041630",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041631",
+                            "destColumn": "retCol-29357-36028797019041631",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041633",
+                            "destColumn": "retCol-29357-36028797019041633",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041634",
+                            "destColumn": "retCol-29357-36028797019041634",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041635",
+                            "destColumn": "retCol-29357-36028797019041635",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041636",
+                            "destColumn": "retCol-29357-36028797019041636",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041638",
+                            "destColumn": "retCol-29357-36028797019041638",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041640",
+                            "destColumn": "retCol-29357-36028797019041640",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041641",
+                            "destColumn": "retCol-29357-36028797019041641",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041642",
+                            "destColumn": "retCol-29357-36028797019041642",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041644",
+                            "destColumn": "retCol-29357-36028797019041644",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041645",
+                            "destColumn": "retCol-29357-36028797019041645",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041646",
+                            "destColumn": "retCol-29357-36028797019041646",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041647",
+                            "destColumn": "retCol-29357-36028797019041647",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041648",
+                            "destColumn": "retCol-29357-36028797019041648",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041649",
+                            "destColumn": "retCol-29357-36028797019041649",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041650",
+                            "destColumn": "retCol-29357-36028797019041650",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041651",
+                            "destColumn": "retCol-29357-36028797019041651",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041652",
+                            "destColumn": "retCol-29357-36028797019041652",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041653",
+                            "destColumn": "retCol-29357-36028797019041653",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041654",
+                            "destColumn": "retCol-29357-36028797019041654",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041655",
+                            "destColumn": "retCol-29357-36028797019041655",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041656",
+                            "destColumn": "retCol-29357-36028797019041656",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041657",
+                            "destColumn": "retCol-29357-36028797019041657",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041658",
+                            "destColumn": "retCol-29357-36028797019041658",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041659",
+                            "destColumn": "retCol-29357-36028797019041659",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041660",
+                            "destColumn": "retCol-29357-36028797019041660",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041661",
+                            "destColumn": "retCol-29357-36028797019041661",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041663",
+                            "destColumn": "retCol-29357-36028797019041663",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041664",
+                            "destColumn": "retCol-29357-36028797019041664",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041665",
+                            "destColumn": "retCol-29357-36028797019041665",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041668",
+                            "destColumn": "retCol-29357-36028797019041668",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041670",
+                            "destColumn": "retCol-29357-36028797019041670",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041671",
+                            "destColumn": "retCol-29357-36028797019041671",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041672",
+                            "destColumn": "retCol-29357-36028797019041672",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "retCol-29357-36028797019041673",
+                            "destColumn": "retCol-29357-36028797019041673",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-24891-36028797018965889-column2",
+                            "destColumn": "prefix-24891-36028797018965889-column2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "prefix-24891-36028797018965889-column47",
+                            "destColumn": "prefix-24891-36028797018965889-column47",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319:RN0temp-36028797019151739",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319:temp-36028797019233559",
+                "key": [
+                    {
+                        "name": "retCol-29357-36028797019041641",
+                        "keyFieldName": "retCol-29357-36028797019041641",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "retCol-29357-36028797019041673",
+                        "keyFieldName": "retCol-29357-36028797019041673",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "retCol-29357-36028797019041631",
+                        "keyFieldName": "retCol-29357-36028797019041631",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319:temp-36028797019233559",
+                "dest": "RN0retina--29358-36028797019326034-36028797019348319",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970335",
+                        "destColumn": "retCol-29358-36028797019326035",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970336",
+                        "destColumn": "retCol-29358-36028797019326036",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970337",
+                        "destColumn": "retCol-29358-36028797019326037",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970338",
+                        "destColumn": "retCol-29358-36028797019326038",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970341",
+                        "destColumn": "retCol-29358-36028797019326039",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970344",
+                        "destColumn": "retCol-29358-36028797019326040",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970346",
+                        "destColumn": "retCol-29358-36028797019326041",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970347",
+                        "destColumn": "retCol-29358-36028797019326042",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970348",
+                        "destColumn": "retCol-29358-36028797019326043",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970349",
+                        "destColumn": "retCol-29358-36028797019326044",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970351",
+                        "destColumn": "retCol-29358-36028797019326045",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970352",
+                        "destColumn": "retCol-29358-36028797019326046",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970353",
+                        "destColumn": "retCol-29358-36028797019326047",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970354",
+                        "destColumn": "retCol-29358-36028797019326048",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970358",
+                        "destColumn": "retCol-29358-36028797019326049",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970359",
+                        "destColumn": "retCol-29358-36028797019326050",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970360",
+                        "destColumn": "retCol-29358-36028797019326051",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970361",
+                        "destColumn": "retCol-29358-36028797019326052",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970362",
+                        "destColumn": "retCol-29358-36028797019326053",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970363",
+                        "destColumn": "retCol-29358-36028797019326054",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970364",
+                        "destColumn": "retCol-29358-36028797019326055",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970365",
+                        "destColumn": "retCol-29358-36028797019326056",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970366",
+                        "destColumn": "retCol-29358-36028797019326057",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970369",
+                        "destColumn": "retCol-29358-36028797019326058",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970371",
+                        "destColumn": "retCol-29358-36028797019326059",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970373",
+                        "destColumn": "retCol-29358-36028797019326060",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970374",
+                        "destColumn": "retCol-29358-36028797019326061",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970375",
+                        "destColumn": "retCol-29358-36028797019326062",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970376",
+                        "destColumn": "retCol-29358-36028797019326063",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "retCol-29358-36028797018970377",
+                        "destColumn": "retCol-29358-36028797019326064",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "prefix-24891-36028797018965889-column17",
+                        "destColumn": "retCol-29358-36028797019326065",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0retina--29358-36028797019326034-36028797019348319",
+                "dest": "RN0temp-36028797019535227",
+                "key": [
+                    {
+                        "name": "retCol-29358-36028797019326061",
+                        "keyFieldName": "retCol-29358-36028797019326061",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    },
+                    {
+                        "name": "retCol-29358-36028797019326042",
+                        "keyFieldName": "retCol-29358-36028797019326042",
+                        "type": "DfUnknown",
+                        "ordering": "Descending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "RN0temp-36028797019535227",
+                "dest": "temp-36028797020057778",
+                "eval": [
+                    {
+                        "evalString": "count(retCol-29358-36028797019326052)",
+                        "newField": "col-29359-36028797020057771"
+                    },
+                    {
+                        "evalString": "count(retCol-29358-36028797019326052)",
+                        "newField": "col-29359-36028797020057772"
+                    },
+                    {
+                        "evalString": "count(retCol-29358-36028797019326052)",
+                        "newField": "col-29359-36028797020057773"
+                    },
+                    {
+                        "evalString": "count(retCol-29358-36028797019326052)",
+                        "newField": "col-29359-36028797020057774"
+                    },
+                    {
+                        "evalString": "count(retCol-29358-36028797019326052)",
+                        "newField": "col-29359-36028797020057775"
+                    }
+                ],
+                "newKeyField": "key-29359-36028797020057776",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "args": {
+                "source": "temp-36028797020057778",
+                "fileName": "export-temp-36028797020057778.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-36028797020057778",
+                "columns": [
+                    {
+                        "columnName": "key-29359-36028797020057776",
+                        "headerName": "retCol-29357-36028797020223821"
+                    },
+                    {
+                        "columnName": "retCol-29358-36028797019326042",
+                        "headerName": "retCol-29357-36028797020223822"
+                    },
+                    {
+                        "columnName": "col-29359-36028797020057771",
+                        "headerName": "retCol-29357-36028797020223823"
+                    },
+                    {
+                        "columnName": "col-29359-36028797020057773",
+                        "headerName": "retCol-29357-36028797020223824"
+                    },
+                    {
+                        "columnName": "col-29359-36028797020057774",
+                        "headerName": "retCol-29357-36028797020223825"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.1-1654-xcalardev-801b8bd2-7a0a648e",
+    "dataflowVersion": 1
+}

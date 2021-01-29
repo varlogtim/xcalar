@@ -1,0 +1,9 @@
+enum UdfType {
+    UdfTypeUnknown:"unknown",
+    UdfTypePython:"python",
+}
+
+enum UdfSuffix {
+    UdfTypeUnknownSuffix:"",
+    UdfTypePythonSuffix:".py",
+}

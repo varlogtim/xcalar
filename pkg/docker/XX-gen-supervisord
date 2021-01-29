@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# ** UNUSED. It is merely here for reference on generating a valid supervisord config **
+# ** This was used to generate multiple usrnodes per container. We don't do that anymore **
+#
+if [ -r /etc/default/xcalar ]; then
+    . /etc/default/xcalar
+fi
+export XLRDIR="${XLRDIR:-/opt/xcalar}"
+XCE_CONFIG="${XCE_CONFIG:-/etc/xcalar/default.cfg}"
+NUM_NODES="$(awk -F= '/^Node.NumNodes/{print $2}' $XCE_CONFIG)"
+
+##cat > /etc/supervisor/conf.d/supervisor.conf<<EOF
+cat <<EOF
+[supervisord]
+nodaemon=true
+
+[program:sshd]
+command=/usr/sbin/sshd -D
+
+[program:apache2]
+command=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
+
+[program:rsyslog]
+command=rsyslogd -n -c5
+autostart=true
+autorestart=true
+redirect_stderr=true
+
+[program:xcmgmtd]
+user=xcalar
+group=xcalar
+command=${XLRDIR}/bin/xcmgmtd ${XCE_CONFIG}
+EOF
+
+for ii in `seq ${NUM_NODES}`; do
+    cat <<-EOF
+	[program:usrnode-${ii}]
+    user=xcalar
+    group=xcalar
+	command=${XLRDIR}/bin/usrnode --nodeId ${ii} --numNodes ${NUM_NODES} --configFile ${XCE_CONFIG}
+	environment=XLRDIR=${XLRDIR}
+	killasgroup=true
+	stopasgroup=true
+	EOF
+done

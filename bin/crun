@@ -1,0 +1,486 @@
+#!/bin/bash
+#
+# shellcheck disable=SC2191,SC2006,SC2206,SC2207,SC1091,SC2013,SC2034,SC2086,SC2046
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# shellcheck disable=SC1090
+. "$DIR"/xcalar-sh-lib
+
+xcalar_stdenv
+
+# shellcheck disable=SC2155
+export CONTAINER_UID="${CONTAINER_UID:-$(id -u)}"
+export CONTAINER_GID="${CONTAINER_GID:-$(id -g)}"
+export UGID="${CONTAINER_UID}:${CONTAINER_GID}"
+export CONTAINER_USER="${CONTAINER_USER:-$(test $CONTAINER_UID = 1000 && echo xcalardev || echo user${CONTAINER_UID})}"
+export CONTAINER_HOME="${CONTAINER_HOME:-/home/$CONTAINER_USER}"
+export DEFAULT_IMAGE=${DEFAULT_IMAGE:-el7-build}
+export HOST="${HOST:-$(hostname -f)}"
+export HOSTIP="${HOSTIP:-$(get_local_ip.sh)}"
+export HOSTOS="${HOSTOS:-$(osid)}"
+export HOSTUSER="${HOSTUSER:-$(id -un)}"
+export HOSTHOME="${HOSTHOME:-$(getent passwd $HOSTUSER | awk -F':' '{print $6}')}"
+export DEFAULT_REGISTRY=${DEFAULT_REGISTRY:-registry.int.xcalar.com}
+export REGISTRY="${REGISTRY:-$DEFAULT_REGISTRY}"
+export TZ=${TZ:-America/Los_Angeles}
+export CACHEVOL_VERSION=${CACHEVOL_VERSION:-4}
+MYCID="$(cat /proc/self/cpuset)"
+export MYCID="${MYCID#*/}"
+# shellcheck disable=SC2155
+export SESSID="$(uuidgen -t 2>/dev/null || {
+    mid=$(cat /etc/machine-id)
+    printf '%08x-%s-%s-%s-%s\n' $(date +%s) ${mid:0:4} ${mid:4:4} ${mid:8:4} ${mid:12:12}
+})"
+export SESSDIR="${XLRDIR}/.tmp/sess/${SESSID}"
+export SID="${SESSID%%-*}"
+test -d "$SESSDIR" || mkdir -p "$SESSDIR"
+
+# This is required for systemd
+add_vol '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+
+export VARTMP=${VARTMP:-/var/tmp/$CONTAINER_UID}
+test -e "$VARTMP" || mkdir -p "$VARTMP" || error "Unable to create $VARTMP"
+test -e "$VARTMP"/.ts || touch "$VARTMP"/.ts || error "Can't write to $VARTMP"
+add_vol "$VARTMP"
+
+## Add user's home, without any links to back to it except this envvar
+add_vol "$HOSTHOME"
+add_vol "$WORKSPACE"
+
+# NOTE: For most the following add_vol are no-ops, since the add_vol removes
+# any paths which are covered by previous mounts
+add_vol "$XLRDIR"
+
+USER_CVOLS=()
+ENVS=()
+LABELS=()
+# shellcheck disable=SC2155
+PROG="$(basename -- $0)"
+
+hash -r
+
+tmpFsPctOfPhysicalMem=95
+if [[ $OSTYPE =~ ^darwin ]]; then
+    stat_fmt=-f
+    DARWIN=1
+    tmpFsSize=$((1 * 1024 * 1024 * tmpFsPctOfPhysicalMem / 100))
+    tmpFsSize="${tmpFsSize%.*}"
+else
+    stat_fmt=-c
+    DARWIN=0
+    # Docker doesn't support size=X%, so use the 'native' type of /proc/meminfo (kbytes=1024 bytes)
+    tmpFsSize=$(awk '/MemTotal/{ printf "%.0f\n", $2*'$tmpFsPctOfPhysicalMem'/100}' /proc/meminfo)
+    tmpFsSize="${tmpFsSize%.*}k"
+fi
+
+CONTAINER_ARGS=(
+    --rm
+    -e container=docker
+    -e PS4 -e XTRACE
+    --cap-add SYS_PTRACE
+    --cap-add IPC_LOCK
+    --security-opt seccomp=unconfined
+    --ulimit core=-1:-1
+    --ulimit nofile=140960:140960
+    --ulimit nproc=140960:140960
+    --ulimit memlock=-1:-1
+    --ulimit stack=-1:-1
+    --shm-size=${tmpFsSize}
+    --memory-swappiness=10
+    --tmpfs /run
+    --tmpfs /run/lock
+    -P)
+
+# If using local name resolver (dnsmasq, for example) we have to
+# manage container DNS
+if grep nameserver /etc/resolv.conf | grep -q '127.0.0.1'; then
+    CONTAINER_ARGS+=(--dns ${HOSTIP})
+    for search in $(awk '/^search/{print $2}' /etc/resolv.conf); do
+        CONTAINER_ARGS+=(--dns-search $search)
+    done
+    unset search
+fi
+
+# if you want to map ports export DOCKER_PORT_MAPPING
+# with a string "host_port:cont_port host_port:cont_port ...."
+# as many times as you want port mapped
+# NOTE: out of bound ports (>65K) will give weird error about 'invalid publish opts format' in old docker versions
+# https://github.com/docker/cli/issues/1962
+if [ -n "$DOCKER_PORT_MAPPING" ]; then
+    for PM in $DOCKER_PORT_MAPPING; do
+        CONTAINER_ARGS+=(-p $PM)
+    done
+    unset PM
+    unset DOCKER_PORT_MAPPING
+fi
+
+# You can set XLRGUIDIR='' explicitly to avoid the mapping
+export XLRGUIDIR=${XLRGUIDIR-$XLRDIR/xcalar-gui}
+if [ -e "$XLRGUIDIR" ]; then
+    add_vol "$XLRGUIDIR"
+else
+    unset XLRGUIDIR
+fi
+
+export CCACHE_BASEDIR="${CCACHE_BASEDIR:-$XLRDIR}"
+
+#XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+#test -e $XDG_CACHE_HOME || mkdir -p $XDG_CACHE_HOME
+#CONTAINER_ARGS+=(-e XDG_CACHE_HOME=$XDG_CACHE_HOME -v $XDG_CACHE_HOME:$XDG_CACHE_HOME)
+
+# Some tools/tests require netstore
+export NETSTORE_NFS="${NETSTORE_NFS:-/netstore}"
+if [ -e "$NETSTORE_NFS" ]; then
+    add_vol $NETSTORE_NFS:/netstore
+else
+    unset NETSTORE_NFS
+fi
+
+if [ -n "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then
+    if [ -n "$VOLUMES_FROM" ]; then
+        # This handles the jenkins build container case where we don't start out
+        # with SSH_AUTH_SOCK, but the job provides one later
+        if ! is_mountpoint "$SSH_AUTH_SOCK"; then
+            USER_CVOLS+=(${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK})
+        fi
+    else
+        add_vol ${SSH_AUTH_SOCK}
+    fi
+else
+    unset SSH_AUTH_SOCK
+fi
+
+if [ -e "$XLRINFRADIR" ]; then
+    add_vol "$XLRINFRADIR"
+else
+    unset XLRINFRADIR
+fi
+
+DOCKER=${DOCKER:-docker}
+if [ -z "$DOCKER_HOST" ]; then
+    DOCKER_SOCKET=/var/run/docker.sock
+else
+    if [[ $DOCKER_HOST =~ ^unix:// ]]; then
+        DOCKER_SOCKET="${DOCKER_HOST#unix://}"
+        if test -L "$DOCKER_SOCKET"; then
+            DOCKER_SOCKET="$(readlink -f "$DOCKER_SOCKET")"
+        fi
+        DOCKER_HOST="unix://${DOCKER_SOCKET}"
+    fi
+    if [ "$DOCKER_HOST" != unix:///var/run/docker.sock ]; then
+        export DOCKER_HOST
+    fi
+fi
+
+if [ -S "$DOCKER_SOCKET" ]; then
+    test -w $DOCKER_SOCKET || DOCKER="sudo $DOCKER"
+    DOCKER_GID=$(stat $stat_fmt '%g' "$DOCKER_SOCKET")
+    add_vol "$DOCKER_SOCKET"
+fi
+
+if [ "${CRUN_PERSISTENT_HOME:-}" = YesPlease ]; then
+    export CONTAINER_HOMEVOL=${CONTAINER_HOMEVOL:-${HOSTUSER}_${CONTAINER_UID}_home}
+    add_vol "$CONTAINER_HOMEVOL:$CONTAINER_HOME"
+fi
+
+# if you want to map files export DOCKER_VOL_MAPPING
+# with a string "host_path:cont_path host_path:cont_path ...."
+# as many times as you want port mapped
+if [ -n "$DOCKER_VOL_MAPPING" ]; then
+    for ii in $DOCKER_VOL_MAPPING; do
+        add_vol "$ii"
+    done
+    unset DOCKER_VOL_MAPPING
+fi
+
+IT=""
+if test -t 0; then
+    CONTAINER_ARGS+=(-i)
+    IT="-i"
+fi
+if test -t 1; then
+    CONTAINER_ARGS+=(-t)
+    IT="${IT:+$IT }-t"
+fi
+
+if [ -e "$HOSTHOME"/.vault-token ]; then
+    if VTAGE="$(fileage "$(readlink -f "$HOSTHOME"/.vault-token)")"; then
+        if [ $VTAGE -gt $((60 * 60 * 24 * 28)) ]; then
+            warn "Your ~/.vault-token is days $VTAGE seconds old and likely has expired. Log into vault as soon as possible."
+        fi
+    fi
+fi
+
+EXTRA_USER_ARGS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -d)
+            DETACH=1
+            ;;
+        -f)
+            FORCE_CREATE=1
+            ;;
+        el[678] | ub[12][4680] | amzn2 | amzn | rhel[678] | ol[678])
+            CONTAINER_IMAGE="${1}-build"
+            shift
+            break
+            ;;
+        el[678]-* | ub[12][4680]-* | amzn2-* | amzn-* | rhel[678]-* | ol[678]-*)
+            CONTAINER_IMAGE="${1}"
+            shift
+            break
+            ;;
+        img:* | sha256:*)
+            if img_id="$($DOCKER image inspect ${1#img:} --format='{{.Id}}')"; then
+                CONTAINER_IMAGE="${1#img:}"
+                shift
+                break
+            fi
+            echo >&2 "ERROR: Unknown image \"$img_id\" for IMAGE_ID=${1#img:}"
+            exit 1
+            ;;
+        cid:* | [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*)
+            if state="$($DOCKER container inspect ${1#cid:} --format='{{.State.Status}}')" && [ "$state" = running ]; then
+                CID="${1#cid:}"
+                shift
+                break
+            fi
+            echo >&2 "ERROR: Unknown state \"$state\" for CID=${1#cid:}"
+            exit 1
+            ;;
+        --)
+            if [[ $2 =~ ^cid: ]]; then
+                CID="${2#cid:}"
+                shift 2
+            elif [[ $2 =~ ^img: ]] || [[ $2 =~ ^sha256: ]]; then
+                CONTAINER_IMAGE="${2#img:}"
+                shift 2
+            fi
+            break
+            ;;
+        *)
+            if [ -n "$CONTAINER_IMAGE" ]; then
+                # this shouldn't happen
+                echo >&2 "This condition shouldn't occur..."
+                exit 1
+                break
+            fi
+            EXTRA_USER_ARGS+=("$1")
+            ;;
+    esac
+    shift
+done
+
+CONTAINER_IMAGE=${CONTAINER_IMAGE:-$DEFAULT_IMAGE}
+SHORT_NAME=$(basename ${CONTAINER_IMAGE%:*})
+
+if TLD=$(git rev-parse --show-toplevel 2>/dev/null || pwd); then
+    TLD="$(cd $TLD && pwd -P)"
+    add_vol "$TLD"
+fi
+
+case "$PROG" in
+    crunpwd | cshell | cexec) WD="$(pwd -P)" ;;
+    *) WD="$XLRDIR" ;;
+esac
+
+# Make sure we have this image locally
+if ! $DOCKER inspect "$CONTAINER_IMAGE" >/dev/null 2>&1; then
+    # shellcheck disable=SC1090
+    source $XLRDIR/docker/image.env
+    CONTAINER_IMAGE_us="${CONTAINER_IMAGE//-/_}"
+    CONTAINER_IMAGE="${!CONTAINER_IMAGE_us}"
+    # Outside of xcalar, change registry.int.xcalar.com/foo/bar:tag into a registry
+    # url that is understood locally
+    if ! [[ $CONTAINER_IMAGE =~ ^${REGISTRY} ]]; then
+        CONTAINER_IMAGE="${REGISTRY}"/"${CONTAINER_IMAGE#*/}"
+    fi
+fi
+
+# Shared cache volume
+if SHARED_CACHE="$($DOCKER image inspect ${CONTAINER_IMAGE} --format='{{json .}}' | jq -r .Config.Env[] | grep ^SHARED_CACHE)"; then
+    export CACHEVOL=u${CONTAINER_UID}_cache_v${CACHEVOL_VERSION}
+    export SHARED_CACHE="${SHARED_CACHE#SHARED_CACHE=}"
+    add_vol "${CACHEVOL}":"${SHARED_CACHE}"
+fi
+
+# Map in path for core dumps
+if CORE_PATH="$(core_path)"; then
+    if [[ $CORE_PATH =~ ^/ ]]; then
+        add_vol "$CORE_PATH"
+        export CORE_PATH
+    fi
+fi
+
+if [ "${#USER_CVOLS[@]}" -gt 0 ]; then
+    printf '%q\n' "${USER_CVOLS[@]}" >$SESSDIR/user_cvols
+    USER_CVOLS_ARG=" ${USER_CVOLS[*]}"
+    USER_CVOLS_ARG="${USER_CVOLS_ARG//\ / -v }"
+    printf '%s ' $USER_CVOLS_ARG >$SESSDIR/user_cvols.cmdline
+else
+    USER_CVOLS_ARG=''
+fi
+
+if in_container; then
+    export VOLUMES_FROM="${VOLUMES_FROM:-$(container_id)}"
+fi
+
+if [ -n "$VOLUMES_FROM" ]; then
+    CVOLS_ARG="--volumes-from ${VOLUMES_FROM//\ / --volumes-from }"
+else
+    CVOLS_ARG=" ${CVOLS[*]}"
+    CVOLS_ARG="${CVOLS_ARG//\ / -v }"
+fi
+
+printf '%q\n' "${CVOLS[@]}" >$SESSDIR/cvols
+echo "$CVOLS_ARG" >$SESSDIR/cvols.cmdline
+declare -r CVOLS_FINAL="${CVOLS_ARG}${USER_CVOLS_ARG:+ $USER_CVOLS_ARG}"
+
+# Optional custom env file
+if [ -e "$CRUN_ENV_FILE" ]; then
+    CRENV="$SESSDIR"/crun.env
+    [ "$CRENV" == "$CRUN_ENV_FILE" ] || cp "$CRUN_ENV_FILE" "$CRENV"
+    export CRUN_ENV_FILE=$CRENV
+fi
+
+if [ -e "$USER_ENV_FILE" ]; then
+    CUENV="$SESSDIR"/user.env
+    [ "$CUENV" == "$USER_ENV_FILE" ] || cp "$USER_ENV_FILE" "$CUENV"
+    export USER_ENV_FILE=$CUENV
+fi
+
+if [ -e "$JENKINS_ENV_FILE" ]; then
+    export JENKINS_ENV_FILE
+else
+    unset JENKINS_ENV_FILE
+fi
+
+export ENV_FILE="${SESSDIR}/run.keys"
+if ! test -e "$ENV_FILE"; then
+    #printf -- '%s\n' "${ENVS[@]}" >"${ENV_FILE%.*}".keys0
+    #mkenv "${ENVS[@]}" >"${ENV_FILE%.*}".env
+    dumpenv.sh -f default >"${ENV_FILE%.*}".keys
+    dumpenv.sh -f values >"${ENV_FILE%.*}".values
+    dumpenv.sh -f default | sed -r 's/^/-e /' | tr '\n' ' ' >"${ENV_FILE%.*}".cmdline_keys
+    #dumpenv.sh -f shvalues | sed -r 's/^(.*)$/-e "\1" /' | tr '\n' ' ' >"${ENV_FILE%.*}".cmdline_keys
+else
+    echo >&2 "ENV_FILE session re-use. Make sure diff is reasonable:"
+    printf '%s\n' "${ENVS[@]}" >"$ENV_FILE".$$
+    diff "$ENV_FILE" "$ENV_FILE".$$ >&2 || true
+fi
+
+ALL_ENVS=()
+ALL_ENV_FILES=()
+
+add_env_file() {
+    local envfile="${!1}"
+    if test -e "$envfile"; then
+        ALL_ENV_FILES+=("$envfile")
+        ALL_ENVS+=($(cat "$envfile"))
+
+        CONTAINER_ARGS+=(-e "$1=${!1}" --env-file "$envfile")
+    fi
+}
+add_env_file "JENKINS_ENV_FILE"
+add_env_file "ENV_FILE"
+add_env_file "USER_ENV_FILE"
+add_env_file "CRUN_ENV_FILE"
+
+printf -- "-e '%s' " ${ALL_ENVS[*]} >"${ENV_FILE%.*}".envcmd
+
+# Use labels to find containers
+APP_LABEL="app=crun"
+NAME_LABEL="org.label-schema.name=${SHORT_NAME}"
+OWNER_LABEL="com.xcalar.owner=${HOSTUSER}"
+UID_LABEL="com.xcalar.uid=${CONTAINER_UID}"
+UID_LABEL="com.xcalar.ugid=${UGID}"
+CRUN_LABEL="com.xcalar.crun=${PROG}"
+SESSID_LABEL="com.xcalar.sessid=${SESSID}"
+XLRDIR_LABEL="com.xcalar.xlrdir=${XLRDIR}"
+LABELS+=("$APP_LABEL" "$NAME_LABEL" "$OWNER_LABEL" "$UID_LABEL" "$CRUN_LABEL" "$SESSID_LABEL" "$XLRDIR_LABEL")
+LABELS_FILE="$SESSDIR"/labels.txt
+printf '%q\n' "${LABELS[@]}" >"$LABELS_FILE"
+LABELS_ARGS=(--label-file "$LABELS_FILE")
+FILTERS=(--filter status=running --filter "label=$APP_LABEL" --filter "label=$NAME_LABEL" --filter "label=$OWNER_LABEL" --filter "label=$UID_LABEL" --filter "label=$XLRDIR_LABEL")
+UNIQ_NAME="${SHORT_NAME}-${SESSID%%-*}"
+NAME_ARGS=(--hostname "$UNIQ_NAME" --name "$UNIQ_NAME")
+case "$PROG" in
+    cshell)
+        # Turn a long image name like registry.int.xcalar.com/el7-build:latest -> el7-build
+
+        # Name the container my-{image}. Append the UID to the container
+        # if you're not UID=1000 (the common case)
+        [ $CONTAINER_UID -eq 1000 ] && NAME="my-${SHORT_NAME}" || NAME="my-${SHORT_NAME}-${CONTAINER_UID}"
+        NAME_ARGS=(--hostname "$NAME" --name "$NAME")
+
+        CRUN_TIMEOUT=${CRUN_TIMEOUT:-60}
+        CRUNDEADLINE=$(($(date +%s) + CRUN_TIMEOUT))
+
+        # Do we have existing containers with the desired name? If we we need to join them via docker exec
+        # instead of launching a new one
+        if [ -z "$CID" ]; then
+            if CTR=($($DOCKER container ls "${FILTERS[@]}" --filter "label=$CRUN_LABEL" -q)) && [ "${#CTR[@]}" -gt 0 ]; then
+                # Unless -f was specified, in which case we delete the existing containers
+                CID="${CTR[0]}"
+                if ((FORCE_CREATE)) || [[ "$($DOCKER container inspect $CID --format='{{.Image}}')" != "$($DOCKER image inspect $CONTAINER_IMAGE --format='{{.Id}}')" ]]; then
+                    if [ "$MYCID" != "$CID" ]; then
+                        $DOCKER rm -f -v "$CID" >/dev/null
+                        CTR=()
+                        CID=''
+                    fi
+                fi
+            fi
+        fi
+        if [ -z "$CID" ]; then
+            if $DOCKER container inspect "$NAME" >/dev/null 2>&1; then
+                if ! in_container && ((FORCE_CREATE)); then
+                    if ! $DOCKER rm -f -v "$NAME"; then
+                        echo >&2 "Failed to remove $NAME"
+                        exit 1
+                    fi
+                else
+                    NAME="${NAME}-${SESSID%%-*}"
+                    NAME_ARGS=(--hostname "$NAME" --name "$NAME")
+                fi
+            fi
+            if ! CID=$($DOCKER run "${LABELS_ARGS[@]}" -w "$XLRDIR" --detach "${NAME_ARGS[@]}" $CVOLS_FINAL "${CONTAINER_ARGS[@]}" "${EXTRA_USER_ARGS[@]}" -- "$CONTAINER_IMAGE"); then
+                echo >&2 "Failed to run docker"
+                exit 1
+            fi
+        fi
+        until $DOCKER exec -- $CID test -e /run/systemd/container; do
+            echo >&2 "Waiting for docker container $NAME($CID) to come online ..."
+            # shellcheck disable=SC2046
+            [ $(date +%s) -lt $CRUNDEADLINE ] || exit 1
+            sleep 1
+        done
+        echo "$CID" >"$SESSDIR"/cid
+
+        # Unless a command is provided, run an interactive bash login shell
+        test $# -gt 0 || set -- /bin/bash -l
+        exec $DOCKER exec -w "$(pwd -P)" $IT -e XTRACE -e PS4 -e UGID -e HOSTHOME -e CONTAINER_HOME -e CONTAINER_GID -e CONTAINER_UID -e CONTAINER_USER -e RUNAS=$CONTAINER_UID -- "$CID" /docker-entrypoint.sh "$@"
+        ;;
+    cstart)
+        exec $DOCKER run -w "$XLRDIR" $IT --detach "${NAME_ARGS[@]}" $CVOLS_FINAL "${LABELS_ARGS[@]}" "${CONTAINER_ARGS[@]}" "${EXTRA_USER_ARGS[@]}" -- "$CONTAINER_IMAGE"
+        ;;
+    cexec)
+        if [ -z "$CID" ]; then
+            if CTR=($($DOCKER container ls "${FILTERS[@]}" --filter "label=com.xcalar.crun=cstart" -q)) && [ "${#CTR[@]}" -gt 0 ]; then
+                CID="${CTR[0]}"
+            fi
+        fi
+        if [ -n "$CID" ]; then
+            [ $# -gt 0 ] || set -- "${EXTRA_USER_ARGS[@]}"
+            [ $# -gt 0 ] || set -- /bin/bash -l
+            exec $DOCKER exec -w "$(pwd -P)" -u $CONTAINER_UID $IT $(cat "${ENV_FILE%.*}".envcmd) -- $CID "$@"
+        fi
+        echo >&2 "No matching cstart container found"
+        exit 1
+        ;;
+    crun*)
+        exec $DOCKER run -w "$WD" "${NAME_ARGS[@]}" $CVOLS_FINAL "${LABELS_ARGS[@]}" "${CONTAINER_ARGS[@]}" -e RUNAS=$CONTAINER_UID "${EXTRA_USER_ARGS[@]}" -- "$CONTAINER_IMAGE" "$@"
+        ;;
+esac
+echo >&2 "Unknown program: $PROG"
+exit 1

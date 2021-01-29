@@ -1,0 +1,22 @@
+# There's a bug in ruby 2.5 on alpine :(
+FROM alpine:3.10.2
+
+RUN apk add --no-cache  rpm-dev \
+                        tar gzip \
+                        bzip2 \
+                        bash \
+                        ruby-etc \
+                        fakeroot \
+                        xz \
+                        cpio \
+                        ruby
+
+RUN apk add --no-cache --virtual build-deps \
+        g++ \
+        make \
+        ruby-dev \
+    && gem install --no-rdoc --no-ri fpm \
+    && apk del build-deps
+
+ENTRYPOINT ["/usr/bin/fpm"]
+CMD ["--help"]

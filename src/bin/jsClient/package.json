@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "google-protobuf": "3.11.2",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.7",
+    "require-context": "^1.1.0"
+  },
+  "description": "Xcalar API",
+  "devDependencies": {},
+  "license": "ISC",
+  "main": "index.js",
+  "name": "xcalar",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}

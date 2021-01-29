@@ -1,0 +1,23 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq14",
+            "columns": [
+                {
+                    "columnName": "dummycol_sum",
+                    "headerAlias": "dummycol_sum"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "fileName": "udfs/adddateinterval_modified.py",
+            "moduleName": "adddateinterval_modified",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"<pathToTpchDatasets>/part.tbl\" --format csv --size 0B  --name \"demo.47465.part\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.47465.part\" --dsttable \"part#L9175\" --prefix part;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#L9173\" --prefix lineitem1;index --key \"part::P_PARTKEY\" --keyType 1  --srctable \"part#L9175\" --dsttable \"part.index#L9178\";index --key \"lineitem1::L_PARTKEY\" --keyType 1  --srctable \"lineitem#L9173\" --dsttable \"lineitem.index#L9177\";join --leftTable \"lineitem.index#L9177\" --rightTable \"part.index#L9178\" --joinType innerJoin  --joinTable \"litem_partkey_join#L9176\" --collisionCheck;filter --srctable litem_partkey_join#L9176 --eval \"ge(lineitem1::L_SHIPDATE, \\\"1995-09-01\\\")\"  --dsttable \"litem_partkey_join#L9179\";map --eval \"adddateinterval_modified:dateltinputdate(lineitem1::L_SHIPDATE, \\\"1995-09-01\\\", 1)\" --srctable \"litem_partkey_join#L9179\" --fieldName \"L_SHIPDATE_udf\" --dsttable \"litem_partkey_join#L9180\";filter --srctable litem_partkey_join#L9180 --eval \"eq(L_SHIPDATE_udf, \\\"True\\\")\"  --dsttable \"litem_partkey_join#L9181\";map --eval \"float(lineitem1::L_EXTENDEDPRICE)\" --srctable \"litem_partkey_join#L9181\" --fieldName \"L_EXTENDEDPRICE_float\" --dsttable \"litem_partkey_join#L9183\";map --eval \"float(lineitem1::L_DISCOUNT)\" --srctable \"litem_partkey_join#L9183\" --fieldName \"L_DISCOUNT_float\" --dsttable \"litem_partkey_join#L9184\";map --eval \"mult(L_EXTENDEDPRICE_float, sub(1,L_DISCOUNT_float))\" --srctable \"litem_partkey_join#L9184\" --fieldName \"L_EXTENDEDPRICE_mult_L_DISCOUNT\" --dsttable \"litem_partkey_join#L9185\";map --eval \"if(like(part::P_TYPE,\\\"PROMO*\\\"), L_EXTENDEDPRICE_mult_L_DISCOUNT, 0)\" --srctable \"litem_partkey_join#L9185\" --fieldName \"P_TYPE_if\" --dsttable \"litem_partkey_join#L9192\";map --eval \"int(1)\" --srctable \"litem_partkey_join#L9192\" --fieldName \"dummycol\" --dsttable \"litem_partkey_join#L9195\";aggregate --srctable \"litem_partkey_join#L9185\" --dsttable \"L_EXTENDEDPRICE_mult_L_DISCOUNT\" --eval \"sum(L_EXTENDEDPRICE_mult_L_DISCOUNT)\";index --key \"dummycol\" --keyType 4  --srctable \"litem_partkey_join#L9195\" --dsttable \"litem_partkey_join.index#L9197\";groupBy --srctable \"litem_partkey_join.index#L9197\" --eval \"sum(div(mult(100,P_TYPE_if),^L_EXTENDEDPRICE_mult_L_DISCOUNT))\" --fieldName \"dummycol_sum\" --newKeyFieldName \"dummycol\" --dsttable \"EndResult-tpchq14\" --nosample;",
+    "xcalarVersion": "1.2.1-1-jenkins-efd2531c-fc9162cb",
+    "retinaVersion": 1
+}

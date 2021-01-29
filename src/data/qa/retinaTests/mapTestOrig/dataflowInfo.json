@@ -1,0 +1,369 @@
+{
+    "tables": [
+        {
+            "name": "temp-4652308",
+            "columns": [
+                {
+                    "columnName": "col-4863-4647138",
+                    "headerAlias": "col-4863-4647138"
+                },
+                {
+                    "columnName": "col-4863-4647122",
+                    "headerAlias": "col-4863-4647122"
+                },
+                {
+                    "columnName": "col-4862-4492828",
+                    "headerAlias": "col-4862-4492828"
+                },
+                {
+                    "columnName": "col-4862-4492843",
+                    "headerAlias": "col-4862-4492843"
+                },
+                {
+                    "columnName": "col-4863-4489966",
+                    "headerAlias": "col-4863-4489966"
+                },
+                {
+                    "columnName": "col-4863-4489967",
+                    "headerAlias": "col-4863-4489967"
+                },
+                {
+                    "columnName": "col-4863-4489968",
+                    "headerAlias": "col-4863-4489968"
+                },
+                {
+                    "columnName": "col-4862-4492855",
+                    "headerAlias": "col-4862-4492855"
+                },
+                {
+                    "columnName": "col-4863-4652121",
+                    "headerAlias": "col-4863-4652121"
+                },
+                {
+                    "columnName": "col-4863-4652122",
+                    "headerAlias": "col-4863-4652122"
+                },
+                {
+                    "columnName": "col-4863-4652145",
+                    "headerAlias": "col-4863-4652145"
+                },
+                {
+                    "columnName": "col-4863-4652171",
+                    "headerAlias": "col-4863-4652171"
+                },
+                {
+                    "columnName": "col-4863-4647123",
+                    "headerAlias": "col-4863-4647123"
+                },
+                {
+                    "columnName": "col-4863-4647139",
+                    "headerAlias": "col-4863-4647139"
+                },
+                {
+                    "columnName": "col-4863-4652146",
+                    "headerAlias": "col-4863-4652146"
+                },
+                {
+                    "columnName": "col-4863-4652172",
+                    "headerAlias": "col-4863-4652172"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-bli-faf49ead-af9f79a3",
+    "udfs": [
+        {
+            "fileName": "udfs/default2.py",
+            "moduleName": "default2",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "size": 104857600,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "<pathToQaDatasets>/yelp/user",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "dest": "RN10temp-4484135",
+                "prefix": "prefix-4790-4484115",
+                "key": [
+                    {
+                        "name": "name",
+                        "ordering": "Unordered",
+                        "keyFieldName": "prefix-4790-4484115-name",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "comment": "",
+            "args": {
+                "source": "RN10temp-4484135",
+                "dest": "temp-4490037",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-4790-4484115::name)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "groupAll": false,
+                "source": "RN10temp-4484135",
+                "includeSample": false,
+                "dest": "RN0temp-4489971",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-4790-4484115-name)",
+                        "newField": "col-4863-4489966"
+                    },
+                    {
+                        "evalString": "count(prefix-4790-4484115-name)",
+                        "newField": "col-4863-4489967"
+                    },
+                    {
+                        "evalString": "count(prefix-4790-4484115-name)",
+                        "newField": "col-4863-4489968"
+                    }
+                ],
+                "newKeyField": "key-4863-4489969",
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "RN0temp-4489971",
+                "dest": "temp-4492866",
+                "eval": [
+                    {
+                        "evalString": "concat(string(col-4863-4489967), string(21))",
+                        "newField": "col-4862-4492819"
+                    },
+                    {
+                        "evalString": "add(float(col-4863-4489967), float(^temp-4490037))",
+                        "newField": "col-4862-4492828"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-4863-4489967, ^temp-4490037)",
+                        "newField": "col-4862-4492843"
+                    },
+                    {
+                        "evalString": "concat(string(col-4863-4489966), string(43))",
+                        "newField": "col-4862-4492855"
+                    },
+                    {
+                        "evalString": "add(float(col-4863-4489967), float(^temp-4490037))",
+                        "newField": "col-4862-4492863"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "temp-4492866",
+                "dest": "RN0temp-4493069",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "col-4862-4492843",
+                        "ordering": "Ascending",
+                        "keyFieldName": "col-4862-4492843",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "RN0temp-4493069",
+                "dest": "temp-4652174",
+                "eval": [
+                    {
+                        "evalString": "add(float(col-4862-4492863), float(^temp-4490037))",
+                        "newField": "col-4863-4647122"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-4862-4492843, ^temp-4490037)",
+                        "newField": "col-4863-4647138"
+                    },
+                    {
+                        "evalString": "concat(string(col-4862-4492819), string(97))",
+                        "newField": "col-4863-4652121"
+                    },
+                    {
+                        "evalString": "add(float(col-4862-4492819), float(^temp-4490037))",
+                        "newField": "col-4863-4652145"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-4862-4492863, ^temp-4490037)",
+                        "newField": "col-4863-4652171"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "temp-4652174",
+                "dest": "temp-4652308",
+                "eval": [
+                    {
+                        "evalString": "add(float(col-4862-4492863), float(^temp-4490037))",
+                        "newField": "col-4863-4647123"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-4862-4492843, ^temp-4490037)",
+                        "newField": "col-4863-4647139"
+                    },
+                    {
+                        "evalString": "concat(string(col-4862-4492819), string(97))",
+                        "newField": "col-4863-4652122"
+                    },
+                    {
+                        "evalString": "add(float(col-4862-4492819), float(^temp-4490037))",
+                        "newField": "col-4863-4652146"
+                    },
+                    {
+                        "evalString": "default2:multiJoin(col-4862-4492863, ^temp-4490037)",
+                        "newField": "col-4863-4652172"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 4121976926829019136,
+                "targetName": "Default",
+                "splitSize": 11185,
+                "headerType": "every",
+                "source": "temp-4652308",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-4652308.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-4652308",
+                "columns": [
+                    {
+                        "headerName": "col-4863-4647138",
+                        "columnName": "col-4863-4647138"
+                    },
+                    {
+                        "headerName": "col-4863-4647122",
+                        "columnName": "col-4863-4647122"
+                    },
+                    {
+                        "headerName": "col-4862-4492828",
+                        "columnName": "col-4862-4492828"
+                    },
+                    {
+                        "headerName": "col-4862-4492843",
+                        "columnName": "col-4862-4492843"
+                    },
+                    {
+                        "headerName": "col-4863-4489966",
+                        "columnName": "col-4863-4489966"
+                    },
+                    {
+                        "headerName": "col-4863-4489967",
+                        "columnName": "col-4863-4489967"
+                    },
+                    {
+                        "headerName": "col-4863-4489968",
+                        "columnName": "col-4863-4489968"
+                    },
+                    {
+                        "headerName": "col-4862-4492855",
+                        "columnName": "col-4862-4492855"
+                    },
+                    {
+                        "headerName": "col-4863-4652121",
+                        "columnName": "col-4863-4652121"
+                    },
+                    {
+                        "headerName": "col-4863-4652122",
+                        "columnName": "col-4863-4652122"
+                    },
+                    {
+                        "headerName": "col-4863-4652145",
+                        "columnName": "col-4863-4652145"
+                    },
+                    {
+                        "headerName": "col-4863-4652171",
+                        "columnName": "col-4863-4652171"
+                    },
+                    {
+                        "headerName": "col-4863-4647123",
+                        "columnName": "col-4863-4647123"
+                    },
+                    {
+                        "headerName": "col-4863-4647139",
+                        "columnName": "col-4863-4647139"
+                    },
+                    {
+                        "headerName": "col-4863-4652146",
+                        "columnName": "col-4863-4652146"
+                    },
+                    {
+                        "headerName": "col-4863-4652172",
+                        "columnName": "col-4863-4652172"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

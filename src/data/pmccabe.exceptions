@@ -1,0 +1,2 @@
+# Exception syntax is <filename>:<funcName>
+clog.c:vlogst

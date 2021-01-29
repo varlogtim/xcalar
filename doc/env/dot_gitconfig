@@ -1,0 +1,19 @@
+[core]
+	autocrlf = false
+[branch]
+	autosetupmerge = true
+	autosetuprebase = always
+[rerere]
+	enabled = 1
+[alias]
+	b = !"git branch -a -v | sed 's/\t/ /g' | cut -c1-80"
+	st = status --ignore-submodules=dirty --short
+        cur = rev-parse --abbrev-ref HEAD
+	co = checkout
+	d = difftool -a -y
+	chpk = "cherry-pick -x"
+	lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+	wip = "commit -a -m 'WIP'"
+	log = log --follow
+[fetch]
+	prune = true

@@ -1,0 +1,3 @@
+sem_timedwait
+sysSemTimedWait
+WorkQueue::worker

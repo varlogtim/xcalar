@@ -1,0 +1,137 @@
+{
+    "tables": [
+        {
+            "name": "temp-2460290",
+            "columns": [
+                {
+                    "columnName": "col-18407-2460263",
+                    "headerAlias": "col-18407-2460263"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-bli-a08abee6-4c2d1e8d",
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-1-node1",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "1000",
+                        "targetName": "QA memory",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node1",
+                "dest": "RN0temp-2315473",
+                "prefix": "prefix-18408-2313713",
+                "key": [
+                    {
+                        "name": "cols.object.val\\.0",
+                        "ordering": "Unordered",
+                        "keyFieldName": "prefix-18408-2313713-cols.object.val\\.0",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN0temp-2315473",
+                "dest": "RN0temp-2359400",
+                "eval": [
+                    {
+                        "evalString": "lt(float(prefix-18408-2313713-cols\\.object\\.val\\\\\\.0), float(21))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": "RN0temp-2359400",
+                "dest": "temp-2460215",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "prefix-18408-2313713-cols\\.object\\.val\\\\\\.0",
+                        "ordering": "Ascending",
+                        "keyFieldName": "prefix-18408-2313713-cols.object.val\\.0",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "groupAll": false,
+                "source": "temp-2460215",
+                "includeSample": false,
+                "dest": "temp-2460290",
+                "eval": [
+                    {
+                        "evalString": "count(77)",
+                        "newField": "col-18407-2460263"
+                    }
+                ],
+                "newKeyField": "key-18407-2460288",
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 140148742291576,
+                "targetName": "Default",
+                "splitSize": 140148742291576,
+                "headerType": "every",
+                "source": "temp-2460290",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-2460290.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-2460290",
+                "columns": [
+                    {
+                        "headerName": "col-18407-2460263",
+                        "columnName": "col-18407-2460263"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

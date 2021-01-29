@@ -1,0 +1,34 @@
+// Copyright 2020 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "xcalar/compute/localtypes/LogLevel.proto";
+
+package xcalar.compute.localtypes.log;
+
+message GetLevelResponse {
+    xcalar.compute.localtypes.XcalarEnumType.XcalarSyslogMsgLevel log_level = 1;
+    int32 log_flush_period_sec = 2;
+}
+
+message SetLevelRequest {
+    xcalar.compute.localtypes.XcalarEnumType.XcalarSyslogMsgLevel log_level = 1;
+    bool log_flush = 2;
+    xcalar.compute.localtypes.XcalarEnumType.XcalarSyslogFlushLevel
+        log_flush_level = 3;
+    int32 log_flush_period_sec = 4;
+}
+
+service Log {
+    // rpc for XcalarApiLogLevelGet
+    rpc GetLevel(google.protobuf.Empty) returns (GetLevelResponse);
+    // rpc for XcalarApiLogLevelSet
+    rpc SetLevel(SetLevelRequest) returns (google.protobuf.Empty);
+};

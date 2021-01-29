@@ -1,0 +1,116 @@
+set(OPERATOR_HANDLERS
+    OperatorHandlerBulkLoad.cpp
+    OperatorHandlerIndex.cpp
+    OperatorHandlerJoin.cpp
+    OperatorHandlerUnion.cpp
+    OperatorHandlerFilter.cpp
+    OperatorHandlerMap.cpp
+    OperatorHandlerSynthesize.cpp
+    OperatorHandlerGroupBy.cpp
+    OperatorHandlerAggregate.cpp
+    OperatorHandlerExport.cpp
+    OperatorHandlerProject.cpp
+    OperatorHandlerGetRowNum.cpp
+    OperatorHandlerDeleteObjects.cpp
+    OperatorHandlerArchiveTables.cpp
+    OperatorHandlerExecuteRetina.cpp
+    OperatorHandlerSelect.cpp)
+
+set(API_HANDLERS
+    ApiHandlerTop.cpp
+    ApiHandlerGetNumNodes.cpp
+    ApiHandlerGetStatGroupIdMap.cpp
+    ApiHandlerSessionList.cpp
+    ApiHandlerSessionNew.cpp
+    ApiHandlerSessionInact.cpp
+    ApiHandlerSessionDelete.cpp
+    ApiHandlerSessionActivate.cpp
+    ApiHandlerSessionDownload.cpp
+    ApiHandlerSessionUpload.cpp
+    ApiHandlerListDagNodeInfo.cpp
+    ApiHandlerQueryState.cpp
+    ApiHandlerGetTableMeta.cpp
+    ApiHandlerGetDag.cpp
+    ApiHandlerListDatasets.cpp
+    ApiHandlerGetDatasetsInfo.cpp
+    ApiHandlerListExportTargets.cpp
+    ApiHandlerMakeRetina.cpp
+    ApiHandlerGetRetina.cpp
+    ApiHandlerGetRetinaJson.cpp
+    ApiHandlerUpdateRetina.cpp
+    ApiHandlerDeleteRetina.cpp
+    ApiHandlerCreateDht.cpp
+    ApiHandlerDeleteDht.cpp
+    ApiHandlerListFuncTests.cpp
+    ApiHandlerStartFuncTests.cpp
+    ApiHandlerKeyAddOrReplace.cpp
+    ApiHandlerKeyList.cpp
+    ApiHandlerKeyDelete.cpp
+    ApiHandlerKeyAppend.cpp
+    ApiHandlerKeySetIfEqual.cpp
+    ApiHandlerPreview.cpp
+    ApiHandlerGetQuery.cpp
+    ApiHandlerQueryCancel.cpp
+    ApiHandlerQueryDelete.cpp
+    ApiHandlerGetTableRefCount.cpp
+    ApiHandlerRenameNode.cpp
+    ApiHandlerTagDagNodes.cpp
+    ApiHandlerCommentDagNodes.cpp
+    ApiHandlerGetStat.cpp
+    ApiHandlerResetStat.cpp
+    ApiHandlerGetOpStats.cpp
+    ApiHandlerCancelOp.cpp
+    ApiHandlerListRetinas.cpp
+    ApiHandlerListParametersInRetina.cpp
+    ApiHandlerImportRetina.cpp
+    ApiHandlerExportRetina.cpp
+    ApiHandlerUdfAdd.cpp
+    ApiHandlerUdfGet.cpp
+    ApiHandlerUdfUpdate.cpp
+    ApiHandlerUdfDelete.cpp
+    ApiHandlerListXdfs.cpp
+    ApiHandlerSessionRename.cpp
+    ApiHandlerSessionPersist.cpp
+    ApiHandlerSupportGenerate.cpp
+    ApiHandlerGetPerNodeOpStats.cpp
+    ApiHandlerGetConfigParams.cpp
+    ApiHandlerSetConfigParam.cpp
+    ApiHandlerAppSet.cpp
+    ApiHandlerAppRun.cpp
+    ApiHandlerAppReap.cpp
+    ApiHandlerGetIpAddr.cpp
+    ApiHandlerListDatasetUsers.cpp
+    ApiHandlerListUserDatasets.cpp
+    ApiHandlerDatasetCreate.cpp
+    ApiHandlerDatasetDelete.cpp
+    ApiHandlerDatasetUnload.cpp
+    ApiHandlerDatasetGetMeta.cpp
+    ApiHandlerPerNodeTop.cpp
+    ApiHandlerTarget.cpp
+    ApiHandlerPublish.cpp
+    ApiHandlerUpdate.cpp
+    ApiHandlerRestoreTable.cpp
+    ApiHandlerUnpublish.cpp
+    ApiHandlerCoalesce.cpp
+    ApiHandlerRuntimeSetParam.cpp
+    ApiHandlerRuntimeGetParam.cpp
+)
+
+add_xce_library(libapis_send STATIC ApisSend.cpp WorkItem.cpp)
+
+add_xce_library(libapis_recv STATIC ApisRecv.cpp ApisRecvObject.cpp ApisRecvClient.cpp OperatorHandler.cpp ApiHandler.cpp ProtobufUtil.cpp ${OPERATOR_HANDLERS} ${API_HANDLERS})
+target_link_libraries(libapis_recv
+    # Xcalar libs
+    libapis_send
+    libhash
+    libutilxc
+    libstringutilxc
+    libcallout
+    libds
+    libmsg
+    libdag
+    libtable
+    libxdb
+    libscalars
+    libusrnode
+)

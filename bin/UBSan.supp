@@ -1,0 +1,6 @@
+bounds:ConditionFns.cpp
+bounds:DataFormat.cpp
+bounds:DataValue.cpp
+vptr:Cursor.cpp
+vptr:Cursor.h
+vptr:Map.cpp

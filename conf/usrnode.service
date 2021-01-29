@@ -1,0 +1,42 @@
+[Unit]
+Description=Xcalar Usrnode
+After=network-online.target remote-fs.target
+After=xcalar-expserver@0.service xcalar-expserver@1.service xcalar-expserver@2.service xcalar-expserver@3.service
+Wants=xcalar-support-asup.service
+PartOf=xcalar.service
+
+
+[Service]
+Slice=xcalar.slice
+Delegate=true
+CPUAccounting=true
+MemoryLimit=infinity
+
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+
+ExecStart=/opt/xcalar/bin/usrnode-service.sh -1
+ExecStopPost=/bin/rm -f ${XCE_WORKDIR}/xcalar.pid
+
+SendSIGKILL=yes
+; the $XCE_USRNODE_WAIT must be less that systemd
+; TimeoutStartSec, or systemd will kill the service
+TimeoutStartSec=360s
+TimeoutStopSec=100s
+
+LimitCORE=infinity:infinity
+LimitNPROC=65536:infinity
+LimitNOFILE=32768:1048576
+LimitMEMLOCK=infinity:infinity
+
+ReadWriteDirectories=/var/log/xcalar
+WorkingDirectory=/var/tmp/xcalar-root
+
+AmbientCapabilities=CAP_NET_RAW
+NoNewPrivileges=false
+
+SyslogIdentifier=xcalar-usrnode

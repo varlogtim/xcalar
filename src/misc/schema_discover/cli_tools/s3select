@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+
+import re
+import sys
+import pprint
+
+import boto3
+
+supported_types = [
+    "PARQUET", "JSONL", "JSON", "CSV", "SPACE_CSV", "CSV_GZ", "CSV_NO_HEAD",
+    "CSV_IGNORE_HEAD"
+]
+supported_outputs = ["JSONL", "CSV"]
+
+USAGE = """
+What it does:
+    - Prints raw bytes to cli of result of select_object_content call.
+Usage:
+    {script} <path> <input_serial> <select_statment> <output_serial>
+    {script} /<bucket>/<key> [{supported_types_list}] <select_statment> [JSONL|CSV]
+
+TODO:
+    - Expand options later
+""".format(
+    script=sys.argv[0], supported_types_list='|'.join(supported_types))
+
+err = sys.stderr.write
+
+path_regex = re.compile(r'^\/([^\/]+)\/(.+)$')
+
+
+def get_input_serialization(file_type):
+    input_serial = None
+    file_type = file_type.upper()
+    if file_type == "PARQUET":
+        input_serial = {"Parquet": {}}
+    elif file_type == "JSONL":
+        input_serial = {"JSON": {"Type": "LINES"}}
+    elif file_type == "JSON":
+        input_serial = {"JSON": {"Type": "DOCUMENT"}}
+    elif file_type == "CSV_NO_HEAD":
+        input_serial = {"CSV": {"FileHeaderInfo": "NONE"}}
+    elif file_type == "CSV_IGNORE_HEAD":
+        input_serial = {"CSV": {"FileHeaderInfo": "IGNORE"}}
+    elif file_type == "CSV":
+        input_serial = {"CSV": {"FileHeaderInfo": "USE"}}
+    elif file_type == "CSV_GZ":
+        input_serial = {
+            "CSV": {
+                "FileHeaderInfo": "USE"
+            },
+            "CompressionType": "GZIP"
+        }
+    elif file_type == "SPACE_CSV":
+        input_serial = {
+            "CSV": {
+                "FileHeaderInfo": "NONE",
+                "QuoteEscapeCharacter": '"',
+                "RecordDelimiter": "\n",
+                "FieldDelimiter": "╦",
+                "QuoteCharacter": '"',
+                "AllowQuotedRecordDelimiter": True
+            }
+        }
+    print("Using Input Serial:")
+    pprint.pprint(input_serial, indent=4)
+    return input_serial
+
+
+def get_output_serialization(output_serial):
+    output_serial_obj = None
+    output_serial = output_serial.upper()
+    if output_serial == "JSONL":
+        output_serial_json = {'JSON': {'RecordDelimiter': '\n'}}
+    elif output_serial == "CSV":
+        output_serial_json = {
+            "CSV": {
+                "QuoteFields": "ALWAYS",
+                "RecordDelimiter": "\n",
+                "FieldDelimiter": ",",
+                "QuoteCharacter": "\"",
+                "QuoteEscapeCharacter": "\\"
+            }
+        }
+    return output_serial_json
+
+
+##
+# SETUP Cli args
+
+
+def do_usage():
+    err(USAGE)
+    sys.exit(1)
+
+
+if len(sys.argv) != 5:
+    do_usage()
+
+file_path = sys.argv[1]
+file_type = sys.argv[2]
+expression = sys.argv[3]
+output_serial = sys.argv[4]
+
+match = re.match(path_regex, file_path)
+if match is None:
+    err("Path is not in correct format\n")
+    do_usage()
+
+bucket = match.group(1)
+key = match.group(2)
+
+if file_type.upper() not in supported_types:
+    err(f"File type '{file_type}' is not in {supported_types}")
+    do_usage()
+
+if output_serial.upper() not in supported_outputs:
+    err(f"Output Serialization '{output_serial}' is not in {supported_outputs}"
+        )
+    do_usage()
+
+##
+# Setup AWS stuff
+
+client = boto3.client('s3')
+
+# output_serialization = {'JSON': {'RecordDelimiter': '\n'}}
+input_serialization = get_input_serialization(file_type)
+output_serialization = get_output_serialization(output_serial)
+
+select_kwargs = {
+    'Bucket': bucket,
+    'Key': key,
+    'ExpressionType': 'SQL',
+    'Expression': expression,
+    'OutputSerialization': output_serialization,
+    'InputSerialization': input_serialization
+}
+
+print(f"EXPRESSION: {expression}")
+
+ret = client.select_object_content(**select_kwargs)
+
+http_code = ret['ResponseMetadata']['HTTPStatusCode']
+if http_code != 200:
+    err(f"Select object content HTTP({http_code}). Please check your args.\n")
+    do_usage()
+
+event_stream = ret['Payload']
+for event in event_stream:
+    if 'Records' in event:
+        sys.stdout.buffer.write(event['Records']['Payload'])

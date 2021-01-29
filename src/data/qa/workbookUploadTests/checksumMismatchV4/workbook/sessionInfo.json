@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.0.0-1-hying-3871ba1b-bfe28db2",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5c64d5b33af50330",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1550112179",
+        "tvNsec": "989135664"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1550112181",
+        "tvNsec": "785181476"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1550112687",
+        "tvNsec": "884924796"
+    },
+    "sessionName": "New Workbook_4"
+}

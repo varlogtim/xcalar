@@ -1,0 +1,58 @@
+type_id,type_name,description,parameters
+shared,Shared File System,A shared file system that is available at the same path (mount point) on all nodes. The data target can also be any subdirectory within the shared file system.,"* **mountpoint** : *Required.* Local path to shared file system
+
+ "
+s3environ,S3 Account with Environmental Credentials,Inherits the environmental setup for S3 using the standard boto3 scheme for obtaining authentication credentials,
+s3fullaccount,S3 Account with Specified Credentials,"Manually specifies the credentials for an S3 account. WARNING this is insecure and could lead to the leaking of your AWS keys. If possible, use the s3environ target instead.","* **access_key** : *Required.* S3 access key
+* **secret_access_key** : *Required.* S3 secret access key
+* **endpoint_url** : *Optional.* URL to use when accessing the bucket
+* **region_name** : *Optional.* Region to use when connecting to S3 (required if using 'verify')
+* **verify** : *Optional.* Verify SSL certificate when connecting to S3 (default is true)
+
+ "
+memory,Generated,Generated dataset with no backing store. The 'path' for this target should be the number of rows desired in the dataset.,
+maprfullaccount,Secured MapR Cluster Account,Manually specifies the credentials for a MapR account.,"* **cluster_name** : *Required.* Cluster name (check /opt/mapr/conf/mapr-clusters.conf)
+* **cldb_port** : *Optional.* Port to use when connecting to cluster CLDB node)
+* **username** : *Required.* Username
+* **password** : *Required.* password
+
+ "
+maprimpersonation,Secured MapR Cluster Account Impersonation,Connect to MapR as the current Xcalar user.,"* **cldb_port** : *Optional.* Port to use when connecting to cluster CLDB node
+* **service_ticket** : *Required.* Path to the service ticket (ticket must be present on all Xcalar nodes and must have impersonation access)
+
+ "
+azblobfullaccount,Azure Blob Storage Account with SAS Token,Specifies the credentials to an Azure Storage Account using a generated Shared Access Signature Token.,"* **account_name** : *Required.* Storage Account name
+* **sas_token** : *Required.* Storage Account SAS Token
+
+ "
+azblobenviron,Azure Blob Storage Account with Environmental Credentials,Specifies the credentials to an Azure Storage Account using AZURE_STORAGE_ACCOUNT as the Storage Account and AZURE_STORAGE_KEY as the Storage Account Access Key.,
+gcsenviron,Google Cloud Storage Account with Environmental Credentials,Uses the environmental setup to access Google Cloud Storage Account,
+sharednothingsymm,Symmetric Pre-sharded Filesystem,Directory with data that has been sharded across different cluster nodes. The directory must be at the same path on all nodes.,"* **mountpoint** : *Required.* Local path to sharded directory
+
+ "
+sharednothingsingle,Single Node Filesystem,Individual node's file system.,
+webhdfskerberos,WebHDFS with Kerberos,"Connect to a Kerberized HDFS cluster via the WebHDFS protocol.  A keytab can be provided. Otherwise, we assume that the xcalar nodes have the necessary kerberos tokens already initialized. To create a keytab, refer to https://kb.iu.edu/d/aumh.  Namenode to be specified in the form <FQDN of namenode>:<port number>. <port number> if omitted, defaults to 50070.  Multiple name-nodes can be specified with semi-colon delimiter. E.g.  http://namenode1.int.xcalar.com; http://namenode2.int.xcalar.com:50071; http://namenode3.int.xcalar.com;
+ You may use https instead of http as well. We'll default to http if protocol is not provided","* **namenodes** : *Required.* Semi-colon delimited list of namenodes
+* **keytab** : *Optional.* <user@realm>|<Path to keytab file>
+
+ "
+httpfskerberos,HttpFs with Kerberos,"Connect to a Kerberized HDFS cluster via HttpFs.  A keytab can be provided. Otherwise, we assume that the xcalar nodes have the necessary kerberos tokens already initialized. To create a keytab, refer to https://kb.iu.edu/d/aumh.  Httpfs node to be specified in the form <FQDN of httpfs node>:<port number>. <port number> if omitted, defaults to 14000.  Multiple httpfs nodes can be specified with semi-colon delimiter. E.g.  http://httpfsnode1.int.xcalar.com; http://httpfsnode2.int.xcalar.com:14001; http://httpfsnode3.int.xcalar.com;
+ You may use https instead of http as well. We'll default to http if protocol is not provided","* **httpfsnodes** : *Required.* Semi-colon delimited list of httpfs nodes
+* **keytab** : *Optional.* <user@realm>|<Path to keytab file>
+
+ "
+webhdfsnokerberos,WebHDFS,"Connect to a HDFS cluster via the WebHDFS protocol.  Namenode to be specified in the form <FQDN of namenode>:<port number>. <port number> if omitted, defaults to 50070.  Multiple name-nodes can be specified with semi-colon delimiter. E.g.  http://namenode1.int.xcalar.com; http://namenode2.int.xcalar.com:50071; http://namenode3.int.xcalar.com;
+ You may use https instead of http as well. We'll default to http if protocol is not provided","* **namenodes** : *Required.* Semi-colon delimited list of namenodes
+
+ "
+httpfsnokerberos,HttpFs,"Connect to a HDFS cluster via HttpFs.  Httpfs node to be specified in the form <FQDN of httpfs node>:<port number>. <port number> if omitted, defaults to 14000.  Multiple httpfs nodes can be specified with semi-colon delimiter. E.g.  http://httpfsnode1.int.xcalar.com; http://httpfsnode2.int.xcalar.com:14001; http://httpfsnode3.int.xcalar.com;
+ You may use https instead of http as well. We'll default to http if protocol is not provided","* **httpfsnodes** : *Required.* Semi-colon delimited list of httpfs nodes
+
+ "
+custom,Custom Target,Custom 2nd order Data Target Use this with an existing data target to overlay your own custom UDF to filter/select the set of files to read,"* **backingTargetName** : *Required.* Need an underlying target to read files
+* **listUdf** : *Required.* moduleName:fnName of UDF to use to select files to read
+
+ "
+parquetds,Parquet Dataset,"Second order Data Target for Parquet Dataset. In the backingTargetName field, enter the name of the data target that contains the location of your Parquet files. When creating a Parquet dataset, select this second order data target from the Data Target list.","* **backingTargetName** : *Required.* Underlying Data Target to read Parquet files
+
+ "

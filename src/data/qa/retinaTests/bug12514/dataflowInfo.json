@@ -1,0 +1,761 @@
+{
+    "tables": [
+        {
+            "name": "t#13",
+            "columns": [
+                {
+                    "columnName": "VEND_NUM",
+                    "headerAlias": "VEND_NUM"
+                },
+                {
+                    "columnName": "EMAIL_concat",
+                    "headerAlias": "EMAIL_concat"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "WHO",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "LINE_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "UPDATE_DT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Count",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_GB114",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_who",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_linenum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "max_update",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_l_index84247",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "vendcount",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "f011512__VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "WHO",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "LINE_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "UPDATE_DT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Count",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_GB114",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_who",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_linenum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "max_update",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_l_index84247",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "vendcount",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "f011512__VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "WHO",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "LINE_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "UPDATE_DT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Count",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_GB114",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_who",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_linenum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "max_update",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_l_index84247",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "vendcount",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "f011512__VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "WHO",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "LINE_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "UPDATE_DT",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Count",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_GB114",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_who",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "min_linenum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "max_update",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM_l_index84247",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "VEND_NUM",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "vendcount",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "EMAIL_concat",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "f011512__VEND_NUM",
+            "type": "DfUnknown"
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.t:admin.65911.union_issue_distinctemail-GB",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/users/ttucker/datasets/customer10_union_issue/union_issue_distinctemail-GB.csv",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "VEND_NUM",
+                                "destColumn": "VEND_NUM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "WHO",
+                                "destColumn": "WHO",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "LINE_NUM",
+                                "destColumn": "LINE_NUM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "EMAIL_concat",
+                                "destColumn": "EMAIL_concat",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "UPDATE_DT",
+                                "destColumn": "UPDATE_DT",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Count",
+                                "destColumn": "Count",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "VEND_NUM_GB114",
+                                "destColumn": "VEND_NUM_GB114",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "min_who",
+                                "destColumn": "min_who",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "min_linenum",
+                                "destColumn": "min_linenum",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "max_update",
+                                "destColumn": "max_update",
+                                "columnType": "DfString"
+                            }
+                        ]
+                    },
+                    "size": 107374182400
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.t:admin.75708.union_issue_f011512_single",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/users/ttucker/datasets/customer10_union_issue/union_issue_f011512_single.csv",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"isCRLF\":false,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "VEND_NUM_l_index84247",
+                                "destColumn": "VEND_NUM_l_index84247",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "VEND_NUM",
+                                "destColumn": "VEND_NUM",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "vendcount",
+                                "destColumn": "vendcount",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "EMAIL_concat",
+                                "destColumn": "EMAIL_concat",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "f011512__VEND_NUM",
+                                "destColumn": "f011512__VEND_NUM",
+                                "columnType": "DfInt64"
+                            }
+                        ]
+                    },
+                    "size": 107374182400
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#25",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.t:admin.65911.union_issue_distinctemail-GB",
+                "dest": "t:union_issue_distinctemail-GB#25",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "union_issue_distinctemail-GB-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "union_issue_distinctemail-GB",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#26",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.t:admin.75708.union_issue_f011512_single",
+                "dest": "t:union_issue_f011512_single#26",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "union_issue_f011512_single-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "union_issue_f011512_single",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_distinctemail-GB#25",
+                "dest": "t:union_issue_distinctemail-GB#29",
+                "eval": [
+                    {
+                        "evalString": "int(string(union_issue_distinctemail-GB::VEND_NUM), 10)",
+                        "newField": "union_issue_distinctemail-GB-VEND_NUM_99631"
+                    },
+                    {
+                        "evalString": "string(union_issue_distinctemail-GB::EMAIL_concat)",
+                        "newField": "union_issue_distinctemail-GB-EMAIL_concat_73133"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_f011512_single#26",
+                "dest": "t:union_issue_f011512_single#28",
+                "eval": [
+                    {
+                        "evalString": "int(string(union_issue_f011512_single::VEND_NUM), 10)",
+                        "newField": "union_issue_f011512_single-VEND_NUM_19681"
+                    },
+                    {
+                        "evalString": "string(union_issue_f011512_single::EMAIL_concat)",
+                        "newField": "union_issue_f011512_single-EMAIL_concat_84224"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_distinctemail-GB#29",
+                "dest": "t:union_issue_distinctemail-GB#31",
+                "eval": [
+                    {
+                        "evalString": "string(union_issue_distinctemail-GB-VEND_NUM_99631)",
+                        "newField": "union_issue_distinctemail-GB-VEND_NUM_99631_xc_03171"
+                    },
+                    {
+                        "evalString": "string(union_issue_distinctemail-GB-EMAIL_concat_73133)",
+                        "newField": "union_issue_distinctemail-GB-EMAIL_concat_73133_xc_03171"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_f011512_single#28",
+                "dest": "t:union_issue_f011512_single#30",
+                "eval": [
+                    {
+                        "evalString": "string(union_issue_f011512_single-VEND_NUM_19681)",
+                        "newField": "union_issue_f011512_single-VEND_NUM_19681_xc_04692"
+                    },
+                    {
+                        "evalString": "string(union_issue_f011512_single-EMAIL_concat_84224)",
+                        "newField": "union_issue_f011512_single-EMAIL_concat_84224_xc_04692"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_distinctemail-GB#31",
+                "dest": "t:union_issue_distinctemail-GB#33",
+                "eval": [
+                    {
+                        "evalString": "concat(string(ifStr(exists(union_issue_distinctemail-GB-VEND_NUM_99631_xc_03171), union_issue_distinctemail-GB-VEND_NUM_99631_xc_03171, \"XC_FNF\")), concat(\".Xc.\", string(ifStr(exists(union_issue_distinctemail-GB-EMAIL_concat_73133_xc_03171), union_issue_distinctemail-GB-EMAIL_concat_73133_xc_03171, \"XC_FNF\"))))",
+                        "newField": "XC_CONCAT87044"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_f011512_single#30",
+                "dest": "t:union_issue_f011512_single#32",
+                "eval": [
+                    {
+                        "evalString": "concat(string(ifStr(exists(union_issue_f011512_single-VEND_NUM_19681_xc_04692), union_issue_f011512_single-VEND_NUM_19681_xc_04692, \"XC_FNF\")), concat(\".Xc.\", string(ifStr(exists(union_issue_f011512_single-EMAIL_concat_84224_xc_04692), union_issue_f011512_single-EMAIL_concat_84224_xc_04692, \"XC_FNF\"))))",
+                        "newField": "XC_CONCAT03513"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_distinctemail-GB#33",
+                "dest": "t:union_issue_distinctemail-GB.index#35",
+                "key": [
+                    {
+                        "name": "union_issue_distinctemail-GB-VEND_NUM_99631",
+                        "keyFieldName": "union_issue_distinctemail-GB-VEND_NUM_99631",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "union_issue_distinctemail-GB-EMAIL_concat_73133",
+                        "keyFieldName": "union_issue_distinctemail-GB-EMAIL_concat_73133",
+                        "type": "DfString",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": "t:union_issue_f011512_single#32",
+                "dest": "t:union_issue_f011512_single.index#34",
+                "key": [
+                    {
+                        "name": "union_issue_f011512_single-VEND_NUM_19681",
+                        "keyFieldName": "union_issue_f011512_single-VEND_NUM_19681",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    },
+                    {
+                        "name": "union_issue_f011512_single-EMAIL_concat_84224",
+                        "keyFieldName": "union_issue_f011512_single-EMAIL_concat_84224",
+                        "type": "DfString",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiUnion",
+            "comment": "",
+            "tag": "union#27",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "t:union_issue_f011512_single.index#34",
+                    "t:union_issue_distinctemail-GB.index#35"
+                ],
+                "dest": "t:testing#27",
+                "key": [
+                    [],
+                    []
+                ],
+                "dedup": true,
+                "unionType": "unionStandard",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "union_issue_f011512_single-VEND_NUM_19681",
+                            "destColumn": "VEND_NUM",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "union_issue_f011512_single-EMAIL_concat_84224",
+                            "destColumn": "EMAIL_concat",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "union_issue_distinctemail-GB-VEND_NUM_99631",
+                            "destColumn": "VEND_NUM",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "union_issue_distinctemail-GB-EMAIL_concat_73133",
+                            "destColumn": "EMAIL_concat",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiSynthesize",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "t:testing#27",
+                "dest": "t#5",
+                "sameSession": true,
+                "columns": [
+                    {
+                        "sourceColumn": "VEND_NUM",
+                        "destColumn": "VEND_NUM",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "EMAIL_concat",
+                        "destColumn": "EMAIL_concat",
+                        "columnType": "DfUnknown"
+                    },
+                    {
+                        "sourceColumn": "XC_UNION_INDEX20561",
+                        "destColumn": "XC_UNION_INDEX20561",
+                        "columnType": "DfUnknown"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "map#6",
+            "state": "Created",
+            "args": {
+                "source": "t#5",
+                "dest": "t#6",
+                "eval": [
+                    {
+                        "evalString": "xdbHash(VEND_NUM)",
+                        "newField": "VEND_NUM_xdbHash"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "filter#13",
+            "state": "Created",
+            "args": {
+                "source": "t#6",
+                "dest": "t#13",
+                "eval": [
+                    {
+                        "evalString": "eq(VEND_NUM, 83779)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "t#13",
+                "fileName": "export-t#13.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.t#13",
+                "columns": [
+                    {
+                        "columnName": "VEND_NUM",
+                        "headerName": "VEND_NUM"
+                    },
+                    {
+                        "columnName": "EMAIL_concat",
+                        "headerName": "EMAIL_concat"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-bli-2fbf8e03-4d99d367",
+    "dataflowVersion": 1
+}

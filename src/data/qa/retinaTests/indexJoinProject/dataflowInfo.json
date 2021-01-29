@@ -1,0 +1,190 @@
+{
+    "tables": [
+        {
+            "name": "temp-18913",
+            "columns": [
+                {
+                    "columnName": "dsPrefix-21464-5646::row\\.num.int\\.col",
+                    "headerAlias": "dsPrefix-21464-5646::row\\.num.int\\.col"
+                },
+                {
+                    "columnName": "dsPrefix-21464-5646::a.b",
+                    "headerAlias": "dsPrefix-21464-5646::a.b"
+                },
+                {
+                    "columnName": "dsPrefix-21464-5646::a\\.b",
+                    "headerAlias": "dsPrefix-21464-5646::a\\.b"
+                },
+                {
+                    "columnName": "dsPrefix-21464-5646::cols.object.val\\.1",
+                    "headerAlias": "dsPrefix-21464-5646::cols.object.val\\.1"
+                },
+                {
+                    "columnName": "dsPrefix-21464-5648::a\\.b",
+                    "headerAlias": "dsPrefix-21464-5648::a\\.b"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "source tables": [],
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                },
+                "dest": "operatorsFuncTestUser-0-node1"
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-0-node1",
+                "dest": "temp-810",
+                "prefix": "prefix-21457-507",
+                "key": [
+                    {
+                        "name": "cols.object.val\\.2",
+                        "keyFieldName": "prefix-21457-507-cols.object.val\\.2",
+                        "ordering": "Unordered",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-0-node1",
+                "dest": "RN0temp-855",
+                "prefix": "prefix-21457-507",
+                "key": [
+                    {
+                        "name": "cols.object.val\\.2",
+                        "keyFieldName": "prefix-21457-507-cols.object.val\\.2",
+                        "ordering": "Unordered",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "RN0temp-855",
+                    "temp-810"
+                ],
+                "joinType": "innerJoin",
+                "dest": "RN0temp-5667",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-21457-507",
+                            "columnType": "DfFatptr",
+                            "destColumn": "dsPrefix-21464-5646"
+                        },
+                        {
+                            "sourceColumn": "prefix-21457-507-cols.object.val\\.2",
+                            "columnType": "DfInt64",
+                            "destColumn": "col-21464-5647"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-21457-507",
+                            "columnType": "DfFatptr",
+                            "destColumn": "dsPrefix-21464-5648"
+                        },
+                        {
+                            "sourceColumn": "prefix-21457-507-cols.object.val\\.2",
+                            "columnType": "DfInt64",
+                            "destColumn": "col-21464-5649"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "RN0temp-5667",
+                "dest": "temp-18913",
+                "columns": [
+                    "dsPrefix-21464-5646::a\\.b",
+                    "dsPrefix-21464-5648::row\\.num.string\\\\\\.col",
+                    "dsPrefix-21464-5648::a\\.b",
+                    "dsPrefix-21464-5648::a.b",
+                    "dsPrefix-21464-5648::cols.object.val\\.0"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 5332343323908655616,
+                "targetName": "Default",
+                "splitSize": 5332343323908655616,
+                "headerType": "every",
+                "source": "temp-18913",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-18913.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-18913",
+                "columns": [
+                    {
+                        "headerName": "dsPrefix-21464-5646::row\\.num.int\\.col",
+                        "columnName": "dsPrefix-21464-5646::row\\.num.int\\.col"
+                    },
+                    {
+                        "headerName": "dsPrefix-21464-5646::a.b",
+                        "columnName": "dsPrefix-21464-5646::a.b"
+                    },
+                    {
+                        "headerName": "dsPrefix-21464-5646::a\\.b",
+                        "columnName": "dsPrefix-21464-5646::a\\.b"
+                    },
+                    {
+                        "headerName": "dsPrefix-21464-5646::cols.object.val\\.1",
+                        "columnName": "dsPrefix-21464-5646::cols.object.val\\.1"
+                    },
+                    {
+                        "headerName": "dsPrefix-21464-5648::a\\.b",
+                        "columnName": "dsPrefix-21464-5648::a\\.b"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "xcalarVersion": "1.2.3-1-bli-9c5d3e43-4b5adeeb",
+    "dataflowVersion": 1
+}

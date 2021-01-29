@@ -1,0 +1,18 @@
+[
+    {
+        "teacher_name":"Andrew Tanenbaum",
+        "teacher_id":1
+    },
+    {
+        "teacher_name":"Donald Knuth",
+        "teacher_id":2
+    },
+    {
+        "teacher_name":"Jim Gray",
+        "teacher_id":3
+    },
+    {
+        "teacher_name":"Dennis Ritchie",
+        "teacher_id":4
+    }
+]

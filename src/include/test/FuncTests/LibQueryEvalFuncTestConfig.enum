@@ -1,0 +1,7 @@
+enum LibQueryEvalFuncTestConfig {
+    LibQueryEvalThreadsPerCore:"LibQueryEvalThreadsPerCore",
+    LibQueryEvalRunsPerThread:"LibQueryEvalRunsPerThread",
+    LibQueryEvalNumberOfCores:"LibQueryEvalNumberOfCores",
+    LibQueryEvalEvaluateTestEnabled:"LibQueryEvalEvaluateTestEnabled",
+    LibQueryEvalStepThroughTestEnabled:"LibQueryEvalStepThroughTestEnabled",
+}

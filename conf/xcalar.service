@@ -1,0 +1,33 @@
+[Unit]
+Description=Xcalar Start/Stop service
+Documentation=https://xcalar.com/documentation/Content/DocPortalHome.htm
+After=network-online.target
+Wants=network-online.target
+; tried making most of these WantedBy, but that requires that they
+; all be enabled
+Wants=xcalar-caddy.service
+Wants=xcalar-expserver@0.service xcalar-expserver@1.service xcalar-expserver@2.service xcalar-expserver@3.service
+Wants=xcalar-sqldf.service
+Wants=xcalar-usrnode.service
+Wants=xcalar-xcmgmtd.service
+Wants=xcalar-terminal.service
+
+[Service]
+; User and group the process will run as.
+User=xcalar
+Group=xcalar
+
+EnvironmentFile=/opt/xcalar/etc/default/xcalar
+EnvironmentFile=-/etc/default/xcalar
+
+Type=oneshot
+ExecStart=/bin/true
+ExecStartPost=/opt/xcalar/bin/usrnode-service-responding.sh
+RemainAfterExit=yes
+
+; the $XCE_USRNODE_WAIT must be less that systemd
+; TimeoutStartSec, or systemd will kill the service
+TimeoutStartSec=360s
+
+[Install]
+WantedBy=multi-user.target

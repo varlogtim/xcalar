@@ -1,0 +1,16 @@
+{
+    "udfs": [
+        {
+            "fileName": "workbook/udfs/add1module.py",
+            "moduleName": "add1module",
+            "udfType": "python"
+        },
+        {
+            "fileName": "workbook/udfs/streamingmodule.py",
+            "moduleName": "streamingmodule",
+            "udfType": "python"
+        }
+    ],
+    "xcalarVersion": "1.4.0-1-swatanabe-ce2935e5-f9fdabe2",
+    "workbookVersion": 5
+}

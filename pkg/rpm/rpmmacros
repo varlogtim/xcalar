@@ -1,0 +1,6 @@
+%debug_package %{nil}
+%__os_install_post %{nil}
+
+
+
+

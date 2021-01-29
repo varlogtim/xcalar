@@ -1,0 +1,4 @@
+[Unit]
+Description=Xcalar Slice
+Documentation=https://xcalar.com/documentation/Content/DocPortalHome.htm
+Before=slices.target

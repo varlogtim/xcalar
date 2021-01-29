@@ -1,0 +1,59 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq1",
+            "columns": [
+                {
+                    "columnName": "sum_qty",
+                    "headerAlias": "sum_qty"
+                },
+                {
+                    "columnName": "sum_base_price",
+                    "headerAlias": "sum_base_price"
+                },
+                {
+                    "columnName": "sum_disc_price",
+                    "headerAlias": "sum_disc_price"
+                },
+                {
+                    "columnName": "sum_charge",
+                    "headerAlias": "sum_charge"
+                },
+                {
+                    "columnName": "avg_qty",
+                    "headerAlias": "avg_qty"
+                },
+                {
+                    "columnName": "avg_price",
+                    "headerAlias": "avg_price"
+                },
+                {
+                    "columnName": "avg_disc",
+                    "headerAlias": "avg_disc"
+                },
+                {
+                    "columnName": "L_QUANTITY_float_count",
+                    "headerAlias": "L_QUANTITY_float_count"
+                },
+                {
+                    "columnName": "L_RETURNFLAG",
+                    "headerAlias": "L_RETURNFLAG"
+                },
+                {
+                    "columnName": "L_LINESTATUS",
+                    "headerAlias": "L_LINESTATUS"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "adddateinterval_modified",
+            "fileName": "udfs/adddateinterval_modified.py",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"uk.83143.lineitem\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.uk.83143.lineitem\" --dsttable \"lineitem#CQ31\" --prefix lineitem;map --eval \"float(lineitem::L_QUANTITY)\" --srctable \"lineitem#CQ31\" --fieldName \"L_QUANTITY_float\" --dsttable \"lineitem#CQ32\";map --eval \"float(lineitem::L_EXTENDEDPRICE)\" --srctable \"lineitem#CQ32\" --fieldName \"L_EXTENDEDPRICE_float\" --dsttable \"lineitem#CQ33\";map --eval \"float(lineitem::L_DISCOUNT)\" --srctable \"lineitem#CQ33\" --fieldName \"L_DISCOUNT_float\" --dsttable \"lineitem#CQ34\";map --eval \"float(lineitem::L_TAX)\" --srctable \"lineitem#CQ34\" --fieldName \"L_TAX_float\" --dsttable \"lineitem#CQ35\";map --eval \"mult(L_EXTENDEDPRICE_float, sub(1,L_DISCOUNT_float))\" --srctable \"lineitem#CQ35\" --fieldName \"disc_price\" --dsttable \"lineitem#CQ36\";map --eval \"mult(sub(1,L_DISCOUNT_float), add(1,L_TAX_float))\" --srctable \"lineitem#CQ36\" --fieldName \"L_DISCOUNT_multi_L_TAX\" --dsttable \"lineitem#CQ39\";map --eval \"mult(L_EXTENDEDPRICE_float, L_DISCOUNT_multi_L_TAX)\" --srctable \"lineitem#CQ39\" --fieldName \"charge\" --dsttable \"lineitem#CQ40\";map --eval \"adddateinterval_modified:dateleshipdate(lineitem::L_SHIPDATE, \\\"1998-12-01\\\", 90)\" --srctable \"lineitem#CQ40\" --fieldName \"L_SHIPDATE_udf\" --dsttable \"lineitem#CQ46\";filter --srctable lineitem#CQ46 --eval \"eq(L_SHIPDATE_udf, \\\"True\\\")\"  --dsttable \"lineitem#CQ47\";map --eval \"concat(string(lineitem::L_RETURNFLAG), concat(\\\".Xc.\\\", string(lineitem::L_LINESTATUS)))\" --srctable \"lineitem#CQ47\" --fieldName \"multiGroupBy62951\" --dsttable \"lineitem#CQ49\";index --key \"multiGroupBy62951\" --keyType 1  --srctable \"lineitem#CQ49\" --dsttable \"lineitem.index#CQ50\";groupBy --srctable \"lineitem.index#CQ50\" --eval \"sum(L_EXTENDEDPRICE_float)\" --fieldName \"sum_base_price\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ52\" --nosample;groupBy --srctable \"lineitem.index#CQ50\" --eval \"sum(L_QUANTITY_float)\" --fieldName \"sum_qty\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ51\" --nosample;groupBy --srctable \"lineitem.index#CQ50\" --eval \"sum(disc_price)\" --fieldName \"sum_disc_price\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ53\" --nosample;join --leftTable \"Final_Q1_output#CQ51\" --rightTable \"Final_Q1_output#CQ52\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ59\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB330:1;groupBy --srctable \"lineitem.index#CQ50\" --eval \"sum(charge)\" --fieldName \"sum_charge\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ54\" --nosample;join --leftTable \"Final_Q1_output#CQ59\" --rightTable \"Final_Q1_output#CQ53\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ60\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB993:1;groupBy --srctable \"lineitem.index#CQ50\" --eval \"avg(L_QUANTITY_float)\" --fieldName \"avg_qty\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ55\" --nosample;join --leftTable \"Final_Q1_output#CQ60\" --rightTable \"Final_Q1_output#CQ54\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ61\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB428:1;groupBy --srctable \"lineitem.index#CQ50\" --eval \"avg(L_EXTENDEDPRICE_float)\" --fieldName \"avg_price\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ56\" --nosample;join --leftTable \"Final_Q1_output#CQ61\" --rightTable \"Final_Q1_output#CQ55\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ62\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB853:1;groupBy --srctable \"lineitem.index#CQ50\" --eval \"avg(L_DISCOUNT_float)\" --fieldName \"avg_disc\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ57\" --nosample;join --leftTable \"Final_Q1_output#CQ62\" --rightTable \"Final_Q1_output#CQ56\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ63\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB568:1;groupBy --srctable \"lineitem.index#CQ50\" --eval \"count(lineitem::L_SHIPDATE)\" --fieldName \"L_QUANTITY_float_count\" --newKeyFieldName \"multiGroupBy62951\" --dsttable \"Final_Q1_output#CQ58\" --nosample;join --leftTable \"Final_Q1_output#CQ63\" --rightTable \"Final_Q1_output#CQ57\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ64\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB301:1;join --leftTable \"Final_Q1_output#CQ64\" --rightTable \"Final_Q1_output#CQ58\" --joinType innerJoin  --joinTable \"Final_Q1_output#CQ65\" --collisionCheck --rightRenameMap multiGroupBy62951:multiGroupBy62951_GB189:1;map --eval \"cut(multiGroupBy62951, 1, \\\".Xc.\\\")\" --srctable \"Final_Q1_output#CQ65\" --fieldName \"L_RETURNFLAG\" --dsttable \"Final_Q1_output#CQ66\";map --eval \"cut(multiGroupBy62951, 2, \\\".Xc.\\\")\" --srctable \"Final_Q1_output#CQ66\" --fieldName \"L_LINESTATUS\" --dsttable \"Final_Q1_output#CQ67\";map --eval \"concat(L_RETURNFLAG, concat(\\\"\\t\\txc\\t\\\", L_LINESTATUS))\" --srctable \"Final_Q1_output#CQ67\" --fieldName \"Fields_concat\" --dsttable \"Final_Q1_output#CQ68\";index --key \"Fields_concat\" --keyType 1  --srctable \"Final_Q1_output#CQ68\" --dsttable \"EndResult-tpchq1\" --sorted;",
+    "xcalarVersion": "1.2.1-1044-xcalardev-67cf7211-67cf7211",
+    "retinaVersion": 1
+}

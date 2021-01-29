@@ -1,0 +1,5 @@
+
+So.so produced via:
+ $ gcc -g -c -fPIC So.c
+ $ gcc -g -shared -o So.so So.o
+

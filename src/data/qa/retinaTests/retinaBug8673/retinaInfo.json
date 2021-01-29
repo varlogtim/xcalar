@@ -1,0 +1,49 @@
+{
+    "tables": [
+        {
+            "name": "temp-144115188105441799",
+            "columns": [
+                {
+                    "columnName": "dsPrefix-25506-144115188103544515::intCol",
+                    "headerAlias": "dsPrefix-25506-144115188103544515::intCol"
+                },
+                {
+                    "columnName": "col-25506-144115188103544516",
+                    "headerAlias": "col-25506-144115188103544516"
+                },
+                {
+                    "columnName": "dsPrefix-25506-144115188103544517::intCol",
+                    "headerAlias": "dsPrefix-25506-144115188103544517::intCol"
+                },
+                {
+                    "columnName": "col-25508-144115188105358395",
+                    "headerAlias": "col-25508-144115188105358395"
+                },
+                {
+                    "columnName": "col-25508-144115188105390076",
+                    "headerAlias": "col-25508-144115188105390076"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "fileName": "udfs/default2.py",
+            "moduleName": "default2",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"memory://1000\" --format json --size 0B  --name \"<datasetName>\" --apply \"operatorsfunctestloadMem:loadRandom\";index --key \"floatCol\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-RN0-144115188102196982\" --prefix floatCol;index --key \"floatCol\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-144115188102197104\" --prefix floatCol2;map --eval \"add(float(71), float(floatCol::floatCol))\" --srctable \"<tablePrefix>-RN0-144115188102196982\" --fieldName \"col-25508-144115188102336990\" --dsttable \"<tablePrefix>-RN10-144115188102336991\";join --leftTable \"<tablePrefix>-RN10-144115188102336991\" --rightTable \"<tablePrefix>-144115188102197104\" --joinType innerJoin  --joinTable \"<tablePrefix>-RN11-144115188103544523\" --leftRenameMap floatCol:dsPrefix-25506-144115188103544515:0&col-25508-144115188102336990:col-25506-144115188103544516:1 --rightRenameMap floatCol:dsPrefix-25506-144115188103544517:0;map --eval \"default2:multiJoin(col-25506-144115188103544516, col-25506-144115188103544516)\" --srctable \"<tablePrefix>-RN11-144115188103544523\" --fieldName \"col-25508-144115188105358395\" --dsttable \"<tablePrefix>-144115188105358396\";index --key \"col-25508-144115188105358395\" --srctable \"<tablePrefix>-144115188105358396\" --dsttable \"<tablePrefix>-144115188105375227\" --sorted;map --eval \"default2:multiJoin(col-25506-144115188103544516, col-25506-144115188103544516)\" --srctable \"<tablePrefix>-144115188105375227\" --fieldName \"col-25508-144115188105390076\" --dsttable \"<tablePrefix>-144115188105390077\";index --key \"col-25508-144115188105390076\" --srctable \"<tablePrefix>-144115188105390077\" --dsttable \"<tablePrefix>-144115188105441512\" --sorted;filter --srctable <tablePrefix>-144115188105441512 --eval \"eq(col-25508-144115188105358395,col-25508-144115188105390076)\"  --dsttable \"temp-144115188105441799\";",
+    "xcalarVersion": "1.1.3-876-xcalardev-96152c78",
+    "retinaVersion": 1
+}

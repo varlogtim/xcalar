@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if ((XTRACE)); then
+    set -x
+    export PS4='# [${PWD}] ${BASH_SOURCE#$PWD/}:${LINENO}: ${FUNCNAME[0]}() - ${container:+[$container] }[${SHLVL},${BASH_SUBSHELL},$?] '
+fi

@@ -1,0 +1,5 @@
+sysSemTimedWait
+ringBufDequeue
+Parent::reap
+Runtime::blockableThreadWrapper<Parent>
+DedicatedThread::threadEntryPoint

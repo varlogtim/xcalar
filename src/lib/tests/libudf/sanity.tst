@@ -1,0 +1,2 @@
+addtaptest ./libudfpytest
+addtaptest ./libudftest

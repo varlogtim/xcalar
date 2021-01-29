@@ -1,0 +1,142 @@
+{
+    "tables": [
+        {
+            "name": "ds10#3",
+            "columns": [
+                {
+                    "columnName": "startRow",
+                    "headerAlias": "startRow"
+                },
+                {
+                    "columnName": "numRows",
+                    "headerAlias": "numRows"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.support@xcalar.com.74651.ds10",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "10",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#1",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.support@xcalar.com.74651.ds10",
+                "dest": "ds10#1",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "ds10-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "ds10",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "changeType#2",
+            "state": "Created",
+            "args": {
+                "source": "ds10#1",
+                "dest": "ds10#2",
+                "eval": [
+                    {
+                        "evalString": "int(ds10::startRow, 10)",
+                        "newField": "startRow"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "changeType#3",
+            "state": "Created",
+            "args": {
+                "source": "ds10#2",
+                "dest": "ds10#3",
+                "eval": [
+                    {
+                        "evalString": "int(ds10::numRows, 10)",
+                        "newField": "numRows"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "ds10#3",
+                "fileName": "export-ds10#3.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.ds10#3",
+                "columns": [
+                    {
+                        "columnName": "startRow",
+                        "headerName": "startRow"
+                    },
+                    {
+                        "columnName": "numRows",
+                        "headerName": "numRows"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.1-1-pmaddipatla-098cb2b7-4d99d367",
+    "dataflowVersion": 1
+}

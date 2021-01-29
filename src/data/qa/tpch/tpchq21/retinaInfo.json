@@ -1,0 +1,63 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "EndResult-tpchq21",
+            "columns": [
+                {
+                    "columnName": "numwait",
+                    "headerAlias": "numwait"
+                },
+                {
+                    "columnName": "S_NAME",
+                    "headerAlias": "S_NAME"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "lineitem--L_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem2--L_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem3--L_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "supplier--S_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem--L_ORDERKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem2--L_ORDERKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem3--L_ORDERKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "orders--O_ORDERKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "supplier--S_NATIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "nation--N_NATIONKEY",
+            "type": "DfInt64"
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-bli-8088a6fa-a568cfd8",
+    "udfs": [],
+    "query": "load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"test.10460.lineitem\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/supplier.tbl\" --format csv --size 0B  --name \"test.25038.supplier\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"test.16849.orders\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/nation.tbl\" --format csv --size 0B  --name \"test.24752.nation\" --fielddelim | --crlf --header;index --key \"L_SUPPKEY\" --dataset \".XcalarDS.test.10460.lineitem\" --dsttable \"lineitem.index\" --sorted=partial --prefix lineitem;index --key \"S_NATIONKEY\" --dataset \".XcalarDS.test.25038.supplier\" --dsttable \"supplier.index\" --sorted=partial --prefix supplier;index --key \"O_ORDERKEY\" --dataset \".XcalarDS.test.16849.orders\" --dsttable \"orders.index\" --sorted=partial --prefix orders;index --key \"N_NATIONKEY\" --dataset \".XcalarDS.test.24752.nation\" --dsttable \"nation.index\" --sorted=partial --prefix nation;index --key \"L_ORDERKEY\" --dataset \".XcalarDS.test.10460.lineitem\" --dsttable \"lineitem3.index\" --sorted=partial --prefix lineitem3;index --key \"L_ORDERKEY\" --dataset \".XcalarDS.test.10460.lineitem\" --dsttable \"lineitem2.index\" --sorted=partial --prefix lineitem2;filter --srctable lineitem.index --eval \"gt(lineitem::L_RECEIPTDATE, lineitem::L_COMMITDATE)\"  --dsttable \"lineitem#pS4\";filter --srctable orders.index --eval \"eq(orders::O_ORDERSTATUS, \\\"F\\\")\"  --dsttable \"orders#pS6\";filter --srctable nation.index --eval \"eq(nation::N_NAME, \\\"SAUDI ARABIA\\\")\"  --dsttable \"nation#pS14\";filter --srctable lineitem3.index --eval \"gt(lineitem3::L_RECEIPTDATE, lineitem3::L_COMMITDATE)\"  --dsttable \"lineitem3#pS26\";join --leftTable \"nation#pS14\" --rightTable \"supplier.index\" --joinType innerJoin  --joinTable \"supp_nation_join\" --collisionCheck;index --key \"supplier::S_SUPPKEY\" --srctable \"supp_nation_join\" --dsttable \"supp_nation_join_index\";join --leftTable \"supp_nation_join_index\" --rightTable \"lineitem#pS4\" --joinType innerJoin  --joinTable \"line_supp_join#pS8\" --collisionCheck;index --key \"lineitem::L_ORDERKEY\" --srctable \"line_supp_join#pS8\" --dsttable \"line_supp_join.index#pS12\";join --leftTable \"line_supp_join.index#pS12\" --rightTable \"orders#pS6\" --joinType innerJoin  --joinTable \"j#21\" --collisionCheck;join --leftTable \"j#21\" --rightTable \"lineitem2.index\" --joinType innerJoin  --joinTable \"j2#pS27\" --collisionCheck;join --leftTable \"j#21\" --rightTable \"lineitem3#pS26\" --joinType innerJoin  --joinTable \"j3#pS30\" --collisionCheck;filter --srctable j2#pS27 --eval \"neq(lineitem2::L_SUPPKEY, lineitem::L_SUPPKEY)\"  --dsttable \"j2#pS33\";filter --srctable j3#pS30 --eval \"neq(lineitem::L_SUPPKEY, lineitem3::L_SUPPKEY)\"  --dsttable \"j3#pS34\";groupBy --srctable \"j3#pS34\" --eval \"count(lineitem::L_ORDERKEY)\" --fieldName \"L_ORDERKEY_count\" --newKeyFieldName \"L_ORDERKEY\" --dsttable \"j3_grouped#pS37\" --nosample;groupBy --srctable \"j2#pS33\" --eval \"count(lineitem::L_ORDERKEY)\" --fieldName \"L_ORDERKEY_count\" --newKeyFieldName \"L_ORDERKEY\" --dsttable \"j2_grouped#pS35\" --nosample;join --leftTable \"j2_grouped#pS35\" --rightTable \"j3_grouped#pS37\" --joinType leftJoin  --joinTable \"group_join#pS38\" --collisionCheck --rightRenameMap L_ORDERKEY_count:L_ORDERKEY_count_359:1&L_ORDERKEY:L_ORDERKEY_359:1;filter --srctable group_join#pS38 --eval \"not(exists(L_ORDERKEY_359))\"  --dsttable \"group_join#pS39\";join --leftTable \"j#21\" --rightTable \"group_join#pS39\" --joinType innerJoin  --joinTable \"final_join#pS42\" --collisionCheck;index --key \"supplier::S_NAME\" --keyType 1  --srctable \"final_join#pS42\" --dsttable \"final_join.index#pS44\";groupBy --srctable \"final_join.index#pS44\" --eval \"count(supplier::S_NAME)\" --fieldName \"numwait\" --newKeyFieldName \"S_NAME\" --dsttable \"final_grouped#pS43\" --nosample;index --key \"numwait\" --keyType 4  --srctable \"final_grouped#pS43\" --dsttable \"EndResult-tpchq21\" --sorted=desc;"
+}

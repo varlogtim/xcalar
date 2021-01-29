@@ -1,0 +1,4 @@
+enum ExecutionMode {
+    DFS = 0,
+    BFS = 1,
+};

@@ -1,0 +1,89 @@
+Naming Conventions:
+=======================================================================
+Everything is camel case except for directory and binary names, which should be
+all lower cases.  The capitalization of the first starting letter depends on the
+type of idendifier, specified below:
+Constant variables, Typedefs, Enum values, Constant-like-macros:
+CamelCaseLikeThis
+Functions, non-constant variables, Function-like-macros: camelCaseLikeThis
+Everything public (xcalar/src/include/*) gets a unique 2-6 character
+prefix.  e.x. Message.h uses the "msg" prefix.  Types have the form
+MsgHdr, MsgMessage, etc.  Functions have the form msgInit(),
+msgWait(), msgSend(), etc.
+Everything private (statics) can skip the prefix.  e.x. Message.c's sendOrRecv()
+Avoid underscores and all-caps.
+
+Indentation:
+=======================================================================
+4 spaces each level, no tab characters
+Each case in a switch does not add an indentation level.  e.x.:
+
+    switch (a) {
+    case 1:
+        statements...;
+        break;
+    case 2:
+        statements...;
+        break;
+
+    default:
+        statements...;
+    }
+
+Miscellaneous:
+=======================================================================
+Not required, but prefer enums over constant-like-macros.  e.x. instead of:
+
+#define SectorSize (512)
+
+enum { SectorSize = 512 };
+
+Not required, but prefer functions over function-like-macros.  e.x. instead of:
+
+#define strHexToAscii(hex) (strHexToAsciiCharIndex[hex])
+
+extern char strHexToAscii(uint8 hexValue);
+
+Align parameters of a function on second line with the first parameter on first
+line whenever possible e.x.
+                    function1(parameter1, parameter2,
+                              parameter3, parameter4)
+
+Return value of a function signature should be on sparated line, the left
+bracket of the a function definition should be on a new line, e.x. instead of:
+
+int func(param) {
+
+}
+
+int
+func(param)
+{
+
+}
+
+Have a space between the cast and the variable being casted, e.x. instead of
+
+(int)foo;
+
+(int) foo;
+
+When writing a function make sure that it takes or returns meaningful variable
+names or constants as parameters and not just true, NULL e.x. instead of:
+
+func(NULL, false)
+
+char *fooName = NULL;
+bool isBar = false; (Or a proper enum type)
+func(fooName, isBar);
+
+Avoid XXX:FIXME, instead use XXX
+
+n general, any of a module's functions, internal or external, can have as many
+of its own unique error return values as it wants.  These unique values should
+be expressed by extending the existing global Status enumeration, and not by
+creating new module-specific error namespaces.  A non-error return value should
+generally be expressed with StatusOk.
+
+use size_t when need to represent "number of bytes" since this is canonical
+form in C.

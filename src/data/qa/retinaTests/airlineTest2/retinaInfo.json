@@ -1,0 +1,38 @@
+{
+    "xcalarVersion": "0.9.8.7",
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "retinaTests-airlineTests2-flight8470airport1559GB#tv15",
+            "columns": [
+                {
+                    "columnName": "AvgDelay",
+                    "headerAlias": "AvgDelay"
+                },
+                {
+                    "columnName": "flight::UniqueCarrier",
+                    "headerAlias": "UniqueCarrier"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "flight--UniqueCarrier",
+            "type": "DfString"
+        },
+        {
+            "columnName": "flight--ArrDelay",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "flight--Dest",
+            "type": "DfString"
+        }
+    ],
+
+    "query": "load --url \"nfs://<pathToQaDatasets>/flight/airports.csv\" --format csv --size 0B --name \"airport1559\" --fielddelim , --crlf --header; load --url \"nfs://<pathToQaDatasets>/flight/airlines_2007.csv\" --format csv --size 0B --name \"flight8470\" --fielddelim , --crlf --header; index --prefix \"flight\" --key \"xcalarRecordNum\" --dataset \".XcalarDS.flight8470\" --dsttable \"retinaTests-airlineTests2-flight8470#tv5\"; index --prefix \"airport\" --key \"xcalarRecordNum\" --dataset \".XcalarDS.airport1559\" --dsttable \"retinaTests-airlineTests2-airport1559#tv6\"; filter --srctable \"retinaTests-airlineTests2-flight8470#tv5\" --eval \"gt(flight::ArrDelay, 0)\" --dsttable \"retinaTests-airlineTests2-flight8470#tv9\"; index --key \"flight::Dest\" --srctable \"retinaTests-airlineTests2-flight8470#tv9\" --dsttable \"retinaTests-airlineTests2-flight8470#tv13\"; index --key \"airport::iata\" --srctable \"retinaTests-airlineTests2-airport1559#tv6\" --dsttable \"retinaTests-airlineTests2-airport1559#tv12\"; join --leftTable \"retinaTests-airlineTests2-flight8470#tv13\" --rightTable \"retinaTests-airlineTests2-airport1559#tv12\" --joinType innerJoin --joinTable \"retinaTests-airlineTests2-flight8470airport1559#tv11\" -c; index --key \"flight::UniqueCarrier\" --srctable \"retinaTests-airlineTests2-flight8470airport1559#tv11\" --dsttable \"retinaTests-airlineTests2-flight8470airport1559#tv14\"; groupBy --srctable \"retinaTests-airlineTests2-flight8470airport1559#tv14\" --eval \"avg(flight::ArrDelay)\" --fieldName \"AvgDelay\" --dsttable \"retinaTests-airlineTests2-flight8470airport1559GB#tv15\" --nosample;",
+
+    "udfs": [
+    ]
+}

@@ -1,0 +1,8 @@
+[
+  {"recId": 1, "deptId": 1, "softwareId": 1, "bugCount": 5, "numHours": 0.0, "shipped": false},
+  {"recId": 2, "deptId": 1, "softwareId": 2, "bugCount": 10, "numHours": 1.5, "shipped": false},
+  {"recId": 3, "deptId": 1, "softwareId": 3, "bugCount": 15, "numHours": 0.5, "shipped": true},
+  {"recId": 4, "deptId": 2, "softwareId": 1, "bugCount": 2, "numHours": 1.0, "shipped": true},
+  {"recId": 5, "deptId": 2, "softwareId": 2, "bugCount": 4, "numHours": 100.4, "shipped": false},
+  {"recId": 6, "deptId": 2, "softwareId": 3, "bugCount": 6, "numHours": 5.6, "shipped": true}
+]

@@ -1,0 +1,4 @@
+FROM centos:6
+MAINTAINER Xcalar, Inc <info@xcalar.com>
+
+RUN yum install -y openssh-server openssh-clients redhat-lsb-core deltarpm yum-utils sudo curl tar nfs-utils rsyslog iproute

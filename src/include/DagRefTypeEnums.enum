@@ -1,0 +1,7 @@
+enum DagRefType {
+     DagRefNone:"None",
+     DagRefApi:"api",
+     DagRefOperator:"operator",
+     DagRefNode:"dag node",
+     DagRefResultSet:"result set",
+}

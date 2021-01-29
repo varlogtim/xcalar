@@ -1,0 +1,3 @@
+# el7-systemd already has ENTRYPOINT set up, but put it here
+# again for consistency with the other footer.*
+ENTRYPOINT ["/usr/sbin/init"]

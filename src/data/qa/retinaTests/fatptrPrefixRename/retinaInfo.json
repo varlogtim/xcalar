@@ -1,0 +1,21 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "selfJoin#if5",
+            "columns": [
+                {
+                    "columnName": "intString_add",
+                    "headerAlias": "intString_add"
+                },
+                {
+                    "columnName": "intString_add1",
+                    "headerAlias": "intString_add1"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "1.1.0.18-blim-4af74cfb",
+    "udfs": [],
+    "query": "load --url \"nfs:///<pathToQaDatasets>/keyCollision/1.json\" --format json --size 0B  --name \"<datasetName>\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-if0\" --prefix keyCollision1;index --key \"keyCollision1::intString\" --srctable \"<tablePrefix>-if0\" --dsttable \"<tablePrefix>-if3\";index --key \"keyCollision1::intString\" --srctable \"<tablePrefix>-if0\" --dsttable \"<tablePrefix>-if2\";join --leftTable \"<tablePrefix>-if2\" --rightTable \"<tablePrefix>-if3\" --joinType innerJoin  --joinTable \"<tablePrefix>-if1\" --collisionCheck --leftRenameMap keyCollision1:leftTable:0&keyCollision1-intString:leftKey:1 --rightRenameMap keyCollision1:rightTable:0;map --eval \"add(float(leftTable::intString), 5)\" --srctable \"<tablePrefix>-if1\" --fieldName \"intString_add\" --dsttable \"<tablePrefix>-if4\";map --eval \"add(float(rightTable::intString), 10)\" --srctable \"<tablePrefix>-if4\" --fieldName \"intString_add1\" --dsttable \"selfJoin#if5\";"
+}

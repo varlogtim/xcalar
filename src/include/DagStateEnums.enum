@@ -1,0 +1,13 @@
+enum DgDagState {
+    DgDagStateUnknown :"Unknown state",
+    DgDagStateCreated :"Created",
+    DgDagStateQueued  :"Queued",
+    DgDagStateProcessing :"Processing",
+    DgDagStateCleaned :"Cleaned",
+    DgDagStateReady :"Ready",
+    DgDagStateDropped :"Dropped",
+    DgDagStateError :"Error",
+    DgDagStateArchived :"Archived",
+    DgDagStateArchiving :"Archiving",
+    DgDagStateArchiveError :"Error during Archiving",
+};

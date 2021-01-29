@@ -1,0 +1,27 @@
+enum ExTargetType {
+    ExTargetUnknownType:"unknown" = 0,
+    ExTargetSFType:"file" = 1,
+    ExTargetUDFType:"udf" = 2,
+}
+
+enum ExExportCreateRule {
+    ExExportUnknownRule:"unknown" = 0,
+    ExExportCreateOnly:"createOnly" = 1,
+    ExExportCreateOrAppend:"createOrAppend" = 2,
+    ExExportAppendOnly:"appendOnly" = 3,
+    ExExportDeleteAndReplace:"deleteAndReplace" = 4,
+}
+
+enum ExSFFileSplitType {
+    ExSFFileSplitUnknownType:"unknown" = 0,
+    ExSFFileSplitNone:"none" = 1,
+    ExSFFileSplitForceSingle:"single" = 2,
+    ExSFFileSplitSize:"size" = 3,
+}
+
+enum ExSFHeaderType {
+    ExSFHeaderUnknownType:"unknown" = 0,
+    ExSFHeaderEveryFile:"every" = 1,
+    ExSFHeaderSeparateFile:"separate" = 2,
+    ExSFHeaderNone:"none" = 3,
+}

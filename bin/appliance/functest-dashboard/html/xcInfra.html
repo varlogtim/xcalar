@@ -1,0 +1,98 @@
+<html>
+<header>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script> 
+        $(function(){
+            $("#includedContent").load("view");
+        });
+    </script>
+</header>
+<body>
+
+<textarea id="inputTextToSave" cols="80" rows="55" disabled="disabled"></textarea>
+
+</br>Cluster Status: <b id="cluster_status"></b>
+</br>
+<button onclick="getParamsFromFile()" id="getParamsFromFile">Open Config</button>
+<button onclick="saveParamsToFile()" id="saveParamsToFile">Save Config</button>
+<button onclick="runTest()" id="runTest">Run Functest</button>
+
+<div id="includedContent"></div>
+
+<script type="text/javascript">
+var myVar = setInterval(refresh, 1000);
+
+function getParamsFromFile()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("inputTextToSave").value = this.responseText;
+            document.getElementById("inputTextToSave").disabled = false;
+        }
+    };
+    xhttp.open("POST", "getParams", true);
+    xhttp.send();
+}
+
+function saveParamsToFile()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("Good");
+        }
+    };
+    xhttp.open("POST", "saveParams", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify({"config": "/etc/xcalar/default.cfg", "data": document.getElementById("inputTextToSave").value}));
+}
+
+function restartXcalar()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("restartXcalar").disabled = false;
+            console.log("Good");
+        }
+    };
+    document.getElementById("restartXcalar").disabled = true;
+    xhttp.open("POST", "restart", true);
+    xhttp.send();
+}
+
+function runTest()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("runTest").disabled = false;
+            console.log("Finish tests");
+        }
+    };
+    document.getElementById("runTest").disabled = true;
+    xhttp.open("POST", "test", true);
+    xhttp.send();
+}
+
+function refresh() {
+    $("#includedContent").load("view");
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status != 200) { // Cluster is down
+            document.getElementById("runTest").disabled = true;
+            document.getElementById("cluster_status").innerHTML = "Stopped";
+        } else if (this.readyState == 4) { // Cluster is up
+            document.getElementById("runTest").disabled = false;
+            document.getElementById("cluster_status").innerHTML = "Started";
+        }
+    };
+    xhttp.open("POST", "status", true);
+    xhttp.send();
+}
+
+</script>
+
+</body>
+</html>

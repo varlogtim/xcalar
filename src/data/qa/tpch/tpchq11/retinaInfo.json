@@ -1,0 +1,21 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq11",
+            "columns": [
+                {
+                    "columnName": "value",
+                    "headerAlias": "value"
+                },
+                {
+                    "columnName": "PS_PARTKEY",
+                    "headerAlias": "PS_PARTKEY"
+                }
+            ]
+        }
+    ],
+    "udfs": [],
+    "query": "load --url \"<pathToTpchDatasets>/supplier.tbl\" --format csv --size 0B  --name \"demo.92928.supplier\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/partsupp.tbl\" --format csv --size 0B  --name \"demo.25083.partsupp\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.92928.supplier\" --dsttable \"supplier#L9302\" --prefix supplier;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.25083.partsupp\" --dsttable \"partsupp#L9301\" --prefix partsupp;load --url \"<pathToTpchDatasets>/nation.tbl\" --format csv --size 0B  --name \"demo.71146.nation\" --fielddelim | --crlf --header;index --key \"supplier::S_SUPPKEY\" --keyType 1  --srctable \"supplier#L9302\" --dsttable \"supplier.index#L9306\";index --key \"partsupp::PS_SUPPKEY\" --keyType 1  --srctable \"partsupp#L9301\" --dsttable \"partsupp.index#L9305\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.71146.nation\" --dsttable \"nation#L9303\" --prefix nation;join --leftTable \"partsupp.index#L9305\" --rightTable \"supplier.index#L9306\" --joinType innerJoin  --joinTable \"partsupp_supp_join#L9304\" --collisionCheck;index --key \"nation::N_NATIONKEY\" --keyType 1  --srctable \"nation#L9303\" --dsttable \"nation.index#L9309\";index --key \"supplier::S_NATIONKEY\" --keyType 1  --srctable \"partsupp_supp_join#L9304\" --dsttable \"partsupp_supp_join.index#L9308\";join --leftTable \"partsupp_supp_join.index#L9308\" --rightTable \"nation.index#L9309\" --joinType innerJoin  --joinTable \"partsupp_supp_nation_subq_join#L9307\" --collisionCheck;filter --srctable partsupp_supp_nation_subq_join#L9307 --eval \"eq(nation::N_NAME, \\\"GERMANY\\\")\"  --dsttable \"partsupp_supp_nation_subq_join#L9310\";map --eval \"float(partsupp::PS_SUPPLYCOST)\" --srctable \"partsupp_supp_nation_subq_join#L9310\" --fieldName \"PS_SUPPLYCOST_float\" --dsttable \"partsupp_supp_nation_subq_join#L9311\";map --eval \"float(partsupp::PS_AVAILQTY)\" --srctable \"partsupp_supp_nation_subq_join#L9311\" --fieldName \"PS_AVAILQTY_float\" --dsttable \"partsupp_supp_nation_subq_join#L9312\";map --eval \"mult(PS_SUPPLYCOST_float, PS_AVAILQTY_float)\" --srctable \"partsupp_supp_nation_subq_join#L9312\" --fieldName \"PS_SUPPLYCOST_float_mult\" --dsttable \"partsupp_supp_nation_subq_join#L9313\";aggregate --srctable \"partsupp_supp_nation_subq_join#L9313\" --dsttable \"PS_SUPPLYCOST_SUM\" --eval \"sum(PS_SUPPLYCOST_float_mult)\";map --eval \"mult(^PS_SUPPLYCOST_SUM, 0.0001)\" --srctable \"partsupp_supp_nation_subq_join#L9313\" --fieldName \"PS_SUPPLYCOST_float_mult_mult\" --dsttable \"partsupp_supp_nation_subq_join#L9314\";index --key \"partsupp::PS_PARTKEY\" --keyType 1  --srctable \"partsupp_supp_nation_subq_join#L9313\" --dsttable \"partsupp_supp_nation_subq_join.index#L9318\";aggregate --srctable \"partsupp_supp_nation_subq_join#L9314\" --dsttable \"partsupp_supp_nation_subq_oneval_max\" --eval \"max(PS_SUPPLYCOST_float_mult_mult)\";groupBy --srctable \"partsupp_supp_nation_subq_join.index#L9318\" --eval \"sum(PS_SUPPLYCOST_float_mult)\" --fieldName \"value\" --newKeyFieldName \"PS_PARTKEY\" --dsttable \"Final_q11_output#L9317\" --nosample;filter --srctable Final_q11_output#L9317 --eval \"gt(value, ^partsupp_supp_nation_subq_oneval_max)\"  --dsttable \"Final_q11_output#L9319\";index --key \"value\" --keyType 7  --srctable \"Final_q11_output#L9319\" --dsttable \"EndResult-tpchq11\" --sorted=desc;",
+    "xcalarVersion": "1.2.1-1-jenkins-efd2531c-fc9162cb",
+    "retinaVersion": 1
+}

@@ -1,0 +1,2 @@
+add_xce_library(libtransport STATIC TransportPage.cpp)
+target_link_libraries(libtransport libxccompress libruntime)

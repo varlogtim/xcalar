@@ -1,0 +1,248 @@
+#!/bin/bash
+if ((XTRACE)); then
+    set -x
+    export PS4='# [${PWD}] ${BASH_SOURCE#$PWD/}:${LINENO}: ${FUNCNAME[0]}() - ${container:+[$container] }[${SHLVL},${BASH_SUBSHELL},$?] '
+fi
+
+if [ -z "$XLRDIR" ]; then
+    if [ -e "$PWD/doc/env/xc_aliases" ]; then
+        export XLRDIR=$PWD
+    else
+        echo >&2 "ERROR: Unable to determine XLRDIR. Are you in a xcalar directory?"
+        return 1
+    fi
+fi
+
+. "$XLRDIR"/bin/xcalar-sh-lib
+
+function xclean() {
+    (
+        set +e
+        cd "$XLRDIR"
+        shm=/run/shm
+        if ! test -e $shm; then
+            shm=/dev/shm
+        fi
+
+        echo "* Kill all Xcalar processes"
+        killall -s KILL usrnode
+        killall -s KILL childnode
+        killall -s KILL xcmgmtd
+        killall -s KILL xcmonitor
+        pkill -SIGKILL -f xcalar-sqldf.jar
+        pgrep -u $(whoami) -f expServer | xargs -r kill -9
+        pgrep -u $(whoami) -f jupyter | xargs -r kill -9
+        echo "* Remove all Xcalar state under /tmp, /var/tmp & /var/opt/"
+        sudo rm -rf /tmp/*build1
+        sudo rm -rf /tmp/cliTest.*
+        sudo rm -rf /tmp/LibDsTest.*
+        sudo rm -rf /tmp/launcher.*
+        sudo rm -rf /tmp/xce*
+        sudo rm -rf /tmp/xcalar_sock
+        sudo rm -rf /tmp/xcalar.output.*
+        sudo rm -rf /tmp/usrnode*
+        sudo rm -rf /tmp/mgmtdspawn.*
+        sudo rm -rf /tmp/mgmtdtest.*
+        sudo rm -rf /tmp/xcalar
+        sudo rm -rf /tmp/valgrindCheck.*
+        sudo find /tmp/ -type f -name "childnode*" -delete # childnode redirected output.
+        sudo rm -rf /var/tmp/xcalar-$LOGNAME
+        sudo rm -rf /var/tmp/xcalar
+        sudo rm -rf /var/tmp/xcalarTest-$LOGNAME
+        sudo rm -rf /var/tmp/xcalarTest
+        sudo rm -rf /var/opt/xcalar
+        sudo rm -rf /var/opt/xcalarTest
+        echo "* Remove SHM files"
+        sudo rm -rf $shm/xcalar-shm-*
+        echo "* Remove SHM segments"
+        sudo ipcs -a | awk '{if ($6 == 0) print $2}' | while read line; do ipcrm -m $line; done
+        echo "* Set up Xcalar Environment"
+        sudo mkdir -p /opt/xcalar
+        test -e /etc/xcalar || sudo mkdir -p /etc/xcalar
+        test -e /var/log/xcalar || sudo mkdir -p /var/log/xcalar
+        sudo ln -sfn $XLRDIR/src/data/EcdsaPub.key /etc/xcalar/
+        sudo ln -sfn $XLRDIR/src/data/XcalarLic.key /etc/xcalar/
+        mkdir /var/tmp/xcalar
+        mkdir /var/tmp/xcalarTest-$LOGNAME
+        mkdir /var/tmp/xcalarTest
+        mkdir -p /tmp/xcalar
+        sudo mkdir -p /var/opt/xcalar /var/opt/xcalarTest
+        sudo chown $(id -u):$(id -g) /var/opt/xcalar /var/opt/xcalarTest /var/log/xcalar
+        echo "* Clean up cores"
+        cleancores
+        if [ "$NOCADDY" = 1 ]; then
+            echo >&2 "Skipping caddy launch, due to NOCADDY=$NOCADDY"
+        elif caddy_env="$(caddy.sh status 2>/dev/null)"; then
+            eval "$caddy_env"
+            # Reload caddy
+            pkill -USR1 -F "$CADDYPIDFILE"
+        fi
+    )
+
+    return 0
+}
+
+# Get the installed version number of a package
+# eg, for xcalar-python36 => 3.6.4-76
+function pkgversion() {
+    if test -e /etc/system-release; then
+        rpm -q "$1" --qf '%{VERSION}-%{RELEASE}\n' || return 1
+    else
+        local v
+        if ! v=$(
+            set -o pipefail
+            dpkg -s "$1" | awk '/^Version:/{print $2}'
+        ); then
+            return 1
+        fi
+        echo "${v%.ub1?}"
+    fi
+}
+
+# Remove dead containers
+function drm() {
+    docker ps -aq --filter status=exited | xargs -r docker rm || true
+}
+
+function cleancores() {
+    (
+    { set +x; } 2>/dev/null;
+    local fn=
+    for fn in $(find -type f -name 'core.*'); do
+        if file "$fn" | grep -q 'core file'; then
+            rm -fv "$fn"
+        fi
+    done
+    )
+}
+
+# Remove orphaned docker images
+function drmi() {
+    docker images --filter=dangling=true -q | xargs -r docker rmi || true
+}
+
+function xcw() {
+    procsToSearch="usrnode childnode xcmgmtd libapisSanity libconfigtest libdssanity libhashSanity liboperatorsSanity liboperatorsTest libstatsanity libstringsTest libsysTest libutilTest libxdbsanity liblogsanity libkvbufsanity libmsgsanity libdagsanity libkvstoresanity libcalloutsanity libnstest libsessionOneNodeSanity libshmsgtests libevaltests libbctests libagingsanity mgmtdtest.sh cliTest.sh libudfpytest libudftest libchildnodetest"
+
+    while [ "$procsToSearch" != "" ]; do
+        curProc=$(echo $procsToSearch | cut -f1 -d' ')
+        procsToSearch=$(echo $procsToSearch | sed "s/${curProc}[ ]*//")
+
+        /bin/ps -deaf | grep "$curProc" | grep -v grep | grep -v bash | grep -v make | grep -v tap-driver.[sp][hl] | grep -v valgrind | grep -v stdbuf
+    done
+}
+
+function setup_proxy() {
+    # Use ${http_proxy-unset} here to allow the user to explicitly disable http_proxy
+    # by setting it to an empty string. http_proxy='' means something different than
+    # never having set it at all (no preference)
+    if [ -z "${http_proxy-unset}" ]; then
+        return
+    fi
+    local cacher_host=${CACHER:-cacher}
+    local cacher_ip
+    cacher_ip=$(
+        set -o pipefail
+        getent hosts $cacher_host 2>/dev/null | cut -d' ' -f1
+    )
+    if [ $? -eq 0 ] && [ -z "${http_proxy:-}" ] && [ -n "$cacher_ip" ]; then
+        export http_proxy=http://${cacher_ip}:3128
+    fi
+    if [ -n "${http_proxy:-}" ]; then
+        local netstore_host=${NETSTORE_HOST:-netstore}
+        local netstore_ip
+        if ! netstore_ip=$(
+            set -o pipefail
+            getent hosts $netstore_host 2>/dev/null | cut -d' ' -f1
+        ); then
+            echo >&2 "WARNING: Unable to resolve netstore ($netstore_host)"
+        fi
+        local domain
+        domain=$(dnsdomainname)
+        export no_proxy="localhost,127.0.0.1,.local,.localdomain,${cacher_host},${netstore_host}${domain:+,$domain}${netstore_ip:+,$netstore_ip}${cacher_ip:+,$cacher_ip}"
+        # Unset http_proxy before calling curl, otherwise you're testing the proxy with a proxy
+        # Squid returns a 400 if you try to get the main page, so we grep for the signature. For
+        # other proxies (like apt-cacher), it returns a 200.
+        if http_proxy= curl -sL "$http_proxy" | grep -q "squid/" ||
+            test "$(http_proxy= curl -w '%{http_code}' -sL "$http_proxy" -o /dev/null)" -eq 200; then
+            :
+        else
+            echo >&2 "WARNING: Disabling http_proxy=$http_proxy because it can't be reached"
+            export http_proxy=''
+            export https_proxy=''
+        fi
+    fi
+}
+
+function xcEnvEnter() {
+    [ -d "$XLRDIR" ] || { echo >&2 "XLRDIR '$XLRDIR' does not exist" && return 1; }
+
+    xcEnvEnterDir "$XLRDIR/xcve"
+}
+
+function xcEnvEnterDir() {
+    [ -n "$1" ] || { echo >&2 "Need to specify target directory" && return 1; }
+    [ -d "$XLRDIR" ] || { echo >&2 "XLRDIR '$XLRDIR' does not exist" && return 1; }
+
+    xcEnvLeave
+
+    PREFIX="${PREFIX:-/opt/xcalar}"
+    _OLD_PYTHONPATH="$PYTHONPATH"
+    _OLD_PATH="$PATH"
+
+    xcalar_stdenv
+
+    export DOCKER_BUILDKIT=1
+    export _XCALAR_INTERNAL_=1
+    export JWT_SECRET="${JWT_SECRET:-7dVwJE9nA0PlpPlsuVm7Xe2KXZYc2xu9E}"
+    export XCE_HTTPS_PORT=${XCE_HTTPS_PORT:-8443}
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
+
+    # bash completion for xc2
+    if [ -n "$PS1" ]; then
+        source "${XLRDIR}/doc/env/xc2_complete.sh"
+    fi
+
+    if [ "$SKIP_PYVESETUP" != true ] && [ "$SKIP_PYVESETUP" != 1 ]; then
+        if ! (cd $XLRDIR && pyVeSetup.sh "$1" -r pkg/requirements.txt -r requirements.txt); then
+            echo >&2 "Failed to install python requirements"
+            return 1
+        fi
+    fi
+
+    if ! . "$1"/bin/activate; then
+        echo >&2 "Failed to activate python virtualenv"
+        return 1
+    fi
+}
+
+function xcEnvLeave() {
+    [ ! -z ${VIRTUAL_ENV+_} ] && type -t deactivate >/dev/null && deactivate || true
+    if ! [ -z ${_OLD_PYTHONPATH+_} ]; then
+        export PYTHONPATH="$_OLD_PYTHONPATH"
+        unset _OLD_PYTHONPATH
+    fi
+
+    if ! [ -z ${_OLD_PATH+_} ]; then
+        export PATH="$_OLD_PATH"
+        unset _OLD_PATH
+    fi
+
+    unset _XCALAR_INTERNAL_
+}
+
+function sendFileToQaDataRepo() {
+    filePath="$1"
+    fileName=$(basename "$filePath")
+
+    shasum=$(sha1sum "$filePath" | cut -d\  -f1)
+
+    placeholderFile="${filePath}.sha1"
+    echo "$shasum" >"$placeholderFile"
+
+    dstKey="gs://repo.xcalar.net/qa/${fileName}/${shasum:0:2}/${shasum:2:2}/${shasum}"
+    echo "Sending $filePath to $dstKey"
+    gsutil cp "$filePath" "$dstKey"
+
+    return 0
+}

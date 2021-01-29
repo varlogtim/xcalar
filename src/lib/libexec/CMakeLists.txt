@@ -1,0 +1,35 @@
+set(CORE_UTIL_FILES
+    "coreutils/Aggregate.cpp"
+    "coreutils/Drop.cpp"
+    "coreutils/Filter.cpp"
+    "coreutils/GroupBy.cpp"
+    "coreutils/Index.cpp"
+    "coreutils/Project.cpp"
+    "coreutils/GetRowNum.cpp"
+    "coreutils/Inspect.cpp"
+    "coreutils/Join.cpp"
+    "coreutils/List.cpp"
+    "coreutils/Load.cpp"
+    "coreutils/Shutdown.cpp"
+    "coreutils/Stats.cpp"
+    "coreutils/Map.cpp"
+    "coreutils/Query.cpp"
+    "coreutils/Rename.cpp"
+    "coreutils/DagCli.cpp"
+    "coreutils/Cast.cpp"
+    "coreutils/ListXdfs.cpp"
+    "coreutils/SessionCli.cpp"
+    "coreutils/Dht.cpp"
+    "coreutils/Support.cpp"
+    "coreutils/Python.cpp"
+    "coreutils/CancelCli.cpp"
+    "coreutils/GetOpStatusCli.cpp"
+    "coreutils/FuncTests.cpp"
+    "coreutils/Delist.cpp"
+    "coreutils/LogLevelSet.cpp"
+    "coreutils/GetIpAddr.cpp"
+    "coreutils/LogLevelGet.cpp")
+
+include_directories("${CMAKE_SOURCE_DIR}/src/lib/libexec")
+
+add_xce_library(libexec STATIC "ExecXcalarCmd.cpp" ${CORE_UTIL_FILES})

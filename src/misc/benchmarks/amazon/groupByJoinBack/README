@@ -1,0 +1,3 @@
+Run lineitem_src.tar.gz and export to a table with name "lineitem". Then run Gb-join-back.tar.gz.
+
+If running from the UI, you'll need to modify the source of the Synthesize operation in Gb-join-back.tar.gz to point to the name created by the UI.

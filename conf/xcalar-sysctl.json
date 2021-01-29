@@ -1,0 +1,18 @@
+{
+    "count": 3,
+    "data":
+    [
+        {
+            "token": "kernel.core_pattern",
+            "value": "core.%e.%p"
+        },
+        {
+            "token": "fs.suid_dumpable",
+            "value": 0
+        },
+        {
+            "token": "vm.swappiness",
+            "value": 10
+        }
+    ]
+}

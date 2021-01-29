@@ -1,0 +1,33 @@
+--- dpkg-sig.orig	2014-11-11 22:53:37.948984878 +0000
++++ dpkg-sig.new	2014-11-11 22:54:54.972988312 +0000
+@@ -555,7 +555,7 @@
+ 
+ =item * DON'T check the Signer- and Date-Fiels.
+ 
+-=item * Check that at least the digests for control.tar.gz, data.tar.gz and debian-binary were signed.
++=item * Check that at least the digests for control.tar.gz, data.tar.gz (or data.tar.xz) and debian-binary were signed.
+ 
+ =back
+ 
+@@ -602,10 +602,12 @@
+ 	my %seen_files;
+ 	for my $file_info (split /\n/, $data{files}) {
+ 		my ($md5sum, $sha1sum, $size, $name) = split /\s+/, $file_info;
++		$name =~ tr/\/$//d;
+ 		$seen_files{$name} = 1;
+ 
+ 		my $checked_something=0;		
+ 		for my $member_info (@$digests) {
++			$member_info->[0] =~ tr/\/$//d;
+ 			if ($member_info->[0] eq $name) {
+ 				$checked_something = 1;
+ 				if ($member_info->[1] ne $size) {
+@@ -634,7 +636,7 @@
+ 	}
+ 
+ 	return "FORCE_BAD" unless ($seen_files{"control.tar.gz"} &&
+-	                     $seen_files{"data.tar.gz"} &&
++	                     ($seen_files{"data.tar.gz"} || $seen_files{"data.tar.xz"}) &&
+ 	                     $seen_files{"debian-binary"});
+ 
+ 	return "GOOD";

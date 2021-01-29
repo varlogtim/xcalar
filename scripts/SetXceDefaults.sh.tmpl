@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# Copyright 2017 Xcalar, Inc. All rights reserved.
+#
+# No use, or distribution, of this source code is permitted in any form or
+# means without a valid, written license agreement with Xcalar, Inc.
+# Please refer to the included "COPYING" file for terms and conditions
+# regarding the use and redistribution of this software.
+
+
+#####################################
+# To modify inputs here, uncomment the line and set
+# the approprate value: (e.g. XCE_USER=someuser)
+#
+# Partial list of inputs are:
+# XCE_USER - name of the Xcalar process owner, if not
+#            provided, xcalar will be used
+# XCE_GROUP - name of the primary group for the Xcalar process
+#             owner, defaults to XCE_USER value (optional)
+# XCE_USER_HOME - home directory of the Xcalar process owner, if account
+#            created during install  (optional)
+# XCE_WORKDIR - directory where Xcalar processes are started,
+#               should be readable by Xcalar process owner,
+#               and shouldn't be on shared storage (optional)
+#
+#XCE_USER=
+#XCE_GROUP=
+#XCE_USER_HOME=
+#XCE_WORKDIR=
+#
+# Do not edit below this line.
+#####################################
+
+XCE_DEFAULT="${XCE_DEFAULT:-/etc/default/xcalar}"
+XCE_CONFIG="${XCE_CONFIG:-/etc/xcalar/default.cfg}"
+XCE_USER="${XCE_USER:-xcalar}"
+XCE_GROUP="${XCE_GROUP:-$XCE_USER}"
+XCE_HOME="${XCE_HOME:-/var/opt/xcalar}"
+XCE_USER_HOME="${XCE_USER_HOME:-/home/xcalar}"
+XCE_WORKDIR="${XCE_WORKDIR:-/var/tmp/xcalar-root}"
+XCE_LOGDIR="${XCE_LOGDIR:-/var/log/xcalar}"
+XLRGUIDIR="${XLRGUIDIR:-/opt/xcalar/xcalar-gui}"
+XCE_LICENSEDIR="${XCE_LICENSEDIR:-/etc/xcalar}"
+XCE_LICENSEFILE="${XCE_LICENSEFILE:-$XCE_LICENSEDIR/XcalarLic.key}"
+XCE_SUPERVISOR_CONF="${XCE_SUPERVISOR_CONF:-/etc/xcalar/supervisor.conf}"
+XCE_CADDYFILE="${XCE_CADDYFILE:-/etc/xcalar/Caddyfile}"
+XCE_HTTP_ROOT="${XCE_HTTP_ROOT:-/var/www}"
+XCE_HTTP_PORT="${XCE_HTTP_PORT:-80}"
+XCE_HTTPS_PORT="${XCE_HTTPS_PORT:-443}"
+XCE_ACCESS_URL="${XCE_ACCESS_URL:-/assets/htmlFiles/login.html}"
+XCE_LOGIN_PAGE="${XCE_LOGIN_PAGE:-/assets/htmlFiles/login.html}"
+PYTHONHOME="${PYTHONHOME:-/opt/xcalar}"
+
+default_config="$(dirname $XCE_DEFAULT).default.config"
+
+[ "$1" == "-u" ] && [ -e "$default_config" ] && exit 0
+
+TMP_DIR="${TMP_DIR:-/tmp}"
+TMP_FILE="${TMP_DIR}/xcalar-${RANDOM}"
+
+if [ -d "$XCE_WORKDIR" ]; then
+    WORKDIR_FS_TYPE=$(df -T "$XCE_WORKDIR" | tail -1 | awk '{print $2}')
+
+    case $WORKDIR_FS_TYPE in
+        nfs*)
+            echo "WARNING: XCE_WORKDIR set to NFS shared filesystem"
+            echo "WARNING: This will prevent the file system from"
+            echo "WARNING: being unmounted while Xcalar is running"
+            ;;
+        *)
+            ;;
+    esac
+fi
+
+cat > $TMP_FILE <<EOF
+_XCE_CONF_FILE_TOKEN_
+EOF
+
+[ "$XCE_CONFIG" != "/etc/xcalar/default.cfg" ] && sed -i -e "s:^#XCE_CONFIG=/etc/xcalar/default.cfg:XCE_CONFIG=${XCE_CONFIG}:g" "$TMP_FILE"
+[ "$XCE_USER" != "xcalar" ] && sed -i -e "s/^#XCE_USER=xcalar$/XCE_USER=${XCE_USER}/g" "$TMP_FILE"
+[ "$XCE_GROUP" != "xcalar" ] && sed -i -e "s/^#XCE_GROUP=xcalar$/XCE_GROUP=${XCE_GROUP}/g" "$TMP_FILE"
+[ "$XCE_HOME" != "/var/opt/xcalar" ] && sed -i -e "s:^#XCE_HOME=/var/opt/xcalar:XCE_HOME=${XCE_HOME}:g" "$TMP_FILE"
+[ "$XCE_USER_HOME" != "/home/xcalar" ] && sed -i -e "s:^#XCE_USER_HOME=/home/xcalar:XCE_USER_HOME=${XCE_USER_HOME}:g" "$TMP_FILE"
+[ "$XCE_WORKDIR" != "/var/tmp/xcalar-root" ] && sed -i -e "s:^#XCE_WORKDIR=/var/tmp/xcalar-root:XCE_WORKDIR=${XCE_WORKDIR}:g" "$TMP_FILE"
+[ "$XCE_LOGDIR" != "/var/log/xcalar" ] && sed -i -e "s:^#XCE_LOGDIR=/var/log/xcalar:XCE_LOGDIR=${XCE_LOGDIR}:g" "$TMP_FILE"
+[ "$XLRDIR" != "/opt/xcalar" ] && sed -i -e "s:^#XLRDIR=/opt/xcalar:XLRDIR=${XLRDIR}:g" "$TMP_FILE"
+[ "$XLRGUIDIR" != "/opt/xcalar/xcalar-gui" ] && sed -i -e "s:^#XLRGUIDIR=/opt/xcalar/xcalar-gui:XLRGUIDIR=${XLRGUIDIR}:g" "$TMP_FILE"
+[ "$XCE_LICENSEDIR" != "/etc/xcalar" ] && sed -i -e "s:^#XCE_LICENSEDIR=/etc/xcalar:XCE_LICENSEDIR=${XCE_LICENSEDIR}:g" "$TMP_FILE"
+[ "$XCE_LICENSEFILE" != "/etc/xcalar/XcalarLic.key" ] && sed -i -e "s:^#XCE_LICENSEFILE=/etc/xcalar/XcalarLic.key:XCE_LICENSEFILE=${XCE_LICENSEFILE}:g" "$TMP_FILE"
+[ "$XCE_SUPERVISOR_CONF" != "/etc/xcalar/supervisor.conf" ] && sed -i -e "s:^#XCE_SUPERVISOR_CONFIG=/etc/xcalar/supervisor.conf:XCE_SUPERVISOR_CONFIG=${XCE_SUPERVISOR_CONF}:g" "$TMP_FILE"
+[ "$XCE_CADDYFILE" != "/etc/xcalar/Caddyfile" ] && sed -i -e "s:^#XCE_CADDYFILE=/etc/xcalar/Caddyfile:XCE_CADDYFILE=${XCE_CADDYFILE}:g" "$TMP_FILE"
+[ "$XCE_HTTP_ROOT" != "/var/www" ] && sed -i -e "s:^#XCE_HTTP_ROOT=/var/www:XCE_HTTP_ROOT=${XCE_HTTP_ROOT}:g" "$TMP_FILE"
+[ "$XCE_HTTP_PORT" != "80" ] && sed -i -e "s:^#XCE_HTTP_PORT=80:XCE_HTTP_PORT=${XCE_HTTP_PORT}:g" "$TMP_FILE"
+[ "$XCE_HTTPS_PORT" != "443" ] && sed -i -e "s:^#XCE_HTTPS_PORT=443:XCE_HTTPS_PORT=${XCE_HTTPS_PORT}:g" "$TMP_FILE"
+[ "$PYTHONHOME" != "/opt/xcalar" ] && sed -i -e "s:^#PYTHONHOME=/opt/xcalar:PYTHONHOME=${PYTHONHOME}:g" "$TMP_FILE"
+[ "$XCE_ACCESS_URL" != "/assets/htmlFiles/login.html" ] && sed -i -e "s|^#XCE_ACCESS_URL=/assets/htmlFiles/login.html|XCE_ACCESS_URL=${XCE_ACCESS_URL}|g" "$TMP_FILE"
+[ "$XCE_LOGIN_PAGE" != "/assets/htmlFiles/login.html" ] && sed -i -e "s|^#XCE_LOGIN_PAGE=/assets/htmlFiles/login.html|XCE_LOGIN_PAGE=${XCE_LOGIN_PAGE}|g" "$TMP_FILE"
+[ "$XCE_CLUSTER_URL" != "" ] && sed -i -e "s|^#XCE_CLUSTER_URL=|XCE_CLUSTER_URL=${XCE_CLUSTER_URL}|g" "$TMP_FILE"
+[ "$CLUSTER_ALIAS" != "" ] && sed -i -e "s|^#CLUSTER_ALIAS=|CLUSTER_ALIAS=${CLUSTER_ALIAS}|g" "$TMP_FILE"
+
+case "$1" in
+    -u)
+        cat $TMP_FILE > $XCE_DEFAULT && touch "$default_config"
+        ;;
+    *)
+        cat $TMP_FILE | sudo tee $XCE_DEFAULT >/dev/null
+        ;;
+esac
+
+rm $TMP_FILE

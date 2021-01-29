@@ -1,0 +1,191 @@
+{
+    "tables": [
+        {
+            "name": "temp-12520",
+            "columns": [
+                {
+                    "columnName": "col-26237-8434",
+                    "headerAlias": "col-26237-8434"
+                },
+                {
+                    "columnName": "col-26237-8436",
+                    "headerAlias": "col-26237-8436"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/yelp/user/",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node0",
+                "dest": "RN10temp-1030",
+                "key": [
+                    {
+                        "name": "name",
+                        "keyFieldName": "prefix-24376-993-name",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-24376-993",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "args": {
+                "source": "RN10temp-1030",
+                "dest": "temp-8440",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-24376-993::yelping_since)",
+                        "newField": "col-26237-8434"
+                    },
+                    {
+                        "evalString": "count(prefix-24376-993::yelping_since)",
+                        "newField": "col-26237-8435"
+                    },
+                    {
+                        "evalString": "count(prefix-24376-993::yelping_since)",
+                        "newField": "col-26237-8436"
+                    },
+                    {
+                        "evalString": "count(prefix-24376-993::yelping_since)",
+                        "newField": "col-26237-8437"
+                    }
+                ],
+                "newKeyField": "key-26237-8438",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN10temp-1030",
+                "dest": "RN0temp-8119",
+                "eval": [
+                    {
+                        "evalString": "gt(float(prefix-24376-993-name), float(85))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "RN0temp-8119",
+                    "temp-8440"
+                ],
+                "dest": "temp-12520",
+                "joinType": "fullOuterJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-24376-993",
+                            "destColumn": "prefix-24376-993",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-24376-993-name",
+                            "destColumn": "prefix-24376-993-name",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "key-26237-8438",
+                            "destColumn": "key-26237-8438",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-26237-8434",
+                            "destColumn": "col-26237-8434",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-26237-8435",
+                            "destColumn": "col-26237-8435",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-26237-8436",
+                            "destColumn": "col-26237-8436",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-26237-8437",
+                            "destColumn": "col-26237-8437",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-12520",
+                "fileName": "export-temp-12520.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-12520",
+                "columns": [
+                    {
+                        "columnName": "col-26237-8434",
+                        "headerName": "col-26237-8434"
+                    },
+                    {
+                        "columnName": "col-26237-8436",
+                        "headerName": "col-26237-8436"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1422-xcalardev-9e3ddec4-af9f79a3",
+    "dataflowVersion": 1
+}

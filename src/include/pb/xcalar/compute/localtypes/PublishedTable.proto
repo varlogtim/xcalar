@@ -1,0 +1,109 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/ColumnAttribute.proto";
+import "xcalar/compute/localtypes/Workbook.proto";
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.PublishedTable;
+
+message Column {
+    string sourceName = 1;
+    string destName = 2;
+}
+
+message MapEval {
+    string evalString = 1;
+    string newField = 2;
+}
+
+message GroupByEval {
+    string evalString = 1;
+    string newField = 2;
+}
+
+message SelectRequest {
+    string source = 1;
+    string dest = 2;
+    int64 minBatchId = 3;
+    int64 maxBatchId = 4;
+
+    string filterString = 5;
+    repeated MapEval maps = 6;
+    repeated GroupByEval groupBys = 7;
+    repeated string groupKeys = 8;
+
+    repeated Column columns = 9;
+};
+
+message SelectResponse {
+    string tableName = 1;
+};
+
+message ListTablesRequest {
+    string namePattern = 1;
+    int64 updateStartBatchId = 2;
+    int32 maxUpdateCount = 3;
+    int32 maxSelectCount = 4;
+}
+
+message ListTablesResponse {
+    message UpdateInfo {
+        string srcTableName = 1;
+        int64 batchId = 2;
+        uint64 startTS = 3;
+        uint64 numRows = 4;
+        uint64 numInserts = 5;
+        uint64 numUpdates = 6;
+        uint64 numDeletes = 7;
+        uint64 size = 8;
+    }
+    message SelectInfo {
+        string dstTableName = 1;
+        int64 minBatchId = 2;
+        int64 maxBatchId = 3;
+    }
+    message IndexInfo {
+        xcalar.compute.localtypes.ColumnAttribute.ColumnAttributeProto key = 1;
+        uint64 uptimeMS = 2;
+        uint64 sizeEstimate = 3;
+    }
+    message TableInfo {
+        string name = 1;
+        uint32 numPersistedUpdates = 2;
+        uint64 sizeTotal = 3;
+        uint64 numRowsTotal = 4;
+        int64 oldestBatchId = 5;
+        int64 nextBatchId = 6;
+        string srcTableName = 7;
+        bool   active = 8;
+        bool   restoring = 9;
+        string userIdName = 10;
+        string sessionName = 11;
+        repeated xcalar.compute.localtypes.ColumnAttribute.ColumnAttributeProto keys = 12;
+        repeated xcalar.compute.localtypes.ColumnAttribute.ColumnAttributeProto values = 13;
+        repeated UpdateInfo updates = 14;
+        repeated SelectInfo selects = 15;
+        repeated IndexInfo indexes = 16;
+    }
+    repeated TableInfo tables = 1;
+}
+
+message ChangeOwnerRequest {
+    string publishedTableName = 1;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 2;
+}
+
+service PublishedTable {
+    rpc Select (SelectRequest) returns (SelectResponse);
+    rpc ListTables (ListTablesRequest) returns (ListTablesResponse);
+    // rpc for XcalarApiPtChangeOwner
+    rpc ChangeOwner (ChangeOwnerRequest) returns (google.protobuf.Empty);
+};

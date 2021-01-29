@@ -1,0 +1,48 @@
+Name of the Feature and Release Target
+======================================
+Functional specification documents are iterative in nature and expected to be incrementally improved.  The final version of the functional specification document should faithfully reflect what is delivered in the release and should be coherent with the corresponding design document(s).  Functional specification documents only talk about the feature/functionality that has been implemented in a given release.
+
+The primary audience for this document is: developers, verification engineers, technical marketing engineers, support engineers, product managers.  Material from this document is also expected to be usable for creating external customer facing documentation like quick start guides, administrator guides, release notes, etc.
+
+History
+======================================
+Tracking changes as the document goes through multiple iterations.  Basic information such as author, date modified, and what changes are done in this version need to be identified.
+
+References
+======================================
+This section provides links to other documents that are relevant to the reader.   At the minimum it should refer to the corresponding design document for this feature, architecture specification for the component (if relevant), the PRD, and other features/components this design affects or interacts with.  It is OK to have the list reasonably long i.e., it is OK to be superfluous.
+
+Use Cases
+======================================
+This section describes the use cases this feature is going to address.  Provide sufficient details on the use cases to make the document standalone.  If there are multiple use cases, identify all of them.
+
+Overview
+======================================
+Describe the issue/feature and the proposal at a high-level being addressed in this document in this section.  This sets the stage for the rest of the document.
+
+Operations
+======================================
+Discuss the the high-level operations implemented by this feature in this section.  These should be short sentences in bullet format.  Add reference to the requirements section in the Design Specification for detailed list of requirements.
+
+Non-Operations
+======================================
+Discuss functionality that might be implied in the overview but is not reflected in the release.  These are items that are not implemented in this release or ever.  DO NOT specify which release the operations will appear in even if you know.  Add reference to the non-requirements section in the Design Specification for detailed list of non-requirements.
+
+Dependencies
+======================================
+This section covers the dependencies this feature/functionality has on other components of the system.  Identify all the dependencies in order here.
+Open Issues
+This section identifies the open issues in design and functionality that need to be resolved for fully implementing the requirements identified in previous sections.  As the open issues are identified, cross them off rather than deleting them for posterity purposes.
+
+External Behavior & User Interface
+======================================
+This section covers user interface (mainly CLI) for the component/functionality and describes user experience.  GUI should be covered in a detailed spec on its own as that should capture the screenshots and any other components involved.
+This section also covers any settings/knobs, configuration parameters, log files and their location, etc.  that would be useful in understanding the "black box" behavior of the feature.
+
+Upgrade/Downgrade
+======================================
+This section covers how upgrade/downgrade of the software is handled and backward/forward compatibility is maintained.  If there is any impact on the user experience, describe how it is handled/mitigated.
+
+Autosupport
+======================================
+Does this feature require any information to be put in Autosupport? If so, identify the information and enhance is Autosupport to include the information.

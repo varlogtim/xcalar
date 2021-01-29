@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+if ((XTRACE)); then
+    set -x
+fi
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "$1" == clean ] && [ "$2" != "--help" ] && [ -n "$GIT_CLEAN_DISABLE" ]; then
+    case "$GIT_CLEAN_DISABLE" in
+        2|all)
+            echo "WARNING: git clean has been completely disabled via GIT_CLEAN_DISABLE=2" >&2
+            exit 0
+            ;;
+        1|on)
+            set -- "$@" --exclude .tmp --exclude xcve
+            ;;
+        0|off)
+            ;;
+    esac
+fi
+
+for ii in ${PATH//:/ } /usr/local/bin /usr/bin; do
+    if [ -x "$ii"/git ] && [ "$ii" != "$DIR" ]; then
+        exec "$ii"/git "$@"
+    fi
+done
+exit 1

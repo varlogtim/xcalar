@@ -1,0 +1,29 @@
+{
+    "query": "load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/customer.tbl\" --format csv --size 0B  --name \"demo.60456.customer\" --fielddelim | --crlf --header;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#L973\" --prefix orders;index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.60456.customer\" --dsttable \"customer#L972\" --prefix customer;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"orders::O_CUSTKEY\" --keyType 1  --srctable \"orders#L973\" --dsttable \"orders.index#L978\";index --key \"customer::C_CUSTKEY\" --keyType 1  --srctable \"customer#L972\" --dsttable \"customer.index#L995\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#L974\" --prefix lineitem2;join --leftTable \"customer.index#L995\" --rightTable \"orders.index#L978\" --joinType innerJoin  --joinTable \"cust_order_join#L994\" --collisionCheck;index --key \"lineitem2::L_ORDERKEY\" --keyType 1  --srctable \"lineitem#L974\" --dsttable \"lineitem.index#L981\";index --key \"orders::O_ORDERKEY\" --keyType 1  --srctable \"cust_order_join#L994\" --dsttable \"cust_order_join.index#L997\";join --leftTable \"cust_order_join.index#L997\" --rightTable \"lineitem.index#L981\" --joinType innerJoin  --joinTable \"cust_order_lineitem_join#L996\" --collisionCheck;filter --srctable cust_order_lineitem_join#L996 --eval \"eq(customer::C_MKTSEGMENT, \\\"BUILDING\\\")\"  --dsttable \"cust_order_lineitem_join#L998\";filter --srctable cust_order_lineitem_join#L998 --eval \"gt(lineitem2::L_SHIPDATE, \\\"1995-03-15\\\")\"  --dsttable \"cust_order_lineitem_join#L999\";filter --srctable cust_order_lineitem_join#L999 --eval \"lt(orders::O_ORDERDATE, \\\"1995-03-15\\\")\"  --dsttable \"cust_order_lineitem_join#L9100\";map --eval \"float(lineitem2::L_EXTENDEDPRICE)\" --srctable \"cust_order_lineitem_join#L9100\" --fieldName \"L_EXTENDEDPRICE_float\" --dsttable \"cust_order_lineitem_join#L9101\";map --eval \"float(lineitem2::L_DISCOUNT)\" --srctable \"cust_order_lineitem_join#L9101\" --fieldName \"L_DISCOUNT_float\" --dsttable \"cust_order_lineitem_join#L9102\";map --eval \"sub(1.00, L_DISCOUNT_float)\" --srctable \"cust_order_lineitem_join#L9102\" --fieldName \"L_DISCOUNT_float_sub\" --dsttable \"cust_order_lineitem_join#L9108\";map --eval \"mult(L_EXTENDEDPRICE_float, L_DISCOUNT_float_sub)\" --srctable \"cust_order_lineitem_join#L9108\" --fieldName \"revenue_bfr_sum\" --dsttable \"cust_order_lineitem_join#L9109\";map --eval \"concat(string(lineitem2::L_ORDERKEY), concat(\\\".Xc.\\\", concat(string(orders::O_ORDERDATE), concat(\\\".Xc.\\\", string(orders::O_SHIPPRIORITY)))))\" --srctable \"cust_order_lineitem_join#L9109\" --fieldName \"multiGroupBy26302\" --dsttable \"cust_order_lineitem_join#L9111\";index --key \"multiGroupBy26302\" --keyType 1  --srctable \"cust_order_lineitem_join#L9111\" --dsttable \"cust_order_lineitem_join.index#L9112\";groupBy --srctable \"cust_order_lineitem_join.index#L9112\" --eval \"sum(revenue_bfr_sum)\" --fieldName \"revenue\" --dsttable \"Final_Q3_output#L9110\";map --eval \"concat(concat(substring(\\\"0000000\\\", 1, int(sub(7, len(cut(string(revenue), 1, \\\".\\\"))), 10)), string(revenue)), concat(\\\"\\t\\txc\\t\\\", orders::O_ORDERDATE))\" --srctable \"Final_Q3_output#L9110\" --fieldName \"Fields_concat\" --dsttable \"Final_Q3_output#L9113\";index --key \"Fields_concat\" --keyType 1  --srctable \"Final_Q3_output#L9113\" --dsttable \"EndResult-tpchq3\" --sorted=desc;",
+    "tables": [
+        {
+            "name": "EndResult-tpchq3",
+            "columns": [
+                {
+                    "columnName": "revenue",
+                    "headerAlias": "revenue"
+                },
+                {
+                    "columnName": "orders::O_ORDERDATE",
+                    "headerAlias": "O_ORDERDATE"
+                },
+                {
+                    "columnName": "orders::O_SHIPPRIORITY",
+                    "headerAlias": "O_SHIPPRIORITY"
+                },
+                {
+                    "columnName": "lineitem2::L_ORDERKEY",
+                    "headerAlias": "L_ORDERKEY"
+                }
+            ]
+        }
+    ],
+    "udfs": [],
+    "xcalarVersion": "1.2.1-1-jenkins-417e2c36-fc9162cb",
+    "retinaVersion": 1
+}

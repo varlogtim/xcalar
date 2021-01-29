@@ -1,0 +1,116 @@
+{
+    "tables": [
+        {
+            "name": "temp-1347",
+            "columns": [
+                {
+                    "columnName": "prefix-7007-577::a.b",
+                    "headerAlias": "prefix-7007-577::a.b"
+                },
+                {
+                    "columnName": "prefix-7007-577__a\\\\\\.b",
+                    "headerAlias": "prefix-7007-577__a\\\\\\.b"
+                },
+                {
+                    "columnName": "prefix-7007-577::row\\.num.float\\.\\.col",
+                    "headerAlias": "prefix-7007-577::row\\.num.float\\.\\.col"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.2.3-1-bli-d6d6c6a0-46cd8b74",
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-0-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-0-node0",
+                "dest": "RN0temp-609",
+                "prefix": "prefix-7007-577",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-7007-577__a\\.b",
+                        "ordering": "Unordered",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN0temp-609",
+                "dest": "temp-1347",
+                "eval": [
+                    {
+                        "evalString": "gt(float(prefix-7007-577::row\\.num.float\\.\\.col), float(65))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 7306071583668445216,
+                "targetName": "Default",
+                "splitSize": 2322206376885046898,
+                "headerType": "every",
+                "source": "temp-1347",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-1347.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-1347",
+                "columns": [
+                    {
+                        "headerName": "prefix-7007-577::a.b",
+                        "columnName": "prefix-7007-577::a.b"
+                    },
+                    {
+                        "headerName": "prefix-7007-577__a\\\\\\.b",
+                        "columnName": "prefix-7007-577__a\\\\\\.b"
+                    },
+                    {
+                        "headerName": "prefix-7007-577::row\\.num.float\\.\\.col",
+                        "columnName": "prefix-7007-577::row\\.num.float\\.\\.col"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

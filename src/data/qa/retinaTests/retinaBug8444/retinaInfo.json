@@ -1,0 +1,17 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "j#ce44",
+            "columns": [
+                {
+                    "columnName": "single_quote_add",
+                    "headerAlias": "single_quote_add"
+                }
+            ]
+        }
+    ],
+    "xcalarVersion": "",
+    "udfs": [],
+    "query": "load --url \"nfs:///<pathToQaDatasets>/edgeCases/variousColNames.json\" --format json --size 0B  --name \"<datasetName>\";index --key \"xcalarRecordNum\" --dataset \".XcalarDS.<datasetName>\" --dsttable \"<tablePrefix>-tbl#ce38\" --prefix variousColNames2;map --eval \"concat(string(variousColNames2::single'quote), concat(\\\".Xc.\\\", string(variousColNames2::dbl\\\"quote)))\" --srctable \"<tablePrefix>-tbl#ce38\" --fieldName \"rightJoinCol15280\" --dsttable \"<tablePrefix>-tbl#ce41\";map --eval \"concat(string(variousColNames2::single'quote), concat(\\\".Xc.\\\", string(variousColNames2::dbl\\\"quote)))\" --srctable \"<tablePrefix>-tbl#ce38\" --fieldName \"leftJoinCol35282\" --dsttable \"<tablePrefix>-tbl#ce40\";index --key \"rightJoinCol15280\" --srctable \"<tablePrefix>-tbl#ce41\" --dsttable \"<tablePrefix>-variousColNames2.index#ce43\";index --key \"leftJoinCol35282\" --srctable \"<tablePrefix>-tbl#ce40\" --dsttable \"<tablePrefix>-variousColNames2.index#ce42\";join --leftTable \"<tablePrefix>-variousColNames2.index#ce42\" --rightTable \"<tablePrefix>-variousColNames2.index#ce43\" --joinType innerJoin  --joinTable \"<tablePrefix>-join#ce39\" --collisionCheck --rightRenameMap variousColNames2:variousColNames2_333:0;map --eval \"add(variousColNames2::single'quote, 1.5)\" --srctable \"<tablePrefix>-join#ce39\" --fieldName \"single_quote_add\" --dsttable \"j#ce44\";"
+}

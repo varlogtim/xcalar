@@ -1,0 +1,131 @@
+{
+    "properties" : {
+        "deltaIntervalInSeconds": 5,
+        "batchRetentionSeconds": 600,
+        "minimumSleepIntervalInSeconds": 5,
+        "snapshotDataTargetName": "snapshot",
+        "snapshotMaxRetentionNumber": 5,
+        "snapshotMaxRetentionPeriodSeconds": 604800,
+        "distributer": {},
+        "IMDThreadCount": 2,
+        "snapshotThreadCount": 1,
+        "parallelOperations": true
+    },
+    "params": {
+        "lake_infinity": 999999999,
+        "infdt1": 253399622400000000,
+        "dt2": 1483246800000000,
+        "infdt3": 253370782800000000,
+        "ds2path": "ds2base/"
+    },
+    "source_defs": {
+        "local_parquet": {
+            "targetName": "Default Shared Root",
+            "type": "dataset",
+            "parseArgs": {
+                "parquetParser": "native"
+            },
+            "parserFnName": "/sharedUDFs/default:parseParquet",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "mysql_dbcon": {
+            "targetName": "test_mysql",
+            "type": "dataset",
+            "parseArgs": {
+                "query": "select * from pet"
+            },
+            "parserFnName": "/sharedUDFs/default:ingestFromDatabase",
+            "basePath": "/test_mysql/test_mysql",
+            "forceCast": false,
+            "forceTrim": false
+        },
+        "mysql": {
+            "targetName": "kafka-base",
+            "type": "dataset",
+            "parseArgs": {"host":"127.0.0.1", "port":"3306", "uid":"root", "psw":"xcalar","dbname":"test"},
+            "parserFnName": "/sharedUDFs/amemsql:utMemSQL",
+            "basePath": "",
+            "forceCast": false,
+            "forceTrim": false
+        },
+        "kafka-base": {
+            "targetName": "kafka-base",
+            "type": "stream",
+            "parserFnName": "parse_kafka_topic",
+            "parserTemplateName": "kafka_import_confluent",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "vac_git": {
+            "type":"application_repository",
+             "args": {
+                "url": "https://gitlab.com/api/v4",
+                "projectId": "14164315",
+                "accessToken": "Tavay5JsBjYzTq25DyXV",
+                "branchName": "test"
+            },
+            "driver": "git.git_api:GitCheckinUtil"
+        }
+    },
+    "sink_defs": {
+        "kafkaexport": {
+            "targetName": "Default Shared Root",
+            "parserTemplateName": "kafka_export_confluent",
+            "args": {
+                "avscFname": "/netstore/controller/customer4.avsc",
+                "batchSize": 100,
+                "producerProperties": {
+                    "bootstrap.servers": "localhost:9092"
+                }
+            }
+        }
+    },
+    "universe": {
+        "pet": {
+            "schema": "pet_schema",
+            "source": {
+                "parseArgs_bkp": {
+                   "key":{"query": "select p.* from pet as p"}
+                },
+                "parseArgs": {
+                    "key":{
+                        "query": "select z.* /*aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz aaaaa aaaa aaaaa zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz zzzz */ from pet as z",
+                        "bins":["sex='f'", "sex='m'"]
+                    }
+                },
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "2",
+                "sourceDef": "mysql"
+            }
+        }
+    },
+    "universe_bkp": {
+        "pet2": {
+            "schema": "pet_schema",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "",
+                "sourceDef": "mysql_dbcon"
+            }
+        }
+    }
+}

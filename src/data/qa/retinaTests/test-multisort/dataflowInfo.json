@@ -1,0 +1,163 @@
+{
+    "tables": [
+        {
+            "name": "test-multisort#b5162",
+            "columns": [
+                {
+                    "columnName": "Row",
+                    "headerAlias": "Row"
+                },
+                {
+                    "columnName": "Col",
+                    "headerAlias": "Col"
+                },
+                {
+                    "columnName": "Val",
+                    "headerAlias": "Val"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-pmaddipatla-bc0bdd69-d5a44043",
+    "udfs": [
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.test-admin@xcalar.com.55685.test-multisort",
+                "loadArgs": {
+                    "size": 10737418240,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "<pathToQaDatasets>/test-multisort.csv",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\",\",\"isCRLF\":false,\"linesToSkip\":0,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"header\"}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.test-admin@xcalar.com.55685.test-multisort",
+                "dest": "test-multisort#b5148",
+                "prefix": "test-multisort",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "test-multisort-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "test-multisort#b5148",
+                "dest": "test-multisort#b5161",
+                "eval": [
+                    {
+                        "evalString": "string(test-multisort::Row)",
+                        "newField": "Row"
+                    },
+                    {
+                        "evalString": "string(test-multisort::Col)",
+                        "newField": "Col"
+                    },
+                    {
+                        "evalString": "string(test-multisort::Val)",
+                        "newField": "Val"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "test-multisort#b5161",
+                "dest": "test-multisort#b5162",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "Row",
+                        "ordering": "Descending",
+                        "keyFieldName": "Row",
+                        "type": "DfString"
+                    },
+                    {
+                        "name": "Col",
+                        "ordering": "Ascending",
+                        "keyFieldName": "Col",
+                        "type": "DfString"
+                    },
+                    {
+                        "name": "Val",
+                        "ordering": "Descending",
+                        "keyFieldName": "Val",
+                        "type": "DfString"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "test-multisort#b5162",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-test-multisort#b5162.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.test-multisort#b5162",
+                "columns": [
+                    {
+                        "headerName": "Row",
+                        "columnName": "Row"
+                    },
+                    {
+                        "headerName": "Col",
+                        "columnName": "Col"
+                    },
+                    {
+                        "headerName": "Val",
+                        "columnName": "Val"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

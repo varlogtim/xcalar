@@ -1,0 +1,13 @@
+{
+    "gSQLSnippetQuery-1": "{\"Untitled\":\"\"}",
+    "gInfo-1-commitKey": "commit7813",
+    "workBookDesc-1": "",
+    "gSQLFuncListKey-1": "{\"dags\":[]}",
+    "gMode-1": "{\"mode\":\"Advanced\"}",
+    "gNotebook-1": "null",
+    "gDagListKey-1": "{\"dags\":[]}",
+    "gDagTableManagerKey-1": "{}",
+    "/sys/sessionMeta/versionInfo-1": "{\n    \"xcalarVersion\": \"2.0.0-1-hying-3871ba1b-bfe28db2\",\n    \"workbookVersion\": \"4\"\n}",
+    "gInfo-1": "{\"version\":1,\"TILookup\":{},\"worksheets\":{},\"aggregates\":null,\"datacarts\":{},\"statsCols\":{},\"query\":[],\"tablePrefix\":{},\"sqlcursor\":-1}",
+    "gErr-1": "{\"version\":1,\"title\":\"Upload Python\",\"options\":{},\"sqlType\":\"error\",\"error\":{\"status\":326,\"error\":\"Error: The given module contains no functions\",\"log\":\"Failed to load python UDF module 'new_module' from path '/var/opt/xcalar/workbooks/admin/5C64D5B33AF50330/udfs/python'(The given module contains no functions): (null)\",\"output\":{\"status\":326,\"moduleName\":\"new_module\",\"error\":{\"message\":\"\",\"traceback\":\"\"}}},\"timestamp\":1550112197124},{\"version\":1,\"title\":\"Upload Python\",\"options\":{},\"sqlType\":\"error\",\"error\":{\"status\":326,\"error\":\"Error: The given module contains no functions\",\"log\":\"Failed to load python UDF module 'new_module' from path '/var/opt/xcalar/workbooks/admin/5C64D5B33AF50330/udfs/python'(The given module contains no functions): (null)\",\"output\":{\"status\":326,\"moduleName\":\"new_module\",\"error\":{\"message\":\"\",\"traceback\":\"\"}}},\"timestamp\":1550112207272},"
+}

@@ -1,0 +1,67 @@
+{
+    "type": "record",
+    "name": "ChangedData",
+    "fields": [{
+        "name": "group",
+        "type": {
+            "type": "string"
+        }
+    }, {
+        "name": "source",
+        "type": {
+            "type": "string"
+        }
+    }, {
+        "name": "headers",
+        "type": {
+            "type": "map",
+            "values": [{
+                "type": "string"
+            }, "long", "null", "double", "int", "boolean"]
+        }
+    }, {
+        "name": "data",
+        "type": {
+            "type": "map",
+            "values": {
+                "type": "array",
+                "items": {
+                    "type": "map",
+                    "values": [{
+                        "type": "string"
+                    }, "long", "null", "double", "float", "int", "boolean", {
+                        "type": "record",
+                        "name": "Timestamp",
+                        "fields": [{
+                            "name": "timestamp",
+                            "type": ["null", {
+                                     "type": "long",
+                                     "logicalType": "timestamp-micros"
+                                     }]
+                        }]
+                    }, {
+                        "type": "record",
+                        "name": "Date",
+                        "fields": [{
+                            "name": "date",
+                            "type": ["null", {
+                                     "type": "int",
+                                     "logicalType": "date"
+                                     }]
+                        }]
+                    }, {
+                        "type": "record",
+                        "name": "Decimal",
+                        "fields": [{
+                            "name": "decimal",
+                            "type": ["null", {
+                                     "type": "string",
+                                     "logicalType": "decimal"
+                                     }]
+                        }]
+                    }]
+                }
+            }
+        }
+    }]
+}

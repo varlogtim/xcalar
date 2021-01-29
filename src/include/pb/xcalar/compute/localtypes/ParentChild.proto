@@ -1,0 +1,324 @@
+// Copyright 2016-2019 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+// Optimize for lite runtime. Disables fancy things like reflection.
+option optimize_for = LITE_RUNTIME;
+
+import "xcalar/compute/localtypes/ProtoFieldValue.proto";
+import "xcalar/compute/localtypes/RuntimeEnums.proto";
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// General purpose types.
+//
+
+// XXX Xc-10369 Replace completely with SHM buffers from Buffer Cache.
+message ParentChildBuf {
+    bytes buf = 1;
+};
+
+// Xcalar Txn structs. This should be kept in sync with the
+// 'include/runtime/Txn.h' structs. Also, might want to replace
+// Txn.h with this proto struct.
+// This message is required to pass Txn details to child which will
+// be used in logging to help correlate logs end-to-end from XCE
+// parent to XPU child
+message ProtoTxn {
+    enum SchedType {
+        Sched0 = 0;
+        Sched1 = 1;
+        Sched2 = 2;
+        Immediate = 3;
+        MaxSched = 4;
+    };
+    enum ModeType {
+        LRQ = 0;
+        NonLRQ = 1;
+        Invalid = 2;
+    };
+    uint64 id = 1;
+    // these values have meaning in the child purely to correlate with
+    // parent logs, could make sense of these in future as needed
+    ModeType mode = 2;
+    SchedType schedId = 3;
+    xcalar.compute.localtypes.XcalarEnumType.RuntimeType runTimeType = 4;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Handles Parent -> Child requests.
+//
+enum ProtoChildFunc {
+    ChildFuncShutdown = 0;
+    ChildFuncUdfEval = 1;
+    ChildFuncAppStart = 2;
+    ChildFuncUdfAdd = 3;
+    ChildFuncUdfUpdate = 4;
+    ChildFuncUdfListFunctions = 5;
+    ChildFuncRecvBufferFromSrc = 6;
+    ChildFuncUdfInit = 7;
+};
+
+message ParentChildShmPtr {
+    uint32 index = 1;
+    uint64 offset = 2;
+    uint64 bufCacheOffset = 3;
+};
+
+message ChildUdfInitRequest {
+    string userName = 1;
+    uint64 sessionId = 2;
+};
+
+// XXX Xc-10369 This can be replaced by repeated ParentChildShmPtr.
+message ChildEvalRequest {
+    ParentChildShmPtr ptrInput = 1;
+    ParentChildShmPtr ptrOutput = 2;
+    bool icvMode = 3;
+};
+
+message ChildAppStartRequest {
+    message XpuIdRange {
+        uint32 xpuIdStart = 1;
+        uint32 xpuIdEnd = 2;
+    };
+    uint32 hostType = 1;
+    bytes exec = 2;
+    string inStr = 3;
+    string appName = 4;
+    string userName = 5;         // XCE login userName
+    uint32 xpuId = 6;            // globally unique XPU id
+    uint32 xpuClusterSize = 7;   // total XPUs in this XPU cluster
+    uint64 sessionId = 8;        // ID of workbook
+    repeated XpuIdRange xpuIdRange = 9;
+};
+
+// Invoked by the destination XPU to receive buffer from source XPU.
+message XpuReceiveBufferFromSrc {
+    message Buffer {
+        uint64 offset = 1; // offset from SHM start addr in XPU
+        uint64 length = 2;
+    };
+    uint32 srcXpuId = 1;
+    uint32 dstXpuId = 2;
+    repeated Buffer buffers = 3;
+};
+
+message ProtoChildRequest {
+    ProtoChildFunc func = 1;
+    oneof payload {
+        ParentChildShmPtr shmPtr = 2;
+        ParentChildBuf pcBuf = 3;
+        ChildEvalRequest childEval = 4;
+        ChildAppStartRequest appStart = 5;
+        XpuReceiveBufferFromSrc recvBufferFromSrc = 6;
+        ChildUdfInitRequest childUdfInit = 7;
+    };
+    ProtoTxn txn = 8;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Handles Child to Parent requests.
+//
+enum ProtoParentFunc {
+    // Internal XPU control functions.
+    ParentFuncConnect = 0;
+    ParentFuncAppDone = 1;
+
+    // XXX These are exposed publicly. Should probably be separated out in some
+    // way.
+    ParentFuncAppGetGroupId = 2;
+    ParentFuncAppReportNumFiles = 3;
+    ParentFuncAppLoadBuffer = 4;
+    ParentFuncAppGetOutputBuffer = 5;
+    ParentFuncAppReportFileError = 6;
+    ParentFuncXpuSendListToDsts = 7;
+    ParentFuncXdbGetMeta = 8;
+    ParentFuncXdbGetLocalRows = 9;
+    ParentFuncGetRuntimeHistograms = 10;
+};
+
+message ParentAppGetOutputBuffersRequest {
+    int64 numBuffers = 1;
+};
+
+message ParentAppDoneRequest {
+    int64 status = 1;
+    string outStr = 2;
+    string errStr = 3;
+};
+
+message ParentReportNumFilesRequest {
+    int64 filesSampled = 1;
+    int64 totalFileBytes = 2;
+    bool downSampled = 3;
+};
+
+message ParentAppLoadBufferRequest {
+    message Buffer {
+        uint64 offset = 1;
+    };
+    message DataBuffer {
+        bool hasErrors = 1;
+        Buffer buffer = 2;
+    };
+    int64 numFiles = 1;
+    int64 numFileBytes = 2;
+    int64 numErrors = 3;
+    repeated DataBuffer dataBuffers = 4;
+    repeated Buffer unusedBuffers = 5;
+    bool fixedSchema = 6;
+};
+
+//
+// Invoked by the source XPU to send buffers to destination XPUs via the
+// XPU's parent.
+//
+message XpuSendListToDsts {
+    message Buffer {
+        uint64 offset = 1;
+    }
+    message XpuSendListBufferToDst {
+        message Buffer {
+            uint64 offset = 1;
+            uint64 length = 2;
+        };
+        uint32 dstXpuId = 1;
+        repeated Buffer buffers = 2;
+    };
+    uint32 srcXpuId = 1;
+    repeated XpuSendListBufferToDst sendList = 2;
+    repeated Buffer unusedList = 3;
+};
+
+message ParentReportFileErrorRequest {
+    string fileName = 1;
+    string fileError = 2;
+};
+
+message XdbGetMetaRequest {
+    int64 xdbId = 1;
+}
+
+message XdbColumnDesc {
+    string name = 1;
+    string type = 2;
+};
+
+message XdbGetMetaResponse {
+    int64 xdbId = 1;
+    repeated int64 numRowsPerNode = 2;
+    repeated XdbColumnDesc columns = 3;
+};
+
+message XdbGetLocalRowsRequest {
+    int64 xdbId = 1;
+    int64 startRow = 2;
+    int64 numRows = 3;
+    int32 nodeId = 4;
+    bool asDataPage = 5;
+    repeated string columns = 6;
+};
+
+message XdbGetLocalRowsResponse {
+    message RowBatch {
+        repeated ProtoRow rows = 1;
+    };
+    oneof data {
+        bytes dataPage = 1;
+        RowBatch rows = 2;
+    };
+};
+
+// Request to fetch histograms pertaining to throughput/duration/stddev of the
+// various things running inside libruntime.
+message RuntimeHistogramsRequest {
+};
+
+// Response sent by usrnode when asked for histograms (see above).
+message RuntimeHistogramsResponse {
+    // A single logical histogram for a certain time period finishing now.
+    message Histogram {
+        // A single line item representing a unit of work recently executed by
+        // libruntime recently.
+        message Item {
+            string name = 1;
+
+            int32 count = 2;
+            double mean_suspensions = 3;
+            int64 mean_suspended_time_us = 4;
+            int64 mean_duration_us = 5;
+            int64 duration_stddev = 6;
+
+            // Percentiles for the duration's distribution.
+            int64 duration_95th_us = 7;
+            int64 duration_99th_us = 8;
+
+            int64 mean_locking_time_us = 9;
+        }
+
+        // Duration in seconds for this histogram. I.E. these stats are
+        // aggregated for the last 'dirationSec' seconds.
+        int32 duration_sec = 1;
+
+        repeated Item items = 2;
+    }
+
+    repeated Histogram histograms = 1;
+}
+
+// App-related requests going from child to parent.
+message ParentAppRequest {
+    oneof payload {
+        ParentAppGetOutputBuffersRequest getBuffers = 1;
+        ParentAppDoneRequest done = 2;
+        ParentReportNumFilesRequest reportNumFiles = 3;
+        ParentAppLoadBufferRequest loadBuffers = 4;
+        ParentReportFileErrorRequest fileError = 5;
+        XpuSendListToDsts sendListToDsts = 6;
+        XdbGetMetaRequest xdbGetMeta = 7;
+        XdbGetLocalRowsRequest xdbGetLocalRows = 8;
+        RuntimeHistogramsRequest runtimeHistograms = 9;
+    };
+};
+
+message ProtoParentRequest {
+    ProtoParentFunc func = 1;
+    oneof payload {
+        ParentAppRequest app = 2;
+    };
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Handles both Parent and Child responses or ACKs.
+//
+
+message ParentGetOutputBufferResponse {
+    message Buffer {
+        uint64 offset = 1;
+    };
+    repeated Buffer bufs = 1;
+};
+
+message ProtoParentChildResponse {
+    oneof payload {
+        ParentGetOutputBufferResponse outputBuffers = 1;
+        string groupId = 2;
+        ParentChildBuf pcBuf = 3;
+        XdbGetMetaResponse xdbGetMeta = 4;
+        XdbGetLocalRowsResponse xdbGetLocalRows = 5;
+        uint64 num_rows_failed_total = 6;
+        RuntimeHistogramsResponse histograms = 7;
+    };
+};

@@ -1,0 +1,1 @@
+{"retName":"joinretina2","scheduleId":"1234567","substitutions":{},"options":{"activeSession":false,"newTableName":""},"timingInfo":{"startTime":1487735469000,"dateText":"2/21/2017","timeText":"07 : 51 PM","repeat":"biweekly","modified":1486587921119,"recur":4}}

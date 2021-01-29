@@ -1,0 +1,25 @@
+// Copyright 2020 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/Workbook.proto";
+import "google/protobuf/empty.proto";
+
+package xcalar.compute.localtypes.Operator;
+
+message MergeRequest {
+    xcalar.compute.localtypes.Workbook.WorkbookScope delta_scope = 1;
+    string delta_table = 2;
+    xcalar.compute.localtypes.Workbook.WorkbookScope target_scope = 3;
+    string target_table = 4;
+}
+
+service Operator {
+    rpc OpMerge (MergeRequest) returns (google.protobuf.Empty);
+};

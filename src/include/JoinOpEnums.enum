@@ -1,0 +1,9 @@
+enum JoinOperator {
+    InnerJoin:"innerJoin",
+    LeftOuterJoin:"leftJoin",
+    RightOuterJoin:"rightJoin",
+    FullOuterJoin:"fullOuterJoin",
+    CrossJoin:"crossJoin",
+    LeftSemiJoin:"leftSemiJoin",
+    LeftAntiJoin:"leftAntiJoin",
+};

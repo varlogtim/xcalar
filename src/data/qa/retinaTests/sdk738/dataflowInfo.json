@@ -1,0 +1,383 @@
+{
+    "tables": [
+        {
+            "name": "RN10temp-18014398509549459",
+            "columns": [
+                {
+                    "columnName": "prefix-28148-18014398509537845::RowNum",
+                    "headerAlias": "retCol-28150-18014398510398805"
+                },
+                {
+                    "columnName": "prefix-28148-18014398509537845::Col0",
+                    "headerAlias": "retCol-28150-18014398510398806"
+                },
+                {
+                    "columnName": "prefix-28148-18014398509537845::Col1",
+                    "headerAlias": "retCol-28150-18014398510398807"
+                },
+                {
+                    "columnName": "prefix-28148-18014398509537845::Col4",
+                    "headerAlias": "retCol-28150-18014398510398808"
+                },
+                {
+                    "columnName": "prefix-28148-18014398509537845-RowNum",
+                    "headerAlias": "retCol-28150-18014398510398809"
+                },
+                {
+                    "columnName": "prefix-20028-18014398509495948::cols.array[1]",
+                    "headerAlias": "retCol-28150-18014398510398810"
+                },
+                {
+                    "columnName": "prefix-20028-18014398509495948::a.b",
+                    "headerAlias": "retCol-28150-18014398510398811"
+                },
+                {
+                    "columnName": "prefix-20028-18014398509495948::ab",
+                    "headerAlias": "retCol-28150-18014398510398812"
+                },
+                {
+                    "columnName": "prefix-20028-18014398509495948-rownum\\.floatcol",
+                    "headerAlias": "retCol-28150-18014398510398813"
+                },
+                {
+                    "columnName": "col-28148-18014398509503737",
+                    "headerAlias": "retCol-28150-18014398510398814"
+                },
+                {
+                    "columnName": "col-28148-18014398509503793",
+                    "headerAlias": "retCol-28150-18014398510398815"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "loadMemRandParam",
+            "fileName": "udfs/loadMemRandParam.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "loadMemDefault",
+            "fileName": "udfs/loadMemDefault.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-1-node1",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "1000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "loadMemDefault:loadMemory",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-1-node1",
+                "dest": "RN0temp-18014398509497611",
+                "key": [
+                    {
+                        "name": "rownum.floatcol",
+                        "keyFieldName": "prefix-20028-18014398509495948-rownum.floatcol",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-20028-18014398509495948",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-18014398509497611",
+                "dest": "temp-18014398509498461",
+                "eval": [
+                    {
+                        "evalString": "int(prefix-20028-18014398509495948-rownum\\.floatcol)",
+                        "newField": "gKey-28150-18014398509498459"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398509498461",
+                "dest": "RN10temp-18014398509498826",
+                "key": [
+                    {
+                        "name": "gKey-28150-18014398509498459",
+                        "keyFieldName": "gKey-28150-18014398509498459",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN10temp-18014398509498826",
+                "dest": "temp-18014398509503948",
+                "eval": [
+                    {
+                        "evalString": "timestamp(prefix-20028-18014398509495948::cols.object.val1)",
+                        "newField": "col-28148-18014398509503737"
+                    },
+                    {
+                        "evalString": "add(float(prefix-20028-18014398509495948::rownum.floatcol), float(prefix-20028-18014398509495948::a.b))",
+                        "newField": "col-28148-18014398509503793"
+                    },
+                    {
+                        "evalString": "concat(string(prefix-20028-18014398509495948-rownum\\.floatcol), string(prefix-20028-18014398509495948::ab))",
+                        "newField": "col-28148-18014398509503843"
+                    },
+                    {
+                        "evalString": "explodeString(string(prefix-20028-18014398509495948-rownum\\.floatcol), \".\")",
+                        "newField": "col-28148-18014398509503945"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-0-node1-28148-18014398509537847",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "QA memory",
+                            "path": "1000",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "loadMemRandParam:loadMemory",
+                        "parserArgJson": "{\"schema\": \"{'ParamVal': 930, 'Cols': { 'Col0': 'float', 'Col1': 'string', 'Col2': 'string', 'Col3': 'float', 'Col4': 'string'}}\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 0
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-0-node1-28148-18014398509537847",
+                "dest": "RN0temp-18014398509539072",
+                "key": [
+                    {
+                        "name": "RowNum",
+                        "keyFieldName": "prefix-28148-18014398509537845-RowNum",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-28148-18014398509537845",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": [
+                    "RN0temp-18014398509539072",
+                    "temp-18014398509503948"
+                ],
+                "dest": "RN10temp-18014398509549459",
+                "joinType": "crossJoin",
+                "key": [
+                    [
+                        "prefix-28148-18014398509537845-RowNum"
+                    ],
+                    [
+                        "gKey-28150-18014398509498459"
+                    ]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-28148-18014398509537845",
+                            "destColumn": "prefix-28148-18014398509537845",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-28148-18014398509537845-RowNum",
+                            "destColumn": "prefix-28148-18014398509537845-RowNum",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-20028-18014398509495948",
+                            "destColumn": "prefix-20028-18014398509495948",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-20028-18014398509495948-rownum.floatcol",
+                            "destColumn": "prefix-20028-18014398509495948-rownum.floatcol",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "gKey-28150-18014398509498459",
+                            "destColumn": "gKey-28150-18014398509498459",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "col-28148-18014398509503737",
+                            "destColumn": "col-28148-18014398509503737",
+                            "columnType": "DfTimespec"
+                        },
+                        {
+                            "sourceColumn": "col-28148-18014398509503793",
+                            "destColumn": "col-28148-18014398509503793",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "col-28148-18014398509503843",
+                            "destColumn": "col-28148-18014398509503843",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "col-28148-18014398509503945",
+                            "destColumn": "col-28148-18014398509503945",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": "",
+                "keepAllColumns": true,
+                "nullSafe": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN10temp-18014398509549459",
+                "dest": ".XcalarLRQExport.RN10temp-18014398509549459",
+                "columns": [
+                    {
+                        "columnName": "prefix-28148-18014398509537845::RowNum",
+                        "headerName": "retCol-28150-18014398510398805"
+                    },
+                    {
+                        "columnName": "prefix-28148-18014398509537845::Col0",
+                        "headerName": "retCol-28150-18014398510398806"
+                    },
+                    {
+                        "columnName": "prefix-28148-18014398509537845::Col1",
+                        "headerName": "retCol-28150-18014398510398807"
+                    },
+                    {
+                        "columnName": "prefix-28148-18014398509537845::Col4",
+                        "headerName": "retCol-28150-18014398510398808"
+                    },
+                    {
+                        "columnName": "prefix-28148-18014398509537845-RowNum",
+                        "headerName": "retCol-28150-18014398510398809"
+                    },
+                    {
+                        "columnName": "prefix-20028-18014398509495948::cols.array[1]",
+                        "headerName": "retCol-28150-18014398510398810"
+                    },
+                    {
+                        "columnName": "prefix-20028-18014398509495948::a.b",
+                        "headerName": "retCol-28150-18014398510398811"
+                    },
+                    {
+                        "columnName": "prefix-20028-18014398509495948::ab",
+                        "headerName": "retCol-28150-18014398510398812"
+                    },
+                    {
+                        "columnName": "prefix-20028-18014398509495948-rownum\\.floatcol",
+                        "headerName": "retCol-28150-18014398510398813"
+                    },
+                    {
+                        "columnName": "col-28148-18014398509503737",
+                        "headerName": "retCol-28150-18014398510398814"
+                    },
+                    {
+                        "columnName": "col-28148-18014398509503793",
+                        "headerName": "retCol-28150-18014398510398815"
+                    }
+                ],
+                "driverName": "do_nothing",
+                "driverParams": "{}"
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "2.0.2-3215-xcalardev-cf008bc0-c4f91c0a",
+    "dataflowVersion": 1
+}

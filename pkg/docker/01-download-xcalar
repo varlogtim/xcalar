@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+# vim: ft=sh
+set -e
+if ! test -d /opt/xcalar; then
+    set -ex
+    cd /tmp
+    if ! test -e /tmp/xcalarInstaller; then
+        exit 1
+    fi
+    bash /tmp/xcalarInstaller --noStart
+    (
+     echo "Constants.BufferCacheLazyMemLocking=true"
+     cat /etc/xcalar/default.cfg
+    ) > /tmp/default.cfg
+    mv /tmp/default.cfg /etc/xcalar/default.cfg
+
+    service xcalar stop || true
+    service apache2 stop || true
+    service rsyslog stop || true
+fi

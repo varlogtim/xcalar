@@ -1,0 +1,26 @@
+[
+    {
+        "class_name":"Programming in C",
+        "class_id":1
+    },
+    {
+        "class_name":"Analysis of Algorithms",
+        "class_id":2
+    },
+    {
+        "class_name":"Compiler Construction",
+        "class_id":3
+    },
+    {
+        "class_name":"Operating Systems",
+        "class_id":4
+    },
+    {
+        "class_name":"Introduction to Data Structures",
+        "class_id":5
+    },
+    {
+        "class_name":"Databases I",
+        "class_id":6
+    }
+]

@@ -1,0 +1,85 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-tpchq10",
+            "columns": [
+                {
+                    "columnName": "Revenue_SUM",
+                    "headerAlias": "Revenue_SUM"
+                },
+                {
+                    "columnName": "customer::C_CUSTKEY",
+                    "headerAlias": "C_CUSTKEY"
+                },
+                {
+                    "columnName": "customer::C_NAME",
+                    "headerAlias": "C_NAME"
+                },
+                {
+                    "columnName": "customer::C_ADDRESS",
+                    "headerAlias": "C_ADDRESS"
+                },
+                {
+                    "columnName": "customer::C_PHONE",
+                    "headerAlias": "C_PHONE"
+                },
+                {
+                    "columnName": "customer::C_ACCTBAL",
+                    "headerAlias": "C_ACCTBAL"
+                },
+                {
+                    "columnName": "customer::C_COMMENT",
+                    "headerAlias": "C_COMMENT"
+                },
+                {
+                    "columnName": "nation::N_NAME",
+                    "headerAlias": "N_NAME"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "lineitem--L_DISCOUNT",
+            "type": "DfFloat64"
+        },
+        {
+            "columnName": "lineitem--L_EXTENDEDPRICE",
+            "type": "DfFloat64"
+        },
+        {
+            "columnName": "customer--C_CUSTKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "orders--O_CUSTKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "nation--N_NATIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "customer--C_NATIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "lineitem--L_ORDERKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "orders--O_ORDERKEY",
+            "type": "DfInt64"
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "adddateinterval_modified",
+            "fileName": "udfs/adddateinterval_modified.py",
+            "udfType": "python"
+        }
+    ],
+    "query": "load --url \"<pathToTpchDatasets>/orders.tbl\" --format csv --size 0B  --name \"demo.59229.orders\" --fielddelim | --crlf --header;index --key \"O_CUSTKEY\" --dataset \".XcalarDS.demo.59229.orders\" --dsttable \"orders#MQ109\" --sorted=partial --prefix orders;filter --eval \"and(ge(orders::O_ORDERDATE, \\\"1993-10-01\\\"), lt(orders::O_ORDERDATE, dateAddMonth(\\\"1993-10-01\\\", \\\"%F\\\", 3)))\" --srctable \"orders#MQ109\" --dsttable \"orders#MQ116\";load --url \"<pathToTpchDatasets>/customer.tbl\" --format csv --size 0B  --name \"demo.60456.customer\" --fielddelim | --crlf --header;index --key \"C_CUSTKEY\" --dataset \".XcalarDS.demo.60456.customer\" --dsttable \"customer#MQ111\" --sorted=partial --prefix customer;load --url \"<pathToTpchDatasets>/nation.tbl\" --format csv --size 0B  --name \"demo.71146.nation\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/lineitem.tbl\" --format csv --size 0B  --name \"demo.70529.lineitem\" --fielddelim | --crlf --header;index --key \"N_NATIONKEY\" --dataset \".XcalarDS.demo.71146.nation\" --dsttable \"nation#MQ110\" --sorted=partial --prefix nation;join --leftTable \"customer#MQ111\" --rightTable \"orders#MQ116\" --joinType innerJoin  --joinTable \"cust_order_join#MQ118\" --collisionCheck;index --key \"L_ORDERKEY\" --dataset \".XcalarDS.demo.70529.lineitem\" --dsttable \"lineitem#MQ112\" --sorted=partial --prefix lineitem;index --key \"customer::C_NATIONKEY\" --srctable \"cust_order_join#MQ118\" --dsttable \"cust_order_join.index#MQ125\";filter --srctable lineitem#MQ112 --eval \"eq(lineitem::L_RETURNFLAG, \\\"R\\\")\"  --dsttable \"lineitem#MQ117\";join --leftTable \"cust_order_join.index#MQ125\" --rightTable \"nation#MQ110\" --joinType innerJoin  --joinTable \"cust_order_nation_join#MQ124\" --collisionCheck;index --key \"orders::O_ORDERKEY\" --srctable \"cust_order_nation_join#MQ124\" --dsttable \"cust_order_nation_join.index#MQ128\";join --leftTable \"cust_order_nation_join.index#MQ128\" --rightTable \"lineitem#MQ117\" --joinType innerJoin  --joinTable \"cust_order_nation_lineitem_join#MQ127\" --collisionCheck;map --eval \"mult(lineitem::L_EXTENDEDPRICE, sub(1, lineitem::L_DISCOUNT))\" --srctable \"cust_order_nation_lineitem_join#MQ127\" --fieldName \"Revenue\" --dsttable \"cust_order_nation_lineitem_join#MQ131\";map --eval \"concat(string(customer::C_CUSTKEY), concat(\\\".Xc.\\\", concat(customer::C_NAME, concat(\\\".Xc.\\\", concat(customer::C_ACCTBAL, concat(\\\".Xc.\\\", concat(customer::C_PHONE, concat(\\\".Xc.\\\", concat(nation::N_NAME, concat(\\\".Xc.\\\", concat(customer::C_ADDRESS, concat(\\\".Xc.\\\", customer::C_COMMENT))))))))))))\" --srctable \"cust_order_nation_lineitem_join#MQ131\" --fieldName \"multiGroupBy05479\" --dsttable \"cust_order_nation_lineitem_join#MQ133\";index --key \"multiGroupBy05479\" --keyType 1  --srctable \"cust_order_nation_lineitem_join#MQ133\" --dsttable \"cust_order_nation_lineitem_join.index#MQ134\";groupBy --srctable \"cust_order_nation_lineitem_join.index#MQ134\" --eval \"sum(Revenue)\" --fieldName \"Revenue_SUM\" --dsttable \"FinalOutputTable#MQ132\";index --key \"Revenue_SUM\" --keyType 7  --srctable \"FinalOutputTable#MQ132\" --dsttable \"EndResult-tpchq10\" --sorted=desc;",
+    "xcalarVersion": "1.2.1-1044-xcalardev-67cf7211-67cf7211",
+    "retinaVersion": 1
+}

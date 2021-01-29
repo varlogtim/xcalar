@@ -1,0 +1,7 @@
+enum QueryState {
+    qrNotStarted = 0,
+    qrProcessing = 1,
+    qrFinished = 2,
+    qrError = 3,
+    qrCancelled = 4,
+};

@@ -1,0 +1,292 @@
+// Copyright 2018 Xcalar, Inc. All rights reserved.
+//
+// No use, or distribution, of this source code is permitted in any form or
+// means without a valid, written license agreement with Xcalar, Inc.
+// Please refer to the included "COPYING" file for terms and conditions
+// regarding the use and redistribution of this software.
+//
+syntax = "proto3";
+
+import "xcalar/compute/localtypes/Workbook.proto";
+import "xcalar/compute/localtypes/DataflowEnums.proto";
+
+package xcalar.compute.localtypes.Dataflow;
+
+message FilterRequest {
+    string filterStr = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+};
+
+message FilterResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+};
+
+message AggregateRequest {
+    string aggOp = 1;
+    string colName = 2;
+    string srcTableName = 3;
+    string dstAggName = 4;
+};
+
+message AggregateEvalStrRequest {
+    string evalStr = 1;
+    string srcTableName = 2;
+    string dstAggName = 3;
+};
+
+message AggregateResponse {
+    string queryStr = 1;
+    string aggVal = 2;
+    string dstAggName = 3;
+    bool toDelete = 4;
+};
+
+message MapRequest {
+    repeated string mapStrs = 1;
+    repeated string newColNames = 2;
+    string srcTableName = 3;
+    string dstTableName = 4;
+    bool icvMode = 5;
+};
+
+message MapResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+};
+
+message GenRowNumRequest {
+    string newColName = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+};
+
+message GenRowNumResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+};
+
+message ProjectRequest {
+    repeated string columns = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+};
+
+message ProjectResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+};
+
+//Grouby
+message AggColInfo {
+    string operator = 1;
+    string aggColName = 2;
+    string newColName = 3;
+    bool isDistinct = 4;
+};
+
+message GroupByOptions {
+    string newTableName = 1;
+    bool groupAll = 2;
+    bool icvMode = 3;
+    string dhtName = 4;
+    bool clean = 5;
+    bool isIncSample = 6;
+    repeated uint64 sampleCols = 7;
+    repeated string newKeys = 8;
+};
+
+message GroupByRequest {
+    repeated AggColInfo aggArgs = 1;
+    repeated string groupByCols = 2;
+    string srcTableName = 3;
+    GroupByOptions options = 4;
+};
+
+message GroupByResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+    repeated string tempCols = 3;
+    string newKeyFieldName = 4;
+    repeated string newKeys = 5;
+};
+
+//Join
+message ColRenameInfo {
+    string orig = 1;
+    string new = 2;
+    string type = 3;
+};
+
+message JoinTableInfo {
+    string tableName = 1;
+    repeated string columns = 2;
+    repeated string casts  = 3;
+    repeated string pulledColumns = 4;
+    repeated ColRenameInfo rename = 5;
+    repeated string allImmediates = 6;
+    bool removeNulls = 7;
+};
+
+message JoinOptions {
+    string newTableName = 1;
+    bool clean = 2;
+    string evalStr = 3;
+    string existenceCol = 4;
+    bool keepAllColumns = 5;
+};
+
+message JoinRequest {
+    uint32 joinType = 1;
+    JoinTableInfo lTableInfo = 2;
+    JoinTableInfo rTableInfo = 3;
+    JoinOptions options = 4;
+};
+
+message JoinResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+    repeated string tempCols = 3;
+    ColRenameInfo lRename = 4;
+    ColRenameInfo rRename = 5;
+};
+
+//Union
+message UnionColInfo {
+    string name = 1;
+    string rename = 2;
+    string type = 3;
+    bool cast = 4;
+};
+
+message UnionTableInfo {
+    string tableName = 1;
+    repeated UnionColInfo columns = 2;
+};
+
+message UnionRequest {
+    repeated UnionTableInfo tableInfos = 1;
+    bool dedup = 2;
+    string newTableName = 3;
+    uint32 unionType = 4;
+};
+
+message UnionResponse {
+    message RenameInfo {
+        string rename = 1;
+        string type = 2;
+    };
+    string queryStr = 1;
+    string newTableName = 2;
+    repeated RenameInfo newTableCols = 3;
+};
+
+//Index
+message IndexRequest {
+    repeated string colNames = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+    repeated string newKeys = 4;
+    string dhtName = 5;
+};
+
+message IndexResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+    bool isCache = 3;
+    repeated string newKeys = 4;
+    repeated string tempCols = 5;
+};
+
+message IndexFromDatasetRequest {
+    string dsName = 1;
+    string dstTableName = 2;
+    string prefix = 3;
+};
+
+message IndexFromDatasetResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+    string prefix = 3;
+};
+
+message SortRequest {
+    message keyInfo {
+        string name = 1;
+        uint32 ordering = 2;
+        string type = 3;
+    }
+    repeated keyInfo keyInfos = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+    string dhtName = 4;
+};
+
+message SortResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+    repeated string newKeys = 3;
+};
+
+message SynthesizeRequest {
+    repeated ColRenameInfo colInfos = 1;
+    string srcTableName = 2;
+    string dstTableName = 3;
+    bool sameSession = 4;
+};
+
+message SynthesizeResponse {
+    string queryStr = 1;
+    string newTableName = 2;
+};
+
+message Parameter{
+    string name = 1;
+    string value = 2;
+};
+
+message ExecuteRequest {
+    // either dataflow_name or dataflow_str should be supplied
+    // if both are supplied, dataflow_name will be taken into consideration
+    string dataflow_name = 1;
+    string dataflow_str = 2;
+    string job_name = 3;
+    xcalar.compute.localtypes.Workbook.WorkbookScope scope = 4;
+    string udf_user_name = 5;
+    string udf_session_name = 6;
+    bool is_async = 7;
+    string sched_name = 8;
+    repeated Parameter parameters = 9;
+    bool export_to_active_session = 10;
+    // XXX this is needed for backward compatability
+    // will be removed once we remove legacy apis 
+    string dest_table = 11;
+    bool pin_results = 12;
+    bool optimized = 13;
+    bool collect_stats = 14;
+    // clean the job state if job successfully completed
+    bool clean_job_state = 15;
+    xcalar.compute.localtypes.XcalarEnumType.ExecutionMode execution_mode = 16; // bfs or dfs
+};
+
+message ExecuteResponse {
+    string job_name = 1;
+};
+
+service Dataflow {
+    rpc Filter (FilterRequest) returns (FilterResponse);
+    rpc Aggregate (AggregateRequest) returns (AggregateResponse);
+    rpc AggregateWithEvalStr (AggregateEvalStrRequest) returns (AggregateResponse);
+    rpc Map (MapRequest) returns (MapResponse);
+    rpc GenRowNum (GenRowNumRequest) returns (GenRowNumResponse);
+    rpc Project (ProjectRequest) returns (ProjectResponse);
+    rpc Join (JoinRequest) returns (JoinResponse);
+    rpc UnionOp (UnionRequest) returns (UnionResponse);
+    rpc GroupBy (GroupByRequest) returns (GroupByResponse);
+    rpc IndexFromDataset (IndexFromDatasetRequest) returns (IndexFromDatasetResponse);
+    rpc Index (IndexRequest) returns (IndexResponse);
+    rpc Sort (SortRequest) returns (SortResponse);
+    rpc Synthesize (SynthesizeRequest) returns (SynthesizeResponse);
+    rpc Execute (ExecuteRequest) returns (ExecuteResponse);
+};

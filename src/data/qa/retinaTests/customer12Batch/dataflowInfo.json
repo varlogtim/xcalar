@@ -1,0 +1,612 @@
+{
+    "tables": [
+        {
+            "name": "maxVolCustomer12-Ay51",
+            "columns": [
+                {
+                    "columnName": "Stock_max",
+                    "headerAlias": "Stock_max"
+                },
+                {
+                    "columnName": "YMD",
+                    "headerAlias": "YMD"
+                },
+                {
+                    "columnName": "Stock",
+                    "headerAlias": "Stock"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "xcalarVersion": "1.3.0-1-pmaddipatla-db01a150-af9f79a3",
+    "udfs": [
+        {
+            "fileName": "udfs/dateudfs.py",
+            "moduleName": "dateudfs",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/default.py",
+            "moduleName": "default",
+            "udfType": "python"
+        },
+        {
+            "fileName": "udfs/customer12parser.py",
+            "moduleName": "customer12parser",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.customer12Batch-customer12",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "/netstore/datasets/customer12/sec-10K-10Q/",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "customer12parser:streamCustomer12",
+                        "parserArgJson": "{}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.customer12Batch-customer12",
+                "dest": "customer12Batch-Ay1",
+                "prefix": "customer12",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "customer12-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay1",
+                "dest": "customer12Batch-Ay2",
+                "eval": [
+                    {
+                        "evalString": "cut(customer12::tweeter, 1, \"  \")",
+                        "newField": "tweeter-split-1"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay2",
+                "dest": "customer12Batch-Ay3",
+                "eval": [
+                    {
+                        "evalString": "default:splitWithDelim(customer12::tweeter, 1, \"  \")",
+                        "newField": "tweeter-split-rest"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay3",
+                "dest": "customer12Batch-Ay4",
+                "eval": [
+                    {
+                        "evalString": "dateudfs:cutFromRight(customer12::tweeter, \"  \")",
+                        "newField": "dateStr"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay4",
+                "dest": "customer12Batch-Ay5",
+                "eval": [
+                    {
+                        "evalString": "eq(tweeter-split-rest, dateStr)",
+                        "newField": "tweeter-split-rest_eq"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.customer12Batch-dailyStockData",
+                "loadArgs": {
+                    "size": 0,
+                    "sourceArgs": {
+                        "recursive": false,
+                        "path": "/netstore/datasets/dailyStockData/top50_dailystockprice_5yrs/",
+                        "targetName": "Default Shared Root",
+                        "fileNamePattern": ""
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"schemaMode\": \"header\", \"fieldDelim\": \",\", \"linesToSkip\": 0, \"quoteDelim\": \"\\\"\", \"isCRLF\": false, \"recordDelim\": \"\\n\"}"
+                    }
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay5",
+                "dest": "customer12Batch-Ay10",
+                "eval": [
+                    {
+                        "evalString": "default:convertFormats(dateStr, \"%Y%m%d\", \"\")",
+                        "newField": "YMD"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.customer12Batch-dailyStockData",
+                "dest": "customer12Batch-Ay24",
+                "prefix": "dailyStockData",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "ordering": "Unordered",
+                        "keyFieldName": "dailyStockData-xcalarRecordNum",
+                        "type": "DfInt64"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay10",
+                "dest": "customer12Batch-Ay11",
+                "eval": [
+                    {
+                        "evalString": "default:convertFormats(dateStr, \"%Y\", \"\")",
+                        "newField": "Year"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay24",
+                "dest": "customer12Batch-Ay38",
+                "eval": [
+                    {
+                        "evalString": "default:convertFormats(dailyStockData::Date, \"%Y%m%d\", \"\")",
+                        "newField": "YMD"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay11",
+                "dest": "customer12Batch-Ay41",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "YMD",
+                        "ordering": "Unordered",
+                        "keyFieldName": "YMD",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay38",
+                "dest": "customer12Batch-Ay40",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "YMD",
+                        "ordering": "Unordered",
+                        "keyFieldName": "YMD",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "customer12Batch-Ay40",
+                    "customer12Batch-Ay41"
+                ],
+                "joinType": "innerJoin",
+                "dest": "customer12Batch-Ay39",
+                "key": [["YMD"], ["YMD"]],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "dailyStockData",
+                            "columnType": "DfFatptr",
+                            "destColumn": "dailyStockData"
+                        },
+                        {
+                            "sourceColumn": "YMD",
+                            "columnType": "DfString",
+                            "destColumn": "YMD1"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "customer12",
+                            "columnType": "DfFatptr",
+                            "destColumn": "customer12"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-1",
+                            "columnType": "DfString",
+                            "destColumn": "tweeter-split-1"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-rest",
+                            "columnType": "DfString",
+                            "destColumn": "tweeter-split-rest"
+                        },
+                        {
+                            "sourceColumn": "dateStr",
+                            "columnType": "DfString",
+                            "destColumn": "dateStr"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-rest_eq",
+                            "columnType": "DfBoolean",
+                            "destColumn": "tweeter-split-rest_eq"
+                        },
+                        {
+                            "sourceColumn": "YMD",
+                            "columnType": "DfString",
+                            "destColumn": "YMD"
+                        },
+                        {
+                            "sourceColumn": "Year",
+                            "columnType": "DfString",
+                            "destColumn": "Year"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay39",
+                "dest": "customer12Batch-Ay42",
+                "eval": [
+                    {
+                        "evalString": "float(dailyStockData::Volume)",
+                        "newField": "Volume_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay42",
+                "dest": "customer12Batch-Ay44",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "dailyStockData::Stock",
+                        "ordering": "Unordered",
+                        "keyFieldName": "dailyStockData-Stock",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "groupAll": false,
+                "source": "customer12Batch-Ay44",
+                "includeSample": false,
+                "dest": "customer12Batch-Ay43",
+                "eval": [
+                    {
+                        "evalString": "max(Volume_float)",
+                        "newField": "Stock_max"
+                    }
+                ],
+                "newKeyField": "Stock",
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay43",
+                "dest": "customer12Batch-Ay47",
+                "eval": [
+                    {
+                        "evalString": "concat(string(Stock), concat(\".Xc.\", string(Stock_max)))",
+                        "newField": "rightJoinCol38808"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay42",
+                "dest": "customer12Batch-Ay46",
+                "eval": [
+                    {
+                        "evalString": "concat(string(dailyStockData::Stock), concat(\".Xc.\", string(Volume_float)))",
+                        "newField": "leftJoinCol08837"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay47",
+                "dest": "customer12Batch-Ay49",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "rightJoinCol38808",
+                        "ordering": "Unordered",
+                        "keyFieldName": "rightJoinCol38808",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay46",
+                "dest": "customer12Batch-Ay48",
+                "prefix": "",
+                "key": [
+                    {
+                        "name": "leftJoinCol08837",
+                        "ordering": "Unordered",
+                        "keyFieldName": "leftJoinCol08837",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": "",
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "customer12Batch-Ay48",
+                    "customer12Batch-Ay49"
+                ],
+                "joinType": "innerJoin",
+                "dest": "customer12Batch-Ay45",
+                "key": [
+                    ["leftJoinCol08837"],
+                    ["rightJoinCol38808"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "dailyStockData",
+                            "columnType": "DfFatptr",
+                            "destColumn": "dailyStockData"
+                        },
+                        {
+                            "sourceColumn": "YMD1",
+                            "columnType": "DfString",
+                            "destColumn": "YMD1"
+                        },
+                        {
+                            "sourceColumn": "customer12",
+                            "columnType": "DfFatptr",
+                            "destColumn": "customer12"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-1",
+                            "columnType": "DfString",
+                            "destColumn": "tweeter-split-1"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-rest",
+                            "columnType": "DfString",
+                            "destColumn": "tweeter-split-rest"
+                        },
+                        {
+                            "sourceColumn": "dateStr",
+                            "columnType": "DfString",
+                            "destColumn": "dateStr"
+                        },
+                        {
+                            "sourceColumn": "tweeter-split-rest_eq",
+                            "columnType": "DfBoolean",
+                            "destColumn": "tweeter-split-rest_eq"
+                        },
+                        {
+                            "sourceColumn": "YMD",
+                            "columnType": "DfString",
+                            "destColumn": "YMD"
+                        },
+                        {
+                            "sourceColumn": "Year",
+                            "columnType": "DfString",
+                            "destColumn": "Year"
+                        },
+                        {
+                            "sourceColumn": "Volume_float",
+                            "columnType": "DfFloat64",
+                            "destColumn": "Volume_float"
+                        },
+                        {
+                            "sourceColumn": "leftJoinCol08837",
+                            "columnType": "DfString",
+                            "destColumn": "leftJoinCol08837"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "Stock",
+                            "columnType": "DfString",
+                            "destColumn": "Stock"
+                        },
+                        {
+                            "sourceColumn": "Stock_max",
+                            "columnType": "DfScalarObj",
+                            "destColumn": "Stock_max"
+                        },
+                        {
+                            "sourceColumn": "rightJoinCol38808",
+                            "columnType": "DfString",
+                            "destColumn": "rightJoinCol38808"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay45",
+                "dest": "customer12Batch-Ay50",
+                "eval": [
+                    {
+                        "evalString": "eq(customer12::tickerFound, Stock)",
+                        "newField": "tickerFound_eq"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "customer12Batch-Ay50",
+                "dest": "maxVolCustomer12-Ay51",
+                "eval": [
+                    {
+                        "evalString": "eq(tickerFound_eq, true)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "maxVolCustomer12-Ay51",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-maxVolCustomer12-Ay51.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.maxVolCustomer12-Ay51",
+                "columns": [
+                    {
+                        "headerName": "Stock_max",
+                        "columnName": "Stock_max"
+                    },
+                    {
+                        "headerName": "YMD",
+                        "columnName": "YMD"
+                    },
+                    {
+                        "headerName": "Stock",
+                        "columnName": "Stock"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "dataflowVersion": 1
+}

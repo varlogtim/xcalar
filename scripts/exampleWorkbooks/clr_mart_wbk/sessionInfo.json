@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.3.2-4554-xcalardev-a70c238b-8e164e50",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5f32dd2721f84ee4",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1597168935",
+        "tvNsec": "569921252"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1597617484",
+        "tvNsec": "577303813"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1597617548",
+        "tvNsec": "523903014"
+    },
+    "sessionName": "clr_mart_wbk"
+}

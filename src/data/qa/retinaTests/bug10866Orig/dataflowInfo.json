@@ -1,0 +1,65 @@
+{
+    "tables": [
+        {
+            "name": "RN0temp-138594691",
+            "columns": [
+                {
+                    "columnName": "prefix-30947-138582624-row\\\\\\.num\\.float\\\\\\.\\\\\\.col",
+                    "headerAlias": "col-25238-20299"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "operatorsfunctestloadMem",
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.retina--25243-508283-520955:operatorsFuncTestUser-1-node0",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.retina--25243-508283-520955:operatorsFuncTestUser-1-node0",
+                "dest": "RN0temp-138594691",
+                "key": [
+                    {
+                        "name": "row\\.num.float\\.\\.col",
+                        "keyFieldName": "prefix-30947-138582624-row\\.num.float\\.\\.col",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-30947-138582624",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1461-xcalardev-7a52d6b7-d5a44043",
+    "dataflowVersion": 1
+}

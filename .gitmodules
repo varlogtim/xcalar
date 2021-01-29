@@ -1,0 +1,3 @@
+[submodule "xcalar-idl"]
+	path = xcalar-idl
+    url = ./xcalar-idl

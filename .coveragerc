@@ -1,0 +1,11 @@
+# .coveragerc controls coverage.py, the python code coverage tool.
+# This is used by the pytest-cov plugin for code coverage under pytest.
+# For docs see https://coverage.readthedocs.io/en/latest/config.html
+[run]
+# measure branch coverage
+branch = True
+source =
+    src/bin/sdk
+# Use the same coverage data file for pytest and pyTestNew so that the
+# results get combined into 1 file.
+data_file = $BUILD_DIR/.pytest_coverage

@@ -1,0 +1,91 @@
+{
+    "retinaVersion": 1,
+    "tables": [
+        {
+            "name": "EndResult-tpchq2",
+            "columns": [
+                {
+                    "columnName": "supplier::S_ACCTBAL",
+                    "headerAlias": "S_ACCTBAL"
+                },
+                {
+                    "columnName": "supplier::S_NAME",
+                    "headerAlias": "S_NAME"
+                },
+                {
+                    "columnName": "nation::N_NAME",
+                    "headerAlias": "N_NAME"
+                },
+                {
+                    "columnName": "part::P_PARTKEY",
+                    "headerAlias": "P_PARTKEY"
+                },
+                {
+                    "columnName": "part::P_MFGR",
+                    "headerAlias": "P_MFGR"
+                },
+                {
+                    "columnName": "supplier::S_ADDRESS",
+                    "headerAlias": "S_ADDRESS"
+                },
+                {
+                    "columnName": "supplier::S_PHONE",
+                    "headerAlias": "S_PHONE"
+                },
+                {
+                    "columnName": "supplier::S_COMMENT",
+                    "headerAlias": "S_COMMENT"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "region--R_REGIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "nation--N_REGIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "nation--N_NATIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "supplier--S_NATIONKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "part--P_SIZE",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "supplier--S_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "partsupp--PS_SUPPKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "partsupp--PS_PARTKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "part--P_PARTKEY",
+            "type": "DfInt64"
+        },
+        {
+            "columnName": "partsupp--PS_SUPPLYCOST",
+            "type": "DfFloat64"
+        },
+        {
+            "columnName": "supplier--S_ACCTBAL",
+            "type": "DfFloat64"
+        }
+    ],
+    "xcalarVersion": "1.2.1-1-jenkins-3b38bb0b-a568cfd8",
+    "query": "load --url \"<pathToTpchDatasets>/region.tbl\" --format csv --size 0B  --name \"demo.02158.region\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/nation.tbl\" --format csv --size 0B  --name \"demo.71146.nation\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/supplier.tbl\" --format csv --size 0B  --name \"demo.92928.supplier\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/part.tbl\" --format csv --size 0B  --name \"demo.47465.part\" --fielddelim | --crlf --header;load --url \"<pathToTpchDatasets>/partsupp.tbl\" --format csv --size 0B  --name \"demo.25083.partsupp\" --fielddelim | --crlf --header;index --key \"N_REGIONKEY\" --dataset \".XcalarDS.demo.71146.nation\" --dsttable \"nation.index#R1528\" --prefix nation;index --key \"R_REGIONKEY\" --dataset \".XcalarDS.demo.02158.region\" --dsttable \"region#R1529\" --prefix region;index --key \"S_NATIONKEY\" --dataset \".XcalarDS.demo.92928.supplier\" --dsttable \"supplier.index#R1525\" --prefix supplier;index --key \"P_PARTKEY\" --dataset \".XcalarDS.demo.47465.part\" --dsttable \"part#R1524\" --prefix part;index --key \"PS_SUPPKEY\" --dataset \".XcalarDS.demo.25083.partsupp\" --dsttable \"partsupp.index#R1526\" --prefix partsupp;filter --srctable region#R1529 --eval \"eq(region::R_NAME, \\\"EUROPE\\\")\"  --dsttable \"region.index#R1542\";join --leftTable \"nation.index#R1528\" --rightTable \"region.index#R1542\" --joinType innerJoin  --joinTable \"region-nation#R1545\" --collisionCheck;index --key \"nation::N_NATIONKEY\" --srctable \"region-nation#R1545\" --dsttable \"region-nation.index#R1551\";join --leftTable \"supplier.index#R1525\" --rightTable \"region-nation.index#R1551\" --joinType innerJoin  --joinTable \"supplier-nation#R1550\" --collisionCheck;filter --srctable part#R1524 --eval \"and(eq(part::P_SIZE, 15), contains(part::P_TYPE, \\\"BRASS\\\"))\"  --dsttable \"filterPart\";index --key \"supplier::S_SUPPKEY\" --srctable \"supplier-nation#R1550\" --dsttable \"supplier-nation.index#R1556\";join --leftTable \"partsupp.index#R1526\" --rightTable \"supplier-nation.index#R1556\" --joinType innerJoin  --joinTable \"partsupp-supplier-nation#R1555\" --collisionCheck;index --key \"partsupp::PS_PARTKEY\" --srctable \"partsupp-supplier-nation#R1555\" --dsttable \"partsupp-supplier-nation.index#R1561\";join --leftTable \"partsupp-supplier-nation.index#R1561\" --rightTable \"filterPart\" --joinType innerJoin  --joinTable \"q2-all-tables#R1560\" --collisionCheck;index --key \"part::P_PARTKEY\" --srctable \"q2-all-tables#R1560\" --dsttable \"q2-all-tables.index#R1564\";groupBy --srctable \"q2-all-tables.index#R1564\" --eval \"minFloat(partsupp::PS_SUPPLYCOST)\" --fieldName \"MIN_SUPPLYCOST\" --newKeyFieldName \"PART_KEY\" --dsttable \"partkey_min_supplycost#R1565\" --nosample;join --leftTable \"q2-all-tables.index#R1564\" --rightTable \"partkey_min_supplycost#R1565\" --joinType fullOuterJoin  --joinTable \"q2-all-tables-GB#R1566\" --collisionCheck;filter --srctable \"q2-all-tables-GB#R1566\" --eval \"eq(MIN_SUPPLYCOST, partsupp::PS_SUPPLYCOST)\"  --dsttable \"q2-all-tables-GB#R1567\";index --key \"supplier::S_ACCTBAL\" --srctable \"q2-all-tables-GB#R1567\" --dsttable \"q2-all-tables-GB#R1568\" --sorted=desc;project --srctable \"q2-all-tables-GB#R1568\" --dsttable \"q2-result#R1569\" \"supplier--S_ACCTBAL\" \"supplier--S_NAME\" \"nation--N_NAME\" \"part--P_PARTKEY\" \"part--P_MFGR\" \"supplier--S_ADDRESS\" \"supplier--S_PHONE\" \"supplier--S_COMMENT\";getRowNum --srctable \"q2-result#R1569\" --fieldName \"Rownum\" --dsttable \"q2-result#R1570\";filter --srctable q2-result#R1570 --eval \"le(Rownum, 100)\"  --dsttable \"q2-result#R1571\";index --key \"Rownum\" --keyType 4  --srctable \"q2-result#R1571\" --dsttable \"EndResult-tpchq2\" --sorted;",
+    "udfs": []
+}

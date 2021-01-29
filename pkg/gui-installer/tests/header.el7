@@ -1,0 +1,7 @@
+FROM el7-systemd
+MAINTAINER Xcalar, Inc <info@xcalar.com>
+
+RUN yum install -y openssh-server openssh-clients redhat-lsb-core deltarpm yum-utils sudo curl tar nfs-utils rsyslog iproute
+ADD sshd2.service /usr/lib/systemd/system/
+RUN systemctl enable sshd2.service
+

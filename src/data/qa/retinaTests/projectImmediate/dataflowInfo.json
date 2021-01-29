@@ -1,0 +1,99 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398509496972",
+            "columns": [
+                {
+                    "columnName": "prefix-20172-18014398509482894::a\\.b",
+                    "headerAlias": "prefix-20172-18014398509482894--a\\\\\\.b"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "source tables": [],
+    "udfs": [
+        {
+            "fileName": "udfs/operatorsfunctestloadMem.py",
+            "moduleName": "operatorsfunctestloadMem",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": "RN0retina--20607-18014398509485764-18014398509486794:operatorsFuncTestUser-0-node1",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "QA memory",
+                        "path": "1000",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "operatorsfunctestloadMem:loadRandom",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.RN0retina--20607-18014398509485764-18014398509486794:operatorsFuncTestUser-0-node1",
+                "dest": "RN0retina--20607-18014398509485764-18014398509486794",
+                "prefix": "prefix-20172-18014398509482894",
+                "key": [
+                    {
+                        "name": "a\\.b",
+                        "keyFieldName": "prefix-20172-18014398509482894-a\\.b",
+                        "ordering": "Unordered",
+                        "type": "DfUnknown"
+                    }
+                ],
+                "delaySort": false,
+                "dhtName": ""
+            }
+        },
+        {
+            "operation": "XcalarApiProject",
+            "args": {
+                "source": "RN0retina--20607-18014398509485764-18014398509486794",
+                "dest": "temp-18014398509496972",
+                "columns": [
+                    "prefix-20172-18014398509482894::a\\.b"
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "splitNumFiles": 0,
+                "targetName": "Default",
+                "splitSize": 0,
+                "headerType": "every",
+                "source": "temp-18014398509496972",
+                "sorted": true,
+                "targetType": "file",
+                "quoteDelim": "\"",
+                "fileName": "export-temp-18014398509496972.csv",
+                "createRule": "createOnly",
+                "dest": ".XcalarLRQExport.temp-18014398509496972",
+                "columns": [
+                    {
+                        "headerName": "prefix-20172-18014398509482894--a\\\\\\.b",
+                        "columnName": "prefix-20172-18014398509482894::a\\.b"
+                    }
+                ],
+                "splitRule": "none",
+                "recordDelim": "\n",
+                "format": "csv",
+                "fieldDelim": "\t"
+            }
+        }
+    ],
+    "xcalarVersion": "1.2.3-1-bli-9c5d3e43-4b5adeeb",
+    "dataflowVersion": 1
+}

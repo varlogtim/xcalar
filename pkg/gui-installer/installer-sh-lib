@@ -1,0 +1,1108 @@
+# vim: ft=sh
+# Copyright 2015-2016 Xcalar, Inc. All rights reserved.
+#
+# No use, or distribution, of this source code is permitted in any form or
+# means without a valid, written license agreement with Xcalar, Inc.
+# Please refer to the included "COPYING" file for terms and conditions
+# regarding the use and redistribution of this software.
+
+if [ -z "$DIR" ]; then
+    DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
+fi
+
+export TMPDIR="${TMPDIR:-/tmp/$(id -u)}/installer"
+mkdir -p "$TMPDIR"
+
+nstep=0
+tsteps=1
+ssh_opts="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR"
+serdes_config="Constants.XdbLocalSerDesPath"
+support_bundles_config="Constants.SendSupportBundle"
+
+say () {
+    echo >&2 "$*"
+}
+
+die () {
+    res=$1
+    shift
+    cleanup
+    echo >&2 "ERROR:$res: $*"
+    exit $res
+}
+
+check_file () {
+    if [ -z "$1" ]; then
+        return 1
+    fi
+    if ! test -r "$1"; then
+        return 2
+    fi
+}
+
+print_help () {
+    cat <<-EOF
+
+	    $0 <options ...>
+
+	    --help                   Show help
+	    -H,--hosts "HOST .."     Install to the specified hosts
+	    -h,--hosts-file FILE     Install to the hosts/ips in this file
+	    --priv-hosts "HOST .."   Private hosts/ips to use for cluster communications
+	    --priv-hosts-file FILE   Private hosts/ips to use for cluster communications in this file
+	    --installer FILE         Use installer in file
+	    --license-file FILE      Use license in file
+	    --template FILE          Use template in file to generate config
+	    --ssh-mode               SSH password/key/user operation type
+	    -i KEY                   SSH private key
+	    -l USER                  SSH user
+	    -p PORT                  SSH port (default: 22)
+	    --password-file FILE     SSH password in file
+	    --nfs-mode               NFS create/external/reuse operation type
+	    --nfs-host HOST          NFS host to use for Xcalar Root
+	    --nfs-folder PATH        NFS mount point
+	    --nfs-uid UID            NFS user id
+	    --nfs-gid GID            NFS group id
+	    --nfs-reuse              reuse existing NFS mount point
+	    --nfs-copy               copy from the existing /mtn/xcalar to the new host/folder
+	     --install-dir           installation directory for tarball installs
+	    --script COMMAND         Run subscript (eg, cluster_uninstall)
+	    --ldap-mode              LDAP create/external operation type
+	    --ldap-domain            DNS domain used to create LDAP DN and SSL certificates
+	    --ldap-password          rootDN password for OpenLDAP service
+	    --ldap-org               Company name used in LDAP directory and SSL certificates
+	    --default-admin          Default admin user create
+	    --admin-username         Name of the default admin user
+	    --admin-email            E-mail address of the default admin user
+	    --admin-password         Password of the default admin user
+	    --install-dir            Location where xcalar is installed
+	    --ntp-servers            Comma separated list of ntp servers
+	    --ntp-iburst             Use ntp iburst mode
+	    --pre-config             Perform root level config (userinstaller only)
+	    --support-bundles        Enable collection of daily support bundles
+	    --serdes                 Path to the serialization/deserialization directory
+	    --enable-hotPatches      Enable the ability to get Xcalar Design hot patches
+	EOF
+}
+
+parse_args () {
+    rm -rf "$TMPDIR"
+    mkdir -p "$TMPDIR" || die 2 "Failed to create $TMPDIR"
+    [ $# -eq 0 ] && set -- --help
+    nfs_uid=0
+    nfs_gid=0
+    nfs_copy=0
+    nfs_reuse=0
+    while test $# -gt 0; do
+        cmd="$1"
+        shift
+        case "$cmd" in
+            --help) print_help; exit 1;;
+            -h|--hosts-file) hosts_file="$1"; shift;;
+            --priv-hosts-file) priv_hosts_file="$1"; shift;;
+            -i) id_file="$1"; chmod 0600 "$1"; shift;;
+            -H|--hosts) hosts_file="/tmp/hosts.txt"; echo "$1" > $hosts_file ; shift;;
+            --priv-hosts) priv_hosts_file="/tmp/priv_hosts.txt"; echo "$1" > $priv_hosts_file; shift;;
+            -l) user="$1"; ssh_opts="$ssh_opts -o User=$1"; shift;;
+            -p) port="$1"; ssh_opts="$ssh_opts -o Port=$1"; shift;;
+            --template) template="$1"; shift;;
+            --ssh-mode) ssh_mode="$1"; shift;;
+            --password-file) password_file="$1"; shift;;
+            --license-file) license_file="$1"; shift;;
+            --installer) installer_path="$1"; shift;;
+            --nfs-mode) nfs_mode="$1"; shift;;
+            --nfs-host) nfs_host="$1"; shift;;
+            --nfs-folder) nfs_folder="$1"; shift;;
+            --nfs-uid) nfs_uid="$1"; shift;;
+            --nfs-gid) nfs_gid="$1"; shift;;
+            --nfs-reuse) nfs_dest="$1"; nfs_reuse=1; shift;;
+            --nfs-copy) nfs_copy=1;;
+            --script) script="$1"; shift;;
+            --ldap-mode) ldap_mode="$1"; shift;;
+            --ldap-domain) ldap_domain="$1"; shift;;
+            --ldap-password) ldap_password="$1"; shift;;
+            --ldap-org) ldap_org="$1"; shift;;
+            --default-admin) default_admin=1;;
+            --admin-username) admin_username="$1"; shift;;
+            --admin-email) admin_email="$1"; shift;;
+            --admin-password) admin_password="$1"; shift;;
+            --install-dir) install_dir="$1"; shift;;
+            --ntp-servers) ntp_servers="$1"; shift;;
+            --ntp-iburst) ntp_iburst="iburst";;
+            --pre-config) pre_config="1";;
+            --support-bundles) support_bundles="1";;
+            --serdes) serdes_dir="$1"; shift;;
+            --enable-hotPatches) enable_hotPatches="1";;
+            --) break;;
+            *) echo >&2 "ERROR: Unknown argument $cmd"; exit 2;;
+        esac
+    done
+    if test -z "$user"; then
+        user=root
+        ssh_opts="$ssh_opts -o User=$user"
+    elif [ "$user" != root ]; then
+        sudo=sudo
+    fi
+    if test -z "$template"; then
+        template="$DIR/template.cfg"
+        if ! test -e "$DIR/template.cfg"; then
+            template="$XLRDIR/src/data/template.cfg"
+        fi
+    fi
+    if test -z "$installer_path"; then
+        installer_path="$(find $DIR -name "$installer_regex" -type f | head -1)"
+    fi
+    if test -n "$installer_path"; then
+        installer_name=$(basename $installer_path)
+    fi
+    if test -f "$hosts_file"; then
+        hosts_array=($(cat $hosts_file))
+    fi
+
+    if ! test -f "$priv_hosts_file"; then
+        if test -f "$hosts_file"; then
+            priv_hosts_file=$hosts_file
+        fi
+    fi
+    if test -f "$priv_hosts_file"; then
+        priv_hosts_array=($(cat $priv_hosts_file))
+    fi
+    nfs_mode_error="0"
+    case "$nfs_mode" in
+        reuse)
+            test "$nfs_reuse" != "1" -o -z "$nfs_dest" && nfs_mode_error="1"
+            ;;
+        external)
+            test -z "$nfs_host" -o -z "$nfs_folder" && nfs_mode_error="1"
+            ;;
+        create)
+            test -n "$nfs_host" -o -n "$nfs_folder" && nfs_mode_error="1"
+            ;;
+    esac
+    if test "$nfs_mode_error" = "1"; then
+        test -z "$nfs_mode" && nfs_mode="(empty)"
+        test -z "$nfs_host" && nfs_host="(empty)"
+        test -z "$nfs_folder" && nfs_folder="(emtpy)"
+        test -z "$nfs_dest" && nfs_dest="(empty)"
+        die 2 "unknown combination of NFS flags: --nfs_mode: $nfs_mode, --nfs-dest: $nfs_dest, --nfs_host: $nfs_host, --nfs_folder: $nfs_folder"
+    fi
+    ldap_mode_error="0"
+    case "$ldap_mode" in
+        create)
+            test -z "$ldap_domain" -o -z "$ldap_password" -o -z "$ldap_org" && ldap_mode_error="1"
+            ;;
+        external)
+            test -n "$ldap_domain" -o -n "$ldap_password" -o -n "$ldap_org" && ldap_mode_error="1"
+            ;;
+    esac
+    if test "$ldap_mode_error" = "1"; then
+        test -z "$ldap_mode" && ldap_mode="(empty)"
+        test -z "$ldap_domain" && ldap_domain="(empty)"
+        test -z "$ldap_password" && ldap_password="(empty)"
+        test -z "$ldap_org" && ldap_org="(empty)"
+        die 2 "unknown combination of LDAP flags: --ldap-mode: $ldap_mode, --ldap-domain: $ldap_domain, --ldap_password: $ldap_password, --ldap_org: $ldap_org"
+    fi
+    ssh_mode_error="0"
+    test -n "$SSHPASS" -a  -z "$ssh_mode" && ssh_mode='sshpass'
+    case "$ssh_mode" in
+        password)
+            test -z "$password_file" -o -n "$id_file" && ssh_mode_error="1"
+            if check_file "$password_file"; then
+                test -z "$(cat $password_file)" && ssh_mode_error="1"
+            else
+                ssh_mode_error="1"
+            fi
+            ;;
+        key)
+            test -n "$password_file" -o -z "$id_file" && ssh_mode_error="1"
+            ! check_file "$id_file" && ssh_mode_error="1"
+            ;;
+        user|sshpass)
+            test -n "$password_file" -o -n "$id_file" && ssh_mode_error="1"
+            ;;
+    esac
+    if test "$ssh_mode_error" = "1"; then
+        test -z "$SSHPASS" && SSHPASS="(empty)"
+        test -z "$ssh_mode" && ssh_mode="(empty)"
+        test -z "$password_file" && password_file="(empty)"
+        test -z "$id_file" && id_file="(empty)"
+        die 2 "unknown combination of SSH flags: SSHPASS: $SSHPASS, --ssh-mode: $ssh_mode, -i: $id_file, --password-file: $password_file"
+    fi
+    _ssh_setup
+    if test "$default_admin" = "1"; then
+       test -z "admin_username" && admin_username="(empty)" && default_admin_error=1
+       test -z "admin_email" && admin_email="(empty)" && default_admin_error=1
+       test -z "admin_password" && admin_password="(empty)" && default_admin_error=1
+       test "$default_admin_error" = "1" && die 2 "unknown combination of default admin flags: --default-admin --admin-username: $admin_username --admin-email: $admin_email --admin_password: $admin_password"
+    fi
+}
+
+_ssh_setup () {
+    [ "$is_ssh_setup" == "1" ] && return 0
+    case "$ssh_mode" in
+        password)
+            export SSHPASS="$(cat $password_file)"
+            ssh_opts="$ssh_opts -o PasswordAuthentication=yes -o PubkeyAuthentication=no"
+            ;;
+        key)
+            ssh_opts="$ssh_opts -o IdentityFile=$id_file -o PasswordAuthentication=no -o PubkeyAuthentication=yes";
+            ;;
+        sshpass)
+            ssh_opts="$ssh_opts -o PasswordAuthentication=yes -o PubkeyAuthentication=no"
+            ;;
+        user)
+            :
+            ;;
+    esac
+    is_ssh_setup="1"
+}
+
+# $1: boolean true/false; if true - non-0 exit codes are not treated as failure.
+#     false - any non-0 exit code is treated and logged as faiulre
+# remaining args: ssh cmds to send
+_pssh_core() {
+    _ssh_setup
+    local ignore_errors=$1
+    shift
+    local -i n=0
+    local -a pids=()
+    t_start="$(date +%s)"
+    for host in "${hosts_array[@]}"; do
+        host_part="${host%%:*}"
+        port_part="${host##*:}"
+        if [ "$port_part" = "$host_part" ]; then
+            port_part=
+        else
+            port_part="-o Port=$port_part"
+        fi
+
+        OUTDIR="${TMPDIR}/${nstep}/${n}"
+        mkdir -p "$OUTDIR"
+        case "$ssh_mode" in
+            key|user)
+                ssh -tt $ssh_opts $port_part $host_part "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null &
+                pids+=($!)
+                ;;
+            password|sshpass)
+                sshpass -e ssh -tt $ssh_opts $port_part $host_part "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null &
+                pids+=($!)
+                ;;
+        esac
+        n=$(( $n + 1 ))
+    done
+    n=0
+    local -i anyfailed=0
+    for pid in "${pids[@]}"; do
+        OUTDIR="${TMPDIR}/${nstep}/${n}"
+        wait $pid
+        rc=$?
+        t_end="$(date +%s)"
+        echo "$rc" > "$OUTDIR/rc"
+        dt=$(( $t_end - $t_start ))
+        if [ $rc -ne 0 ] && [ "$ignore_errors" == "false" ]; then
+            echo "[$n] $(date --utc -d@$dt +'%H:%M:%S') [FAILURE] ${hosts_array[$n]} -> $*"
+            cat $OUTDIR/std* >&2
+            anyfailed=1
+        else
+            echo "[$n] $(date --utc -d@$dt +'%H:%M:%S') [SUCCESS] ${hosts_array[$n]} -> $*"
+        fi
+        n=$(( $n + 1 ))
+    done
+    return $anyfailed
+}
+
+# sends args supplied as an ssh command to each host in hosts_array
+# any non-0 exit codes are treated and logged as failure
+# ex: _pssh echo hello
+_pssh () {
+    _pssh_core false "$@"
+}
+
+# sends ssh cmds to hosts in hosts_array
+# non-0 exit codes are ignored and still treated as success.
+# ex: _pssh test -f myfile
+_pssh_ignore_failure () {
+    _pssh_core true "$@"
+}
+
+#
+# _pssh_compare()
+# Arguments:
+# $1 - destination file name where comparison data will be written if all copies are identical
+# $2 - Descriptive text tag used in error messages to state what was being compared
+# $3 - (Optional) Token used to separate string used from comparison from other text that appears
+#      in command results.  Example: when token is '%' and data '3%2', the '2' is compared to
+#      other results.
+_pssh_compare () {
+    local file_dest="$1"
+    local file_tag="$2"
+    local data_sep="$3"
+
+    local -i n=0
+    local -i anyfailed=0
+    old=""
+    for host in "${hosts_array[@]}"; do
+        OUTDIR="${TMPDIR}/${nstep}/${n}"
+        if [ -z "$data_sep" ]; then
+            new=$(cat "${OUTDIR}/stdout" | tr -d '\n' | tr -d '\r')
+        else
+            new=$(cat "${OUTDIR}/stdout" | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+        fi
+        if [ -z "$old" ]; then
+            if [ -z "$new" ]; then
+                echo "$file_tag on host $host is empty" > $file_dest
+                anyfailed=1
+                break
+            fi
+            old="$new"
+        else
+            if [ "$old" != "$new" ]; then
+                echo "$file_tag $new on host $host does not match the value $old on one or more of the others hosts." > $file_dest
+                anyfailed=1
+                break
+            fi
+        fi
+        n=$(( $n + 1 ))
+    done
+
+    [ $anyfailed -eq 0 ] && echo "$old" > $file_dest
+
+    return $anyfailed
+}
+
+_pscp () {
+    _ssh_setup
+    local -i n=0
+    local -a pids=()
+    for host in "${hosts_array[@]}"; do
+        host_part="${host%%:*}"
+        port_part="${host##*:}"
+        if [ "$port_part" = "$host_part" ]; then
+            port_part=
+        else
+            port_part="-o Port=$port_part"
+        fi
+
+        t_start="$(date +%s)"
+        OUTDIR="${TMPDIR}/${nstep}/${n}"
+        mkdir -p "$OUTDIR"
+        case "$ssh_mode" in
+            key|user)
+                scp $ssh_opts $port_part $1 $host_part:$2 >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null &
+                pids+=($!)
+                ;;
+            password|sshpass)
+                sshpass -e scp $ssh_opts $port_part $1 $host_part:$2 >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null &
+                pids+=($!)
+                ;;
+        esac
+        n=$(( $n + 1 ))
+    done
+    n=0
+    local -i anyfailed=0
+    for pid in "${pids[@]}"; do
+        OUTDIR="${TMPDIR}/${nstep}/${n}"
+        wait $pid
+        rc=$?
+        echo "$rc" > "$OUTDIR/rc"
+        t_end="$(date +%s)"
+        dt=$(( $t_end - $t_start ))
+        if [ $rc -eq 0 ]; then
+            echo "[$n] $(date --utc -d@$dt +'%H:%M:%S') [SUCCESS] $1 -> ${hosts_array[$n]}:$2"
+        else
+            echo "[$n] $(date --utc -d@$dt +'%H:%M:%S') [FAILURE] $1 -> ${hosts_array[$n]}:$2"
+            cat $OUTDIR/std* >&2
+            anyfailed=1
+        fi
+        n=$(( $n + 1 ))
+    done
+    return $anyfailed
+}
+
+# $1: boolean true/false; if true - non-0 exit code is not treated as failure.
+#     false - any non-0 exit code is treated and logged as a failure
+# remaining args: ssh command to send
+_ssh_core () {
+    _ssh_setup
+    local ignore_errors=$1
+    shift
+    t_start="$(date +%s)"
+    OUTDIR="${TMPDIR}/${nstep}/0"
+    mkdir -p "$OUTDIR"
+    case "$ssh_mode" in
+        key|user)
+            ssh -tt $ssh_opts "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+        password|sshpass)
+            sshpass -e ssh -tt $ssh_opts "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+    esac
+    rc=$?
+    t_end="$(date +%s)"
+    dt=$(( $t_end - $t_start ))
+    if [ $rc -ne 0 ] && [ "$ignore_errors" == "false" ]; then
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [FAILURE] ssh $@"
+        cat $OUTDIR/std* >&2
+    else
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [SUCCESS] ssh $@"
+    fi
+    return $rc
+}
+
+# sends args passed to ssh program
+# non-0 exit code is treated and logged as failure
+# ex: _ssh hostname_to_send_to echo hello
+_ssh () {
+    _ssh_core false "$@"
+}
+
+# sends args passed to ssh program
+# non-0 exit code is ignore and still treated as success
+_ssh_ignore_failure () {
+    _ssh_core true "$@"
+}
+
+_ssh_copy () {
+    local file_dest=$1
+    shift
+
+    _ssh_setup
+    t_start="$(date +%s)"
+    OUTDIR="${TMPDIR}/${nstep}/0"
+    mkdir -p "$OUTDIR"
+    case "$ssh_mode" in
+        key|user)
+            ssh -tt $ssh_opts "$@" >"$file_dest" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+        password|sshpass)
+            sshpass -e ssh -tt $ssh_opts "$@" >"$file_dest" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+    esac
+    rc=$?
+    t_end="$(date +%s)"
+    dt=$(( $t_end - $t_start ))
+    if [ $rc -eq 0 ]; then
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [SUCCESS] ssh $@ > $file_dest"
+    else
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [FAILURE] ssh $@ > $file_dest"
+        cat $OUTDIR/std* >&2
+    fi
+    return $rc
+}
+
+_scp () {
+    _ssh_setup
+    t_start="$(date +%s)"
+    OUTDIR="${TMPDIR}/${nstep}/0"
+    mkdir -p "$OUTDIR"
+    case "$ssh_mode" in
+        key|user)
+            scp $ssh_opts "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+        password|sshpass)
+            sshpass -e scp $ssh_opts "$@" >"$OUTDIR/stdout" 2>"$OUTDIR/stderr" </dev/null
+            ;;
+    esac
+    rc=$?
+    t_end="$(date +%s)"
+    dt=$(( $t_end - $t_start ))
+    if [ $rc -eq 0 ]; then
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [SUCCESS] scp $@"
+    else
+        echo "[0] $(date --utc -d@$dt +'%H:%M:%S') [FAILURE] scp $@"
+        cat $OUTDIR/std* >&2
+    fi
+    return $rc
+}
+
+
+_step () {
+    nstep=$(( $nstep + 1 ))
+    echo "Step [$nstep/$tsteps]: $*"
+}
+
+license_check () {
+    nstep=0
+    tsteps=1
+    _step "Checking license"
+    check_file "$license_file" || die 2 "No license specified"
+    # cluster-install.sh can be run outside of the gui-installer container where we
+    # don't have /installer/licenseCheck
+    if test -x ${XCE_INSTALLER_ROOT}/installer/licenseCheck; then
+        checker_msg=`${XCE_INSTALLER_ROOT}/installer/licenseCheck ${XCE_INSTALLER_ROOT}/installer/EcdsaPub.key $license_file 2>&1`
+        checker_code=$?
+        if [[ $checker_code != 0 ]]; then
+            echo "[0] 00:00:00 [FAILURE] Invalid license: $license_code"
+            echo "[0] 00:00:00 [FAILURE] $checker_msg"
+            die 2 "Invalid license"
+        fi
+    fi
+    echo "[0] 00:00:00 [SUCCESS] Valid license"
+}
+
+check_user_identity () {
+    # check that user ids match
+    _step "Check the user ids"
+    _pssh 'echo -n "#%@" && id -u' || die $nstep "Unable to get uids for user $user"
+    _pssh_compare "$test_file" "User id" "#%@" || die $nstep $(cat $test_file)
+
+    # check that the group ids match
+    _step "Check the group ids"
+    _pssh 'echo -n "#%@" && id -g' || die $nstep "Unable to get gids for user $user"
+    _pssh_compare "$test_file" "Group id" "#%@" || die $nstep $(cat $test_file)
+    read group_id <$test_file
+
+    # check that the group names match
+    _step "Check the group names"
+    _pssh "echo -n '#%@' && getent group $group_id | cut -d: -f1" || die $nstep "Unable to get group names for user $user"
+    _pssh_compare "$test_file" "Group name" "#%@" || die $nstep $(cat $test_file)
+    read group_name <$test_file
+
+    XCE_USER=$user
+    XCE_GROUP=$group_name
+}
+
+tmpdir_test () {
+    local tmp_test_file="$1"
+    shift
+
+    file_test="if [ -e \"$1\" ] && ! [ -w \"$1\" ]; then echo '#%@false'; else echo '#%@true'; fi"
+    _pssh "$file_test" || die $nstep "Unable to test $1"
+    _pssh_compare "$tmp_test_file" "$1" "#%@" || die $nstep $(cat $tmp_test_file)
+    read tmp_test_result <$tmp_test_file
+
+    [ "$tmp_test_result" == "false" ] && die $nstep "$1 exists but is not writeable"
+}
+
+check_tmpdir () {
+    # check that tmp directories are writeable if they exist
+
+    _step "Check on /tmp/xcalar"
+    tmpdir_test "${TMPDIR}/tmpdir_test1" "/tmp/xcalar"
+
+    _step "Check on /tmp/${XCE_USER}"
+    tmpdir_test "${TMPDIR}/tmpdir_test2" "/tmp/${XCE_USER}"
+
+    _step "Check on /tmp/xcalar_sock"
+    tmpdir_test "${TMPDIR}/tmpdir_test3" "/tmp/xcalar_sock"
+}
+
+create_cluster_config_file () {
+    install_log_dir="$1"
+    # create the cluster config
+    _step "Create cluster config"
+    rm -f $TMPDIR/default.cfg
+    if _pssh_ignore_failure test -e /.dockerenv; then
+        cat > $TMPDIR/default.cfg <<-EOF
+		Constants.EnforceVALimit=false
+		Constants.BufferCacheLazyMemLocking=true
+		EOF
+    fi
+    if test -f "$priv_hosts_file"; then
+        genConfig.sh $template - $(cat $priv_hosts_file) >> $TMPDIR/default.cfg
+    else
+        genConfig.sh $template - $(cat $hosts_file) >> $TMPDIR/default.cfg
+    fi
+    test $? -eq 0 || die $nstep "Failed to create default.cfg"
+    echo "" >> $TMPDIR/default.cfg
+    echo "Constants.XcalarLogCompletePath=${install_log_dir}" >> $TMPDIR/default.cfg
+    sed_pre='s@^Constants.XcalarRootCompletePath=.*$@Constants.XcalarRootCompletePath='
+    sed_post='@g'
+    sed -i -Ee "$sed_pre$xce_root_path$sed_post" $TMPDIR/default.cfg
+    if [ -n "$serdes_dir" ]; then
+        echo "${serdes_config}=${serdes_dir}" >> $TMPDIR/default.cfg
+        echo "Constants.XdbSerDesMode=2" >> $TMPDIR/default.cfg
+    fi
+    if [ -n "$support_bundles" ]; then
+        echo "${support_bundles_config}=true" >> $TMPDIR/default.cfg
+    fi
+}
+
+# print value of tls derivative in a Caddyfile to stdout.
+# do not print anything else to stdout
+get_caddy_tls() {
+    if [ -z "$1" ]; then
+        echo "Must supply Caddyfile to grep tls from" >&2
+        exit 1
+    fi
+    local caddyfile="$1"
+    if [ ! -f "$caddyfile" ]; then
+        echo "Caddyfile $caddyfile does not exist or is not accessible." >&2
+        exit 1
+    fi
+    grep -oP '^\s+tls.*' "$caddyfile" | grep -oP '(?<=tls).*' | grep -oP '\S+.*'
+}
+
+# Replace a Caddyfile's tls derivative, with the tls derivative from another Caddyfile
+# $1: path to a Caddyfile to save tls value from
+# $2: path to a Caddyfile; replaces its tls derivative with tls from $1
+preserve_previous_caddy_configuration() {
+    if [ -z "$1" ]; then
+        echo "Must supply Caddyfile to get tls derivative from" >&2
+        exit 1
+    fi
+    if [ -z "$2" ]; then
+        echo "Must supply Caddyfile to copy tls derivative in to" >&2
+        exit 1
+    fi
+    local curr_caddyfile="$1"
+    local new_caddyfile="$2"
+    local tls_curr
+    tls_curr="$(get_caddy_tls $curr_caddyfile)"
+    local tls_new
+    tls_new="$(get_caddy_tls $new_caddyfile)"
+    sed -i "s@$tls_new@$tls_curr@g" $new_caddyfile
+}
+
+nfs_test_clean () {
+    max_hosts=$1
+    data_file=$2
+    success=0
+
+    for host in `seq 0 $max_hosts`; do
+        _ssh ${hosts_array[$host]} "/tmp/$user/nfs-test.sh clean $nfs_dest $data_file $host" || success=$?
+    done
+
+    return $success
+}
+
+nfs_write_test () {
+    max_hosts=$(( ${#hosts_array[*]}-1 ))
+    host_iter=$(seq 0 $max_hosts)
+    nstep=0
+    tsteps=5
+    success=0
+
+    _step "Copy clean scripts"
+    _pscp "$DIR/nfs-test.sh" "/tmp/$user/nfs-test.sh" || die $nstep "Unable to copy nfs-test.sh script"
+
+    _step "Generate data"
+    for host in $host_iter; do
+        names_array[$host]="${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
+        data_array[$host]="${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
+    done
+    host_names=$( IFS=$':'; echo "${names_array[*]}" )
+    host_data=$( IFS=$':'; echo "${data_array[*]}" )
+    echo "$host_names" > $TMPDIR/nfs-test-data.txt
+    echo "$host_data" >> $TMPDIR/nfs-test-data.txt
+    data_file="/tmp/$user/nfs-test-data.txt"
+    _pscp "$TMPDIR/nfs-test-data.txt" $data_file || die $nstep "Unable to copy nfs test data"
+
+    _step "Write test files"
+    success=0
+    for host in $host_iter; do
+        _ssh ${hosts_array[$host]} "/usr/bin/env bash -exec \"set -o pipefail; /tmp/$user/nfs-test.sh write $nfs_dest $data_file $host 2>&1 | tee /tmp/$user/nfs-write.log\""
+        success=$?
+        [ "$success" != "0" ] && break
+    done
+
+    if [ "$success" != "0" ]; then
+        nfs_test_clean $max_hosts $host_names
+        die $nstep "Shared storage test write permission failure on $host: $success"
+    fi
+
+    _step "Test written files"
+    success=0
+    _pssh "/usr/bin/env bash -exec \"set -o pipefail; /tmp/$user/nfs-test.sh test $nfs_dest $data_file none 2>&1 | tee /tmp/$user/nfs-test.log\""
+    success=$?
+
+    if [ "$success" != "0" ]; then
+        nfs_test_clean $max_hosts $data_file
+        die $nstep "Shared storage test data presence failure"
+    fi
+
+    _step "Clean up test files"
+    nfs_test_clean $max_hosts $data_file
+}
+
+nfs_setup () {
+    nstep=0
+    tsteps=5
+
+    # valid nfs modes: reuse, create, external
+
+    case "$nfs_mode" in
+        reuse)
+            nstep=0
+            tsteps=4
+            file_tag=$RANDOM
+            test_file="$nfs_dest/nfs_test.${RANDOM}"
+
+            _step "Verify that all the mount points exist"
+            _pssh "test -d $nfs_dest"
+
+            _step "Creating an empty test file"
+            _ssh ${hosts_array[0]} "touch $test_file"
+
+            _step "Checking for empty test file"
+            _pssh "test -f $test_file"
+
+            _step "Removing empty test file"
+            _ssh ${hosts_array[0]} "rm -f $test_file"
+            return 0
+            ;;
+        create)
+            tsteps=6
+            # create is external with different presets
+            nfs_dest="$xce_root_path"
+            nfs_host="${hosts_array[0]}"
+            [ -n "${priv_hosts_array[0]}" ] && nfs_host="${priv_hosts_array[0]}"
+            nfs_folder="/srv/xcalar"
+
+            _step "Set up NFS server"
+            nfs_setup_host="${hosts_array[0]}"
+            nfs_setup_host="${nfs_setup_host%%:*}"
+            nfs_setup_port="${nfs_setup_host##*:}"
+            [ "$nfs_setup_host" != "$nfs_setup_port" ] && extra_opts="-o Port=$nfs_setup_port"
+            _scp $extra_opts "$DIR/nfs-init.sh" $nfs_setup_host:/tmp/$user/nfs-init.sh
+            _ssh $extra_opts $nfs_setup_host "/usr/bin/env bash -exec \"$sudo /tmp/$user/nfs-init.sh 2>&1 | tee /tmp/$user/nfs-init.log\""
+            ;;
+        external)
+            nfs_dest="$xce_root_path"
+            # nfs_host and nfs_folder should be set
+             ;;
+    esac
+
+    _step "Deploy nfs mount fstab"
+    echo "$nfs_host:$nfs_folder $nfs_dest   nfs   defaults   0  0 #xcalar_mnt" > "$TMPDIR/fstab"
+    _pscp "$TMPDIR/fstab" "/tmp/$user/fstab"
+
+    _step "Add nfs mount to fstab"
+    _pssh "sed -e '/#xcalar_mnt/d' /etc/fstab  > /tmp/$user/fstab.new && cat /tmp/$user/fstab >> /tmp/$user/fstab.new && $sudo chown root:root /tmp/$user/fstab.new && $sudo mv /tmp/$user/fstab.new /etc/fstab"
+
+    _step "Start rpcbind"
+    _pssh "$sudo chkconfig rpcbind on; $sudo service rpcbind start"
+
+    # NFS client services
+    _step "Start NFS client services"
+    _pssh "if test -e /lib/systemd/system/nfs-client.target; then $sudo systemctl enable nfs-client.target; $sudo systemctl start nfs-client.target; else $sudo chkconfig nfs on; $sudo service nfs restart; fi"
+
+    _step "Mount $nfs_host:$nfs_folder on cluster"
+    _pssh "$remote_path sudo systemctl stop xcalar.service"
+    _pssh "if test -d $nfs_dest && mountpoint -q $nfs_dest; then $sudo umount $nfs_dest; fi"
+    _pssh "$sudo mkdir -p $nfs_dest && $sudo mount $nfs_dest" || die $nstep "Failed to mount $nfs_host:$nfs_folder to $nfs_dest"
+    _pssh "$sudo chown $XCE_USER:$XCE_GROUP $nfs_dest"
+}
+
+ldap_install () {
+    local xlrdir="$1"
+
+    if [ "$ldap_mode" != "create" ]; then
+        return 0
+    fi
+
+    ldap_uninstall "$xlrdir"
+
+    nstep=0
+    tsteps=2
+    # this is paired with xceConfigDir and xceConfigFile in ldapInstaller.py
+    ldap_config_file='/tmp/ldapConfig.json'
+    ldap_config_dest="${XCE_INSTALLER_ROOT}/config/ldapConfig.json"
+
+    ldap_host="${hosts_array[0]}"
+    ldap_priv="${priv_hosts_array[0]}"
+    if [ -z "$ldap_priv" ]; then
+        ldap_priv="${hosts_array[0]}"
+    fi
+
+    _step "Running the LDAP installer"
+    _ssh $ldap_host $sudo ${xlrdir}/bin/python3.6 -B ${xlrdir}/scripts/ldapInstaller.py -c install -d $ldap_domain -p \"$ldap_password\" -a $ldap_priv -o \"$ldap_org\" -u
+    rc=$?
+
+    if [ $rc = 0 ]; then
+        _step "Copying the configuration file to the Docker"
+        _ssh_copy $ldap_config_dest $ldap_host cat $ldap_config_file
+    else
+        die $nstep "Error during ldap installation"
+    fi
+}
+
+ldap_uninstall() {
+    local xlrdir="$1"
+
+    nstep=0
+    tsteps=1
+
+    ldap_host="${hosts_array[0]}"
+    _step "Running the LDAP uninstaller"
+    _ssh $ldap_host $sudo ${xlrdir}/bin/python3.6 -B ${xlrdir}/scripts/ldapInstaller.py -c erase
+}
+
+test_dst_empty() {
+   local dst_path="$1"
+
+   _ssh $nfs_file_host "/bin/bash -c 'test -z \"\$(ls -A $dst_path)\"'" || die $nstep "New XcalarRoot directory $dst_path is not empty (or unreadable); it must be empty"
+}
+
+test_src_dst_identity() {
+    local src_path="$1"
+    local dst_path="$2"
+    ident_fname="identity.${RANDOM}"
+    src_fname="${src_path}/${ident_fname}"
+    dst_fname="${dst_path}/${ident_fname}"
+
+    _ssh $nfs_file_host "touch $src_fname" || die $nstep "Unable to write file to ${src_path} for pre-copy verification"
+    _ssh $nfs_file_host "if test -f ${dst_fname}; then rc=1; else rc=0; fi; rm ${src_fname}; exit $rc" || die $nstep "Copy source and destination filesystems appear to be the same. Copy failed."
+}
+
+copy_xcalar_root() {
+    local cluster_config_file="$1"
+    data_sep="#%@"
+
+    if [ "$nfs_copy" -ne 0 ]; then
+        nstep=0
+        tsteps=5
+
+        nfs_file_host="${hosts_array[0]}"
+
+        _step "Determine if the new NFS share is different from the old"
+        _ssh $nfs_file_host "awk -F'=' '/^Constants.XcalarRootCompletePath/{print \"$data_sep\"\$2}' ${cluster_config_file}" || die $nstep "Unable to read default.cfg file to set up NFS copy"
+        OUTDIR="${TMPDIR}/${nstep}/0"
+        old_xcalar_root=$(cat "${OUTDIR}/stdout" | tail -1 | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+
+        old_nfs_mode=""
+        if [ "$old_xcalar_root" != "/mnt/xcalar" ]; then
+            old_nfs_mode="reuse"
+        else
+            _ssh $nfs_file_host "grep '#xcalar_mnt' /etc/fstab"
+            rc=$?
+
+            if [ "$rc" == "0" ]; then
+                old_nfs_host=$(cat ${OUTDIR}/stdout | awk '{ print $1 }' | cut -d ':' -f1)
+                old_nfs_folder=$(cat ${OUTDIR}/stdout | awk '{ print $1 }' | cut -d ':' -f2)
+                old_nfs_dir=$(cat ${OUTDIR}/stdout | awk '{ print $2 }')
+
+                [ "$old_nfs_dir" != "$old_xcalar_root" ] && die $nstep "XcalarRoot is /mnt/xcalar but #xcalar_mnt directory is $old_nfs_dir"
+
+                old_nfs_host_found=0
+                for host in ${hosts_array[@]} ${priv_hosts_array[@]}; do
+                    if [ "$old_nfs_host" == "$host" ]; then
+                        old_nfs_host_found=1
+                        break;
+                    fi
+                done
+
+                if [ "$old_nfs_host_found" == "1" ] && [ "$old_nfs_folder" == "/srv/xcalar" ]; then
+                    old_nfs_mode="create"
+                elif [ "$old_nfs_host_found" == "0" ]; then
+                    old_nfs_mode="external"
+                fi
+            fi
+        fi
+
+        [ -z "$old_nfs_mode" ] && die $nstep "Unable to determine type of XcalarRoot installation for copy; please perform the copy manually and use the \"Existing Shared Storage Already Mounted\" option"
+
+        perform_nfs_copy="1"
+
+        if [ "$old_nfs_mode" == "create" ] || [ "$old_nfs_mode" == "external" ]; then
+            if [ "$nfs_mode" == "reuse" ] && [ "$nfs_dest" == "/mnt/xcalar" ]; then
+                say "Reusing existing xcalar-created mount.  Copy not necessary"
+                 perform_nfs_copy="0"
+            fi
+        fi
+
+        if [ "$old_nfs_mode" == "create" ] && [ "$nfs_mode" == "create" ]; then
+            perform_nfs_copy="0"
+        elif [ "$old_nfs_mode" == "reuse" ] && [ "$nfs_mode" == "reuse" ]; then
+            if [ "$nfs_dest" == "$old_xcalar_root" ]; then
+                perform_nfs_copy="0"
+            fi
+        elif [ "$old_nfs_mode" == "external" ] && [ "$nfs_mode" == "external" ]; then
+            if [ "$old_nfs_host" == "$nfs_host" ] && [ "$old_nfs_folder" == "$nfs_folder" ]; then
+                perform_nfs_copy="0"
+            fi
+        fi
+
+        if [ "$perform_nfs_copy" == "0" ]; then
+            _step "Create temporary mount point on ${hosts_array[0]} (not needed)"
+            _step "Copy files from old to new (not needed)"
+            _step "Remove temporary mount point (not needed)"
+            _step "Update default.cfg (not needed)"
+            return 0
+        fi
+
+        case "$nfs_mode" in
+            reuse)
+                _step "Create temporary mount point on ${hosts_array[0]} (not needed)"
+                _step "Copy files from old to new"
+                test_dst_empty "$nfs_dest"
+                test_src_dst_identity "$old_xcalar_root" "$nfs_dest"
+                _ssh $nfs_file_host "cp -rp ${old_xcalar_root}/* $nfs_dest" || die $nstep "Unable to copy files from ${old_xcalar_root} to ${nfs_dest}"
+                _step "Remove temporary mount point (not needed)"
+                new_xcalar_root="$nfs_dest"
+                ;;
+            create)
+                _step "Create /srv/xcalar on $nfs_file_host"
+                _ssh "$nfs_file_host" "$sudo mkdir -p /srv/xcalar" || die $nstep "Unable to create /srv/xcalar/ on host $nfs_file_host"
+                test_dst_empty "/srv/xcalar"
+                test_src_dst_identity "$old_xcalar_root" "/srv/xcalar"
+                _step "Copy files from old to new"
+                _ssh $nfs_file_host "sudo cp -rp ${old_xcalar_root}/* /srv/xcalar" || die $nstep "Error copying files /srv/xcalar/ on host $nfs_file_host"
+                _step "Remove temporary mount point (not needed)"
+                new_xcalar_root="/mnt/xcalar"
+                ;;
+            external)
+                tmp_mount="/tmp/xcalar_mountpt"
+                _step "Create /tmp/xcalar_mountpt on $nfs_file_host"
+                _ssh "$nfs_file_host" "if test -d $tmp_mount && mountpoint -q $tmp_mount; then $sudo umount $tmp_mount; fi"
+                _ssh "$nfs_file_host" "$sudo mkdir -p $tmp_mount && $sudo mount -t nfs $nfs_host:$nfs_folder $tmp_mount" || die $nstep "Unable to mount $nfs_host:$nfs_folder on $nfs_file_host for copy"
+                test_dst_empty "$tmp_mount"
+                test_src_dst_identity "$old_xcalar_root" "$tmp_mount"
+                _step "Copy files from old to new"
+                _ssh $nfs_file_host "$sudo cp -rp ${old_xcalar_root}/* $tmp_mount" || die $nstep "Error copying files $tmp_mount on host $nfs_file_host"
+                _step "Remove temporary mount point"
+                _ssh "$nfs_file_host" "if test -d $tmp_mount && mountpoint -q $tmp_mount; then $sudo umount $tmp_mount && sudo rmdir $tmp_mount; fi"
+                new_xcalar_root="/mnt/xcalar"
+                ;;
+        esac
+
+        _step "Update default.cfg"
+        _pssh "sed -i -e 's:^Constants.XcalarRootCompletePath=${old_xcalar_root}:Constants.XcalarRootCompletePath=${new_xcalar_root}:g' $cluster_config_file"
+    fi
+}
+
+get_cluster_config () {
+    local cluster_config_file="$1"
+    local cluster_license_file="$2"
+    local cluster_defaults_file="$3"
+    OUTDIR="${TMPDIR}/${nstep}/0"
+    cluster_host="${hosts_array[0]}"
+    cluster_config_dir="${TMPDIR}/cluster_config"
+    data_sep="#%@"
+
+    nstep=0
+    tsteps=8
+
+    # check if we can contact the hosts
+    _step "Check host connection"
+    _ssh $cluster_host "ls -l" || die $nstep "Cluster host unreachable"
+
+    # verify that the RPM version of Xcalar is not installed
+    _step "Check for colliding Xcalar installs"
+    if _ssh_ignore_failure $cluster_host "test -f /etc/default/xcalar"; then
+        die $nstep "/etc/default/xcalar file exists on one or more nodes, indicating that an incompatable Xcalar install may exist.  Uninstall Xcalar and delete the file to avoid problems running this version of Xcalar."
+    fi
+
+    _step "Retrieve XcalarRootCompletePath"
+    root_detect_cmd="awk -F'=' '/^Constants.XcalarRootCompletePath/{print \"$data_sep\"\$2}' $cluster_config_file"
+    _ssh $cluster_host "$root_detect_cmd" || die $nstep "Unable to locate XcalarRoot"
+    xcalar_root=$(cat "${OUTDIR}/stdout" | tail -1 | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+
+    _step "Retrieve XdbDemandPaging"
+    serdes_dir=""
+    serdes_arg=""
+    serdes_detect_cmd="awk -F'=' '/^${serdes_config}/{print \"$data_sep\"\$2}' $cluster_config_file"
+    _ssh $cluster_host "$serdes_detect_cmd" || die $nstep "Unable to locate XdbDemandPaging"
+    xcalar_serdes=$(cat "${OUTDIR}/stdout" | tail -1 | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+    if [ -n "$xcalar_serdes" ]; then  # when DemandPaging is 0
+        serdes_dir=$(echo $xcalar_serdes | tr -d '\r' |  tr -d '\n')
+        serdes_arg="-d ${serdes_dir}"
+    fi
+
+    _step "Locate Xcalar Root Mount Point"
+    mount_detect_cmd="df -h $xcalar_root | tail -n +2 | head -1 | awk '{ print \"$data_sep\"\$1 }'"
+    _ssh $cluster_host "$mount_detect_cmd" || die $nstep "Unable to get NFS mount"
+    xcalar_root_mount=$(cat "${OUTDIR}/stdout" | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+
+    _step "Determine if Xcalar Root Mount Point was created during Xcalar Install"
+    mount_created_cmd="/usr/bin/env bash -c \"grep /etc/fstab '#xcalar_mnt' 2>/dev/null | grep '$xcalar_root_mount' 2>&1 >/dev/null\"; echo \\$data_sep\$?"
+    _ssh $cluster_host "$mount_created_cmd"
+    xcalar_created_mount=$(cat "${OUTDIR}/stdout" | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+
+    local mount_server=""
+    local mount_path=""
+    if [ "${xcalar_root_mount##*:}" != "$xcalar_root_mount" ]; then
+        mount_server="${xcalar_root_mount%%:*}"
+        mount_path="${xcalar_root_mount##*:}"
+    else
+        mount_path="${xcalar_root_mount}"
+    fi
+
+    rm -rf $cluster_config_dir && mkdir -p $cluster_config_dir
+
+    _step "Retrieve installer config files"
+    _scp "${cluster_host}:${xcalar_root}/config/*" "$cluster_config_dir"
+    _scp "${cluster_host}:${cluster_license_file}" "$cluster_config_dir"
+    _scp "${cluster_host}:${cluster_defaults_file}" "${cluster_config_dir}/xcalar.defaults"
+
+    for json_file in "${cluster_config_dir}"/*.json; do
+        # if no files found, the '*' is preserved, so
+        # make sure the file exists
+        if [ -f "$json_file" ]; then
+            base_file="$(basename "$json_file")"
+            jq . "$json_file" >/dev/null 2>&1 || die $nstep "${xcalar_root}/config/${base_file} is not properly formatted json"
+        fi
+    done
+
+    [ -f "$cluster_config_dir/XcalarLic.key" ] && cp "$cluster_config_dir/XcalarLic.key" "${XCE_INSTALLER_ROOT}/config"
+    [ -f "${cluster_config_dir}/xcalar.defaults" ] && cp "${cluster_config_dir}/xcalar.defaults" "${XCE_INSTALLER_ROOT}/config"
+
+    _step "Test for all installer config files"
+    # we don't check for XcalarLic.key because it isn't strictly necessary to upgrade
+    ! test -e "${cluster_config_dir}/hosts.txt" -a -e "${cluster_config_dir}/privHosts.txt" && die $nstep "One or more cluster configuration files were not found.  Verify that they exist in ${xcalar_root}/config."
+
+    ${DIR}/report-config.py -c "$cluster_config_dir" -s "$mount_server" -p "$mount_path" -r "$xcalar_root" -m "$xcalar_created_mount" $serdes_arg > "${XCE_INSTALLER_ROOT}/tmp/config.json"
+    echo -n "$xcalar_root" > "${XCE_INSTALLER_ROOT}/tmp/clusterXcalarRoot"
+}
+
+upgrade_shared_config () {
+    local cluster_config_file="$1"
+    nstep=0
+    tsteps=4
+    cluster_host="${hosts_array[0]}"
+    data_sep="#%@"
+
+    _step "Get XcalarRoot for LDAP config update"
+    root_detect_cmd="awk -F'=' '/^Constants.XcalarRootCompletePath/{print \"$data_sep\"\$2}' $cluster_config_file"
+    _ssh $cluster_host "$root_detect_cmd" || die $nstep "Unable to locate XcalarRoot"
+    xcalar_root=$(cat "${OUTDIR}/stdout" | tail -1 | awk -F "$data_sep" '{ print $2 }' | tr -d '\n' | tr -d '\r')
+
+    _step "Update LDAP config"
+    local_ldap_config="${XCE_INSTALLER_ROOT}/config/ldapConfig.json"
+    remote_ldap_config="${xcalar_root}/config/ldapConfig.json";
+    ldap_config_enabled=$(jq '.ldapConfigEnabled' $local_ldap_config)
+    local_hot_patch_config="${XCE_INSTALLER_ROOT}/config/hotPatch.json"
+    remote_hot_patch_config="${xcalar_root}/config/hotPatch.json"
+
+    if [ "$ldap_config_enabled" == "null" ]; then
+        cat $local_ldap_config | jq '. + {"ldapConfigEnabled": true}' > "${local_ldap_config}.new"
+        _scp "${local_ldap_config}.new" "${cluster_host}:${remote_ldap_config}" || die $nstep "Unable to copy ${local_ldap_config}.new to ${remote_ldap_config}"
+    fi
+
+    _step "Update Hot Patch config"
+    ! test -f "$local_hot_patch_config" && setup_hot_patches
+    _scp "$local_hot_patch_config" "${cluster_host}:${remote_hot_patch_config}" || die "Unable to copy ${local_hot_patch_config} to ${remote_hot_patch_config}"
+
+    _step "Creating JWT secret"
+    if ! [ -f "${XCE_INSTALLER_ROOT}/config/authSecret" ]; then
+        python ${DIR}/stringSeed.py > "${XCE_INSTALLER_ROOT}/config/authSecret"
+        chmod 600 "${XCE_INSTALLER_ROOT}/config/authSecret"
+        _scp "${XCE_INSTALLER_ROOT}/config/authSecret" "${cluster_host}:${xcalar_root}/config" || die "Unable to copy ${XCE_INSTALLER_ROOT}/config/authSecret to ${xcalar_root}/config"
+    fi
+}
+
+create_default_user () {
+    nstep=0
+    tsteps=1
+    cluster_host="${hosts_array[0]}"
+
+    if [ "$default_admin" != "1" ]; then
+        return;
+    fi
+
+    _step "Create defaut admin config"
+    local_default_admin_config="${XCE_INSTALLER_ROOT}/config/defaultAdmin.json"
+
+    ${DIR}/default-admin.py -e "$admin_email" -p "$admin_password" -u "$admin_username" > "$local_default_admin_config"
+    chmod 600 "$local_default_admin_config"
+}
+
+setup_hot_patches () {
+    hot_patch_file="${XCE_INSTALLER_ROOT}/config/hotPatch.json"
+
+    if [ -n "$enable_hotPatches" ]; then
+        echo '{ "hotPatchEnabled": true }' > "$hot_patch_file"
+    else
+        echo '{ "hotPatchEnabled": false }' > "$hot_patch_file"
+    fi
+}

@@ -1,0 +1,474 @@
+{
+    "tables": [
+        {
+            "name": "airlines#21",
+            "columns": [
+                {
+                    "columnName": "airlines::MonthDayYear",
+                    "headerAlias": "MonthDayYear"
+                },
+                {
+                    "columnName": "airlines::DayOfWeek",
+                    "headerAlias": "DayOfWeek"
+                },
+                {
+                    "columnName": "airlines::DepTime",
+                    "headerAlias": "DepTime"
+                },
+                {
+                    "columnName": "airlines::ArrTime",
+                    "headerAlias": "ArrTime"
+                },
+                {
+                    "columnName": "airlines::Carrier",
+                    "headerAlias": "Carrier"
+                },
+                {
+                    "columnName": "airlines::FlightNum",
+                    "headerAlias": "FlightNum"
+                },
+                {
+                    "columnName": "airlines::TailNum",
+                    "headerAlias": "TailNum"
+                },
+                {
+                    "columnName": "airlines::AirTime",
+                    "headerAlias": "AirTime"
+                },
+                {
+                    "columnName": "airlines::ArrDelay",
+                    "headerAlias": "ArrDelay"
+                },
+                {
+                    "columnName": "airlines::DepDelay",
+                    "headerAlias": "DepDelay"
+                },
+                {
+                    "columnName": "airlines::Origin",
+                    "headerAlias": "Origin"
+                },
+                {
+                    "columnName": "airlines::Destination",
+                    "headerAlias": "Destination"
+                },
+                {
+                    "columnName": "airlines::Distance",
+                    "headerAlias": "Distance"
+                },
+                {
+                    "columnName": "airlines::TaxiIn",
+                    "headerAlias": "TaxiIn"
+                },
+                {
+                    "columnName": "airlines::TaxiOut",
+                    "headerAlias": "TaxiOut"
+                }
+            ]
+        }
+    ],
+    "schema hints": [
+        {
+            "columnName": "MonthDayYear",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DayOfWeek",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Carrier",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "FlightNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TailNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "AirTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Origin",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Destination",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Distance",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiIn",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiOut",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "MonthDayYear",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DayOfWeek",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Carrier",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "FlightNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TailNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "AirTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Origin",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Destination",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Distance",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiIn",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiOut",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "MonthDayYear",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DayOfWeek",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Carrier",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "FlightNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TailNum",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "AirTime",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "ArrDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "DepDelay",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Origin",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Destination",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "Distance",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiIn",
+            "type": "DfUnknown"
+        },
+        {
+            "columnName": "TaxiOut",
+            "type": "DfUnknown"
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.support@xcalar.com.21786.airlines",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/XcalarTraining/airlines.csv",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"isCRLF\":true,\"linesToSkip\":1,\"quoteDelim\":\"\\\"\",\"hasHeader\":true,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": [
+                            {
+                                "sourceColumn": "MonthDayYear",
+                                "destColumn": "MonthDayYear",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "DayOfWeek",
+                                "destColumn": "DayOfWeek",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "DepTime",
+                                "destColumn": "DepTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "ArrTime",
+                                "destColumn": "ArrTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Carrier",
+                                "destColumn": "Carrier",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "FlightNum",
+                                "destColumn": "FlightNum",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TailNum",
+                                "destColumn": "TailNum",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "AirTime",
+                                "destColumn": "AirTime",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "ArrDelay",
+                                "destColumn": "ArrDelay",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "DepDelay",
+                                "destColumn": "DepDelay",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Origin",
+                                "destColumn": "Origin",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Destination",
+                                "destColumn": "Destination",
+                                "columnType": "DfString"
+                            },
+                            {
+                                "sourceColumn": "Distance",
+                                "destColumn": "Distance",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TaxiIn",
+                                "destColumn": "TaxiIn",
+                                "columnType": "DfInt64"
+                            },
+                            {
+                                "sourceColumn": "TaxiOut",
+                                "destColumn": "TaxiOut",
+                                "columnType": "DfInt64"
+                            }
+                        ]
+                    },
+                    "size": 10737418240
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#21",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.support@xcalar.com.21786.airlines",
+                "dest": "airlines#21",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "airlines-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "airlines",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "airlines#21",
+                "fileName": "export-airlines#21.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.airlines#21",
+                "columns": [
+                    {
+                        "columnName": "airlines::MonthDayYear",
+                        "headerName": "MonthDayYear"
+                    },
+                    {
+                        "columnName": "airlines::DayOfWeek",
+                        "headerName": "DayOfWeek"
+                    },
+                    {
+                        "columnName": "airlines::DepTime",
+                        "headerName": "DepTime"
+                    },
+                    {
+                        "columnName": "airlines::ArrTime",
+                        "headerName": "ArrTime"
+                    },
+                    {
+                        "columnName": "airlines::Carrier",
+                        "headerName": "Carrier"
+                    },
+                    {
+                        "columnName": "airlines::FlightNum",
+                        "headerName": "FlightNum"
+                    },
+                    {
+                        "columnName": "airlines::TailNum",
+                        "headerName": "TailNum"
+                    },
+                    {
+                        "columnName": "airlines::AirTime",
+                        "headerName": "AirTime"
+                    },
+                    {
+                        "columnName": "airlines::ArrDelay",
+                        "headerName": "ArrDelay"
+                    },
+                    {
+                        "columnName": "airlines::DepDelay",
+                        "headerName": "DepDelay"
+                    },
+                    {
+                        "columnName": "airlines::Origin",
+                        "headerName": "Origin"
+                    },
+                    {
+                        "columnName": "airlines::Destination",
+                        "headerName": "Destination"
+                    },
+                    {
+                        "columnName": "airlines::Distance",
+                        "headerName": "Distance"
+                    },
+                    {
+                        "columnName": "airlines::TaxiIn",
+                        "headerName": "TaxiIn"
+                    },
+                    {
+                        "columnName": "airlines::TaxiOut",
+                        "headerName": "TaxiOut"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "deleteAndReplace",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.0.1-2138-xcalardev-3625fb3f-f9fdabe2",
+    "dataflowVersion": 1
+}

@@ -1,0 +1,12 @@
+To convert the SQL-compiled raw Xcalar Query into a functioning retina using retinaSrcTables, run convertToDataflow.py
+
+This logs into your live Xcalar instance, and attempts to find the source tables in your session in order to create the batch dataflow with these source tables
+
+For example
+python convertToDataflow.py -f ./dcrRaw.json -x localhost -u admin -s untitled-admin-1 -d destTable.json
+g_lastkc#bF3143 => g_lastkc#pZ5
+g_lastkcqc#bF3144 => g_lastkcqc#pZ6
+g_inouttbl#bF3139 => g_inouttbl#pZ1
+g_iodetail#bF3145 => g_iodetail#pZ3
+g_inouttbl_zmd#bF3140 => g_inouttbl_zmd#pZ2
+g_iodetail_zmd#bF3142 => g_iodetail_zmd#pZ4

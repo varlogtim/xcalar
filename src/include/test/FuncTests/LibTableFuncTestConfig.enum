@@ -1,0 +1,11 @@
+enum LibTableFuncTestConfig {
+    LibTableFuncTestNumberOfThreads:"LibTableFuncTestNumberOfThreads",
+    LibTableFuncTestNumberOfPublishingTables:"LibTableFuncTestNumberOfPublishingTables",
+    LibTableFuncTestNumberOfPublishingSessions:"LibTableFuncTestNumberOfPublishingSessions",
+    LibTableFuncTesttbNumberOfStressPublish:"LibTableFuncTesttbNumberOfStressPublish",
+    LibTableFuncTestNumberOfOnRequestMsgTables:"LibTableFuncTestNumberOfOnRequestMsgTables",
+    LibTableFuncTestNumberOfStressTables:"LibTableFuncTestNumberOfStressTables",
+    LibTableFuncTestNumberOfStressSessions:"LibTableFuncTestNumberOfStressSessions",
+    LibTableFuncTestNumberOfSanityIterations:"LibTableFuncTestNumberOfSanityIterations",
+    LibTableFuncTestStressTimeSec:"LibTableFuncTestStressTimeSec",
+}

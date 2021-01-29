@@ -1,0 +1,1 @@
+add_xce_library(liboptimizer STATIC Optimizer.cpp)

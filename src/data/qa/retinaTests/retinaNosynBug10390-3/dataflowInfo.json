@@ -1,0 +1,202 @@
+{
+    "tables": [
+        {
+            "name": "temp-4815",
+            "columns": [
+                {
+                    "columnName": "dsPrefix-27661-4273::review_count",
+                    "headerAlias": "dsPrefix-27661-4273::review_count"
+                },
+                {
+                    "columnName": "dsPrefix-27661-4275::yelping_since",
+                    "headerAlias": "dsPrefix-27661-4275::yelping_since"
+                },
+                {
+                    "columnName": "dsPrefix-27661-4275::votes.funny",
+                    "headerAlias": "dsPrefix-27661-4275::votes.funny"
+                },
+                {
+                    "columnName": "dsPrefix-27661-4275::name",
+                    "headerAlias": "dsPrefix-27661-4275::name"
+                },
+                {
+                    "columnName": "dsPrefix-27661-4275::user_id",
+                    "headerAlias": "dsPrefix-27661-4275::user_id"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "args": {
+                "dest": ".XcalarDS.operatorsFuncTestUser-1-node1",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/yelp/user/",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}"
+                    },
+                    "size": 104857600
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node1",
+                "dest": "RN0temp-1042",
+                "key": [
+                    {
+                        "name": "user_id",
+                        "keyFieldName": "prefix-25797-982-user_id",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-25797-982",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "args": {
+                "source": ".XcalarDS.operatorsFuncTestUser-1-node1",
+                "dest": "temp-1468",
+                "key": [
+                    {
+                        "name": "user_id",
+                        "keyFieldName": "prefix-25797-982-user_id",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-25797-982",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiAggregate",
+            "args": {
+                "source": "RN0temp-1042",
+                "dest": "temp-3905",
+                "eval": [
+                    {
+                        "evalString": "count(prefix-25797-982-user_id)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "args": {
+                "source": [
+                    "RN0temp-1042",
+                    "temp-1468"
+                ],
+                "dest": "RN0temp-4314",
+                "joinType": "innerJoin",
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "prefix-25797-982",
+                            "destColumn": "dsPrefix-27661-4273",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-25797-982-user_id",
+                            "destColumn": "col-27661-4274",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "prefix-25797-982",
+                            "destColumn": "dsPrefix-27661-4275",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "prefix-25797-982-user_id",
+                            "destColumn": "col-27661-4276",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "args": {
+                "source": "RN0temp-4314",
+                "dest": "temp-4815",
+                "eval": [
+                    {
+                        "evalString": "lt(float(dsPrefix-27661-4275::user_id), float(^temp-3905))"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "args": {
+                "source": "temp-4815",
+                "fileName": "export-temp-4815.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.temp-4815",
+                "columns": [
+                    {
+                        "columnName": "dsPrefix-27661-4273::review_count",
+                        "headerName": "dsPrefix-27661-4273::review_count"
+                    },
+                    {
+                        "columnName": "dsPrefix-27661-4275::yelping_since",
+                        "headerName": "dsPrefix-27661-4275::yelping_since"
+                    },
+                    {
+                        "columnName": "dsPrefix-27661-4275::votes.funny",
+                        "headerName": "dsPrefix-27661-4275::votes.funny"
+                    },
+                    {
+                        "columnName": "dsPrefix-27661-4275::name",
+                        "headerName": "dsPrefix-27661-4275::name"
+                    },
+                    {
+                        "columnName": "dsPrefix-27661-4275::user_id",
+                        "headerName": "dsPrefix-27661-4275::user_id"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 801,
+                "splitNumFiles": 504403158288296352,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1421-xcalardev-f5bfb18c-af9f79a3",
+    "dataflowVersion": 1
+}

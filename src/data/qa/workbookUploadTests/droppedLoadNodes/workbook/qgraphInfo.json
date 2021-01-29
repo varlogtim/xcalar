@@ -1,0 +1,109 @@
+[
+    {
+        "operation": "XcalarApiBulkLoad",
+        "comment": "",
+        "tag": "",
+        "state": "Dropped",
+        "args": {
+            "dest": ".XcalarDS.pmaddipatla@xcalar.com.60874.phani_test",
+            "loadArgs": {
+                "sourceArgsList": [
+                    {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/phani-test/phani_test.csv",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    }
+                ],
+                "parseArgs": {
+                    "parserFnName": "default:parseCsv",
+                    "parserArgJson": "{\"recordDelim\":\"\\n\",\"fieldDelim\":\"\\t\",\"isCRLF\":true,\"linesToSkip\":0,\"quoteDelim\":\"\\\"\",\"hasHeader\":false,\"schemaFile\":\"\",\"schemaMode\":\"loadInput\"}",
+                    "fileNameFieldName": "",
+                    "recordNumFieldName": "",
+                    "allowFileErrors": false,
+                    "allowRecordErrors": false,
+                    "schema": [
+                        {
+                            "sourceColumn": "column0",
+                            "destColumn": "column0",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "column1",
+                            "destColumn": "column1",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "column2",
+                            "destColumn": "column2",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                },
+                "size": 10737418240
+            }
+        }
+    },
+    {
+        "operation": "XcalarApiIndex",
+        "comment": "",
+        "tag": "indexFromDataset#1",
+        "state": "Dropped",
+        "args": {
+            "source": ".XcalarDS.pmaddipatla@xcalar.com.60874.phani_test",
+            "dest": "phani_test#1",
+            "key": [
+                {
+                    "name": "xcalarRecordNum",
+                    "keyFieldName": "phani_test-xcalarRecordNum",
+                    "type": "DfInt64",
+                    "ordering": "Unordered"
+                }
+            ],
+            "prefix": "phani_test",
+            "dhtName": "",
+            "delaySort": false,
+            "broadcast": false
+        }
+    },
+    {
+        "operation": "XcalarApiMap",
+        "comment": "",
+        "tag": "changeType#2",
+        "state": "Dropped",
+        "args": {
+            "source": "phani_test#1",
+            "dest": "phani_test#2",
+            "eval": [
+                {
+                    "evalString": "string(phani_test::column0)",
+                    "newField": "column0"
+                },
+                {
+                    "evalString": "string(phani_test::column1)",
+                    "newField": "column1"
+                },
+                {
+                    "evalString": "string(phani_test::column2)",
+                    "newField": "column2"
+                }
+            ],
+            "icv": false
+        }
+    },
+    {
+        "operation": "XcalarApiProject",
+        "comment": "",
+        "tag": "project#3",
+        "state": "Created",
+        "args": {
+            "source": "phani_test#2",
+            "dest": "phani_test#3",
+            "columns": [
+                "column0",
+                "column1",
+                "column2"
+            ]
+        }
+    }
+]

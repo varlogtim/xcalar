@@ -1,0 +1,13 @@
+---
+- hosts: all
+  remote_user: xcalar
+  vars:
+    ansible_python_interpreter: /opt/xcalar/bin/python3
+  gather_facts: no
+  tasks:
+  - shell: uptime
+    register: shell
+    args:
+      warn: false
+  - debug: var=shell.stdout_lines
+    tags: [print_action]

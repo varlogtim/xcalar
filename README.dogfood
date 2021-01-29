@@ -1,0 +1,337 @@
+Instructions for setting up external-facing dogfood
+=====================================================
+
+The instructions here are meant to set up authentication for dogfood. If you just want to try out Xcalar on your own machine, just following the instructions on setting up xcalar-gui in xcalar/README.
+
+
+Setting up the Ldap server
+=================================
+
+If you want to use our existing ldap server (turing.int.xcalar.com), you may skip this step and go straight to Downloading Apache Directory Studio
+
+1. Create Ldap Server VM (running Ubuntu 14 Server)
+
+2. Install openLdap
+ 2a) Modify /etc/hosts and add this line (overwrite it if the line already exists)
+ 127.0.1.1 hostname.int.xcalar.com hostname
+
+ 2b) Run the command
+    $ sudo apt-get install slapd ldap-utils
+
+3. Configuring memberOf module
+  3a) Create the file member.ldif (in whatever directory) with the following content:
+
+dn: cn=module,cn=config
+cn: module
+objectclass: olcModuleList
+objectclass: top
+olcmoduleload: memberof.la
+olcmodulepath: /usr/lib/ldap
+
+dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
+objectClass: olcConfig
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+objectClass: top
+olcOverlay: memberof
+olcMemberOfGroupOC: groupOfUniqueNames
+olcMemberOfMemberAD: uniqueMember
+
+  3b) Install this ldif file into ldap server with the following command:
+$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=admin,dc=int,dc=xcalar,dc=com" -f member.ldif
+
+  3c) Create the file refint.ldif (in whatever directory) with the following content:
+
+dn: cn=module,cn=config
+cn: module
+objectclass: olcModuleList
+objectclass: top
+olcmoduleload: refint.la
+olcmodulepath: /usr/lib/ldap
+
+dn: olcOverlay={1}refint,olcDatabase={1}hdb,cn=config
+objectClass: olcConfig
+objectClass: olcOverlayConfig
+objectClass: olcRefintConfig
+objectClass: top
+olcOverlay: {1}refint
+olcRefintAttribute: memberof member manager owner
+
+  3d) Install this ldif file into ldap server with the following command:
+$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=admin,dc=int,dc=xcalar,dc=com" -f refint.ldif
+
+  3e) Create the file admin.ldif (in whatever directory) with the following content:
+
+dn: olcDatabase={1}hdb,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to attrs=userPassword,shadowLastChange
+  by dn="cn=admin,dc=int,dc=xcalar,dc=com" write
+  by group/groupOfUniqueNames/uniqueMember="cn=administrators,ou=Groups,dc=int,dc=xcalar,dc=com" write
+  by anonymous auth
+  by self write
+  by * none
+olcAccess: {1}to dn.base="" by * read
+olcAccess: {2}to *
+  by self write
+  by dn="cn=admin,dc=int,dc=xcalar,dc=com" write
+  by group/groupOfUniqueNames/uniqueMember="cn=administrators,ou=Groups,dc=int,dc=xcalar,dc=com" write
+  by * read
+olcAccess: {3}to dn.subtree="ou=People,dc=int,dc=xcalar,dc=com"
+  by dn="cn=admin,dc=domain,dc=com" write
+  by group/groupOfUniqueNames/uniqueMember="cn=administrators,ou=Groups,dc=int,dc=xcalar,dc=com" write
+  by anonymous auth
+  by self write
+  by * none
+
+  3f) Install this ldif file into ldap server with the following command:
+$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=admin,dc=int,dc=xcalar,dc=com" -f admin.ldif
+
+  3g) Create the file pwmSchema.lidf (in whatever directory) with the following content:
+
+dn: cn={4}pwm,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: {4}pwm
+olcAttributeTypes: {0}( 1.3.6.1.4.1.35015.1.2.1
+  NAME 'pwmEventLog'
+  EQUALITY octetStringMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
+olcAttributeTypes: {1}( 1.3.6.1.4.1.35015.1.2.2
+  NAME 'pwmResponseSet'
+  EQUALITY octetStringMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.35015.1.2.3
+  NAME 'pwmLastPwdUpdate'
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.24 
+  SINGLE-VALUE )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.35015.1.2.4
+  NAME 'pwmGUID'
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+  SINGLE-VALUE )
+olcObjectClasses: {0}( 1.3.6.1.4.1.35015.1.1.1 
+  NAME 'pwmUser' 
+  AUXILIARY 
+  MAY ( pwmEventLog $ pwmGUID $ pwmLastPwdUpdate $ pwmResponseSet ))
+
+  3h) Install this ldif file into ldap server with the following command:
+$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=admin,dc=int,dc=xcalar,dc=com" -f pwmSchema.ldif
+
+  3g) Clean up the mess
+$ rm member.ldif
+$ rm refint.ldif
+$ rm admin.ldif
+$ rm pwmSchema.ldif
+
+Downloading Apache Directory Studio
+=================================
+1. Download Apache Directory Studio from http://directory.apache.org/studio/download/download-linux.html
+  1a)
+     wget http://mirror.sdunix.com/apache//directory/studio/dist/2.0.0.v20130628/ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628.tar.gz
+     wget http://archive.apache.org/dist/directory/studio/dist/2.0.0.v20130628/ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628.tar.gz.md5
+     md5sum ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628.tar.gz
+     (validate above matches ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628.tar.gz.md5)
+     tar -zxvf ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628.tar.gz
+2.  Run & connect to the ldap server
+  2a)
+      cd ApacheDirectoryStudio-linux-x86_64-2.0.0.v20130628
+      GTK2_RC_FILES=/usr/share/themes/Raleigh/gtk-2.0/gtkrc ./ApacheDirectoryStudio 
+  2b) Under LDAP tab, select New Connection...
+    - Pick a name
+    - hostname: ldap.int.xcalar.com
+    - take defaults for everything else & click Next
+  2c)
+    - Authententication Method: Simple
+    - Bind DN or user: cn=admin,dc=int,dc=xcalar,dc=com
+    - Bind password: <standard ioturbine passwd>
+    - take default for everything else & click Finish
+
+3. Poulate your Directory Information Tree (DIT)
+  3a) Under dc=int,dc=xcalar,dc=com, create new entry of objectClass=OrganizationUnit with ou=People
+  3b) Under ou=People,dc=int,dc=xcalar,dc=com, create as many entries as number of users of objectClass=inetOrgPerson
+  3c) Under dc=int,dc=xcalar,dc=com, create new entry of objectClass=OrganizationUnit with ou=Groups
+  3d) Under ou=Groups,dc=int,dc=xcalar,dc=com, create entry objectClass=groupOfUniqueNames with cn=dogfoodUsers
+  3e) Under cn=groupOfUniqueNames,ou=Groups,dc=int,dc=xcalar,dc=com, create as many attributes of type uniqueMember as you want users with access to dogfood
+
+
+Configuring Apache Server
+=================================
+1. Refer to instructions on setting up xcalar-gui in xcalar/README
+
+2. Enable the following mods
+  $ cd /etc/apache2/mods-enabled
+  $ sudo ln -s ../mods-available/auth_form.load .
+  $ sudo ln -s ../mods-available/authnz_ldap.load .
+  $ sudo ln -s ../mods-available/ldap.load .
+  $ sudo ln -s ../mods-available/ldap.conf .
+  $ sudo ln -s ../mods-available/session.load .
+  $ sudo ln -s ../mods-available/request.load .
+  $ sudo ln -s ../mods-available/session_cookie.load .
+  $ sudo ln -s ../mods-available/session_crypto.load .
+  $ sudo ln -s ../mods-available/proxy.conf .
+  $ sudo ln -s ../mods-available/proxy.load .
+  $ sudo ln -s ../mods-available/proxy_http.load .
+
+3. Redirect all non-SSL traffic to the SSL version
+  3a. Delete everything in /etc/apache2/sites-available/000-default.conf and add the following directive
+<VirtualHost *:80>
+    Redirect permanent / https://xcalar-186.tisch.gvad.net/
+</VirtualHost>
+
+4. Configure SSL
+    $ sudo a2ensite default-ssl
+    $ sudo a2enmod ssl
+    $ openssl genrsa -des3 -out xcalar.key 2048
+    $ openssl req -new -key xcalar.key -out xcalar.csr
+
+    Enter pass phrase for xcalar.key:
+    You are about to be asked to enter information that will be incorporated
+    into your certificate request.
+    What you are about to enter is what is called a Distinguished Name or a DN.
+    There are quite a few fields but you can leave some blank
+    For some fields there will be a default value,
+    If you enter '.', the field will be left blank.
+    -----
+    Country Name (2 letter code) [AU]:US
+    State or Province Name (full name) [Some-State]:California
+    Locality Name (eg, city) []:San Jose
+    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Xcalar, Inc
+    Organizational Unit Name (eg, section) []:Xcalar Insight
+    Common Name (e.g. server FQDN or YOUR name) []:somecustomer.xcalar.com
+    Email Address []:support@xcalar.com
+
+    Please enter the following 'extra' attributes
+    to be sent with your certificate request
+    A challenge password []:
+    An optional company name []:
+
+    $ cp xcalar.key xcalar.key.org
+    $ openssl rsa -in xcalar.key.org -out xcalar.key
+    $ openssl x509 -req -days 365 -in xcalar.csr -signkey xcalar.key -out xcalar.crt
+    Signature ok
+    subject=/C=US/ST=California/L=San Jose/O=Xcalar, Inc/OU=Xcalar Insight/CN=somecusotmer.xcalar.com/emailAddress=support@xcalar.com
+    Getting Private key
+
+    $ sudo cp xcalar.key /etc/ssl/private/
+    $ sudo cp xcalar.crt /etc/ssl/certs/
+    $ rm xcalar.key xcalar.crt xcalar.key.org
+
+5. Modify /etc/apache2/sites-enabled/default-ssl.conf
+  5a. Remove the following directive:
+
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
+    SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+  5b. Add the following directive (manually substituting $XLRGUIDIR)
+
+   ServerAdmin dogfood@xcalar.com
+   DocumentRoot $XLRGUIDIR
+
+	# Because login.html requires stylesheet access
+	<directory $XLRGUIDIR/stylesheets/>
+		Options +FollowSymLinks -Indexes
+		Require all granted
+	</directory>
+
+	# Because login.html requires image access
+	<directory $XLRGUIDIR/images/>
+		Options +FollowSymLinks -Indexes
+		Require all granted
+	</directory>
+
+	<Location /dologin.html>
+		SetHandler form-login-handler
+		AuthFormLoginRequiredLocation /login.html?error=Access+Denied
+		AuthFormLoginSuccessLocation /
+		AuthType form
+		AuthName "Xcalar Dogfood"
+		AuthFormProvider ldap
+		AuthFormPassword httpd_password
+		AuthFormUsername httpd_username
+		AuthLDAPURL "ldap://turing.int.xcalar.com:389/ou=People,dc=int,dc=xcalar,dc=com?uid"
+		Require ldap-group cn=dogfoodUsers,ou=Groups,dc=int,dc=xcalar,dc=com
+		Session On
+		SessionCookieName xcalarSession path=/
+		SessionCryptoPassphrase xcalarSecretCookie
+	</Location>
+
+    <Location /dologout.html>
+        SetHandler form-logout-handler
+        AuthName "Xcalar Dogfood"
+        AuthFormLogoutLocation /
+        Session On
+        SessionCookieName xcalarSession path=/
+        SessionCryptoPassphrase xcalarSecretCookie
+    </Location>
+
+	<directory /home/xcalar/xcalar-gui>
+		AuthType form
+		AuthName "Xcalar Dogfood"
+		AuthFormProvider ldap
+		AuthLDAPURL "ldap://turing.int.xcalar.com:389/ou=People,dc=int,dc=xcalar,dc=com?uid"
+		AuthFormPassword httpd_password
+		AuthFormUsername httpd_username
+		Require ldap-group cn=dogfoodUsers,ou=Groups,dc=int,dc=xcalar,dc=com
+		AuthFormLoginRequiredLocation /login.html
+		Options +Indexes +FollowSymLinks
+		AllowOverride None
+		Session On
+		SessionCookieName xcalarSession path=/
+		SessionCryptoPassphrase xcalarSecretCookie
+		<Files login.html>
+			Require all granted
+		</Files>
+	</directory>
+
+    ProxyPass /thrift/service/ http://localhost:9090/thrift/service/
+    <Location /thrift/service>
+		AuthType form
+		AuthName "Xcalar Dogfood"
+		AuthFormProvider ldap
+		AuthLDAPURL "ldap://turing.int.xcalar.com:389/ou=People,dc=int,dc=xcalar,dc=com?uid"
+		AuthFormPassword httpd_password
+		AuthFormUsername httpd_username
+		Require ldap-group cn=dogfoodUsers,ou=Groups,dc=int,dc=xcalar,dc=com
+		AuthFormLoginRequiredLocation /login.html
+		AllowOverride None
+		Session On
+		SessionCookieName xcalarSession path=/
+		SessionCryptoPassphrase xcalarSecretCookie
+    </Location>
+
+    SSLCertificateFile /etc/ssl/certs/xcalar.crt
+    SSLCertificateKeyFile /etc/ssl/private/xcalar.key
+
+6. Restart apache
+    $ sudo service apache2 restart
+
+
+Modify the GUI
+=================================
+1. Have apache proxy communication to Xcalar Thrift
+  1a. Modify $XLRGUIDIR/js/thrift/XcalarApi.js and change thriftUrl in function xcalarConnectThrift to
+  var thriftUrl = "https://" + hostname + "/thrift/service/XcalarApiService/"
+
+
+Getting the SSL Certificate trusted by Browsers
+================================================
+On a mac
+    1) Go to https://wherever_your_server_is
+    2) Click on the lock sign next to the crossed out https
+    3) Click on certificate information
+    4) There should be a big certificate icon next to the text
+
+    wherever_your_server_is
+    Self-signed root certificate
+    Expires: XXX
+
+    5) Click and drag that big certificate icon onto your desktop. This should create a file ending with .cer.
+    6) Double click on that file. This will bring up the KeyChain Access Utility.
+    7) Under the keychain dropdown menu, select "System". Then click the button "Always Trust". This will add the certificate to your system's key chain.
+    8) Double click on that file again. This should being up the KeyChain Access Menu.
+    9) Look for the certificate in the keychain access menu and double click on it. This should bring up more information about that certificate.
+    10 Expand the Trust menu.
+    11) Under "When using this certificate", choose "Always Trust"
+    12) Close the KeyChain Access Menu to save your changes.

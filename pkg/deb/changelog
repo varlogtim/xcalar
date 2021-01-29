@@ -1,0 +1,382 @@
+xcalar (2.3.0) stable; urgency=low
+  * Xcalar 2.3
+    - New features:
+      > Xcalar Load
+      > Xcalar Notebook
+      > Xcalar Shell
+      > Xcalar Connect
+      > Xcalar System Apps
+      > Xcalar Schedule
+
+ -- Xcalar Inc. <support@xcalar.com> Thu, 07 May 2020 22:51:26 -0700
+
+xcalar (2.0.5) stable; urgency=low
+  * Xcalar 2.0 Patch Release 5
+    - Update-in-place IMDs
+
+ -- Xcalar Inc. <support@xcalar.com> Tue, 14 Jan 2020 19:01:41 -0800
+
+xcalar (2.0.4) stable; urgency=low
+  * Xcalar 2.0 Patch Release 4
+    - New and improved Xcalar Demand Paging
+
+ -- Xcalar Inc. <support@xcalar.com> Mon, 04 Nov 2019 14:33:25 -0800
+
+xcalar (2.0.3) stable; urgency=low
+  * Xcalar 2.0 Patch Release 3
+    - Fixed crash when a session is inactivated while an asynchronous dataflow
+    is still running
+    - Fixed issue when a previous version of a streaming UDF is used even
+    after a call to updateUdf succeeds in updating the UDF
+
+ -- Xcalar Inc. <support@xcalar.com> Wed, 25 Sep 2019 11:26:03 -0700
+
+xcalar (2.0.2) stable; urgency=low
+  * Xcalar 2.0 Patch Release 2
+
+ -- Xcalar Inc. <support@xcalar.com> Wed, 17 Jul 2019 10:23:24 -0700
+
+xcalar (2.0.1) stable; urgency=low
+  * Xcalar 2.0 Patch Release
+
+ -- Xcalar Inc. <support@xcalar.com> Fri, 10 May 2019 18:12:13 -0700
+
+xcalar (2.0.0) stable; urgency=low
+  * See https://discourse.xcalar.com/t/xcalar-2-0-release-notes/578
+
+ -- Xcalar Inc. <support@xcalar.com> Wed, 20 Mar 2019 16:28:13 -0700
+
+xcalar (1.4.1) stable; urgency=low
+  * See https://discourse.xcalar.com/t/xcalar-1-4-1-release-notes/521
+
+ -- Xcalar Inc. <support@xcalar.com> Thu, 02 Aug 2018 15:42:03 -0700
+
+xcalar (1.4.0) stable; urgency=low
+  * Xcalar 1.4 General Availability Release
+    - New features:
+      Workbooks:
+        > Workbooks can now be downloaded and uploaded
+        > Instead of a global library of UDFs shared by all users, UDFs now
+        belong to a workbook or to a batch dataflow. Users will now only be
+        able to modify UDFs that belong in their workbooks. Users will still
+        be able to access UDFs from other workbooks, but they'll need to make
+        a copy of it into their workbooks to use it or to make changes to it.
+        This means that changes to UDFs will only affect the workbooks where
+        the UDFs are residing. UDFs belonging to a batch dataflow is still
+        globally editable by all users, but will only affect the batch
+        dataflow
+        > Jupyter notebooks are now local to a workbook
+        > Multiple workbooks can be opened at once, and can be opened in
+        different browser tabs
+        > Play/Pause/Stop of workbooks removed. Workbooks are now opened or
+        closed.
+
+      Batch Dataflows:
+        > Batch dataflows now use its own copy of UDFs instead of using the
+        global library of UDFs. Dataflows' UDFs are globally editable by all
+        users.
+        > Parameters specified in the batch dataflow scheduling screen are now
+        global and can be applied to all dataflows. Changes in parameters will
+        only affect subsequent dataflows and doesn't affect dataflows already
+        running / scheduled.
+        > Advanced Parameterization mode added to batch dataflow screen.
+        Advanced users can now modify the batch dataflow directly via the JSON
+        editor.
+
+      Licensing:
+        > Updating of license no longer requires a cluster restart
+        > License format changed from binary to key=value format.
+        > Xcalar cluster is now disabled when running unlicensed.
+        > License provided will determine the behavior of the cluster on
+        expiration of the license: either the cluster will be disabled, or a
+        warning will be periodically shown
+
+      Operators:
+        > Except and Intersect operators are now supported
+
+    - Beta features:
+      SQL Support:
+        > 100% TPC-H queries coverage and 90% TPC-DS queries coverage
+        > Users can now issue SQL in Xcalar Design during modeling to build
+        out their dataflows. Dataflows, hence, can be built out with a
+        combination of visual point-and-click, SQL and programming. SQL issued
+        in Xcalar can invoke UDFs.
+
+      JDBC:
+        > SQL can also be issued to the Xcalar Cluster via JDBC (Spark SQL)
+
+      Published tables:
+        > Different class of tables from usual Xcalar Tables that are private
+        and immutable -- published tables are mutable and global
+
+    - Enhancements:
+      > Column limit now increased to 1023 from 127.
+      > Standard deviation / Variance now ignores NULL values
+      > Azure AD integration improved: added support for Microsoft Common
+      Endpoint v2.0, which is needed by multi-tenant Azure AD and Azure ADB2C.
+      > A cluster can now be configured to run in latency-optimized mode,
+      throughput-optimized mode, or mixed-mode.
+
+    - Behavior change:
+      > Use of Apache WebServer has been deprecated. Caddy is now the primary
+      HTTP server.
+ -- Xcalar Inc. <support@xcalar.com> Mon, 14 May 2018 12:02:36 -0700
+
+xcalar (1.3.2) stable; urgency=high
+  * Bugfix release
+    - Fixed an issue where sessions could not be recovered if dataflows with
+    source tables are used
+    - Fixed duplicate key issue that sometimes happen during groupBy
+    - Fixed import CSV issue when CSV contains illegal characters in headers
+    and number of columns exceed 127
+ -- Xcalar Inc. <support@xcalar.com> Fri, 13 Apr 2018 14:42:12 -0700
+
+xcalar (1.3.1) stable; urgency=low
+  * Xcalar 1.3 Incremental Release
+    - New Features:
+      Ingest
+        > Per-file error reporting
+        > Different modes of error-handing: stop-load-on-first-error, stop-load-of-file-on-first-error, keep-going
+        > Separate error dataset created to peruse erroneous records
+        > Ability to load CSV with columns renamed and recast
+        > File-ordering, column-ordering and row-ordering now preserved
+
+      File formats / data targets:
+        > New Parquet Dataset data target
+        > New Parquet File format
+        > New Custom data target
+
+      Jupyter integration
+        > Can now use Jupyter to author Map UDFs and Streaming UDFs
+
+    - Enhancements:
+      > 5 different kinds of search in file browsers
+      > Icons for different file types (based on file extension)
+      > Ability to create multiple datasets at once
+      > Ability to select multiple different files at once when loading a dataset
+      > New modal to display errors during load at file-granularity
+      > Performance - 20% faster than 1.3.0 on TPC-H
+
+    - Behavior change:
+      > Descending sort now places FnFs at the bottom
+      > Load targets can now be parametrized
+      > Data target can now only be created and deleted by admins
+      > streaming UDF is now available as User-Defined Format, instead of an action
+      > Datasets are now by default created private. To share it, drag and drop it into the shared folder.
+ -- Xcalar Inc. <support@xcalar.com> Mon, 05 March 2018 13:11:09 -0800
+
+xcalar (1.3.0) stable; urgency=low
+  * Xcalar 1.3 General Availability Release
+    - New features:
+      Data Targets
+        > Load no longer takes in a URL. Instead, an admin will create custom
+        data targets, and paths are relative to a data target. See "Making
+        source data accessible" in the documentation for details.
+        > Multiple data target types are provided:
+          1) MapR with Impersonation
+          2) MapR with Authentication
+          3) HDFS with Kerberos
+          4) Vanilla HDFS
+          5) Distributed shared file system
+          6) Shared-nothing file system
+          7) S3
+          8) Azure Blob Storage
+          9) Generated
+
+      Additional support for new operators
+        > Multi-key sorts
+        > Union
+        > Broadcast join
+
+    - Enhancements:
+      Workbook enhancements
+        > Can now preview workbook before activating it
+        > Can now cancel workbook activation
+        > Can now annotate workbooks
+
+      Improved table functionalities
+        > Tables can now be locked using the table menu drop-down options
+        > Archived tables removed. Tables should now be sent to "temporary
+        tables".
+        > New Project panel added
+        > Data browser can now be opened while creating batch dataflows
+
+      Xcalar Query 2.0
+        > Now a JSON-based language
+
+      Python 3.6
+        > UDFs in Xcalar are now interpreted with Python 3.6 from Python 2.7
+        > Jupyter notebooks in Xcalar will also make use of the Python 3.6
+        kernel
+
+      Dataflows
+        > Batch dataflows can now start from existing tables, instead of load
+        > Data lineage is still displayed for dropped tables
+        > Dataflow can be edited in Xcalar Design and re-run
+        > Users can add comments to dataflows and operations within
+
+      Support
+        > Support ticket filed can now be tracked in Xcalar Design
+        > Live chat automatically creates a support ticket
+        > Chat logs in Live Chat can be sent to a specified email address
+
+      LDAP Integration
+        > Recursive search filter can now be provided for authentication with
+        LDAP
+
+    - Experimental:
+      SQL Support Alpha
+        > SQL compiler to compile SQL into xcalar queries available as a
+        separate xcalar-sqldf package. Requires Java 8 and above to run
+
+    - Bugfixes:
+      > Outer joins on FnFs now handled correctly
+ -- Xcalar Inc. <support@xcalar.com> Wed, 17 January 2018 23:56:03 -0800
+
+xcalar (1.2.4) stable; urgency=low
+  * Xcalar 1.2 Incremental Release
+    - New features:
+      > Package parquet-tools instead of pyArrow for parquet support
+      > WebHDFS connector added
+      > Thrift version upgraded to 0.10
+
+    - Bugfixes:
+      > Fix retina/udfs disappearing on restart of cluster
+ -- Xcalar Inc. <support@xcalar.com> Sat, 2 December 2017 02:26:45 -0700
+
+xcalar (1.2.3) stable; urgency=low
+  * Xcalar 1.2 Incremental Release
+    - New features:
+      > Jupyter Integration
+      > Support for Parquet file format
+      > Can now parameterize export in batch dataflow to use UDF export targets
+ -- Xcalar Inc. <support@xcalar.com> Tue, 24 October 2017 23:17:03 -0700
+
+xcalar (1.2.2) stable; urgency=low
+  * Xcalar 1.2 Incremental Release
+    - New features:
+      > Dataset locking
+      > Azure Blob Storage connector
+      > Automated skew detection
+      > Metaphone extension
+      > Azure Active Directory integration
+
+    - Enhancements:
+      > UDF editor now supports inline search and replace
+      > Installer now performs install/upgrade/uninstall with the option to do
+      so with and without root. Without root assumes pre-configuration has
+      been performed
+      > Demand paging now done at page granularity instead of at slot
+      granularity
+      > Load no longer relies on NFS-backed scratchpad for inter-node communications
+      > XPU Barriers no longer consume obscene number of fibers
+      > Bar chart now available in profile screen
+      > Multiple physical operations now grouped as a logical operation in
+      dataflow graph
+      > Maps and groupBys can emit more than 1 column now
+      > Certain configuration parameter can now be changed without requiring a
+      cluster restart
+
+    - Experimental:
+      > XPU SDK Alpha
+      > Xcalar Enterprise Manager Alpha
+
+    - Bugfixes:
+      > Fix crash in management daemon when bogus workItem is submitted
+ -- Xcalar Inc. <support@xcalar.com> Wed, 3 September 2017 14:00:09 -0700
+
+xcalar (1.2.1) stable; urgency=high
+  * Bugfix release
+    - Fixed a crash that sometimes happens when you profile a numeric column
+    - Fixed a crash that happens when you use the "contains" xdf on a non-existent field
+    - Fixed a rare bug where an API would fail when there are many XPUs dying
+    - Fixed a crash in QueryManager that sometimes happens when cancelling queries
+    - Fixed issue in batch dataflow with 2 or more indices from same dataset
+    - Fixed issue in Ubuntu installers overwriting /etc/default/xcalar
+    - Fixed a crash which happens during session replay of batched dataflow
+ -- Xcalar Inc. <support@xcalar.com> Wed, 19 July 2017 00:11:21 -0700
+
+xcalar (1.2.0) stable; urgency=low
+  * Xcalar 1.2 General Availability Release
+    - Turned on Demand Paging feature by default
+    - Logging is now done on configurable logfile, instead of syslog
+    - Added a way to detect skew in tables
+    - Fixed issue where some xcalarEval XDFs didn't accept FnFs
+    - Added xcalar handshake protocol when connecting to usrnodes
+    - Fixed issue in batched dataflow when field names contained literal dots
+    - Added more parameterization options for export in batched dataflow
+    - Added pause and resume option in scheduler for scheduled batched dataflows
+ -- Xcalar Inc. <support@xcalar.com> Thu, 15 June 2017 12:30:28 -0700
+
+xcalar (1.1.3) stable; urgency=low
+  * Minor bugfix release:
+    - Added MapR connector (Feature in Beta)
+    - Added Demand paging (Feature in Beta)
+    - Disabled xcmonitor
+    - Added Caddy as an alternate HTTP server
+    - Added on-demand MemLocking
+    - Added feature to recover batched dataflow in session replay
+    - Added streaming UDF parameterization
+    - Added ability to run the same batched dataflow concurrently
+    - Fixed bug in CSV parser
+ -- Xcalar Inc. <support@xcalar.com> Sun, 21 May 2017 03:32:46 -0700
+
+xcalar (1.1.2) stable; urgency=low
+  * Minor bugfix release:
+    - Fixed malformed batched dataflow when doing projects
+    - Fixed crash that sometimes happens during load
+    - Fixed crash that happens when performing operators on sorted tables
+    - Fixed deadlock that happens when invoking apps
+ -- Xcalar Inc. <support@xcalar.com> Sun, 30 April 2017 01:31:09 -0700
+
+xcalar (1.1.1) stable; urgency=low
+  * Minor bugfix release:
+    - Fixed crash that sometimes happen when performing groupBy
+    - Fixed crash that happens when getting stats when system under load
+    - Fixed severe performance degradation when system under load
+    - Fixed bug where retina sometimes produces empty tables
+ -- Xcalar Inc. <support@xcalar.com>  Sun, 16 April 2017 22:48:23 -0700
+
+xcalar (1.1.0) stable; urgency=low
+  * Xcalar 1.1 Release:
+    - Xcalar Operational Mode (batched dataflows and scheduling of batched
+    dataflows)
+    - Durable data structures now uses Google protobuf for on-disk
+    serialization
+    - Data transfer from XPU to XCE now done via shared memory instead of
+    named pipes
+    - Datasets and tables now share the same pool of memory (XdbPages)
+    - Transaction recovery now allows Xcalar to be tolerant to transient
+    errors in a cluster (e.g. out of memory on some nodes)
+    - Tables can now be renamed
+    - Xcalar Advanced Visual Parser (Beta)
+
+  * Caveats:
+    - XcalarApiAppSet is no longer supported
+ -- Xcalar Inc. <support@xcalar.com>  Sun, 2 April 2017 13:33:20 -0700
+
+xcalar (1.0.3.17) stable; urgency=low
+  * Cloud Preview Release:
+    - Further improved performance of map UDFs
+    - UDF-on-load changed to streaming UDFs
+    - Increased monitor timeout to 1 hour before it starts shooting usrnodes
+
+  * Caveats:
+    - Strong session-node affinity; when a user has logged into a session on a
+    node, he/she will be unable to log into another session on another node
+    - When a row > 100KB, we'll be unable to peer into the dataset/table
+ -- Xcalar Inc. <support@xcalar.com>  Wed, 15 February 2017 12:13:09 -0700
+
+xcalar (1.0.2.16) stable; urgency=low
+
+  * Minor bugfix release:
+    - Fixed crash when we try to inact a session that's active on a different
+    node
+    - Fixed slow UDF issue
+    - Fixed crash when too many childnodes die
+ -- Xcalar Inc. <support@xcalar.com>  Wed, 4 January 2017 11:10:22 -0700
+
+xcalar (1.0.1.15) stable; urgency=low
+
+  * Xcalar Data Platform Server Beta.
+ -- Xcalar Inc. <support@xcalar.com>  Tue, 29 November 2016 11:22:52 -0700

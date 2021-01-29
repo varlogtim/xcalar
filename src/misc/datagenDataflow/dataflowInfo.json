@@ -1,0 +1,120 @@
+{
+    "tables": [
+        {
+            "name": "PTS_datamodel2#19",
+            "columns": [
+                {
+                    "columnName": "PTS_datamodel2::action",
+                    "headerAlias": "action"
+                },
+                {
+                    "columnName": "PTS_datamodel2::status",
+                    "headerAlias": "status"
+                },
+                {
+                    "columnName": "PTS_datamodel2::comments",
+                    "headerAlias": "comments"
+                }
+            ]
+        }
+    ],
+    "udfs": [
+        {
+            "moduleName": "build_datagen",
+            "fileName": "udfs/build_datagen.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.admin.76642.PTS_datamodel2",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/nikita/PTS_datamodel.json",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "build_datagen:execute",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 1073741824
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "indexFromDataset#19",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.admin.76642.PTS_datamodel2",
+                "dest": "PTS_datamodel2#19",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "PTS_datamodel2-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "PTS_datamodel2",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "PTS_datamodel2#19",
+                "fileName": "export-PTS_datamodel2#19.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.PTS_datamodel2#19",
+                "columns": [
+                    {
+                        "columnName": "PTS_datamodel2::action",
+                        "headerName": "action"
+                    },
+                    {
+                        "columnName": "PTS_datamodel2::status",
+                        "headerName": "status"
+                    },
+                    {
+                        "columnName": "PTS_datamodel2::comments",
+                        "headerName": "comments"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 0,
+                "splitNumFiles": 0,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.4.0-1879-xcalardev-4e591b34-f9fdabe2",
+    "dataflowVersion": 1
+}

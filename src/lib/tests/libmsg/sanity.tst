@@ -1,0 +1,1 @@
+addtaptest ./libmsgsanity

@@ -1,0 +1,189 @@
+#!/bin/bash
+#
+# Runs fpm inside a container to avoid
+# having each build target be responsible
+# for installing their own copy
+#
+# This script can be called with the exact
+# same parameters as one would pass to `fpm`,
+# with one notable exception being the source
+# can't be in /tmp or /var/tmp.
+#
+# ex: fpm -s dir -t rpm --name foo --version 1.0 -C /home/foo/bar usr
+#
+# shellcheck disable=SC2206,SC2207
+
+set -euo pipefail
+
+is_subdir() {
+    [ "${2#$1/}" != "$2" ]
+}
+
+in_container() {
+    local cid
+    [ -z "${container:-}" ] || return 0
+    if ! cid=$(basename $(cat /proc/1/cpuset)); then
+        return 1
+    fi
+    if [ "$cid" = / ]; then
+        return 1
+    fi
+    [ "$1" = "-q" ] || echo "$cid"
+    return 0
+}
+
+check_tmp() {
+    if ! in_container -q; then
+        return 0
+    fi
+    if [[ $1 =~ ^/tmp ]] || [[ $1 =~ ^/var/tmp ]]; then
+        echo >&2 "ERROR: $1: Unable to map paths under /tmp or /var/tmp using the fpm container"
+        exit 1
+    fi
+}
+
+add_volume() {
+    check_tmp "$1"
+    local vol
+    for vol in "${VOLUMES[@]}"; do
+        if is_subdir "$vol" "$1"; then
+            return 1
+        fi
+    done
+    VOLUMES+=("$1")
+    return 0
+}
+
+sudo_if_needed() {
+    local docker_socket="${DOCKER_HOST:-unix:///var/run/docker.sock}"
+    docker_socket="${docker_socket#unix://}"
+    if test -S "$docker_socket" && ! test -w "$docker_socket"; then
+        /usr/bin/sudo -H -n /usr/bin/env ${DOCKER_HOST:+DOCKER_HOST=$DOCKER_HOST} "$@"
+    else
+        "$@"
+    fi
+}
+
+main() {
+    local -i remap=1 ii
+    local -a docker_args=() fpm_args=()
+    local cid cwd
+
+    cwd=$(pwd)
+    VOLUMES=("$cwd")
+
+    # Run as current user
+    docker_args+=(-u $(id -u):$(id -g))
+
+    # Map the all of / into /host in the container. This way all we need to do
+    # is prefix any absolute paths passed to fpm as arguments with /host. The one
+    # exception is --prefix <prefix>, which we want to keep as-is
+    if add_volume "$cwd"; then
+        docker_args+=(-v "$cwd":"$cwd")
+    fi
+    docker_args+=(-w "$cwd")
+
+    # Go through all arguments to fpm, and prefix any
+    # mentions of /abspath with /host. --prefix
+    # is the exception (see comment in header).
+    for ((ii = 1; ii <= $#; ii++)); do
+        local arg="${!ii}"
+        local -i next=$((ii + 1))
+        case "$arg" in
+            -C)
+                local change_dir="$(cd "${!next}" && pwd)"
+                if add_volume "$change_dir"; then
+                    docker_args+=(-v "$change_dir":"$change_dir")
+                fi
+                fpm_args+=(-C "$change_dir")
+                ((ii++))
+                ;;
+            --prefix)
+                local prefix="${!next}"
+                fpm_args+=($arg "$prefix")
+                ((ii++))
+                ;;
+            *)
+                # If it's an absolute path, prefix it with /host
+                if [[ $arg =~ ^/ ]] && [ -e "$arg" ]; then
+                    if add_volume "$arg"; then
+                        docker_args+=(-v "$arg":"$arg")
+                    fi
+                    fpm_args+=("$arg")
+                else
+                    fpm_args+=("$arg")
+                fi
+                ;;
+        esac
+    done
+
+    set -x
+    set +e
+    if [ -z "${FPM:-}" ] && [ -e $XLRDIR/docker/image.env ]; then
+        . $XLRDIR/docker/image.env
+    fi
+
+    FPM=${FPM:-registry.int.xcalar.com/fpm:latest}
+
+    if ! sudo_if_needed docker image ls ${FPM} >/dev/null 2>&1; then
+        echo >&2 "fpm: ${FPM} image not found. Attempting to pull it"
+        if ! sudo_if_needed docker pull ${FPM}; then
+            echo >&2 "fpm: ${FPM} image failed to pull. Building fpm locally"
+            (cd $XLRDIR/docker/fpm && sudo_if_needed make) || exit 1
+            FPM=fpm
+        fi
+    fi
+
+    sudo_if_needed docker run "${docker_args[@]}" --rm ${FPM} "${fpm_args[@]}"
+}
+
+_test_package() {
+    local doubleconv="$1"
+    shift
+    echo "TAP version 13"
+    echo "1..6"
+    [ -f $doubleconv ] && echo "1 ok - built $doubleconv" || { "1 not ok - building $doubleconv"; return 1; }
+    [[ $(rpm -qlp $doubleconv | wc -l) -eq 14 ]] && echo "2 ok - 14 files" || echo "2 not ok - 14 files"
+    [[ $(rpm -qp $doubleconv --qf '%{VERSION}') == 3.1.4 ]] && echo "3 ok - version is 3.1.4" || echo "3 not ok - version is 3.1.4"
+    [[ $(rpm -qp $doubleconv --qf '%{RELEASE}') == 10 ]] && echo "4 ok - release is 10" || echo "4 not ok - release is 10"
+    [[ $(stat -c %s $doubleconv) == 172158 ]] && echo "5 ok - size is 172158" || echo "5 not ok - size is 172158"
+    rpm2cpio $doubleconv | (cd $TMPDIR && cpio -dmiv >/dev/null 2>&1 && md5sum -c md5sums.txt >/dev/null)
+    [[ $? -eq 0 ]] && echo "6 ok - checksums pass" || echo "6 not ok - checksums pass"
+}
+
+test_fpm() {
+    set -e
+
+    TMPDIR=/tmp/fpm-$(id -u)/$$
+    local NAME=double-conversion VERSION=3.1.4 ITER=10 ARCH=x86_64
+    local OUTPUT=double-conversion-3.1.4-10.x86_64.rpm
+
+    mkdir -p $TMPDIR
+    rm -f $OUTPUT
+    curl -fsL http://repo.xcalar.net/fpm/tests/double-conversion-3.1.4.tar.gz | tar zxf - -C $TMPDIR
+    (cd $TMPDIR/rootfs && find usr -type f | xargs md5sum -) > $TMPDIR/md5sums.txt
+
+    ITER=10
+    OUTPUT="${NAME}-${VERSION}-${ITER}.x86_64.rpm"
+    main -s dir -t rpm --name double-conversion --version 3.1.4 --iteration 10 --prefix /usr -p $OUTPUT -f -C $TMPDIR/rootfs/usr >&2
+    _test_package "$OUTPUT"
+    rm -f "$OUTPUT"
+
+    ITER=11
+    OUTPUT="${NAME}-${VERSION}-${ITER}.x86_64.rpm"
+    main -s dir -t rpm --name double-conversion --version 3.1.4 --iteration 11 --prefix /usr -p $OUTPUT -f -C $TMPDIR/rootfs usr >&2
+    _test_package "$OUTPUT"
+    rm -f "$OUTPUT"
+
+    rm -r $TMPDIR
+    #rm $doubleconv
+}
+
+[ $# -gt 0 ] || set -- --help
+
+if [ "$1" == --test ]; then
+    test_fpm
+    exit $?
+fi
+
+main "$@"

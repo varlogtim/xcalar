@@ -1,0 +1,20 @@
+{
+    "xcalarVersion": "2.1.0-1-vgonela-794a752c-c4f91c0a",
+    "workbookVersion": "4",
+    "magic": "cafe080367a3dfc8",
+    "sessionId": "5cfec12a0eb575b0",
+    "sessionOwningUserId": "admin",
+    "sessionCreateTime": {
+        "tvSec": "1559848486",
+        "tvNsec": "875175653"
+    },
+    "sessionLastChangedTime": {
+        "tvSec": "1560199469",
+        "tvNsec": "146356217"
+    },
+    "sessionLastUsedTime": {
+        "tvSec": "1560199600",
+        "tvNsec": "571708591"
+    },
+    "sessionName": "dfSqlParameterized"
+}

@@ -1,0 +1,11 @@
+enum CsvSchemaMode {
+    CsvSchemaModeNoneProvided:"none",
+    CsvSchemaModeUseHeader:"header",
+    CsvSchemaModeUseSchemaFile:"schemaFile",
+    CsvSchemaModeUseLoadInput:"loadInput",
+}
+
+enum CsvDialect {
+    CsvDialectDefault:"default",
+    CsvDialectXcalarSnapshot:"xcalarSnapshot",
+}

@@ -1,0 +1,1285 @@
+{
+    "tables": [
+        {
+            "name": "EndResult-LG",
+            "columns": [
+                {
+                    "columnName": "numWatchedQ0",
+                    "headerAlias": "numWatchedQ0"
+                },
+                {
+                    "columnName": "numWatchedQ1",
+                    "headerAlias": "numWatchedQ1"
+                },
+                {
+                    "columnName": "numWatchedQ2",
+                    "headerAlias": "numWatchedQ2"
+                },
+                {
+                    "columnName": "numWatchedQ3",
+                    "headerAlias": "numWatchedQ3"
+                },
+                {
+                    "columnName": "numWatchedEntire",
+                    "headerAlias": "numWatchedEntire"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        },
+        {
+            "moduleName": "lgudf",
+            "fileName": "udfs/lgudf.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.kkochis.sessionsSmall",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "<LgLrqSessionDataset>",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\": \"\\n\", \"quoteDelim\": \"\\\"\", \"linesToSkip\": 0, \"fieldDelim\": \",\", \"isCRLF\": true, \"schemaMode\": \"header\"}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.kkochis.channel",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/lg_generated/channel.csv",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\": \"\\n\", \"quoteDelim\": \"\\\"\", \"linesToSkip\": 0, \"fieldDelim\": \"\\t\", \"isCRLF\": false, \"schemaMode\": \"header\"}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.kkochis.sessionsSmall",
+                "dest": "sessionsSmall#7C0",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "sessions-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "sessions",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "args": {
+                "dest": ".XcalarDS.kkochis.addata",
+                "loadArgs": {
+                    "sourceArgs": {
+                        "targetName": "Default Shared Root",
+                        "path": "/netstore/datasets/lg_generated/ad_data.csv",
+                        "fileNamePattern": "",
+                        "recursive": false
+                    },
+                    "parseArgs": {
+                        "parserFnName": "default:parseCsv",
+                        "parserArgJson": "{\"recordDelim\": \"\\n\", \"quoteDelim\": \"\\\"\", \"linesToSkip\": 0, \"fieldDelim\": \",\", \"isCRLF\": false, \"schemaMode\": \"header\"}"
+                    },
+                    "size": 0
+                }
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.kkochis.channel",
+                "dest": "channel#7C2",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "channel-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "channel",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "sessionsSmall#7C0",
+                "dest": "sessionsSmall#7C6",
+                "eval": [
+                    {
+                        "evalString": "eq(sessions::sessiontype, \"live\")"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": ".XcalarDS.kkochis.addata",
+                "dest": "addata#7C1",
+                "key": [
+                    {
+                        "name": "xcalarRecordNum",
+                        "keyFieldName": "addata-xcalarRecordNum",
+                        "type": "DfInt64",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "addata",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "channel#7C2",
+                "dest": "channel.index#7C9",
+                "key": [
+                    {
+                        "name": "channel::tsid",
+                        "keyFieldName": "channel-tsid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "sessionsSmall#7C6",
+                "dest": "sessionsSmall.index#7C8",
+                "key": [
+                    {
+                        "name": "sessions::transponderid",
+                        "keyFieldName": "sessions-transponderid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "addata#7C1",
+                "dest": "addata#7C3",
+                "eval": [
+                    {
+                        "evalString": "float(addata::id_duration)",
+                        "newField": "id_duration_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "sessionsSmall.index#7C8",
+                    "channel.index#7C9"
+                ],
+                "dest": "SessionsWithChannel#7C7",
+                "joinType": "innerJoin",
+                "key": [
+                    ["sessions-transponderid"],
+                    ["channel-tsid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "sessions",
+                            "destColumn": "sessions",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "sessions-transponderid",
+                            "destColumn": "sessions-transponderid",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "channel",
+                            "destColumn": "channel",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "channel-tsid",
+                            "destColumn": "channel-tsid",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "addata#7C3",
+                "dest": "addata#7C4",
+                "eval": [
+                    {
+                        "evalString": "float(addata::broadcast_end_time)",
+                        "newField": "broadcast_end_time_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithChannel#7C7",
+                "dest": "SessionsWithChannel#7C10",
+                "eval": [
+                    {
+                        "evalString": "float(sessions::starttime)",
+                        "newField": "starttime_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "addata#7C4",
+                "dest": "addata#7C5",
+                "eval": [
+                    {
+                        "evalString": "float(addata::broadcast_start_time)",
+                        "newField": "broadcast_start_time_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithChannel#7C10",
+                "dest": "SessionsWithChannel#7C11",
+                "eval": [
+                    {
+                        "evalString": "float(sessions::endtime)",
+                        "newField": "endtime_float"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "addata#7C5",
+                "dest": "addata#7C13",
+                "eval": [
+                    {
+                        "evalString": "lgudf:convertFromUnixTS(broadcast_start_time_float, \"%m%d\")",
+                        "newField": "day2"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithChannel#7C11",
+                "dest": "SessionsWithChannel#7C12",
+                "eval": [
+                    {
+                        "evalString": "lgudf:convertFromUnixTS(starttime_float, \"%m%d\")",
+                        "newField": "day"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "addata#7C13",
+                "dest": "addata#7C16",
+                "eval": [
+                    {
+                        "evalString": "concat(string(addata::channel_name), concat(\".Xc.\", string(day2)))",
+                        "newField": "rightJoinCol92899"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithChannel#7C12",
+                "dest": "SessionsWithChannel#7C15",
+                "eval": [
+                    {
+                        "evalString": "concat(string(channel::channel_desc), concat(\".Xc.\", string(day)))",
+                        "newField": "leftJoinCol35421"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "addata#7C16",
+                "dest": "addata.index#7C18",
+                "key": [
+                    {
+                        "name": "rightJoinCol92899",
+                        "keyFieldName": "rightJoinCol92899",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithChannel#7C15",
+                "dest": "SessionsWithChannel.index#7C17",
+                "key": [
+                    {
+                        "name": "leftJoinCol35421",
+                        "keyFieldName": "leftJoinCol35421",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "SessionsWithChannel.index#7C17",
+                    "addata.index#7C18"
+                ],
+                "dest": "SessionsWithAdData#7C14",
+                "joinType": "innerJoin",
+                "key": [
+                    ["leftJoinCol35421"],
+                    ["rightJoinCol92899"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "sessions",
+                            "destColumn": "sessions",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "sessions-transponderid",
+                            "destColumn": "sessions-transponderid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "channel",
+                            "destColumn": "channel",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "channel-tsid",
+                            "destColumn": "channel-tsid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "starttime_float",
+                            "destColumn": "starttime_float",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "endtime_float",
+                            "destColumn": "endtime_float",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "day",
+                            "destColumn": "day",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "leftJoinCol35421",
+                            "destColumn": "leftJoinCol35421",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata",
+                            "destColumn": "addata",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "id_duration_float",
+                            "destColumn": "id_duration_float",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "broadcast_end_time_float",
+                            "destColumn": "broadcast_end_time_float",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "broadcast_start_time_float",
+                            "destColumn": "broadcast_start_time_float",
+                            "columnType": "DfFloat64"
+                        },
+                        {
+                            "sourceColumn": "day2",
+                            "destColumn": "day2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "rightJoinCol92899",
+                            "destColumn": "rightJoinCol92899",
+                            "columnType": "DfString"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C14",
+                "dest": "SessionsWithAdData#7C19",
+                "eval": [
+                    {
+                        "evalString": "lt(starttime_float, broadcast_end_time_float)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C19",
+                "dest": "SessionsWithAdData#7C20",
+                "eval": [
+                    {
+                        "evalString": "gt(endtime_float, broadcast_start_time_float)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C20",
+                "dest": "SessionsWithAdData#7C21",
+                "eval": [
+                    {
+                        "evalString": "le(starttime_float, broadcast_start_time_float)",
+                        "newField": "watchedStart"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C21",
+                "dest": "SessionsWithAdData#7C22",
+                "eval": [
+                    {
+                        "evalString": "ge(endtime_float, broadcast_end_time_float)",
+                        "newField": "watchedEnd"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C22",
+                "dest": "SessionsWithAdData#7C23",
+                "eval": [
+                    {
+                        "evalString": "and(watchedEnd, watchedStart)",
+                        "newField": "watchedEntire"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C23",
+                "dest": "SessionsWithAdData#7C26",
+                "eval": [
+                    {
+                        "evalString": "eq(watchedEnd, false)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C26",
+                "dest": "SessionsWithAdData#7C27",
+                "eval": [
+                    {
+                        "evalString": "eq(watchedStart, true)"
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C27",
+                "dest": "SessionsWithAdData#7C28",
+                "eval": [
+                    {
+                        "evalString": "sub(endtime_float, broadcast_start_time_float)",
+                        "newField": "secsWatched"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C28",
+                "dest": "SessionsWithAdData#7C29",
+                "eval": [
+                    {
+                        "evalString": "div(secsWatched, id_duration_float)",
+                        "newField": "pctWatched"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C29",
+                "dest": "SessionsWithAdData#7C30",
+                "eval": [
+                    {
+                        "evalString": "gt(pctWatched, 0)",
+                        "newField": "watched0Q"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C30",
+                "dest": "SessionsWithAdData#7C31",
+                "eval": [
+                    {
+                        "evalString": "gt(pctWatched, 0.25)",
+                        "newField": "watched1Q"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C31",
+                "dest": "SessionsWithAdData#7C32",
+                "eval": [
+                    {
+                        "evalString": "gt(pctWatched, 0.5)",
+                        "newField": "watched2Q"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C32",
+                "dest": "SessionsWithAdData#7C33",
+                "eval": [
+                    {
+                        "evalString": "gt(pctWatched, 0.75)",
+                        "newField": "watched3Q"
+                    }
+                ],
+                "icv": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C33",
+                "dest": "SessionsWithAdData.index#7C36",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C33",
+                "dest": "SessionsWithAdData.index#7C34",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C33",
+                "dest": "SessionsWithAdData.index#7C38",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData.index#7C36",
+                "dest": "SessionsWithAdData-GB#7C37",
+                "eval": [
+                    {
+                        "evalString": "sumInteger(watched1Q)",
+                        "newField": "numWatchedQ1"
+                    }
+                ],
+                "newKeyField": "addata-detid",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData.index#7C34",
+                "dest": "SessionsWithAdData-GB#7C35",
+                "eval": [
+                    {
+                        "evalString": "sumInteger(watched0Q)",
+                        "newField": "numWatchedQ0"
+                    }
+                ],
+                "newKeyField": "addata-detid",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C33",
+                "dest": "SessionsWithAdData.index#7C40",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData.index#7C38",
+                "dest": "SessionsWithAdData-GB#7C39",
+                "eval": [
+                    {
+                        "evalString": "sumInteger(watched2Q)",
+                        "newField": "numWatchedQ2"
+                    }
+                ],
+                "newKeyField": "addata-detid",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "SessionsWithAdData-GB#7C35",
+                    "SessionsWithAdData-GB#7C37"
+                ],
+                "dest": "Sessi-Sessi#7C42",
+                "joinType": "innerJoin",
+                "key": [
+                    ["addata-detid"],
+                    ["addata-detid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ0",
+                            "destColumn": "numWatchedQ0",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid1",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ1",
+                            "destColumn": "numWatchedQ1",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData#7C23",
+                "dest": "SessionsWithAdData.index#7C24",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData.index#7C40",
+                "dest": "SessionsWithAdData-GB#7C41",
+                "eval": [
+                    {
+                        "evalString": "sumInteger(watched3Q)",
+                        "newField": "numWatchedQ3"
+                    }
+                ],
+                "newKeyField": "addata-detid",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "Sessi-Sessi#7C42",
+                    "SessionsWithAdData-GB#7C39"
+                ],
+                "dest": "Sessi-Sessi#7C43",
+                "joinType": "innerJoin",
+                "key": [
+                    ["addata-detid"],
+                    ["addata-detid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ0",
+                            "destColumn": "numWatchedQ0",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid1",
+                            "destColumn": "addata-detid1",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ1",
+                            "destColumn": "numWatchedQ1",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ2",
+                            "destColumn": "numWatchedQ2",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiGroupBy",
+            "comment": "",
+            "args": {
+                "source": "SessionsWithAdData.index#7C24",
+                "dest": "SessionsWithAdData-GB#7C25",
+                "eval": [
+                    {
+                        "evalString": "sumInteger(watchedEntire)",
+                        "newField": "numWatchedEntire"
+                    }
+                ],
+                "newKeyField": "addata-detid",
+                "includeSample": false,
+                "icv": false,
+                "groupAll": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "Sessi-Sessi#7C43",
+                    "SessionsWithAdData-GB#7C41"
+                ],
+                "dest": "numWatchedPerQ#7C44",
+                "joinType": "innerJoin",
+                "key": [
+                    ["addata-detid"],
+                    ["addata-detid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ0",
+                            "destColumn": "numWatchedQ0",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid1",
+                            "destColumn": "addata-detid1",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ1",
+                            "destColumn": "numWatchedQ1",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid2",
+                            "destColumn": "addata-detid2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ2",
+                            "destColumn": "numWatchedQ2",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid3",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ3",
+                            "destColumn": "numWatchedQ3",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "numWatchedPerQ#7C44",
+                    "SessionsWithAdData-GB#7C25"
+                ],
+                "dest": "NuMWatched#7C45",
+                "joinType": "innerJoin",
+                "key": [
+                    ["addata-detid"],
+                    ["addata-detid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ0",
+                            "destColumn": "numWatchedQ0",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid1",
+                            "destColumn": "addata-detid1",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ1",
+                            "destColumn": "numWatchedQ1",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid2",
+                            "destColumn": "addata-detid2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ2",
+                            "destColumn": "numWatchedQ2",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid3",
+                            "destColumn": "addata-detid3",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ3",
+                            "destColumn": "numWatchedQ3",
+                            "columnType": "DfInt64"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid4",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedEntire",
+                            "destColumn": "numWatchedEntire",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "args": {
+                "source": "addata#7C1",
+                "dest": "addata.index#7C47",
+                "key": [
+                    {
+                        "name": "addata::detid",
+                        "keyFieldName": "addata-detid",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            }
+        },
+        {
+            "operation": "XcalarApiJoin",
+            "comment": "",
+            "args": {
+                "source": [
+                    "addata.index#7C47",
+                    "NuMWatched#7C45"
+                ],
+                "dest": "EndResult-LG",
+                "joinType": "innerJoin",
+                "key": [
+                    ["addata-detid"],
+                    ["addata-detid"]
+                ],
+                "columns": [
+                    [
+                        {
+                            "sourceColumn": "addata",
+                            "destColumn": "addata",
+                            "columnType": "DfFatptr"
+                        },
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid5",
+                            "columnType": "DfString"
+                        }
+                    ],
+                    [
+                        {
+                            "sourceColumn": "addata-detid",
+                            "destColumn": "addata-detid",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ0",
+                            "destColumn": "numWatchedQ0",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid1",
+                            "destColumn": "addata-detid1",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ1",
+                            "destColumn": "numWatchedQ1",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid2",
+                            "destColumn": "addata-detid2",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ2",
+                            "destColumn": "numWatchedQ2",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid3",
+                            "destColumn": "addata-detid3",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedQ3",
+                            "destColumn": "numWatchedQ3",
+                            "columnType": "DfInt64"
+                        },
+                        {
+                            "sourceColumn": "addata-detid4",
+                            "destColumn": "addata-detid4",
+                            "columnType": "DfString"
+                        },
+                        {
+                            "sourceColumn": "numWatchedEntire",
+                            "destColumn": "numWatchedEntire",
+                            "columnType": "DfInt64"
+                        }
+                    ]
+                ],
+                "evalString": ""
+            }
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "args": {
+                "source": "EndResult-LG",
+                "fileName": "export-EndResult-LG.csv",
+                "targetName": "Default",
+                "targetType": "file",
+                "dest": ".XcalarLRQExport.EndResult-LG",
+                "columns": [
+                    {
+                        "columnName": "numWatchedQ0",
+                        "headerName": "numWatchedQ0"
+                    },
+                    {
+                        "columnName": "numWatchedQ1",
+                        "headerName": "numWatchedQ1"
+                    },
+                    {
+                        "columnName": "numWatchedQ2",
+                        "headerName": "numWatchedQ2"
+                    },
+                    {
+                        "columnName": "numWatchedQ3",
+                        "headerName": "numWatchedQ3"
+                    },
+                    {
+                        "columnName": "numWatchedEntire",
+                        "headerName": "numWatchedEntire"
+                    }
+                ],
+                "splitRule": "none",
+                "splitSize": 140209542922360,
+                "splitNumFiles": 140209547629504,
+                "headerType": "every",
+                "createRule": "createOnly",
+                "sorted": true,
+                "format": "csv",
+                "fieldDelim": "\t",
+                "recordDelim": "\n",
+                "quoteDelim": "\""
+            }
+        }
+    ],
+    "xcalarVersion": "1.3.0-1431-xcalardev-faa92fe1-af9f79a3",
+    "dataflowVersion": 1
+}

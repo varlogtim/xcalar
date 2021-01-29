@@ -1,0 +1,246 @@
+{
+    "properties" : {
+        "deltaIntervalInSeconds": 5,
+        "batchRetentionSeconds": 1000,
+        "minimumSleepIntervalInSeconds": 5,
+        "snapshotDataTargetName": "snapshot",
+        "snapshotMaxRetentionNumber": 5,
+        "snapshotMaxRetentionPeriodSeconds": 604800,
+        "distributer": {},
+        "IMDThreadCount": 2,
+        "snapshotThreadCount": 1,
+        "loadThreadCount": 2,
+        "parallelOperations": true
+    },
+    "params": {
+        "lake_infinity": 999999999,
+        "infdt1": 253399622400000000,
+        "dt2": 1483246800000000,
+        "infdt3": 253370782800000000,
+        "ds2path_bkp": "/netstore/solutions/customer4/datasets/ds2base/",
+        "ds2path": "ds2base/"
+    },
+    "source_defs": {
+        "local_parquet": {
+            "targetName": "Default Shared Root",
+            "type": "dataset",
+            "parseArgs": {
+                "parquetParser": "native"
+            },
+            "parserFnName": "/sharedUDFs/default:parseParquet",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "test": {
+            "targetName": "snapshot_mnt",
+            "type": "dataset",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "parserFnName": "default:parseCsv",
+            "forceCast": false,
+            "forceTrim": false,
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "test_base": {
+            "targetName": "Default Shared Root",
+            "type": "dataset",
+            "parseArgs": {
+                "recordDelim": "\n",
+                "fieldDelim": "\t",
+                "isCRLF": false,
+                "linesToSkip": 1,
+                "quoteDelim": "\"",
+                "hasHeader": true,
+                "schemaFile": "",
+                "schemaMode": "loadInput"
+            },
+            "parserFnName": "default:parseCsv",
+            "basePath": "/netstore/controller/snapshots/customer4/",
+            "forceCast": false,
+            "forceTrim": false,
+            "literals": {
+                "batch_id": {
+                    "eval": "getInitBatchId",
+                    "type": "int"
+                },
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "kafka-base": {
+            "targetName": "kafka-base",
+            "type": "stream",
+            "parserFnName": "parse_kafka_topic",
+            "parserTemplateName": "kafka_import_confluent",
+            "literals": {
+                "entry_dt": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "timestamp"
+                },
+                "kx": {
+                    "eval": "getCurrentTimestamp",
+                    "type": "int"
+                }
+            }
+        },
+        "vac_git": {
+            "type":"application_repository",
+             "args": {
+                "url": "https://gitlab.com/api/v4",
+                "projectId": "14164315",
+                "accessToken": "Tavay5JsBjYzTq25DyXV",
+                "branchName": "test"
+            },
+            "driver": "git.git_api:GitCheckinUtil"
+        }
+    },
+    "sink_defs": {
+        "kafkaexport": {
+            "targetName": "Default Shared Root",
+            "parserTemplateName": "kafka_export_confluent",
+            "args": {
+                "avscFname": "/netstore/controller/customer4.avsc",
+                "batchSize": 100,
+                "producerProperties": {
+                    "bootstrap.servers": "localhost:9092"
+                }
+            }
+        }
+    },
+    "universeRefs":{
+        "ds1": {
+            "schema": "ds1_schema",
+            "from_universe_id": "test_shared_test",
+            "name": "ds1"
+        }
+    },
+    "universe": {
+        "ds1_counts": {
+            "schema": "ds_counts_schema",
+            "app": {
+                "barrierCallBackName": "decisionCallBack4TestRefiner",
+                "runtimeParamsCallBackName": "runtimeParamsCallBack4TestRefiner",
+                "path": "nikita/modular_refiner2/ds1_counts",
+                "sourceDef": "vac_git",
+                "pks":["SOURCE_BATCH_ID","SOURCE"],
+                "append": true
+            }
+        },
+        "ds2_counts": {
+            "schema": "ds_counts_schema",
+            "app": {
+                "barrierCallBackName": "decisionCallBack4TestRefiner",
+                "runtimeParamsCallBackName": "runtimeParamsCallBack4TestRefiner",
+                "path": "nikita/modular_refiner2/ds2_counts",
+                "sourceDef": "vac_git",
+                "no_pks":["SOURCE_BATCH_ID","SOURCE"],
+                "append": true
+            }
+        },
+        "all_counts_full": {
+            "schema": "ds_counts_schema",
+            "app": {
+                "barrierCallBackName": "decisionCallBack4TestRefinerBL",
+                "runtimeParamsCallBackName": "runtimeParamsCallBack4TestRefiner",
+                "path": "nikita/modular_refiner2/all_counts_full",
+                "sourceDef": "vac_git",
+                "pks":["SOURCE_BATCH_ID","SOURCE"],
+                "append": true
+            },
+            "sink": {
+                "path": "vgorhe_refiner_export:2/all_counts_full",
+                "sinkDef": "kafkaexport",
+                "max_headers": ["SOURCE_BATCH_ID"]
+            }
+        },
+        "all_counts_params": {
+            "schema": "ds_counts_schema",
+            "app": {
+                "barrierCallBackName": "decisionCallBack4TestRefiner",
+                "runtimeParamsCallBackName": "runtimeParamsCallBack4TestRefiner",
+                "path": "nikita/modular_refiner2/all_counts_params",
+                "sourceDef": "vac_git",
+                "pks":["SOURCE_BATCH_ID","SOURCE"]
+            },
+            "sink": {
+                "path": "vgorhe_refiner_export/all_counts_params",
+                "sinkDef": "kafkaexport",
+                "max_headers": ["SOURCE_BATCH_ID"]
+            }
+        },
+        "ds2": {
+            "schema": "ds2_schema",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": "<ds2path>",
+                "sourceDef": "test_base"
+            },
+            "stream": {
+                "path": "ds2",
+                "filter": "ge(<infdt1>,<infdt3>)",
+                "prune_filter": "le(D1,730)",
+                "sourceDef": "kafka-base",
+                "metaSchema": {"d5": "float"},
+                "milestoneId":{
+                    "col": "d6",
+                    "type": "int"
+                }
+            }
+        },
+        "increment_from_dataset": {
+            "schema": "ds1_schema_cap",
+            "stream": {
+                "type": "reload",
+                "barrierCallBackName": "loadRefDataBarrier",
+                "filter": "ge(fatPtr::COL1, 195)",
+                "isFolder": true,
+                "path": "/netstore/controller/test_data/parquet/ds1",
+                "sourceDef": "local_parquet"
+            }
+        },
+        "ds_no_stream": {
+            "schema": "ds1_schema",
+            "source": {
+                "filter": "eq(1,1)",
+                "isFolder": true,
+                "path": [
+                    "ds2base/,ds1base/",
+                    "ds1base/"
+                ],
+                "sourceDef": "test_base"
+            }
+        }
+    }
+}

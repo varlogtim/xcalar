@@ -1,0 +1,22 @@
+RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz | (test -L /bin && tar xzf - --exclude='./usr/bin/execlineb' --transform='s,^./bin,./usr/bin,' --transform='s,^./sbin,./usr/sbin,' -C / || tar xzf - -C /)
+ADD id_rsa.pub /root/.ssh/authorized_keys
+RUN chmod 0700 /root/.ssh && chmod 0600 /root/.ssh/authorized_keys && mkdir -p /var/run/sshd
+RUN echo "root:root" | chpasswd
+RUN sed -i -Ee 's/^PermitRootLogin .*$/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN if grep -q ':999:' /etc/group; then groupmod -g 909 $(grep :999: /etc/group | cut -d':' -f 1); fi
+RUN groupadd -r -g 999 docker
+RUN if ! grep -q sudo /etc/group; then groupadd -r -g 23 sudo; fi
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99-sudo && chmod 0440 /etc/sudoers.d/99-sudo
+RUN sed -i -E -e 's/Defaults\s+requiretty/Defaults\t!requiretty/g' /etc/sudoers
+RUN groupadd -g 1000 xctest
+RUN useradd -m -s /bin/bash -u 1000 -g 1000 -G sudo,docker,adm xctest
+RUN mkdir -m 0700 -p /home/xctest/.ssh && cp /root/.ssh/authorized_keys /home/xctest/.ssh && chown -R xctest:xctest /home/xctest
+RUN echo "xctest:xctest" | chpasswd
+RUN curl -sSL http://repo.xcalar.net/scripts/osid > /usr/local/bin/osid && chmod +x /usr/local/bin/osid
+RUN SVC=/etc/services.d/sshd && mkdir -p $SVC && printf '#!/usr/bin/execlineb -P\n/usr/sbin/sshd -D -f /etc/ssh/sshd-second_config -e' > $SVC/run
+RUN find /etc/services.d -type f -name run -exec chmod +x {} \;
+ADD ./sshd-second_config /etc/ssh/
+ADD ./ssh-host-keys.sh /usr/local/bin/
+ADD ./docker-entrypoint.sh /
+EXPOSE 22022 22 18552 5000 9090 8889 80 111/udp 2049/tcp
+ENV IN_DOCKER=1

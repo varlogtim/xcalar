@@ -1,0 +1,7 @@
+{
+    "universes":
+    [
+        "test_shared_test",
+        "test--test_shared_test"
+    ]
+}

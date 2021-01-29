@@ -1,0 +1,9 @@
+enum LibDagFuncTestConfig {
+    LibDagNumLoopRandomTest:"LibDagNumLoopRandomTest",
+    LibDagNumThreadRandomTest:"LibDagNumThreadRandomTest",
+    LibDagNumNodesPerMatrix:"LibDagNumNodesPerMatrix",
+    LibDagNumThreadCreateNewMatrix:"LibDagNumThreadCreateNewMatrix",
+    LibDagDeletionFrequency:"LibDagDeletionFrequency",
+    LibDagMaxRetryForRandomNode:"LibDagMaxRetryForRandomNode",
+    LibDagNumScanThreadPerMatrix:"LibDagNumScanThreadPerMatrix",
+}

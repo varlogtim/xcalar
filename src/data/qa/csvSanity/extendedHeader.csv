@@ -1,0 +1,8 @@
+// These are a bunch of lines
+// that need to be skipped
+// before we actually get
+// to the real header
+// and real data
+myColumn,secondCol
+row0col0,row0col1
+row1col0,row1col1

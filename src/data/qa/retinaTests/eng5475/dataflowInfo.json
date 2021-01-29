@@ -1,0 +1,301 @@
+{
+    "tables": [
+        {
+            "name": "temp-18014398514145312",
+            "columns": [
+                {
+                    "columnName": "prefix-4534-18014398514139672::yelping_since",
+                    "headerAlias": "prefix-4534-18014398514139672::yelping_since"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::votes.useful",
+                    "headerAlias": "prefix-4534-18014398514139672::votes.useful"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::review_count",
+                    "headerAlias": "prefix-4534-18014398514139672::review_count"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::name",
+                    "headerAlias": "prefix-4534-18014398514139672::name"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::user_id",
+                    "headerAlias": "prefix-4534-18014398514139672::user_id"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::friends[4]",
+                    "headerAlias": "prefix-4534-18014398514139672::friends[4]"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::fans",
+                    "headerAlias": "prefix-4534-18014398514139672::fans"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::average_stars",
+                    "headerAlias": "prefix-4534-18014398514139672::average_stars"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::type",
+                    "headerAlias": "prefix-4534-18014398514139672::type"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::compliments.hot",
+                    "headerAlias": "prefix-4534-18014398514139672::compliments.hot"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672::elite[6]",
+                    "headerAlias": "prefix-4534-18014398514139672::elite[6]"
+                },
+                {
+                    "columnName": "prefix-4534-18014398514139672-yelping_since",
+                    "headerAlias": "prefix-4534-18014398514139672-yelping_since"
+                },
+                {
+                    "columnName": "col-5048-18014398514143346",
+                    "headerAlias": "col-5048-18014398514143346"
+                }
+            ]
+        }
+    ],
+    "schema hints": [],
+    "udfs": [
+        {
+            "moduleName": "default",
+            "fileName": "udfs/default.py",
+            "udfType": "python"
+        }
+    ],
+    "query": [
+        {
+            "operation": "XcalarApiBulkLoad",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "dest": ".XcalarDS.operatorsUser-1-node1",
+                "loadArgs": {
+                    "sourceArgsList": [
+                        {
+                            "targetName": "Default Shared Root",
+                            "path": "/netstore/datasets/yelp/user/",
+                            "fileNamePattern": "",
+                            "recursive": false
+                        }
+                    ],
+                    "parseArgs": {
+                        "parserFnName": "default:parseJson",
+                        "parserArgJson": "{}",
+                        "fileNameFieldName": "",
+                        "recordNumFieldName": "",
+                        "allowFileErrors": false,
+                        "allowRecordErrors": false,
+                        "schema": []
+                    },
+                    "size": 104857600
+                }
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": ".XcalarDS.operatorsUser-1-node1",
+                "dest": "RN0temp-18014398514139939",
+                "key": [
+                    {
+                        "name": "yelping_since",
+                        "keyFieldName": "prefix-4534-18014398514139672-yelping_since",
+                        "type": "DfUnknown",
+                        "ordering": "Unordered"
+                    }
+                ],
+                "prefix": "prefix-4534-18014398514139672",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "RN0temp-18014398514139939",
+                "dest": "temp-18014398514140644",
+                "eval": [
+                    {
+                        "evalString": "gt(float(prefix-4534-18014398514139672::review_count), float(33))"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiMap",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398514140644",
+                "dest": "temp-18014398514143387",
+                "eval": [
+                    {
+                        "evalString": "timestamp(prefix-4534-18014398514139672::compliments.cute)",
+                        "newField": "col-5048-18014398514143346"
+                    },
+                    {
+                        "evalString": "add(float(prefix-4534-18014398514139672::votes.cool), float(prefix-4534-18014398514139672::name))",
+                        "newField": "col-5048-18014398514143384"
+                    },
+                    {
+                        "evalString": "timestamp(prefix-4534-18014398514139672::compliments.cute)",
+                        "newField": "col-5048-18014398514143946"
+                    },
+                    {
+                        "evalString": "add(float(prefix-4534-18014398514139672::votes.cool), float(prefix-4534-18014398514139672::name))",
+                        "newField": "col-5048-18014398514143984"
+                    }
+                ],
+                "icv": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398514143387",
+                "dest": "temp-18014398514145312",
+                "key": [
+                    {
+                        "name": "col-5048-18014398514143384",
+                        "keyFieldName": "col-5048-18014398514143384",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiIndex",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398514145312",
+                "dest": "temp-18014398514143987",
+                "key": [
+                    {
+                        "name": "col-5048-18014398514143984",
+                        "keyFieldName": "col-5048-18014398514143984",
+                        "type": "DfUnknown",
+                        "ordering": "Ascending"
+                    }
+                ],
+                "prefix": "",
+                "dhtName": "",
+                "delaySort": false,
+                "broadcast": false
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiFilter",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398514143987",
+                "dest": "temp-18014398514140944",
+                "eval": [
+                    {
+                        "evalString": "eq(col-5048-18014398514143384, col-5048-18014398514143984)"
+                    }
+                ]
+            },
+            "annotations": {}
+        },
+        {
+            "operation": "XcalarApiExport",
+            "comment": "",
+            "tag": "",
+            "state": "Created",
+            "args": {
+                "source": "temp-18014398514145312",
+                "dest": ".XcalarLRQExport.temp-18014398514145312",
+                "columns": [
+                    {
+                        "columnName": "prefix-4534-18014398514139672::yelping_since",
+                        "headerName": "prefix-4534-18014398514139672::yelping_since"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::votes.useful",
+                        "headerName": "prefix-4534-18014398514139672::votes.useful"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::review_count",
+                        "headerName": "prefix-4534-18014398514139672::review_count"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::name",
+                        "headerName": "prefix-4534-18014398514139672::name"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::user_id",
+                        "headerName": "prefix-4534-18014398514139672::user_id"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::friends[4]",
+                        "headerName": "prefix-4534-18014398514139672::friends[4]"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::fans",
+                        "headerName": "prefix-4534-18014398514139672::fans"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::average_stars",
+                        "headerName": "prefix-4534-18014398514139672::average_stars"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::type",
+                        "headerName": "prefix-4534-18014398514139672::type"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::compliments.hot",
+                        "headerName": "prefix-4534-18014398514139672::compliments.hot"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672::elite[6]",
+                        "headerName": "prefix-4534-18014398514139672::elite[6]"
+                    },
+                    {
+                        "columnName": "prefix-4534-18014398514139672-yelping_since",
+                        "headerName": "prefix-4534-18014398514139672-yelping_since"
+                    },
+                    {
+                        "columnName": "col-5048-18014398514143346",
+                        "headerName": "col-5048-18014398514143346"
+                    }
+                ],
+                "driverName": "do_nothing",
+                "driverParams": "{}"
+            },
+            "annotations": {}
+        }
+    ],
+    "xcalarVersion": "2.0.3-3544-xcalardev-a766d54b-fcbd9e81",
+    "dataflowVersion": 1
+}

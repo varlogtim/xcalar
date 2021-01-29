@@ -1,0 +1,93 @@
+Name of the Feature and Release Target
+======================================
+Design documents are iterative in nature and expected to be incrementally improved.  As you present your design for review and the team debates both the correctness of each alternative and the tradeoffs between each alternative, those discussions and proposals should be captured and added to future revisions of the design.  Also, the design documents are cumulative in nature i.e., for a feature/functionality that has been designed in previous release, the document should include what is covered by the design in the previous release.  Readers wanting to know what exactly is in a release can refer to the version of the document that pertains to that release.
+
+The primary audience for this document is: developers, verification engineers.
+
+History
+======================================
+Tracking changes as the document goes through multiple iterations. Basic information such as author, date modified, and what changes are done in this version need to be identified.
+
+References
+======================================
+This section provides links to other documents that are relevant to the reader as pertains to this design document.  At the minimum it should refer to the corresponding functional specification for this feature, other features/components this design affects or interacts with, and the PRD.  It is OK to have the list reasonably long i.e., it is OK to be superfluous.
+
+Design Objective(s)
+======================================
+Describe the high-level summary of what is being described in this design document.  Be as succinct as possible. This section sets the stage for the rest of the document. 
+
+Dependencies
+======================================
+This section covers the dependencies and assumptions this design has on other components of the system.  Identify all the dependencies in order here. This section should give readers of the document a sense for which components the design depends on so they can refer to them.
+
+Requirements
+======================================
+Discuss the design requirements in this section.  These should be short sentences in bullet format.
+
+  Hard
+  ====================================
+  Include an exhaustive list of requirements your design MUST meet in order to be considered satisfactory.
+
+  Soft
+  ====================================
+  Include an exhaustive list of requirements your design SHOULD meet in order to be considered ideal.  These requirements are malleable and the discussion sections of competing choices presented below should explain the tradeoffs between each.  For example, design choice 1 satisfies soft requirements 1-3, not 4, and will take 1 year.  Design choice 2 satisfies soft requirement 1, not 2-4.
+
+Non-Requirements
+====================================
+Discuss the design non-requirements in this section.  These should be short sentences in bullet format.
+
+  Hard
+  ==================================
+  These are non-requirements for the feature. These non-requirements are not going to be met in future as well.
+
+  Soft
+  ==================================
+  These are non-requirements for the feature in this release.  These non-requirements may or may not be met in future i.e., they are not in these release but may be deferred to a later release.
+
+Design Axioms
+====================================
+Include an exhaustive list of the assumptions your design makes.  Axioms are broken down into permanent and transient.
+
+  Permanent
+  ==================================
+  Permanent axioms are a list of facts and observations that are true at the time the design and that you are confident will not change for the foreseeable future.  For example, VMware vMotion requires source and destination ESX machines to have visible access to the entire set of physical disks a VM is currently using.
+
+  Transient
+  ==================================
+  Transient axioms are a list of facts and observations that are true at the time the design and that you are reasonably sure will not change for the foreseeable future, but have a much lower degree of confidence of their permanency.  For example, 90% of file IO that occurs during Windows 7 boot is sequential.
+
+Design Choices
+====================================
+This section of the document discusses the various design choices considered for the implementation, the implementation details of the selected choice, APIs, how the solution fits into the overall ecosystem, etc. This is the major section of the document.  For each of the design choices, include the following sections:
+
+Proposal 1: 
+====================================
+Include a brief high-level description of the proposal here.
+
+  Architecture:
+  ==================================
+  Include a block diagram graphic labeling each component and the interactions between each of the components.
+
+  Detailed Discussion:
+  ==================================
+  Iterate through each component and explain why it exists, which design requirements it satisfies, and how it satisfies those requirements.  Some components are complex enough that they also should be broken down into their subcomponent block diagrams and discussions.  Use your best judgment.
+
+  Additionally, a component or subcomponent itself may have several design proposals.  Iterate through each of them similarly.
+
+  Competing Component / Subcomponent Design Tradeoffs:
+  ==================================
+  For each component or subcomponent, explain the tradeoffs, costs, benefits, of each.  You should include descriptions of the resource estimates required of each component/subcomponent.  The resources described when applicable might include CPU consumption, memory consumption, storage capacity consumption, storage bandwidth consumption, network bandwidth consumption, time to develop, cost to develop, cost to support/maintain.  Describe also which soft requirements are met or not met by each.
+
+Repeat the above for each proposal considered.
+
+Data Integrity
+====================================
+This section discusses any impact to data integrity the functionality may have.  Given that we are in the data path, special attention must be given to how we preserve integrity of data even in the face of any modifications/optimizations we may do with our functionality, such as FLD.
+
+Patents
+====================================
+If any of the ideas of the design are patentable, describe them here.  This section should also refer to the core high-level ideas described in the Functional Specification. The goal should be to have a patent attorney go through these two documents - Functional and Design specifications - and come up with an initial version of the patent filing.
+
+Future Directions
+====================================
+Describe extensions to the functionality that will not be covered or implemented in this release.  Sufficient details should be provided the extensions.  These can be described at a high-level as not all functional and design issues may have been thought through at this time.  But, this section can act as a catalyst for enhancing the design in future product releases.

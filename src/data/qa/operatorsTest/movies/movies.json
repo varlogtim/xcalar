@@ -1,0 +1,15 @@
+[
+  { "name": "John", "userId": 1, "movie": "Donny Darko", "movieId": 1, "rating": 3 },
+  { "name": "John", "userId": 1, "movie": "Existenze", "movieId": 2, "rating": 5 },
+  { "name": "John", "userId": 1, "movie": "Sex and the city", "movieId": 3, "rating": 4 },
+  { "name": "John", "userId": 1, "movie": "The Hours", "movieId": 4, "rating": 2.5 },
+  { "name": "John", "userId": 1, "movie": "The Matrix", "movieId": 5, "rating": 0 },
+  { "name": "Tim", "userId": 2, "movie": "Blade", "movieId": 6, "rating": 4 },
+  { "name": "Tim", "userId": 2, "movie": "Donny Darko", "movieId": 1, "rating": 2 },
+  { "name": "Tim", "userId": 2, "movie": "Starwars 4", "movieId": 7, "rating": 5 },
+  { "name": "Tim", "userId": 2, "movie": "The Matrix", "movieId": 5, "rating": 5 },
+  { "name": "Toby", "userId": 3, "movie": "Alien versus Predator", "movieId": 8, "rating": 3 },
+  { "name": "Toby", "userId": 3, "movie": "Donny Darko", "movieId": 1, "rating": 5 },
+  { "name": "Toby", "userId": 3, "movie": "The Hours", "movieId": 4, "rating": 4.5 },
+  { "name": "Toby", "userId": 3, "movie": "The Matrix", "movieId": 5, "rating": 2.5 }
+]
